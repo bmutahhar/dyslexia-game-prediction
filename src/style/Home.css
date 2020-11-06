@@ -1,0 +1,8 @@
+.bg-custom{
+    width: 100%;
+    height: 100%;
+    background-image: url('../Assets/Images/Group\ 2.png');
+    /* background-attachment: fixed no-repeat; */
+    background-size: cover; 
+  }
+  
