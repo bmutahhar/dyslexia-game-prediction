@@ -35,6 +35,8 @@ export default class Home extends Component {
         zIndex: 2,
       },
       grass: {
+        
+        width: "100%",
         position: "absolute",
         zIndex:1,
         bottom: 0,

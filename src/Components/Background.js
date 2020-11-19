@@ -8,9 +8,9 @@ export default class Background extends Component {
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
       minHeight: "100vh",
-      minWidth: "100vw",
+      minWidth: "100%",
       height: "100vh",
-      width: "100vw",
+      width: "100%",
       // padding: "0px",
       // margin: "0px",
     };
