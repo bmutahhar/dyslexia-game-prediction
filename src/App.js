@@ -1,10 +1,13 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Home from "./Components/Screens/Home";
+import About from "./Components/Screens/About"
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello Dyslexia Games</h1>
+      <Home />
+      <About/>
     </div>
   );
 }
