@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import croppedLogo from "./Images/logo-cropped.png"
+import whiteLogo from "./Images/logo-white.png"
 import "./styles/Navbar.css";
 
 export default class Navbar extends Component {
@@ -8,7 +9,7 @@ export default class Navbar extends Component {
       <nav className="navbar navbar-expand-lg fixed-top navbar-light bg-transparent">
         <a className="navbar-brand mr-auto" href="#">
           <img
-            src={croppedLogo}
+            src={whiteLogo}
             alt="Dyslexia"
             className="img-fluid"
             width="100"
