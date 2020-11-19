@@ -14,17 +14,18 @@ export default class ContactUs extends Component {
       
       
       kangaroo: {
-        height: "40%",
+        height: "50%",
         position: "absolute",
-        bottom: "0",
-        right: "3%",
+        bottom: "-300%",
+        right: "1%",
         zIndex: 2,
       },
       stone: {
+    
         width: "100%",
         position: "absolute",
         zIndex:1,
-        bottom: 0,
+        bottom: "-300%",
         right: 0,
         left: 0,
       },
