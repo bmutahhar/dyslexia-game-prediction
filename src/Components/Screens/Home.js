@@ -8,49 +8,19 @@ import lion from "../Images/Characters/lion.png";
 import Background from "../Background";
 import Character from "../Character";
 import Jumbotron from "../Jumbotron";
-import Navbar from "../Navbar";
 
 export default class Home extends Component {
   render() {
-    const styles = {
-      topMonkey: {
-        height: "30%",
-        position: "absolute",
-        top: 0,
-        right: "15%",
-        zIndex: 2,
-      },
-      bottomMonkey: {
-        height: "30%",
-        position: "absolute",
-        bottom: 5,
-        left: "3%",
-        zIndex: 2,
-      },
-      lion: {
-        height: "30%",
-        position: "absolute",
-        bottom: 5,
-        right: "5%",
-        zIndex: 2,
-      },
-      grass: {
-        
-        width: "100%",
-        position: "absolute",
-        zIndex:1,
-        bottom: 0,
-        right: 0,
-        left: 0,
-      },
-    };
+    
     return (
       <Background
         className="d-flex align-items-center justify-content-center flex-column"
+        id = "home"
         customStyle={false}
         src={image}
         // style={{position:"fixed"}}
       >
+        <Jumbotron />
         <Character
           className="top-monkey"
           src={topMonkey}
@@ -76,9 +46,42 @@ export default class Home extends Component {
           style={styles.grass}
           onerror={`this.src=${altGrass}`}
         />
-        <Navbar />
-        <Jumbotron />
+        
       </Background>
     );
   }
 }
+const styles = {
+  topMonkey: {
+    height: "30%",
+    position: "absolute",
+    top: 0,
+    right: "15%",
+    zIndex: 1,
+  },
+  bottomMonkey: {
+    height: "30%",
+    position: "absolute",
+    bottom: 5,
+    left: "3%",
+    zIndex: 1,
+  },
+  lion: {
+    height: "30%",
+    backgroundColor: "white",
+    position: "absolute",
+    bottom: 5,
+    right: "5%",
+    zIndex: 1,
+  },
+  grass: {
+    
+    width: "100%",
+    backgroundColor: "#eee",
+    position: "absolute",
+    zIndex:0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+};

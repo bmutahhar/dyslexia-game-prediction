@@ -7,145 +7,14 @@ import koala from "../Images/Characters/koala.png";
 import Background from "../../Components/Background";
 
 import Character from "../Character";
-import Navbar from "../Navbar";
 
 export default class ContactUs extends Component {
   render() {
-    const styles = {
-      
-      
-      kangaroo: {
-        height: "40%",
-        position: "absolute",
-        bottom: "-300%",
-        right: "1%",
-        zIndex: 2,
-      },
-
-      koala: {
-        height: "35%",
-        position: "absolute",
-        bottom: "-300%",
-        left: "-2%",
-        zIndex: 2,
-      },
-
-
-
-
-      stone: {
-    
-        width: "100%",
-        position: "absolute",
-        zIndex:1,
-        bottom: "-300%",
-        right: 0,
-        left: 0,
-      },
-
-      bottomDiv: {
-        color: "black",
-        fontSize: "18px",
-        backgroundImage:"linear-gradient(to right, #80562D, #BB461A)",
-        alignItems:"center",
-        textAlign:"left",
-        justifyContent:"center",
-        borderRadius: "30px",
-        border:"2px solid black",
-        
-        position: "absolute",
-        
-         minWidth: "10%",
-         minHeight: "5%",
-
-        width: "64%",
-        height: "15%",
-        margin: "5px",
-        padding: "20px",
-        right: "17.5%",
-        bottom: "-292%"
-        
-      },
-
-      topDiv: {
-        color: "black",
-        fontSize: "18px",
-        backgroundColor: "#C44F1E",
-        alignItems:"center",
-        textAlign:"left",
-        justifyContent:"center",
-        borderRadius: "30px",
-        border:"none",
-        
-        position: "absolute",
-        
-         minWidth: "10%",
-         minHeight: "5%",
-
-        width: "64%",
-        height: "65%",
-        margin: "5px",
-        padding: "20px",
-        right: "17.5%",
-        bottom: "-275%"
-        
-      },
-
-      kangarooDiv: {
-        color: "black",
-        fontSize: "18px",
-        backgroundColor:"#F19611",
-        alignItems:"center",
-        textAlign:"left",
-        justifyContent:"center",
-        borderRadius: "30px",
-        border:"5px solid #C2501E",
-        
-        position: "absolute",
-        
-         minWidth: "10%",
-         minHeight: "25%",
-
-        width: "15%",
-        height: "45%",
-        margin: "5px",
-        padding: "20px",
-        right: "1%",
-        bottom: "-265%"
-        
-      },
-
-      koalaDiv: {
-        color: "black",
-        fontSize: "18px",
-        backgroundColor:"#A7A8AC",
-        alignItems:"center",
-        textAlign:"left",
-        justifyContent:"center",
-        borderRadius: "30px",
-        border:"5px solid #494A4E",
-        
-        position: "absolute",
-        
-         minWidth: "10%",
-         minHeight: "25%",
-
-        width: "15%",
-        height: "45%",
-        margin: "5px",
-        padding: "20px",
-        left: "1%",
-        bottom: "-265%"
-        
-      },
-
-
-
-
-    };
+   
     return (
       <Background
         className="d-flex align-items-center justify-content-center flex-column"
+        id = "contact"
         customStyle={false}
         src={image}
         // style={{position:"fixed"}}
@@ -209,8 +78,139 @@ export default class ContactUs extends Component {
           style={styles.stone}
           onerror={`this.src=${stone}`}
         />
-        <Navbar />
       </Background>
     );
   }
 }
+const styles = {
+      
+      
+  kangaroo: {
+    height: "40%",
+    position: "absolute",
+    bottom: "-300%",
+    right: "1%",
+    zIndex: 2,
+  },
+
+  koala: {
+    height: "35%",
+    position: "absolute",
+    bottom: "-300%",
+    left: "-2%",
+    zIndex: 2,
+  },
+
+
+
+
+  stone: {
+
+    width: "100%",
+    position: "absolute",
+    zIndex:1,
+    bottom: "-300%",
+    right: 0,
+    left: 0,
+  },
+
+  bottomDiv: {
+    color: "black",
+    fontSize: "18px",
+    backgroundImage:"linear-gradient(to right, #80562D, #BB461A)",
+    alignItems:"center",
+    textAlign:"left",
+    justifyContent:"center",
+    borderRadius: "30px",
+    border:"2px solid black",
+    
+    position: "absolute",
+    
+     minWidth: "10%",
+     minHeight: "5%",
+
+    width: "64%",
+    height: "15%",
+    margin: "5px",
+    padding: "20px",
+    right: "17.5%",
+    bottom: "-292%"
+    
+  },
+
+  topDiv: {
+    color: "black",
+    fontSize: "18px",
+    backgroundColor: "#C44F1E",
+    alignItems:"center",
+    textAlign:"left",
+    justifyContent:"center",
+    borderRadius: "30px",
+    border:"none",
+    
+    position: "absolute",
+    
+     minWidth: "10%",
+     minHeight: "5%",
+
+    width: "64%",
+    height: "65%",
+    margin: "5px",
+    padding: "20px",
+    right: "17.5%",
+    bottom: "-275%"
+    
+  },
+
+  kangarooDiv: {
+    color: "black",
+    fontSize: "18px",
+    backgroundColor:"#F19611",
+    alignItems:"center",
+    textAlign:"left",
+    justifyContent:"center",
+    borderRadius: "30px",
+    border:"5px solid #C2501E",
+    
+    position: "absolute",
+    
+     minWidth: "10%",
+     minHeight: "25%",
+
+    width: "15%",
+    height: "45%",
+    margin: "5px",
+    padding: "20px",
+    right: "1%",
+    bottom: "-265%"
+    
+  },
+
+  koalaDiv: {
+    color: "black",
+    fontSize: "18px",
+    backgroundColor:"#A7A8AC",
+    alignItems:"center",
+    textAlign:"left",
+    justifyContent:"center",
+    borderRadius: "30px",
+    border:"5px solid #494A4E",
+    
+    position: "absolute",
+    
+     minWidth: "10%",
+     minHeight: "25%",
+
+    width: "15%",
+    height: "45%",
+    margin: "5px",
+    padding: "20px",
+    left: "1%",
+    bottom: "-265%"
+    
+  },
+
+
+
+
+};

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Background from "../../Components/Background";
 import Character from "../Character";
 import image from "../../Components/Images/second.png";
-import rectangle from "../Images/Characters/rectangle.png";
 import card from "../Images/Characters/card.png";
 import dolphin from "../Images/Characters/dolphin.png";
 import fish1 from "../Images/Characters/fish1.png";
@@ -66,6 +65,7 @@ export default class About extends Component {
       <Background
         src={image}
         className="d-flex align-items-center justify-content-center flex-row"
+        id = "about"
         customStyle={false}
       >
         <div
