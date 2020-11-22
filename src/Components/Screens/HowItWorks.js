@@ -3,24 +3,96 @@ import image from "../Images/third.png";
 import bird1 from "../Images/Characters/bird1.png";
 import bird2 from "../Images/Characters/bird2.png";
 import bird3 from "../Images/Characters/bird3.png";
+import bird4 from "../Images/Characters/bird4.png";
+
 import eagle from "../Images/Characters/eagle.png";
 import sun from "../Images/Characters/sun.png";
 import cloud from "../Images/Characters/cloud.png";
 import cloudsun from "../Images/Characters/cloudsun.png";
-import cloudfooter from "../Images/Characters/cloudfooter.png";
+import cloudfooter from "../Images/Characters/cloudfooter1.png";
 import Background from "../../Components/Background";
-import rectangle from "../Images/Characters/Rectangle 20.png";
+import rectangle from "../Images/Characters/rectangle.png";
+
 
 import Character from "../Character";
-
+import Video from "../Video";
 
 import Navbar from "../Navbar";
 
-export default class ContactUs extends Component {
+export default class HowItWorks extends Component {
   render() {
     const styles = {
+      blueDiv: {
+        backgroundImage: "linear-gradient(#17E2D4, #1050CE)",
+        boxShadow: "5px 20px 20px 5px rgba(0, 0, 0, 0.5)",
+        display:"flex",
+        
+        minWidth: "50%",
+        minHeight: "40%",
+        width: "60%",
+        height: "65%",
+        margin: "2px",
+        padding: "20px",
+        borderRadius: "20px",
+        
+      },
 
+      msgDiv: {
+        color: "black",
+        fontSize: "18px",
+        backgroundColor:"#FCFDFF",
+        alignItems:"center",
+        textAlign:"left",
+        justifyContent:"center",
+        borderRadius: "30px",
+        border:"5px solid #8F4321",
+        
+        position: "absolute",
+        
+         minWidth: "10%",
+         minHeight: "25%",
+
+        width: "15%",
+        height: "45%",
+        margin: "5px",
+        padding: "20px",
+        right: "2%",
+        bottom: "-168%"
+        
+      },
+
+      msgDiv1: {
+        color: "black",
+        fontSize: "18px",
+        backgroundColor:"#FFE401",
+        alignItems:"center",
+        textAlign:"left",
+        justifyContent:"center",
+        borderRadius: "30px",
+        border:"5px solid #FDB200",
+        
+        position: "absolute",
+        
+         minWidth: "10%",
+         minHeight: "25%",
+
+        width: "15%",
+        height: "45%",
+        margin: "5px",
+        padding: "20px",
+        left: "2%",
+        bottom: "-182%"
+        
+      },
+
+
+      
        
+      Video: {
+        height: "100%",
+        width: "100%",
+        border: "none"
+      },
       
         sun:{
             position: "absolute",
@@ -49,12 +121,12 @@ export default class ContactUs extends Component {
           },
 
           bird1:{
-            
+            transform: "scaleX(-1)",
             position: "absolute",
             zIndex: 3,
             
-            bottom:"-150%",
-            left: "17%"
+            bottom:"-136%",
+            right: "15%"
           },
 
           bird2:{
@@ -62,7 +134,7 @@ export default class ContactUs extends Component {
             position: "absolute",
             zIndex: 3,
             
-            bottom:"-163%",
+            bottom:"-130%",
             left: "19%"
           },
 
@@ -71,8 +143,16 @@ export default class ContactUs extends Component {
             position: "absolute",
             zIndex: 3,
             
-            bottom:"-180%",
+            bottom:"-183%",
             left: "19%"
+          },
+
+          bird4:{
+            position: "absolute",
+            zIndex: 3,
+            
+            bottom:"-183%",
+            right: "17%"
           },
 
 
@@ -88,21 +168,72 @@ export default class ContactUs extends Component {
         width: "100%",
         position: "absolute",
         zIndex:1,
+        
         bottom: "-200%",
         right: 0,
         left: 0,
       },
+      button: {
+        textAlign: "center",
+        position: "absolute",
+        backgroundColor: "#66CC00",
+        color: "white",
+        // minWidth: "2%",
+        // minHeight: "5%",
+        width:"6%",
+
+        height:"12%",
+        right: "2%",
+        bottom: "-132%",
+        borderRadius: "50%",
+      
+        border: "none"
+
+
+
+      },
+
+    
+
+
     };
     return (
       <Background
         className="d-flex align-items-center justify-content-center flex-column"
         customStyle={false}
         src={image}
-        // style={{position:"fixed"}}
       >
-          
+      <Background className="d-flex justify-justify-content-between flex-column"
+        style={styles.blueDiv}
+        customStyle={true}
         
-         <Character
+        >
+          <Video
+          className="Video"
+          style={styles.Video}
+          />
+        </Background>
+        {/* <button style={styles.button}>click me</button> */}
+
+        <Background className="d-flex justify-justify-content-between flex-column"
+        style={styles.msgDiv}
+        customStyle={true}
+        
+        >
+        <h3>Hello Kids,  I'M Eaggie</h3>
+        <p>Watch The Instructional Video To Learn How To Play The Game</p>
+        </Background>
+
+        <Background className="d-flex justify-justify-content-between flex-column"
+        style={styles.msgDiv1}
+        customStyle={true}
+        
+        >
+        <h3>HI, I'M SUNNY</h3>
+        <p>I Hope You Kids Have A Bright And Wonderful Day. :)</p>
+        </Background>
+
+        <Character
         className="eagle"
         src={eagle} 
         alt="eagle"
@@ -139,6 +270,13 @@ export default class ContactUs extends Component {
         />
 
         <Character
+        className="bird4"
+        src={bird4} 
+        alt="bird4"
+        style={styles.bird4} 
+        />
+
+        <Character
         className="sun"
         src={sun} 
         alt="sun"
@@ -148,7 +286,7 @@ export default class ContactUs extends Component {
         <Character
         className="cloud"
         src={cloud} 
-        alt="bird3"
+        alt="cloud"
         style={styles.cloud} 
         />
 
