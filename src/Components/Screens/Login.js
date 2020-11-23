@@ -6,7 +6,7 @@ export default class Login extends Component {
         return (
             <div className="container" style={styles.login}>
                 Login Page will be displayed here
-                <Link to="/home" >
+                <Link to="/" >
                     <button className="btn btn-outline-sucess btn-success align-self-center">Take me to home</button>
                 </Link>
             </div>
