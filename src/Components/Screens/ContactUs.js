@@ -1,12 +1,16 @@
 import React, { Component } from "react";
+import Background from "../../Components/Background";
+import {HashLink as Link} from "react-router-hash-link"
 import image from "../Images/last.png";
 import stone from "../Images/Characters/stonefooter.png";
 import kangaroo from "../Images/Characters/kangaroo.png";
 import koala from "../Images/Characters/koala.png";
 
-import Background from "../../Components/Background";
+
 
 import Character from "../Character";
+import {GrLinkTop} from "react-icons/gr";
+
 
 export default class ContactUs extends Component {
   render() {
@@ -78,6 +82,11 @@ export default class ContactUs extends Component {
           style={styles.stone}
           onerror={`this.src=${stone}`}
         />
+        <Link smooth to="#home">
+        <div className="toTop" style={styles.toTop}>
+          <GrLinkTop color="black" size="42px" />
+        </div>
+        </Link>
       </Background>
     );
   }
@@ -89,8 +98,20 @@ const styles = {
     height: "40%",
     position: "absolute",
     bottom: "-300%",
-    right: "1%",
+    right: "5%",
     zIndex: 2,
+  },
+
+  toTop: {
+    padding: "10px",
+    borderRadius: "50px",
+    backgroundColor: "orange",
+    border: "2px solid  #BB461A",
+    // height: "40%",
+    position: "absolute",
+    bottom: "-290%",
+    right: "2%",
+    zIndex: 3,
   },
 
   koala: {
