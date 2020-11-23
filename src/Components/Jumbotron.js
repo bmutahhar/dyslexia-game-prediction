@@ -12,7 +12,7 @@ export default class Jumbotron extends Component {
           <br /> click on <b>START</b>
         </p>
         <Link to="/login">
-          <button className="btn btn-outline-sucess btn-success text-white align-self-center btn-lg" style={{zIndex: 1}}>
+          <button className="btn btn-outline-sucess btn-success text-white align-self-center btn-lg">
             Start
           </button>
         </Link>

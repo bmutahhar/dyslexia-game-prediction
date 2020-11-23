@@ -68,16 +68,14 @@ const styles = {
   },
   lion: {
     height: "30%",
-    backgroundColor: "white",
     position: "absolute",
     bottom: 5,
     right: "5%",
     zIndex: 1,
   },
   grass: {
-    
+    // backgroundColor: "#eee",
     width: "100%",
-    backgroundColor: "#eee",
     position: "absolute",
     zIndex:0,
     bottom: 0,
