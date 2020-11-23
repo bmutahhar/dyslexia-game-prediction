@@ -38,12 +38,14 @@ export default class Navbar extends Component {
             <Link smooth to="#howitworks" className="nav-link text-white">
               How it works?
             </Link>
-            <Link smooth to="#contact" className="nav-link text-white">
-              Contact Us
-            </Link>
+
             <Link smooth to="#about" className="nav-link text-white">
               About Us
             </Link>
+            <Link smooth to="#contact" className="nav-link text-white">
+              Contact Us
+            </Link>
+            
             <Link to="/login" className="nav-link">
               <button className="btn btn-outline-sucess btn-success text-white align-self-center btn-sm">
                 Log In

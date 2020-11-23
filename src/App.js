@@ -14,9 +14,10 @@ const MainPage = () => {
     <>
       <Navbar />
       <Home />
-      <About />
       <HowItWorks />
+      <About />
       <Contact />
+      
     </>
   );
 };

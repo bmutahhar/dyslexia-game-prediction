@@ -150,7 +150,7 @@ const styles = {
     margin: "5px",
     padding: "20px",
     right: "2%",
-    bottom: "-168%",
+    bottom: "-68%",
   },
 
   msgDiv1: {
@@ -173,7 +173,7 @@ const styles = {
     margin: "5px",
     padding: "20px",
     left: "2%",
-    bottom: "-182%",
+    bottom: "-82%",
   },
 
   Video: {
@@ -186,7 +186,7 @@ const styles = {
     position: "absolute",
     zIndex: 1,
     height: "25%",
-    bottom: "-135%",
+    bottom: "-35%",
     left: "0%",
   },
 
@@ -194,7 +194,7 @@ const styles = {
     position: "absolute",
     zIndex: 2,
     height: "13%",
-    bottom: "-135%",
+    bottom: "-35%",
     left: "4%",
   },
 
@@ -202,7 +202,7 @@ const styles = {
     position: "absolute",
     zIndex: 1,
     height: "13%",
-    bottom: "-120%",
+    bottom: "-20%",
     right: "4%",
   },
 
@@ -211,7 +211,7 @@ const styles = {
     position: "absolute",
     zIndex: 3,
 
-    bottom: "-136%",
+    bottom: "-36%",
     right: "15%",
   },
 
@@ -219,7 +219,7 @@ const styles = {
     position: "absolute",
     zIndex: 3,
 
-    bottom: "-130%",
+    bottom: "-30%",
     left: "19%",
   },
 
@@ -227,7 +227,7 @@ const styles = {
     position: "absolute",
     zIndex: 3,
 
-    bottom: "-183%",
+    bottom: "-83%",
     left: "19%",
   },
 
@@ -235,14 +235,14 @@ const styles = {
     position: "absolute",
     zIndex: 3,
 
-    bottom: "-183%",
+    bottom: "-83%",
     right: "17%",
   },
 
   eagle: {
     height: "30%",
     position: "absolute",
-    bottom: "-200%",
+    bottom: "-100%",
     right: "1%",
     zIndex: 2,
   },
@@ -251,7 +251,7 @@ const styles = {
     position: "absolute",
     zIndex: 1,
 
-    bottom: "-200%",
+    bottom: "-100%",
     right: 0,
     left: 0,
   },
@@ -266,7 +266,7 @@ const styles = {
 
     height: "12%",
     right: "2%",
-    bottom: "-132%",
+    bottom: "-32%",
     borderRadius: "50%",
 
     border: "none",

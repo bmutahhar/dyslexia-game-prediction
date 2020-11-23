@@ -10,7 +10,15 @@ export default class Formpage extends Component {
         <div className="col-11 m-auto">
         <div className="row">
         <div className="col-12 questions">
-        <div className="row">
+        <h1>question 1</h1>
+        <h1>dropdown 1</h1>
+        <h1>question 2</h1>
+        <h1>dropdown 2</h1>
+        <h1>question 3</h1>
+        <h1>dropdown 3</h1>
+
+        
+        {/* <div className="row">
         <div className="col-12">
         <h1>helloooooo1</h1>
         <h1>helloooooo1</h1>
@@ -38,7 +46,7 @@ export default class Formpage extends Component {
         <h1>helloooooo4</h1>
         <h1>helloooooo1</h1>
         </div>
-        </div>
+        </div> */}
         
         </div>
         

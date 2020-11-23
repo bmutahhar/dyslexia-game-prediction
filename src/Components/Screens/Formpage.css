@@ -10,7 +10,7 @@
 .col-11 {
   background-image: url("../Images/bg.jpg");
   height: 90vh;
-  background-position: top center;
+  background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 20px;

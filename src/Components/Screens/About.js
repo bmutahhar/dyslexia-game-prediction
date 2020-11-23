@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Background from "../../Components/Background";
 import Character from "../Character";
 import image from "../../Components/Images/second.png";
+
+
 import card from "../Images/Characters/card.png";
 import dolphin from "../Images/Characters/dolphin.png";
 import fish1 from "../Images/Characters/fish1.png";
@@ -65,8 +67,8 @@ export default class About extends Component {
       <Background
         src={image}
         className="d-flex align-items-center justify-content-center flex-row"
-        id = "about"
         customStyle={false}
+        id="about"
       >
         <div
           className="d-flex justify-content-between"
@@ -217,7 +219,7 @@ const styles = {
     position: "absolute",
     // zIndex: 2,
     height: "25%",
-    bottom: "-100%",
+    bottom: "-200%",
     left: "3%",
     // right: "2%",
     // transform: "rotate(-20deg)",
@@ -226,28 +228,28 @@ const styles = {
     position: "absolute",
     zIndex: 2,
     height: "10%",
-    bottom: "-45%",
+    bottom: "-145%",
     left: "32%",
   },
   fish2: {
     position: "absolute",
     // zIndex: 1,
     height: "10%",
-    bottom: "-95%",
+    bottom: "-195%",
     left: "40%",
   },
   fish3: {
     position: "absolute",
     zIndex: 2,
     height: "20%",
-    bottom: "-95%",
+    bottom: "-195%",
     right: "4%",
   },
   fish4: {
     position: "absolute",
     zIndex: 2,
     height: "20%",
-    bottom: "-30%",
+    bottom: "-130%",
     left: "4%",
   },
   fish5: {
@@ -255,7 +257,7 @@ const styles = {
     zIndex: 2,
     height: "10%",
     // width: "5%",
-    bottom: "-25%",
+    bottom: "-125%",
     right: "30%",
   },
   fish6: {
@@ -263,7 +265,7 @@ const styles = {
     zIndex: 2,
     height: "15%",
     // width: "5%",
-    bottom: "-40%",
+    bottom: "-140%",
     right: "5%",
     transform: "rotate(-25deg)",
   },

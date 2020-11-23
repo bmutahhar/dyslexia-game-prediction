@@ -21,6 +21,28 @@ export default class Home extends Component {
         // style={{position:"fixed"}}
       >
         <Jumbotron />
+
+        <Background
+        className="d-flex align-items-center justify-content-center flex-column"
+        style={styles.lionDiv}
+        customStyle={true}
+        // style={{position:"fixed"}}
+      >
+        <h3>Hey, I'M SIMBA</h3>
+        <p>I'm A Friend Of Jonny, Me And Jonny Will Tag Along While You Have Some Fun</p>
+      </Background>
+
+      <Background
+        className="d-flex align-items-center justify-content-center flex-column"
+        style={styles.monkeyDiv}
+        customStyle={true}
+        // style={{position:"fixed"}}
+      >
+        <h3>HI, I'M JONNY</h3>
+        <p>You Are Really Going To Enjoy This Game, Come Lets Have Some Fun</p>
+      </Background>
+
+
         <Character
           className="top-monkey"
           src={topMonkey}
@@ -82,4 +104,55 @@ const styles = {
     right: 0,
     left: 0,
   },
+
+  lionDiv: {
+    color: "black",
+    fontSize: "18px",
+    backgroundColor:"#F3A61F",
+    alignItems:"center",
+    textAlign:"left",
+    justifyContent:"center",
+    borderRadius: "30px",
+    border:"5px solid #993A02",
+    
+    position: "absolute",
+    
+     minWidth: "10%",
+     minHeight: "25%",
+
+    width: "15%",
+    height: "45%",
+    margin: "5px",
+    padding: "20px",
+    right: "3%",
+    bottom: "30%"
+    
+    
+  },
+
+  monkeyDiv: {
+    color: "black",
+    fontSize: "18px",
+    backgroundColor:"#F9CEAE",
+    alignItems:"center",
+    textAlign:"left",
+    justifyContent:"center",
+    borderRadius: "30px",
+    border:"5px solid #5B3E36",
+    
+    position: "absolute",
+    
+     minWidth: "10%",
+     minHeight: "25%",
+
+    width: "15%",
+    height: "45%",
+    margin: "5px",
+    padding: "20px",
+    left: "3%",
+    bottom: "30%"
+    
+    
+  },
+
 };
