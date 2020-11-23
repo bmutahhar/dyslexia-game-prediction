@@ -8,15 +8,19 @@ import Contact from "./Components/Screens/ContactUs";
 // import Formpage from "./Components/Screens/Formpage";
 import HowItWorks from "./Components/Screens/HowItWorks";
 import Login from "./Components/Screens/Login";
+import Signup from "./Components/Screens/Signup";
+
 
 const MainPage = () => {
   return (
     <>
-      <Navbar />
+      {/* <Navbar />
       <Home />
       <HowItWorks />
       <About />
-      <Contact />
+      <Contact /> */}
+
+      <Signup />
       
     </>
   );
