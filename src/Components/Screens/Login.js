@@ -79,7 +79,7 @@ margin-top: 20px;
 const Background = styled.div`
   background-image: linear-gradient(#0b8835, #597e87);
   min-height: 80vh;
-  min-width: 80%;
+  min-width: 60%;
   border-radius: 50px;
   display: flex;
   flex-direction: column;
@@ -93,6 +93,7 @@ const Span = styled.span`
   font-size: 18px;
   font-weight: 400;
   letter-spacing: 2px;
+  margin-left: 10px;
 `;
 
 const Input = styled.input.attrs((props) => ({
@@ -100,9 +101,22 @@ const Input = styled.input.attrs((props) => ({
   type: props.type,
   placeholder: props.placeholder,
 }))`
-  border-radius: 5px;
-  border: none;
+  border-radius: 41px;
+  padding: 2px;
+  border: 3px solid #707070;
   width: 100%;
+  text-align: left;
+  padding-left: 15px;
+  background-color: #C9E3D2;
+  box-shadow: 0px 1px 6px 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 5px;
+
+  &:focus {
+      outline: none;
+      
+
+  }
+
 `;
 
 const FormButtonGroup = styled.div`
@@ -140,17 +154,17 @@ const styles = {
     color: "white"
   },
   monkeyTree: {
-    height: "40%",
+    height: "48%",
     position: "absolute",
-    top: "15%",
-    left: "7.75%",
+    top: "13%",
+    left: "19.90%",
     zIndex: 1,
   },
   Tree: {
     height: "35%",
     position: "absolute",
-    bottom: "9%",
-    right: "12%",
+    bottom: "10%",
+    right: "19%",
     zIndex: 1,
   },
 };
