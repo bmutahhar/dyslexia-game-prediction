@@ -36,7 +36,6 @@ export default class Login extends Component {
                 </Button>
               </Link>
               <FormFooter>
-                {/* Don't have an account? <Link to="/" style={styles.signup}> Sign Up</Link> */}
                 Don't have an account?
                 <Link to="/signup" style={styles.link}>
                   Sign up
@@ -112,10 +111,11 @@ const Background = styled.div`
 `;
 
 const Span = styled.span`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   letter-spacing: 2px;
-  margin-left: 10px;
+  margin-left: 5px;
+  padding-left: 5px;
 `;
 
 const Input = styled.input.attrs((props) => ({
@@ -152,7 +152,7 @@ const FormFooter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 16px;
 `;
 
 const styles = {
