@@ -9,6 +9,21 @@ import Contact from "./Components/Screens/ContactUs";
 import HowItWorks from "./Components/Screens/HowItWorks";
 import Login from "./Components/Screens/Login";
 
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route exact path="/" component={MainPage} />
+          {/* <Route path="/login" component={Login} /> */}
+        </Switch>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+
 class MainPage extends Component {
   constructor(props) {
     super(props);
@@ -24,10 +39,10 @@ class MainPage extends Component {
       <>
         {this.state.displayLogin ? (
           <>
-          <Blur isOpen={true}>
-            <Home />
-          </Blur>
-          <Login handleLogin={this.handleLogin} />
+            <Blur isOpen={true}>
+              <Home />
+            </Blur>
+            <Login handleLogin={this.handleLogin} />
           </>
         ) : (
           <>
@@ -42,22 +57,6 @@ class MainPage extends Component {
     );
   }
 }
-
-function App() {
-  return (
-    <Router>
-      <div className="App">
-        <Switch>
-          <Route exact path="/" component={MainPage} />
-          {/* <Route path="/login" component={Login} /> */}
-        </Switch>
-        {/* <Formpage /> */}
-      </div>
-    </Router>
-  );
-}
-
-export default App;
 
 const Blur = styled.div`
   width: 100%;

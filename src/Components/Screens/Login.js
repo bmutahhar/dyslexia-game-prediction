@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+import { slideInDown } from "react-animations";
 import Character from "../Character";
 import { Button } from "../Button";
-// import { HashLink as Link } from "react-router-hash-link";
 import monkeytree from "../Images/Characters/monkeytree.png";
 import tree from "../Images/Characters/tree.png";
 
@@ -62,6 +62,8 @@ class Login extends Component {
 
 export default withRouter(Login);
 
+const slideInAnimation = keyframes`${slideInDown}`;
+
 const Container = styled.div`
   position: absolute;
   top: 0;
@@ -75,6 +77,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   background: transparent;
+  animation: 0.8s ${slideInAnimation};
 `;
 const Form = styled.div`
   margin-top: 20px;

@@ -53,15 +53,12 @@ export default class Jumbotron extends Component {
             <FiChevronsDown color="white" size="32px" />
           </Link>
         </div>
-
-        {/* <span style={{backgroundColor: 'white',minWidth:"10%",minHeight:"10%"}}></span> */}
       </>
     );
   }
 }
 const styles = {
   jumbotron: {
-    // backgroundColor: "rgba(163, 158, 158, 0.549)",
     background: "transparent",
     minWidth: "60%",
     minHeight: "auto",
