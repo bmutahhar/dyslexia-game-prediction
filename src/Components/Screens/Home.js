@@ -68,6 +68,8 @@ export default class Home extends Component {
           style={styles.grass}
           onerror={`this.src=${altGrass}`}
         />
+
+
         
       </Background>
     );
@@ -154,5 +156,7 @@ const styles = {
     
     
   },
+
+  
 
 };

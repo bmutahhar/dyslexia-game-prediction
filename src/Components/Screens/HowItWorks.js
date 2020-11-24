@@ -211,15 +211,15 @@ const styles = {
     position: "absolute",
     zIndex: 3,
 
-    bottom: "-36%",
-    right: "15%",
+    bottom: "-30%",
+    right: "17%",
   },
 
   bird2: {
     position: "absolute",
     zIndex: 3,
 
-    bottom: "-30%",
+    bottom: "-25%",
     left: "19%",
   },
 
@@ -227,16 +227,16 @@ const styles = {
     position: "absolute",
     zIndex: 3,
 
-    bottom: "-83%",
-    left: "19%",
+    bottom: "-85%",
+    left: "18%",
   },
 
   bird4: {
     position: "absolute",
     zIndex: 3,
 
-    bottom: "-83%",
-    right: "17%",
+    bottom: "-84%",
+    right: "16%",
   },
 
   eagle: {
