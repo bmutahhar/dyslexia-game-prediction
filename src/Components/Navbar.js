@@ -1,21 +1,47 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
 import React, { Component } from "react";
-import croppedLogo from "./Images/logo-cropped.png"
-import whiteLogo from "./Images/logo-white.png"
-import "./styles/Navbar.css";
+// import {Link} from "react-router-dom";
+import { HashLink as Link } from "react-router-hash-link";
+import { FaTimes, FaBars } from "react-icons/fa";
+import logo from "./Images/logo-cropped.png";
+import { Button } from "./Button";
 
 export default class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      click: false,
+      button: true,
+    };
+  }
+  handleClick = () => {
+    this.setState({ click: !this.state.click });
+  };
+  closeMobileMenu = () => {
+    this.setState({ click: false });
+  };
+  showButton = () => {
+    if (window.innerWidth <= 960) {
+      this.setState({ button: false });
+    } else {
+      this.setState({ button: true });
+    }
+  };
+
   render() {
+    window.addEventListener("resize", this.showButton);
+
     return (
-      <nav className="navbar navbar-expand-lg fixed-top navbar-light bg-transparent">
-        <a className="navbar-brand mr-auto" href="#">
+      <nav className="navbar navbar-expand-lg fixed-top navbar-light bg-transparent" style={{fontSize:"18px",fontWeight:"600"}}>
+        <Link smooth to="#home" className="navbar-brand mr-auto">
           <img
-            src={whiteLogo}
+            src={logo}
             alt="Dyslexia"
             className="img-fluid"
             width="100"
             height="50"
           />
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -24,26 +50,41 @@ export default class Navbar extends Component {
           aria-controls="navbarNavAltMarkup"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          onClick={this.handleClick}
         >
-          <span className="navbar-toggler-icon"></span>
+          {this.state.click ? <FaTimes /> : <FaBars />}
+          {/* <span className="navbar-toggler-icon"></span> */}
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav  ml-auto">
-            <a className="nav-link text-white active" href="#">
-              Home <span className="sr-only">(current)</span>
-            </a>
-            <a className="nav-link text-white" href="#">
+            <Link smooth to="#home" className="nav-link text-white active">
+              Home
+            </Link>
+            <Link smooth to="#howitworks" className="nav-link text-white">
               How it works?
-            </a>
-            <a className="nav-link text-white" href="#">
+            </Link>
+            <Link smooth to="#about" className="nav-link text-white">
               About Us
-            </a>
-            <a href="#" className="nav-link text-white">
+            </Link>
+            <Link smooth to="#contact" className="nav-link text-white">
               Contact Us
-            </a>
-            <a href="#" className="nav-link">
-              <button className="btn btn-outline-sucess btn-success text-white align-self-center btn-sm">Log In</button>
-            </a>
+            </Link>
+            {/* <Link to="/login" className="nav-link">
+              <button className="btn btn-outline-sucess btn-success text-white align-self-center btn-sm">
+                Log In
+              </button>
+            </Link> */}
+            {this.state.button ? (
+              <Link to="/login" className="login-btn">
+                <Button buttonStyle="btn--outline" buttonColor="green" buttonSize="btn--small">Login</Button>
+              </Link>
+            ) : (
+              <Link to="/login" className="login-btn">
+                <Button buttonStyle="btn--outline" buttonColor="green" buttonSize="btn--wide">
+                  Login
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </nav>

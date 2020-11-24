@@ -1,0 +1,32 @@
+.container-fluid {
+  height: 100vh;
+}
+
+.bgCOLOR {
+  background-color: #21768d;
+  height: 100vh;
+}
+
+.col-11 {
+  background-image: url("../Images/bg.jpg");
+  height: 90vh;
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 20px;
+}
+
+.questions {
+  height: 70vh;
+  border-radius: 20px 20px 0 0;
+}
+
+.cartoon {
+  height: 20vh;
+  border-radius: 0 0 20px 20px;
+}
+
+.col-12 {
+  border: 3px solid blue;
+  text-align: left;
+}
