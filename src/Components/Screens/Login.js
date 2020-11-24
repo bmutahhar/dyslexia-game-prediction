@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { fadeIn } from "react-animations";
 import Character from "../Character";
@@ -7,11 +7,10 @@ import { Button } from "../Button";
 import monkeytree from "../Images/Characters/monkeytree.png";
 import tree from "../Images/Characters/tree.png";
 
-class Login extends Component {
-
+export default class Login extends Component {
   render() {
     return (
-      <Container>
+      <Container onClick={this.props.handleClick}>
         <Background>
           <Form>
             <Span>Username</Span>
@@ -27,16 +26,21 @@ class Login extends Component {
               >
                 Sign In
               </Button>
-              <Button
-                buttonStyle="btn--primary"
-                buttonColor="green"
-                buttonSize="btn--small"
-              >
-                Play As Guest
-              </Button>
+              <Link to="/userform">
+                <Button
+                  buttonStyle="btn--primary"
+                  buttonColor="green"
+                  buttonSize="btn--small"
+                >
+                  Play As Guest
+                </Button>
+              </Link>
               <FormFooter>
                 {/* Don't have an account? <Link to="/" style={styles.signup}> Sign Up</Link> */}
-                Don't have an account? <Link onClick={this.props.handleLogin} >Sign up</Link>
+                Don't have an account?
+                <Link to="/signup" style={styles.link}>
+                  Sign up
+                </Link>
               </FormFooter>
             </FormButtonGroup>
           </Form>
@@ -60,11 +64,10 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
-
-const slideInAnimation = keyframes`${fadeIn}`;
+const fadeInAnimation = keyframes`${fadeIn}`;
 
 const Container = styled.div`
+  background:grey;
   position: absolute;
   top: 0;
   left: 0;
@@ -76,10 +79,9 @@ const Container = styled.div`
   min-height: 100vh;
   width: 100%;
   height: 100vh;
-  
-  
+  z-index: 2;
   backdrop-filter: blur(15px) brightness(45%) saturate(150%) opacity(100%);
-  animation: 0.8s ${slideInAnimation};
+  animation: 0.6s ${fadeInAnimation};
 `;
 const Form = styled.div`
   margin-top: 20px;
@@ -95,7 +97,7 @@ const Form = styled.div`
 
 const Background = styled.div`
   background-image: linear-gradient(to top right, #597e87, #0b8835);
-  box-shadow: 10px 15px 10px rgba(0,0,0,0.4);
+  box-shadow: 10px 15px 10px rgba(0, 0, 0, 0.4);
   min-height: 80vh;
   min-width: 60%;
   border-radius: 50px;
@@ -153,20 +155,7 @@ const FormFooter = styled.div`
   font-size: 18px;
 `;
 
-const Link = styled.a`
-  text-decoration: none;
-  color: white;
-  margin: 2px 5px;
-
-  &:hover {
-    text-decoration: none;
-    color: white;
-    cursor: pointer;
-  }
-`;
-
 const styles = {
-  
   signup: {
     margin: "5px",
     color: "white",
@@ -184,5 +173,11 @@ const styles = {
     bottom: "10%",
     right: "19%",
     zIndex: 1,
+  },
+  link: {
+    color: "white",
+    margin: "2px",
+    padding: "2px",
+    textDecoration: "none",
   },
 };

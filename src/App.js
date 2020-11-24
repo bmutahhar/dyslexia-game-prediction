@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import styled from "styled-components";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Screens/Home";
 import About from "./Components/Screens/About";
@@ -39,14 +38,12 @@ class MainPage extends Component {
       <>
         {this.state.displayLogin ? (
           <>
-            <Blur isOpen={true}>
-              <Home />
-            </Blur>
+            <Home />
             <Login handleLogin={this.handleLogin} />
           </>
         ) : (
           <>
-            <Navbar />
+            <Navbar handleLogin={this.handleLogin} />
             <Home handleLogin={this.handleLogin} />
             <HowItWorks />
             <About />
@@ -57,14 +54,3 @@ class MainPage extends Component {
     );
   }
 }
-
-const Blur = styled.div`
-  width: 100%;
-  height: 100vh;
-  ${(props) =>
-    props.isOpen &&
-    `
-    backdrop-filter: blur(10px);
-    
-  `}
-`;

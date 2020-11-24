@@ -9,7 +9,6 @@ import lion from "../Images/Characters/lion.png";
 import Background from "../Background";
 import Character from "../Character";
 import Jumbotron from "../Jumbotron";
-import Navbar from "../Navbar";
 
 class Home extends Component {
   render() {
@@ -22,7 +21,6 @@ export default withRouter(Home);
 const HomePage = (props) => {
   return (
     <>
-      <Navbar />
       <Background
         className="d-flex align-items-center justify-content-center flex-column"
         id="home"
