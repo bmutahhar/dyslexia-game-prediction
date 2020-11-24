@@ -1,12 +1,14 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Character from "../Character";
 import { Button } from "../Button";
-import { HashLink as Link } from "react-router-hash-link";
+// import { HashLink as Link } from "react-router-hash-link";
 import monkeytree from "../Images/Characters/monkeytree.png";
 import tree from "../Images/Characters/tree.png";
 
-export default class Login extends Component {
+class Login extends Component {
+
   render() {
     return (
       <Container>
@@ -21,6 +23,7 @@ export default class Login extends Component {
                 buttonStyle="btn--primary"
                 buttonColor="green"
                 buttonSize="btn--small"
+                onClick={this.props.handleLogin}
               >
                 Sign In
               </Button>
@@ -32,7 +35,8 @@ export default class Login extends Component {
                 Play As Guest
               </Button>
               <FormFooter>
-                Don't have an account? <Link to="/" style={styles.signup}> Sign Up</Link>
+                {/* Don't have an account? <Link to="/" style={styles.signup}> Sign Up</Link> */}
+                Don't have an account? <Link onClick={this.props.handleLogin} >Sign up</Link>
               </FormFooter>
             </FormButtonGroup>
           </Form>
@@ -56,16 +60,24 @@ export default class Login extends Component {
   }
 }
 
+export default withRouter(Login);
+
 const Container = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 100%;
   min-height: 100vh;
-  background-color: grey;
+  width: 100%;
+  height: 100vh;
+  background: transparent;
 `;
 const Form = styled.div`
-margin-top: 20px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -88,7 +100,9 @@ const Background = styled.div`
   justify-content: center;
   color: white;
   text-align: left;
+  z-index: 10;
 `;
+
 const Span = styled.span`
   font-size: 18px;
   font-weight: 400;
@@ -103,20 +117,16 @@ const Input = styled.input.attrs((props) => ({
 }))`
   border-radius: 41px;
   padding: 2px;
-  border: 3px solid #707070;
+  border: none;
   width: 100%;
   text-align: left;
   padding-left: 15px;
-  background-color: #C9E3D2;
-  box-shadow: 0px 1px 6px 5px rgba(0, 0, 0, 0.2);
+  background-color: #c9e3d2;
   margin-bottom: 5px;
 
   &:focus {
-      outline: none;
-      
-
+    outline: none;
   }
-
 `;
 
 const FormButtonGroup = styled.div`
@@ -137,21 +147,23 @@ const FormFooter = styled.div`
   font-size: 18px;
 `;
 
+const Link = styled.a`
+  text-decoration: none;
+  color: white;
+  margin: 2px 5px;
+
+  &:hover {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+  }
+`;
+
 const styles = {
-  login: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100vh",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "contain",
-    backgroundColor: "grey",
-  },
-  signup:{
+  
+  signup: {
     margin: "5px",
-    color: "white"
+    color: "white",
   },
   monkeyTree: {
     height: "48%",
