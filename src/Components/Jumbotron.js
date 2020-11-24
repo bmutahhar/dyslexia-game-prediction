@@ -12,8 +12,8 @@ export default class Jumbotron extends Component {
         >
           <h1 className="display-3">Welcome to DyxsisML</h1>
           <p>
-            DyxsisML, a fun and friendly gaming environment for the
-            diagnosis of dyslexia.
+            DyxsisML, a fun and friendly gaming environment for the diagnosis of
+            dyslexia.
             <br /> Click on <b>START</b>
           </p>
           {/* <Link to="/login">
@@ -22,12 +22,21 @@ export default class Jumbotron extends Component {
               <FiChevronRight color="white" size="24px" />
             </button>
           </Link> */}
-          <Link to="/login">
+          {/* <Link to="/login">
             <Button buttonStyle="btn--primary" buttonColor="green" buttonSize="btn--medium" >
               Start
               <FiChevronRight color="white" size="24px" />
             </Button>
-          </Link>
+          </Link> */}
+          <Button
+            buttonStyle="btn--primary"
+            buttonColor="green"
+            buttonSize="btn--medium"
+            onClick={this.props.handleLogin}
+          >
+            Start
+            <FiChevronRight color="white" size="24px" />
+          </Button>
           <Link
             smooth
             to="#howitworks"
@@ -44,15 +53,12 @@ export default class Jumbotron extends Component {
             <FiChevronsDown color="white" size="32px" />
           </Link>
         </div>
-
-        {/* <span style={{backgroundColor: 'white',minWidth:"10%",minHeight:"10%"}}></span> */}
       </>
     );
   }
 }
 const styles = {
   jumbotron: {
-    // backgroundColor: "rgba(163, 158, 158, 0.549)",
     background: "transparent",
     minWidth: "60%",
     minHeight: "auto",
