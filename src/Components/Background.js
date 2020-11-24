@@ -7,12 +7,8 @@ export default class Background extends Component {
       backgroundPosition: "bottom center",
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
-      // minHeight: "100vh",
-      // minWidth: "100%",
       height: "100vh",
       width: "100%",
-      // padding: "0px",
-      // margin: "0px",
     };
     return (
       <div
