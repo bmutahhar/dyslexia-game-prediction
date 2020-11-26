@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import { fadeIn } from "react-animations";
+import { fadeIn, slideInDown } from "react-animations";
 import Character from "../Character";
+import Home from "./Home";
 import { Button } from "../Button";
 import monkeytree from "../Images/Characters/monkeytree.png";
 import tree from "../Images/Characters/tree.png";
@@ -10,63 +11,71 @@ import tree from "../Images/Characters/tree.png";
 export default class Login extends Component {
   render() {
     return (
-      <Container onClick={this.props.handleClick}>
-        <Background>
-          <Form>
-            <Span>Username</Span>
-            <Input id="username" type="text" placeholder="Username or Email" />
-            <Span>Password</Span>
-            <Input id="password" type="password" placeholder="Password" />
-            <FormButtonGroup>
-              <Button
-                buttonStyle="btn--primary"
-                buttonColor="green"
-                buttonSize="btn--small"
-                onClick={this.props.handleLogin}
-              >
-                Sign In
-              </Button>
-              <Link to="/userform">
-                <Button
-                  buttonStyle="btn--primary"
-                  buttonColor="green"
-                  buttonSize="btn--small"
-                >
-                  Play As Guest
-                </Button>
-              </Link>
-              <FormFooter>
-                Don't have an account?
-                <Link to="/signup" style={styles.link}>
-                  Sign up
-                </Link>
-              </FormFooter>
-            </FormButtonGroup>
-          </Form>
-          <Character
-            className="monkeytree"
-            src={monkeytree}
-            alt="Monkey & Tree"
-            style={styles.monkeyTree}
-          //   onerror={`this.src=${altGrass}`}
-          />
-          <Character
-            className="tree"
-            src={tree}
-            alt="Bottom Tree"
-            style={styles.Tree}
-          //   onerror={`this.src=${altGrass}`}
-          />
-        </Background>
-      </Container>
+      <>
+        <Home />
+        <Blur />
+        <AnimatedDiv>
+          <LoginComponent />
+        </AnimatedDiv>
+      </>
     );
   }
 }
 
-const fadeInAnimation = keyframes`${fadeIn}`;
+const LoginComponent = () => {
+  return (
+    <Background>
+      <Form>
+        <Span>Username</Span>
+        <Input id="username" type="text" placeholder="Username or Email" />
+        <Span>Password</Span>
+        <Input id="password" type="password" placeholder="Password" />
+        <FormButtonGroup>
+          <Link to="/">
+            <Button
+              buttonStyle="btn--primary"
+              buttonColor="green"
+              buttonSize="btn--small"
+            >
+              Sign In
+            </Button>
+          </Link>
+          <Link to="/userform">
+            <Button
+              buttonStyle="btn--primary"
+              buttonColor="green"
+              buttonSize="btn--small"
+            >
+              Play As Guest
+            </Button>
+          </Link>
+          <FormFooter>
+            Don't have an account?
+            <Link to="/signup" style={styles.link}>
+              Sign up
+            </Link>
+          </FormFooter>
+        </FormButtonGroup>
+      </Form>
+      <Character
+        className="monkeytree"
+        src={monkeytree}
+        alt="Monkey & Tree"
+        style={styles.monkeyTree}
+      />
+      <Character
+        className="tree"
+        src={tree}
+        alt="Bottom Tree"
+        style={styles.Tree}
+      />
+    </Background>
+  );
+};
 
-const Container = styled.div`
-  
+const fadeInAnimation = keyframes`${slideInDown}`;
+
+const AnimatedDiv = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -79,7 +88,6 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   z-index: 2;
-  backdrop-filter: blur(15px) brightness(45%) saturate(150%) opacity(100%);
   animation: 0.6s ${fadeInAnimation};
 `;
 const Form = styled.div`
@@ -107,7 +115,7 @@ const Background = styled.div`
   justify-content: center;
   color: white;
   text-align: left;
-  z-index: 10;
+  z-index: 2;
 `;
 
 const Span = styled.span`
@@ -153,6 +161,17 @@ const FormFooter = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 16px;
+`;
+
+const Blur = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 2;
+  backdrop-filter: blur(10px) brightness(45%) saturate(150%) opacity(100%);
 `;
 
 const styles = {

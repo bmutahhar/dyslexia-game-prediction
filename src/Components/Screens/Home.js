@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { zoomInUp } from "react-animations";
+import { zoomInUp, bounceInUp } from "react-animations";
 import image from "../Images/first.png";
 import topMonkey from "../Images/Characters/topmonkey.png";
 import bottomMonkey from "../Images/Characters/bottommonkey.png";
@@ -11,29 +11,37 @@ import Background from "../Background";
 import Character from "../Character";
 import Jumbotron from "../Jumbotron";
 
-
-
 export default class Home extends Component {
   render() {
-    return <HomePage handleLogin={this.props.handleLogin} />;
+    return <HomePage />;
   }
 }
 
-const HomePage = (props) => {
+const HomePage = () => {
   const [monkeyMessage, setMonkeyMessage] = useState(false);
   const [lionMessage, setLionMessage] = useState(false);
 
   const [monkeyAnimation, setMonkeyAnimation] = useState(true);
+  const [monkeypopup, setMonkeyPopup] = useState(true);
+
+
   const [lionAnimation, setLionAnimation] = useState(true);
+  const [lionpopup, setLionPopup] = useState(true);
+
+
+
 
   const displayMonkeyMessage = () => {
     setMonkeyMessage(!monkeyMessage);
     setMonkeyAnimation(!monkeyAnimation);
+    setMonkeyPopup(!monkeypopup);
 
   }
   const displayLionMessage = () => {
     setLionMessage(!lionMessage);
     setLionAnimation(!lionAnimation);
+    setLionPopup(!lionpopup);
+
 
   }
 
@@ -41,21 +49,20 @@ const HomePage = (props) => {
 
 
   return (
-
     <Background
       className="d-flex align-items-center justify-content-center flex-column"
       id="home"
       customStyle={false}
       src={image}
     >
-      <Jumbotron handleLogin={props.handleLogin} />
+      <Jumbotron />
       {lionMessage && (
         <LionMessage>
           <h3>Hey, I'M SIMBA</h3>
           <p>
             I'm A Friend Of Jonny, Me And Jonny Will Tag Along While You Have
             Some Fun
-            </p>
+          </p>
         </LionMessage>
       )}
       {monkeyMessage && (
@@ -63,13 +70,24 @@ const HomePage = (props) => {
           <h3>HI, I'M JONNY</h3>
           <p>
             You Are Really Going To Enjoy This Game, Come Lets Have Some Fun
-            </p>
+          </p>
         </MonkeyMessage>
       )}
 
-      <MonkeyPopup>
-        <h5> Hey!Click me </h5>
-      </MonkeyPopup>
+
+      {monkeypopup && (
+        <MonkeyPopup>
+          <h6>Hey!</h6>
+        </MonkeyPopup>
+      )}
+
+      {lionpopup && (
+        <LionPopup>
+          <h6>Hey!</h6>
+        </LionPopup>
+      )}
+
+
 
       <Character
         className="top-monkey"
@@ -84,14 +102,7 @@ const HomePage = (props) => {
         onClick={displayMonkeyMessage}
         style={styles.bottomMonkey}
         isAnimated={monkeyAnimation}
-
       />
-
-
-
-
-
-
 
       <Character
         className="lion"
@@ -100,7 +111,6 @@ const HomePage = (props) => {
         style={styles.lion}
         onClick={displayLionMessage}
         isAnimated={lionAnimation}
-
       />
       <Character
         className="grass"
@@ -110,54 +120,79 @@ const HomePage = (props) => {
         onerror={`this.src=${altGrass}`}
       />
     </Background>
-
   );
 };
 
 const fadeInAnimation = keyframes`${zoomInUp}`;
+const bounce = keyframes`${bounceInUp}`;
 
 
 const LionMessage = styled.div`
-    
-    color: black;
-    font-size: 18px;
-    background-color: #F3A61F;
-    align-items: center;
-    text-align: left;
-    justify-content: center;
-    border-radius: 30px;
-    border: 5px solid #993A02;
-    position: absolute;
-    min-width: 10%;
-    min-height: 25%;
-    width: 15%;
-    height: 45%;
-    margin: 5px;
-    padding: 20px;
-    right: 3%;
-    bottom: 30%;
-    animation: 0.6s ${fadeInAnimation};
+  
+  color: black;
+  font-size: 18px;
+  background-color: #f3a61f;
+  align-items: center;
+  text-align: left;
+  justify-content: center;
+  border-radius: 30px;
+  border: 5px solid #993a02;
+  position: absolute;
+  min-width: 10%;
+  min-height: 25%;
+  width: 15%;
+  height: 45%;
+  margin: 5px;
+  padding: 20px;
+  right: 3%;
+  bottom: 30%;
+  animation: 0.6s ${fadeInAnimation};
 `;
 
 const MonkeyPopup = styled.div`
 
 color: black;
-font-size: 1px;
+
 background-color: #F9CEAE;
 align-items: center;
-text-align: left;
+text-align: center;
 justify-content: center;
-border-radius: 30px;
-border: 5px solid #5B3E36;
+border-radius: 50%;
+border: 2px solid #5B3E36;
 position: absolute;
-min-width: 10%;
-min-height: 5%;
+min-width: 5%;
+min-height: 10%;
 width: 5%;
 height: 5%;
 margin: 5px;
-padding: 1px;
-left: 5%;
-bottom: 32%;
+padding-top: 20px;
+left: 8%;
+bottom: 31%;
+animation: 2s ${bounce};
+
+
+`;
+
+const LionPopup = styled.div`
+
+color: black;
+
+background-color: #f3a61f;
+align-items: center;
+text-align: center;
+justify-content: center;
+border-radius: 50%;
+border: 2px solid #993a02;
+position: absolute;
+min-width: 5%;
+min-height: 10%;
+width: 5%;
+height: 5%;
+margin: 5px;
+padding-top: 20px;
+right: 10%;
+bottom: 31%;
+animation: 2s ${bounce};
 
 
 `;
@@ -184,10 +219,6 @@ const MonkeyMessage = styled.div`
     animation: 0.6s ${fadeInAnimation};
 `;
 
-
-
-
-
 const styles = {
   topMonkey: {
     height: "30%",
@@ -195,7 +226,6 @@ const styles = {
     top: 0,
     right: "15%",
     zIndex: 1,
-
   },
   bottomMonkey: {
     height: "30%",
@@ -203,8 +233,6 @@ const styles = {
     bottom: 5,
     left: "3%",
     zIndex: 1,
-
-
   },
   lion: {
     height: "30%",
@@ -212,7 +240,6 @@ const styles = {
     bottom: 5,
     right: "5%",
     zIndex: 1,
-
   },
   grass: {
     width: "100%",
@@ -222,5 +249,4 @@ const styles = {
     right: 0,
     left: 0,
   },
-
 };

@@ -72,29 +72,22 @@ export default class Navbar extends Component {
             <Link smooth to="#contact" className="nav-link text-white">
               Contact Us
             </Link>
-            {/* <Link to="/login" className="nav-link">
-              <button className="btn btn-outline-sucess btn-success text-white align-self-center btn-sm">
-                Log In
-              </button>
-            </Link> */}
             {this.state.button ? (
-              <Link className="login-btn">
+              <Link to="/login" className="login-btn">
                 <Button
                   buttonStyle="btn--outline"
                   buttonColor="green"
                   buttonSize="btn--small"
-                  onClick={this.props.handleLogin}
                 >
                   Login
                 </Button>
               </Link>
             ) : (
-              <Link className="login-btn">
+              <Link to="/login" className="login-btn">
                 <Button
                   buttonStyle="btn--outline"
                   buttonColor="green"
                   buttonSize="btn--wide"
-                  onClick={this.props.handleLogin}
                 >
                   Login
                 </Button>

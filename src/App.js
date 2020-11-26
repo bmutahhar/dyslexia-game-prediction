@@ -14,7 +14,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route exact path="/" component={MainPage} />
-          {/* <Route path="/login" component={Login} /> */}
+          <Route path="/login" component={Login} />
         </Switch>
       </div>
     </Router>
@@ -24,32 +24,14 @@ function App() {
 export default App;
 
 class MainPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      displayLogin: false,
-    };
-  }
-  handleLogin = () => {
-    this.setState({ displayLogin: !this.state.displayLogin });
-  };
   render() {
     return (
       <>
-        {this.state.displayLogin ? (
-          <>
-            <Home />
-            <Login handleLogin={this.handleLogin} />
-          </>
-        ) : (
-            <>
-              <Navbar handleLogin={this.handleLogin} />
-              <Home handleLogin={this.handleLogin} />
-              <HowItWorks />
-              <About />
-              <Contact />
-            </>
-          )}
+        <Navbar />
+        <Home />
+        <HowItWorks />
+        <About />
+        <Contact />
       </>
     );
   }
