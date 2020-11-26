@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { zoomInUp, bounceInUp } from "react-animations";
+import { zoomInUp, bounceInUp, bounce } from "react-animations";
 import image from "../Images/first.png";
 import topMonkey from "../Images/Characters/topmonkey.png";
 import bottomMonkey from "../Images/Characters/bottommonkey.png";
@@ -124,7 +124,7 @@ const HomePage = () => {
 };
 
 const fadeInAnimation = keyframes`${zoomInUp}`;
-const bounce = keyframes`${bounceInUp}`;
+const bounce1 = keyframes`${bounce}`;
 
 
 const LionMessage = styled.div`
@@ -168,7 +168,7 @@ margin: 5px;
 padding-top: 20px;
 left: 8%;
 bottom: 31%;
-animation: 2s ${bounce};
+animation: 2s ${bounce1};
 
 
 `;
@@ -192,7 +192,7 @@ margin: 5px;
 padding-top: 20px;
 right: 10%;
 bottom: 31%;
-animation: 2s ${bounce};
+animation: 2s ${bounce1};
 
 
 `;

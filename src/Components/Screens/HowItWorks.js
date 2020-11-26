@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { zoomInUp, zoomInDown } from "react-animations";
+import { zoomInUp, zoomInDown, bounceInRight, bounceInDown, bounce } from "react-animations";
 import image from "../Images/third.png";
 import bird1 from "../Images/Characters/bird1.png";
 import bird2 from "../Images/Characters/bird2.png";
@@ -18,6 +18,7 @@ import Character from "../Character";
 import Video from "../Video";
 
 
+
 export default class HowItWorks extends Component {
   render() {
     return <Howitworkspage />;
@@ -29,8 +30,25 @@ const Howitworkspage = () => {
   const [sunMessage, setSunMessage] = useState(false);
   const [eagleMessage, setEagleMessage] = useState(false);
 
-  const displaySunMessage = () => setSunMessage(!sunMessage);
-  const displayEagleMessage = () => setEagleMessage(!eagleMessage);
+
+  const [sunAnimation, setSunAnimation] = useState(true);
+  const [sunpopup, setSunPopup] = useState(true);
+
+
+  const [eagleAnimation, setEagleAnimation] = useState(true);
+  const [eaglepopup, setEaglePopup] = useState(true);
+
+  const displaySunMessage = () => {
+    setSunAnimation(!sunAnimation);
+    setSunPopup(!sunpopup);
+    setSunMessage(!sunMessage);
+  }
+
+  const displayEagleMessage = () => {
+    setEagleAnimation(!eagleAnimation);
+    setEaglePopup(!eaglepopup);
+    setEagleMessage(!eagleMessage);
+  }
   return (
     <>
       <Background
@@ -71,6 +89,18 @@ const Howitworkspage = () => {
           </SunMessage>
         )}
 
+        {sunpopup && (
+          <SunPopup>
+            <h6>Hey!</h6>
+          </SunPopup>
+        )}
+
+        {eaglepopup && (
+          <EaglePopup>
+            <h6>Hey!</h6>
+          </EaglePopup>
+        )}
+
 
 
         <Character
@@ -80,6 +110,7 @@ const Howitworkspage = () => {
           onClick={displayEagleMessage}
 
           style={styles.eagle}
+          isAnimated={eagleAnimation}
         />
 
         <Character
@@ -123,7 +154,9 @@ const Howitworkspage = () => {
           alt="sun"
           onClick={displaySunMessage}
 
-          style={styles.sun} />
+          style={styles.sun}
+          isAnimated={sunAnimation}
+        />
 
         <Character
           className="cloud"
@@ -146,6 +179,9 @@ const Howitworkspage = () => {
 
 const zoomInupAnimation = keyframes`${zoomInUp}`;
 const zoomIndownAnimation = keyframes`${zoomInDown}`;
+const bounce1 = keyframes`${bounce}`;
+const bounce2 = keyframes`${bounce}`;
+
 
 
 const EagleMessage = styled.div`
@@ -218,6 +254,56 @@ const SunMessage = styled.div`
     left: 2%;
     bottom: -82%;
     animation: 0.6s ${zoomIndownAnimation};
+
+
+`;
+
+const SunPopup = styled.div`
+
+color: black;
+
+background-color: #FFE401;
+align-items: center;
+text-align: center;
+justify-content: center;
+border-radius: 50%;
+border: 2px solid #FDB200;
+position: absolute;
+min-width: 5%;
+min-height: 10%;
+width: 5%;
+height: 5%;
+margin: 5px;
+z-index: 3;
+padding-top: 20px;
+left: 8%;
+bottom: -35%;
+animation: 2s ${bounce2};
+
+
+`;
+
+const EaglePopup = styled.div`
+
+color: black;
+
+background-color: #FCFDFF;
+align-items: center;
+text-align: center;
+justify-content: center;
+border-radius: 50%;
+border: 2px solid #8F4321;
+position: absolute;
+min-width: 5%;
+min-height: 10%;
+width: 5%;
+height: 5%;
+margin: 5px;
+padding-top: 20px;
+right: 13%;
+bottom: -95%;
+z-index: 2;
+animation: 2s ${bounce1};
 
 
 `;
