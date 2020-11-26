@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { zoomInUp, bounce, pulse } from "react-animations";
+import { zoomInUp } from "react-animations";
 import image from "../Images/first.png";
 import topMonkey from "../Images/Characters/topmonkey.png";
 import bottomMonkey from "../Images/Characters/bottommonkey.png";
@@ -69,10 +69,7 @@ const HomePage = (props) => {
 
       />
 
-      {/* <BottomM
-        src={bottomMonkey}
-        alt="Bottom Monkey"
-      /> */}
+
 
 
 
@@ -100,7 +97,7 @@ const HomePage = (props) => {
 };
 
 const fadeInAnimation = keyframes`${zoomInUp}`;
-const pulseAnimation = keyframes`${pulse}`;
+
 
 const LionMessage = styled.div`
     display: flex;
@@ -150,16 +147,7 @@ const MonkeyMessage = styled.div`
     animation: 0.6s ${fadeInAnimation};
 `;
 
-// const BottomM = styled.img`
 
-//     height: 30%;
-//     position: absolute;
-//     bottom: 5%;
-//     left: 25%;
-//     z-index: 1;
-//     animation: infinite 1s ${pulseAnimation};
-
-// `;
 
 
 
@@ -187,9 +175,7 @@ const styles = {
     bottom: 5,
     right: "5%",
     zIndex: 1,
-    "&:hover": {
-      cursor: "pointer",
-    },
+
   },
   grass: {
     width: "100%",
