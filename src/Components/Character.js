@@ -49,6 +49,10 @@ const Animated = styled.img`
 
 animation: infinite 1s ${pulseAnimation};
 
+&:hover {
+  cursor: pointer;
+}
+
 
 
 `;

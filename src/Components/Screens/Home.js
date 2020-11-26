@@ -23,8 +23,22 @@ const HomePage = (props) => {
   const [monkeyMessage, setMonkeyMessage] = useState(false);
   const [lionMessage, setLionMessage] = useState(false);
 
-  const displayMonkeyMessage = () => setMonkeyMessage(!monkeyMessage);
-  const displayLionMessage = () => setLionMessage(!lionMessage);
+  const [monkeyAnimation, setMonkeyAnimation] = useState(true);
+  const [lionAnimation, setLionAnimation] = useState(true);
+
+  const displayMonkeyMessage = () => {
+    setMonkeyMessage(!monkeyMessage);
+    setMonkeyAnimation(!monkeyAnimation);
+
+  }
+  const displayLionMessage = () => {
+    setLionMessage(!lionMessage);
+    setLionAnimation(!lionAnimation);
+
+  }
+
+
+
 
   return (
 
@@ -53,6 +67,10 @@ const HomePage = (props) => {
         </MonkeyMessage>
       )}
 
+      <MonkeyPopup>
+        <h5> Hey!Click me </h5>
+      </MonkeyPopup>
+
       <Character
         className="top-monkey"
         src={topMonkey}
@@ -65,7 +83,7 @@ const HomePage = (props) => {
         alt="Bottom Monkey"
         onClick={displayMonkeyMessage}
         style={styles.bottomMonkey}
-        isAnimated={true}
+        isAnimated={monkeyAnimation}
 
       />
 
@@ -81,7 +99,7 @@ const HomePage = (props) => {
         alt="Lion"
         style={styles.lion}
         onClick={displayLionMessage}
-        isAnimated={true}
+        isAnimated={lionAnimation}
 
       />
       <Character
@@ -100,9 +118,7 @@ const fadeInAnimation = keyframes`${zoomInUp}`;
 
 
 const LionMessage = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
+    
     color: black;
     font-size: 18px;
     background-color: #F3A61F;
@@ -123,10 +139,31 @@ const LionMessage = styled.div`
     animation: 0.6s ${fadeInAnimation};
 `;
 
+const MonkeyPopup = styled.div`
+
+color: black;
+font-size: 1px;
+background-color: #F9CEAE;
+align-items: center;
+text-align: left;
+justify-content: center;
+border-radius: 30px;
+border: 5px solid #5B3E36;
+position: absolute;
+min-width: 10%;
+min-height: 5%;
+width: 5%;
+height: 5%;
+margin: 5px;
+padding: 1px;
+left: 5%;
+bottom: 32%;
+
+
+`;
+
 const MonkeyMessage = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
+    
     color: black;
     font-size: 18px;
     background-color: #F9CEAE;

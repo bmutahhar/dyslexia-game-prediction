@@ -48,14 +48,14 @@ export default class Login extends Component {
             src={monkeytree}
             alt="Monkey & Tree"
             style={styles.monkeyTree}
-            //   onerror={`this.src=${altGrass}`}
+          //   onerror={`this.src=${altGrass}`}
           />
           <Character
             className="tree"
             src={tree}
             alt="Bottom Tree"
             style={styles.Tree}
-            //   onerror={`this.src=${altGrass}`}
+          //   onerror={`this.src=${altGrass}`}
           />
         </Background>
       </Container>
