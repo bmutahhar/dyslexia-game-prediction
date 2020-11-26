@@ -18,19 +18,20 @@ export default class Jumbotron extends Component {
             dyslexia.
             <br /> Click on <b>START</b>
           </p>
-          <Button
-            buttonStyle="btn--primary"
-            buttonColor="green"
-            buttonSize="btn--medium"
-            onClick={this.props.handleLogin}
-          >
-            Start
-            <FiChevronRight color="white" size="24px" />
-          </Button>
+          <Link to="/login">
+            <Button
+              buttonStyle="btn--primary"
+              buttonColor="green"
+              buttonSize="btn--medium"
+            >
+              Start
+              <FiChevronRight color="white" size="24px" />
+            </Button>
+          </Link>
           <PulseDiv>
             <Link smooth to="#howitworks" style={styles.link}>
               Scroll below <br />
-              <FiChevronsDown color="white" size="32px"/>
+              <FiChevronsDown color="white" size="32px" />
             </Link>
           </PulseDiv>
         </div>
