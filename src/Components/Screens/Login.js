@@ -66,7 +66,7 @@ export default class Login extends Component {
 const fadeInAnimation = keyframes`${fadeIn}`;
 
 const Container = styled.div`
-  background:grey;
+  
   position: absolute;
   top: 0;
   left: 0;

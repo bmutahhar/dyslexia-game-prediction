@@ -42,14 +42,14 @@ class MainPage extends Component {
             <Login handleLogin={this.handleLogin} />
           </>
         ) : (
-          <>
-            <Navbar handleLogin={this.handleLogin} />
-            <Home handleLogin={this.handleLogin} />
-            <HowItWorks />
-            <About />
-            <Contact />
-          </>
-        )}
+            <>
+              <Navbar handleLogin={this.handleLogin} />
+              <Home handleLogin={this.handleLogin} />
+              <HowItWorks />
+              <About />
+              <Contact />
+            </>
+          )}
       </>
     );
   }

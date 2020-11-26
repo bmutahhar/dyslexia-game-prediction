@@ -1,4 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
+import styled, { keyframes } from "styled-components";
+import { zoomInUp, zoomInDown } from "react-animations";
 import image from "../Images/third.png";
 import bird1 from "../Images/Characters/bird1.png";
 import bird2 from "../Images/Characters/bird2.png";
@@ -18,44 +20,65 @@ import Video from "../Video";
 
 export default class HowItWorks extends Component {
   render() {
-    return (
+    return <Howitworkspage />;
+  }
+}
+
+const Howitworkspage = () => {
+
+  const [sunMessage, setSunMessage] = useState(false);
+  const [eagleMessage, setEagleMessage] = useState(false);
+
+  const displaySunMessage = () => setSunMessage(!sunMessage);
+  const displayEagleMessage = () => setEagleMessage(!eagleMessage);
+  return (
+    <>
       <Background
         className="d-flex align-items-center justify-content-center flex-column"
         id="howitworks"
         customStyle={false}
         src={image}
       >
-        <Background
+        {/* <Background
           className="d-flex justify-justify-content-between flex-column"
           style={styles.blueDiv}
           customStyle={true}
         >
           <Video className="Video" style={styles.Video} />
-        </Background>
-        {/* <button style={styles.button}>click me</button> */}
+        </Background> */}
 
-        <Background
-          className="d-flex justify-justify-content-between flex-column"
-          style={styles.msgDiv}
-          customStyle={true}
-        >
-          <h3>Hello Kids, I'M Eaggie</h3>
-          <p>Watch The Instructional Video To Learn How To Play The Game</p>
-        </Background>
+        <BlueDiv className="d-flex justify-justify-content-between flex-column">
+          <Video className="Video" style={styles.Video} />
+        </BlueDiv>
 
-        <Background
-          className="d-flex justify-justify-content-between flex-column"
-          style={styles.msgDiv1}
-          customStyle={true}
-        >
-          <h3>HI, I'M SUNNY</h3>
-          <p>I Hope You Kids Have A Bright And Wonderful Day. :)</p>
-        </Background>
+
+        {eagleMessage && (
+          <EagleMessage>
+            <h3>Hello Kids, I'M Eaggie</h3>
+
+            <p>
+              Watch The Instructional Video To Learn How To Play The Game
+            </p>
+          </EagleMessage>
+        )}
+        {sunMessage && (
+          <SunMessage>
+            <h3>HI, I'M SUNNY</h3>
+
+            <p>
+              I Hope You Kids Have A Bright And Wonderful Day. :)
+          </p>
+          </SunMessage>
+        )}
+
+
 
         <Character
           className="eagle"
           src={eagle}
           alt="eagle"
+          onClick={displayEagleMessage}
+
           style={styles.eagle}
         />
 
@@ -94,7 +117,13 @@ export default class HowItWorks extends Component {
           style={styles.bird4}
         />
 
-        <Character className="sun" src={sun} alt="sun" style={styles.sun} />
+        <Character
+          className="sun"
+          src={sun}
+          alt="sun"
+          onClick={displaySunMessage}
+
+          style={styles.sun} />
 
         <Character
           className="cloud"
@@ -111,70 +140,148 @@ export default class HowItWorks extends Component {
         />
 
       </Background>
-    );
-  }
-}
+    </>
+  );
+};
+
+const zoomInupAnimation = keyframes`${zoomInUp}`;
+const zoomIndownAnimation = keyframes`${zoomInDown}`;
+
+
+const EagleMessage = styled.div`
+    
+    
+    color: black;
+    font-size: 18px;
+    background-color: #FCFDFF;
+    align-items: center;
+    text-align: left;
+    justify-content: center;
+    border-radius: 30px;
+    border: 5px solid #8F4321;
+
+    position: absolute;
+
+    min-width: 10%;
+    min-height: 25%;
+
+    
+
+    width: 15%;
+    height: 45%;
+    margin: 5px;
+    padding: 20px;
+    right: 2%;
+    bottom: -68%;
+    animation: 0.6s ${zoomInupAnimation};
+
+
+`;
+
+const BlueDiv = styled.div`
+
+background-image: linear-gradient(#17E2D4, #1050CE);
+    box-shadow: 5px 20px 20px 5px rgba(0, 0, 0, 0.5);
+    display: flex;
+
+    min-width: 50%;
+    min-height: 40%;
+
+    width: 60%;
+    height: 65%;
+    margin: 2px;
+    padding: 20px;
+    border-radius: 20px;
+
+`;
+
+const SunMessage = styled.div`
+    
+    color: black;
+    font-size: 18px;
+    background-color: #FFE401;
+    align-items: center;
+    text-align: left;
+    justify-content: center;
+    border-radius: 30px;
+    border: 5px solid #FDB200;
+
+    position: absolute;
+
+    min-width: 10%;
+    min-height: 25%;
+
+    width: 15%;
+    height: 45%;
+    margin: 5px;
+    padding: 20px;
+    left: 2%;
+    bottom: -82%;
+    animation: 0.6s ${zoomIndownAnimation};
+
+
+`;
 
 const styles = {
-  blueDiv: {
-    backgroundImage: "linear-gradient(#17E2D4, #1050CE)",
-    boxShadow: "5px 20px 20px 5px rgba(0, 0, 0, 0.5)",
-    display: "flex",
+  // blueDiv: {
+  //   backgroundImage: "linear-gradient(#17E2D4, #1050CE)",
+  //   boxShadow: "5px 20px 20px 5px rgba(0, 0, 0, 0.5)",
+  //   display: "flex",
 
-    minWidth: "50%",
-    minHeight: "40%",
-    width: "60%",
-    height: "65%",
-    margin: "2px",
-    padding: "20px",
-    borderRadius: "20px",
-  },
+  //   minWidth: "50%",
+  //   minHeight: "40%",
+  //   width: "60%",
+  //   height: "65%",
+  //   margin: "2px",
+  //   padding: "20px",
+  //   borderRadius: "20px",
+  // },
 
-  msgDiv: {
-    color: "black",
-    fontSize: "18px",
-    backgroundColor: "#FCFDFF",
-    alignItems: "center",
-    textAlign: "left",
-    justifyContent: "center",
-    borderRadius: "30px",
-    border: "5px solid #8F4321",
+  // msgDiv: {
+  //   color: "black",
+  //   fontSize: "18px",
+  //   backgroundColor: "#FCFDFF",
+  //   alignItems: "center",
+  //   textAlign: "left",
+  //   justifyContent: "center",
+  //   borderRadius: "30px",
+  //   border: "5px solid #8F4321",
 
-    position: "absolute",
+  //   position: "absolute",
 
-    minWidth: "10%",
-    minHeight: "25%",
+  //   minWidth: "10%",
+  //   minHeight: "25%",
 
-    width: "15%",
-    height: "45%",
-    margin: "5px",
-    padding: "20px",
-    right: "2%",
-    bottom: "-68%",
-  },
+  //   width: "15%",
+  //   height: "45%",
+  //   margin: "5px",
+  //   padding: "20px",
+  //   right: "2%",
+  //   bottom: "-68%",
+  // },
 
-  msgDiv1: {
-    color: "black",
-    fontSize: "18px",
-    backgroundColor: "#FFE401",
-    alignItems: "center",
-    textAlign: "left",
-    justifyContent: "center",
-    borderRadius: "30px",
-    border: "5px solid #FDB200",
+  // msgDiv1: {
+  //   color: "black",
+  //   fontSize: "18px",
+  //   backgroundColor: "#FFE401",
+  //   alignItems: "center",
+  //   textAlign: "left",
+  //   justifyContent: "center",
+  //   borderRadius: "30px",
+  //   border: "5px solid #FDB200",
 
-    position: "absolute",
+  //   position: "absolute",
 
-    minWidth: "10%",
-    minHeight: "25%",
+  //   minWidth: "10%",
+  //   minHeight: "25%",
 
-    width: "15%",
-    height: "45%",
-    margin: "5px",
-    padding: "20px",
-    left: "2%",
-    bottom: "-82%",
-  },
+  //   width: "15%",
+  //   height: "45%",
+  //   margin: "5px",
+  //   padding: "20px",
+  //   left: "2%",
+  //   bottom: "-82%",
+  // },
 
   Video: {
     height: "100%",
@@ -272,3 +379,8 @@ const styles = {
     border: "none",
   },
 };
+
+
+
+
+

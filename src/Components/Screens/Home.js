@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { fadeInUp, bounce } from "react-animations";
+import { zoomInUp, bounce, pulse } from "react-animations";
 import image from "../Images/first.png";
 import topMonkey from "../Images/Characters/topmonkey.png";
 import bottomMonkey from "../Images/Characters/bottommonkey.png";
@@ -10,6 +10,8 @@ import lion from "../Images/Characters/lion.png";
 import Background from "../Background";
 import Character from "../Character";
 import Jumbotron from "../Jumbotron";
+
+
 
 export default class Home extends Component {
   render() {
@@ -25,70 +27,80 @@ const HomePage = (props) => {
   const displayLionMessage = () => setLionMessage(!lionMessage);
 
   return (
-    <>
-      <Background
-        className="d-flex align-items-center justify-content-center flex-column"
-        id="home"
-        customStyle={false}
-        src={image}
-      >
-        <Jumbotron handleLogin={props.handleLogin} />
-        {lionMessage && (
-          <LionMessage>
-            <h3>Hey, I'M SIMBA</h3>
-            <p>
-              I'm A Friend Of Jonny, Me And Jonny Will Tag Along While You Have
-              Some Fun
-            </p>
-          </LionMessage>
-        )}
-        {monkeyMessage && (
-          <MonkeyMessage>
-            <h3>HI, I'M JONNY</h3>
-            <p>
-              You Are Really Going To Enjoy This Game, Come Lets Have Some Fun
-            </p>
-          </MonkeyMessage>
-        )}
 
-        <Character
-          className="top-monkey"
-          src={topMonkey}
-          alt="Top Monkey"
-          style={styles.topMonkey}
-        />
-        <Character
-          className="bottom-monkey"
-          src={bottomMonkey}
-          alt="Bottom Monkey"
-          style={styles.bottomMonkey}
-          onClick={displayMonkeyMessage}
-          isAnimated={true}
-          animation={bounce}
-        />
-        <Character
-          className="lion"
-          src={lion}
-          alt="Lion"
-          style={styles.lion}
-          onClick={displayLionMessage}
-          isAnimated={true}
-          animation={bounce}
-        />
-        <Character
-          className="grass"
-          src={grass}
-          alt="Grass"
-          style={styles.grass}
-          onerror={`this.src=${altGrass}`}
-        />
-      </Background>
-    </>
+    <Background
+      className="d-flex align-items-center justify-content-center flex-column"
+      id="home"
+      customStyle={false}
+      src={image}
+    >
+      <Jumbotron handleLogin={props.handleLogin} />
+      {lionMessage && (
+        <LionMessage>
+          <h3>Hey, I'M SIMBA</h3>
+          <p>
+            I'm A Friend Of Jonny, Me And Jonny Will Tag Along While You Have
+            Some Fun
+            </p>
+        </LionMessage>
+      )}
+      {monkeyMessage && (
+        <MonkeyMessage>
+          <h3>HI, I'M JONNY</h3>
+          <p>
+            You Are Really Going To Enjoy This Game, Come Lets Have Some Fun
+            </p>
+        </MonkeyMessage>
+      )}
+
+      <Character
+        className="top-monkey"
+        src={topMonkey}
+        alt="Top Monkey"
+        style={styles.topMonkey}
+      />
+      <Character
+        className="bottom-monkey"
+        src={bottomMonkey}
+        alt="Bottom Monkey"
+        onClick={displayMonkeyMessage}
+        style={styles.bottomMonkey}
+        isAnimated={true}
+
+      />
+
+      {/* <BottomM
+        src={bottomMonkey}
+        alt="Bottom Monkey"
+      /> */}
+
+
+
+
+
+      <Character
+        className="lion"
+        src={lion}
+        alt="Lion"
+        style={styles.lion}
+        onClick={displayLionMessage}
+        isAnimated={true}
+
+      />
+      <Character
+        className="grass"
+        src={grass}
+        alt="Grass"
+        style={styles.grass}
+        onerror={`this.src=${altGrass}`}
+      />
+    </Background>
+
   );
 };
 
-const fadeInAnimation = keyframes`${fadeInUp}`;
-const bounceAnimation = keyframes`${bounce}`;
+const fadeInAnimation = keyframes`${zoomInUp}`;
+const pulseAnimation = keyframes`${pulse}`;
 
 const LionMessage = styled.div`
     display: flex;
@@ -97,7 +109,7 @@ const LionMessage = styled.div`
     color: black;
     font-size: 18px;
     background-color: #F3A61F;
-    align-items: center
+    align-items: center;
     text-align: left;
     justify-content: center;
     border-radius: 30px;
@@ -111,7 +123,7 @@ const LionMessage = styled.div`
     padding: 20px;
     right: 3%;
     bottom: 30%;
-    animation: 1s ${fadeInAnimation};
+    animation: 0.6s ${fadeInAnimation};
 `;
 
 const MonkeyMessage = styled.div`
@@ -135,12 +147,21 @@ const MonkeyMessage = styled.div`
     padding: 20px;
     left: 3%;
     bottom: 30%;
-    animation: 1s ${fadeInAnimation};
+    animation: 0.6s ${fadeInAnimation};
 `;
 
-const BouncyDiv = styled.div`
-  animation: 1s ${bounceAnimation};
-`;
+// const BottomM = styled.img`
+
+//     height: 30%;
+//     position: absolute;
+//     bottom: 5%;
+//     left: 25%;
+//     z-index: 1;
+//     animation: infinite 1s ${pulseAnimation};
+
+// `;
+
+
 
 const styles = {
   topMonkey: {
@@ -149,6 +170,7 @@ const styles = {
     top: 0,
     right: "15%",
     zIndex: 1,
+
   },
   bottomMonkey: {
     height: "30%",
@@ -156,9 +178,8 @@ const styles = {
     bottom: 5,
     left: "3%",
     zIndex: 1,
-    "&:hover": {
-      cursor: "pointer",
-    },
+
+
   },
   lion: {
     height: "30%",
@@ -179,24 +200,4 @@ const styles = {
     left: 0,
   },
 
-  lionDiv: {},
-  monkeyDiv: {
-    color: "black",
-    fontSize: "18px",
-    backgroundColor: "#F9CEAE",
-    alignItems: "center",
-    textAlign: "left",
-    justifyContent: "center",
-    borderRadius: "30px",
-    border: "5px solid #5B3E36",
-    position: "absolute",
-    minWidth: "10%",
-    minHeight: "25%",
-    width: "15%",
-    height: "45%",
-    margin: "5px",
-    padding: "20px",
-    left: "3%",
-    bottom: "30%",
-  },
 };
