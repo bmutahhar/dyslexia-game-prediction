@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { zoomInUp, zoomInDown, bounceInRight, bounceInDown, bounce } from "react-animations";
+import { zoomInUp, zoomInDown, bounceInRight, bounceInDown, bounce, zoomIn } from "react-animations";
 import image from "../Images/third.png";
 import bird1 from "../Images/Characters/bird1.png";
 import bird2 from "../Images/Characters/bird2.png";
@@ -65,7 +65,7 @@ const Howitworkspage = () => {
           <Video className="Video" style={styles.Video} />
         </Background> */}
 
-        <BlueDiv className="d-flex justify-justify-content-between flex-column">
+        <BlueDiv className="d-flex justify-justify-content-between flex-column wow">
           <Video className="Video" style={styles.Video} />
         </BlueDiv>
 
@@ -90,13 +90,13 @@ const Howitworkspage = () => {
         )}
 
         {sunpopup && (
-          <SunPopup>
+          <SunPopup className="wow">
             <h6>Hey!</h6>
           </SunPopup>
         )}
 
         {eaglepopup && (
-          <EaglePopup>
+          <EaglePopup className="wow">
             <h6>Hey!</h6>
           </EaglePopup>
         )}
@@ -104,7 +104,7 @@ const Howitworkspage = () => {
 
 
         <Character
-          className="eagle"
+          className="eagle wow"
           src={eagle}
           alt="eagle"
           onClick={displayEagleMessage}
@@ -149,7 +149,7 @@ const Howitworkspage = () => {
         />
 
         <Character
-          className="sun"
+          className="sun wow"
           src={sun}
           alt="sun"
           onClick={displaySunMessage}
@@ -182,6 +182,7 @@ const zoomIndownAnimation = keyframes`${zoomInDown}`;
 const bounce1 = keyframes`${bounce}`;
 const bounce2 = keyframes`${bounce}`;
 
+const zoomAnimation = keyframes`${zoomIn}`;
 
 
 const EagleMessage = styled.div`
@@ -228,6 +229,7 @@ background-image: linear-gradient(#17E2D4, #1050CE);
     margin: 2px;
     padding: 20px;
     border-radius: 20px;
+    animation: 6s ${zoomAnimation};
 
 `;
 
