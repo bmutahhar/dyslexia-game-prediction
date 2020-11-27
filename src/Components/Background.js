@@ -4,7 +4,7 @@ export default class Background extends Component {
   render() {
     const styles = {
       backgroundImage: `url(${this.props.src})`,
-      backgroundPosition: "bottom center",
+      backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
       height: "100vh",

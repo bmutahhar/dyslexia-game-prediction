@@ -12,7 +12,7 @@ import sun from "../Images/Characters/sun.png";
 import cloud from "../Images/Characters/cloud.png";
 import cloudsun from "../Images/Characters/cloudsun.png";
 import cloudfooter from "../Images/Characters/cloudfooter1.png";
-import Background from "../../Components/Background";
+import Background from "../Background";
 
 import Character from "../Character";
 import Video from "../Video";
@@ -305,66 +305,6 @@ animation: 2s 1s 3 ${bounce1};
 `;
 
 const styles = {
-  // blueDiv: {
-  //   backgroundImage: "linear-gradient(#17E2D4, #1050CE)",
-  //   boxShadow: "5px 20px 20px 5px rgba(0, 0, 0, 0.5)",
-  //   display: "flex",
-
-  //   minWidth: "50%",
-  //   minHeight: "40%",
-  //   width: "60%",
-  //   height: "65%",
-  //   margin: "2px",
-  //   padding: "20px",
-  //   borderRadius: "20px",
-  // },
-
-  // msgDiv: {
-  //   color: "black",
-  //   fontSize: "18px",
-  //   backgroundColor: "#FCFDFF",
-  //   alignItems: "center",
-  //   textAlign: "left",
-  //   justifyContent: "center",
-  //   borderRadius: "30px",
-  //   border: "5px solid #8F4321",
-
-  //   position: "absolute",
-
-  //   minWidth: "10%",
-  //   minHeight: "25%",
-
-  //   width: "15%",
-  //   height: "45%",
-  //   margin: "5px",
-  //   padding: "20px",
-  //   right: "2%",
-  //   bottom: "-68%",
-  // },
-
-  // msgDiv1: {
-  //   color: "black",
-  //   fontSize: "18px",
-  //   backgroundColor: "#FFE401",
-  //   alignItems: "center",
-  //   textAlign: "left",
-  //   justifyContent: "center",
-  //   borderRadius: "30px",
-  //   border: "5px solid #FDB200",
-
-  //   position: "absolute",
-
-  //   minWidth: "10%",
-  //   minHeight: "25%",
-
-  //   width: "15%",
-  //   height: "45%",
-  //   margin: "5px",
-  //   padding: "20px",
-  //   left: "2%",
-  //   bottom: "-82%",
-  // },
-
   Video: {
     height: "100%",
     width: "100%",

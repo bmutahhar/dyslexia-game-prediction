@@ -13,7 +13,7 @@
   white-space: nowrap;
 }
 
-.btn-primary {
+.btn--primary {
   background-color: var(--primary);
   color: #242424;
   border: 1px solid var(--primary);
@@ -54,9 +54,9 @@
   transition: all 0.3s ease-out;
 }
 
-.btn-wide {
-  padding: 12px 64px;
-  font-size: 20px;
+.btn--wide {
+  font-size: 16px;
+  padding: 8px 64px;
 }
 
 .btn--large:hover,
@@ -70,7 +70,7 @@
 .btn--wide:hover {
   color: #ffffff;
   background-color: #f00946;
-  transition: all 0.2s ease-out;
+  transition: all 0.5s ease-out;
 }
 
 .blue {
