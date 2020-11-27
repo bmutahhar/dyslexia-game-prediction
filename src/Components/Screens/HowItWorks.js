@@ -305,65 +305,7 @@ animation: 2s 1s 3 ${bounce1};
 `;
 
 const styles = {
-  // blueDiv: {
-  //   backgroundImage: "linear-gradient(#17E2D4, #1050CE)",
-  //   boxShadow: "5px 20px 20px 5px rgba(0, 0, 0, 0.5)",
-  //   display: "flex",
 
-  //   minWidth: "50%",
-  //   minHeight: "40%",
-  //   width: "60%",
-  //   height: "65%",
-  //   margin: "2px",
-  //   padding: "20px",
-  //   borderRadius: "20px",
-  // },
-
-  // msgDiv: {
-  //   color: "black",
-  //   fontSize: "18px",
-  //   backgroundColor: "#FCFDFF",
-  //   alignItems: "center",
-  //   textAlign: "left",
-  //   justifyContent: "center",
-  //   borderRadius: "30px",
-  //   border: "5px solid #8F4321",
-
-  //   position: "absolute",
-
-  //   minWidth: "10%",
-  //   minHeight: "25%",
-
-  //   width: "15%",
-  //   height: "45%",
-  //   margin: "5px",
-  //   padding: "20px",
-  //   right: "2%",
-  //   bottom: "-68%",
-  // },
-
-  // msgDiv1: {
-  //   color: "black",
-  //   fontSize: "18px",
-  //   backgroundColor: "#FFE401",
-  //   alignItems: "center",
-  //   textAlign: "left",
-  //   justifyContent: "center",
-  //   borderRadius: "30px",
-  //   border: "5px solid #FDB200",
-
-  //   position: "absolute",
-
-  //   minWidth: "10%",
-  //   minHeight: "25%",
-
-  //   width: "15%",
-  //   height: "45%",
-  //   margin: "5px",
-  //   padding: "20px",
-  //   left: "2%",
-  //   bottom: "-82%",
-  // },
 
   Video: {
     height: "100%",
@@ -444,22 +386,7 @@ const styles = {
     right: 0,
     left: 0,
   },
-  button: {
-    textAlign: "center",
-    position: "absolute",
-    backgroundColor: "#66CC00",
-    color: "white",
-    // minWidth: "2%",
-    // minHeight: "5%",
-    width: "6%",
 
-    height: "12%",
-    right: "2%",
-    bottom: "-32%",
-    borderRadius: "50%",
-
-    border: "none",
-  },
 };
 
 

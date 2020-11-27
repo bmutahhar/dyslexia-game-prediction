@@ -1,66 +1,269 @@
-import React, { Component } from "react";
-import "./Formpage.css";
 
-export default class Formpage extends Component {
+
+import React, { Component, useState } from "react";
+import styled, { keyframes } from "styled-components";
+import { zoomInUp, zoomInDown, bounce, zoomIn } from "react-animations";
+import { Dropdown } from 'semantic-ui-react';
+import bg from "../Images/bg.jpg";
+import Character from "../Character";
+import penguin1 from "../Images/Characters/penguin1.png";
+import leapord from "../Images/Characters/leapord.png";
+import polar from "../Images/Characters/polar.png";
+import seal from "../Images/Characters/seal.png";
+import penguin2 from "../Images/Characters/penguin2.png";
+
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { BsCircleFill } from "react-icons/bs";
+import { HashLink as Link } from "react-router-hash-link";
+
+
+
+export default class Form extends Component {
     render() {
-
-        return (
-        <div className="container-fluid">
-        <div className="row bgCOLOR">
-        <div className="col-11 m-auto">
-        <div className="row">
-        <div className="col-12 questions">
-        <h1>question 1</h1>
-        <h1>dropdown 1</h1>
-        <h1>question 2</h1>
-        <h1>dropdown 2</h1>
-        <h1>question 3</h1>
-        <h1>dropdown 3</h1>
-
-        
-        {/* <div className="row">
-        <div className="col-12">
-        <h1>helloooooo1</h1>
-        <h1>helloooooo1</h1>
-
-
-        </div>
-        </div>
-
-        <div className="row">
-        <div className="col-12">
-        <h1>helloooooo2</h1>
-        <h1>helloooooo1</h1>
-        </div>
-        </div>
-
-        <div className="row">
-        <div className="col-12">
-        <h1>helloooooo3</h1>
-        <h1>helloooooo1</h1>
-        </div>
-        </div>
-
-        <div className="row">
-        <div className="col-12">
-        <h1>helloooooo4</h1>
-        <h1>helloooooo1</h1>
-        </div>
-        </div> */}
-        
-        </div>
-        
-        </div>
-        <div className="row">
-        <div className="col-12 cartoon">
-        <h1>wazzuuuuuup</h1>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-
-
-        );
+        return <Formpage />;
     }
 }
+const active = "30px";
+const nonactive = "20px";
+
+
+
+const Formpage = () => {
+
+    const [runs, setRun] = useState(1);
+    const [cvalues, setCvalues] = useState({
+        c1: active,
+        c2: nonactive,
+        c3: nonactive,
+        c4: nonactive,
+        c5: nonactive,
+        animal: penguin1
+    });
+
+
+    const Forwardnavigate = () => {
+
+        setRun(runs + 1);
+        navigation();
+
+    }
+
+    const Backwardnavigate = () => {
+
+        setRun(runs - 1);
+        navigation();
+
+    }
+
+    const navigation = () => {
+
+        if (runs === 1.0) {
+
+            setCvalues({
+                c1: active,
+                c2: nonactive,
+                c3: nonactive,
+                c4: nonactive,
+                c5: nonactive,
+                animal: penguin1
+            });
+
+        }
+
+        if (runs === 2.0) {
+            setCvalues({
+                c1: nonactive,
+                c2: active,
+                c3: nonactive,
+                c4: nonactive,
+                c5: nonactive,
+                animal: leapord
+            });
+
+        }
+
+        if (runs === 3) {
+            setCvalues({
+                c1: nonactive,
+                c2: nonactive,
+                c3: active,
+                c4: nonactive,
+                c5: nonactive,
+                animal: polar
+            });
+
+        }
+
+        if (runs === 4) {
+            setCvalues({
+                c1: nonactive,
+                c2: nonactive,
+                c3: nonactive,
+                c4: active,
+                c5: nonactive,
+                animal: seal
+            });
+
+        }
+
+        if (runs === 5) {
+            setCvalues({
+                c1: nonactive,
+                c2: nonactive,
+                c3: nonactive,
+                c4: nonactive,
+                c5: active,
+                animal: penguin2
+            });
+
+        }
+
+
+    }
+
+    return (
+
+        <Container className="container-fluid">
+            <Row className="row" style={styles.bgCOLOR}>
+                <Column className="col-11 m-auto" style={styles.coll_11}>
+                    <Row className="row">
+
+                        <Column className="col-12" style={styles.questions}>
+
+                        </Column>
+
+                    </Row>
+                    <Row className="row">
+                        <Column className="col-6" style={styles.cartoon}>
+                            <Character
+                                className="iceanimals"
+                                src={cvalues.animal}
+                                alt="iceanimals"
+                                style={styles.iceanimals}
+                            />
+                        </Column>
+
+                        <Column className="col-6" style={styles.navigation}>
+
+                            <h1>{runs}</h1>
+
+
+                            <NavIcons>
+
+                                <IoIosArrowBack onClick={Backwardnavigate} color="blue" size="55px" style={styles.navicon} />
+                                <BsCircleFill color="blue" size={cvalues.c1} style={styles.circle} />
+                                <BsCircleFill color="red" size={cvalues.c2} style={styles.circle} />
+                                <BsCircleFill color="yellow" size={cvalues.c3} style={styles.circle} />
+                                <BsCircleFill color="green" size={cvalues.c4} style={styles.circle} />
+                                <BsCircleFill color="orange" size={cvalues.c5} style={styles.circle} />
+                                <IoIosArrowForward onClick={Forwardnavigate} color="blue" size="55px" style={styles.navicon} />
+
+
+                            </NavIcons>
+
+
+                        </Column>
+                    </Row>
+
+                </Column>
+            </Row>
+
+        </Container>
+
+
+    );
+
+
+};
+
+const NavIcons = styled.div`
+position: absolute;
+right: 2%;
+bottom: 10%;
+
+
+`;
+
+const Container = styled.div`
+  height: 100vh;
+`;
+
+const Row = styled.div`
+
+`;
+
+const Column = styled.div`
+  
+`;
+
+const styles = {
+
+    bgCOLOR: {
+
+        backgroundColor: "#21768d",
+        height: "100vh"
+    },
+
+    coll_11: {
+
+        backgroundImage: "url(" + bg + ")",
+        height: "90vh",
+        backgroundPosition: "bottom center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        borderRadius: "20px"
+
+    },
+
+    questions: {
+        textAlign: "left",
+        height: "70vh",
+        borderRadius: "20px 20px 0 0",
+        // border: "3px solid red"
+    },
+
+    cartoon: {
+        height: "20vh",
+        borderRadius: "0 0 0 20px",
+        border: "3px solid blue"
+
+    },
+
+    navigation: {
+        alignContent: "right",
+        height: "20vh",
+        borderRadius: "0 0 20px 0",
+        border: "3px solid green"
+
+    },
+
+    iceanimals: {
+        position: "absolute",
+        zIndex: 1,
+
+        height: "110%",
+
+        bottom: "-7%",
+        left: "0.3%",
+    },
+
+    circle: {
+        marginLeft: "3px",
+        marginRight: "3px",
+
+
+
+    },
+
+    navicon: {
+
+        "&:hover": {
+            cursor: "pointer"
+        },
+
+
+    },
+
+};
+
+

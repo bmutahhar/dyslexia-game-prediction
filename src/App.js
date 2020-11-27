@@ -7,6 +7,7 @@ import About from "./Components/Screens/About";
 import Contact from "./Components/Screens/ContactUs";
 import HowItWorks from "./Components/Screens/HowItWorks";
 import Login from "./Components/Screens/Login";
+import Formpage from "./Components/Screens/Formpage";
 
 function App() {
   return (
@@ -27,11 +28,13 @@ class MainPage extends Component {
   render() {
     return (
       <>
-        <Navbar />
+        {/* <Navbar />
         <Home />
         <HowItWorks />
         <About />
-        <Contact />
+        <Contact /> */}
+
+        <Formpage />
       </>
     );
   }

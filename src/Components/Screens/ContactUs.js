@@ -329,17 +329,6 @@ const styles = {
 
   },
 
-  toTop: {
-    padding: "10px",
-    borderRadius: "50px",
-    backgroundColor: "orange",
-    border: "2px solid  #BB461A",
-    // height: "40%",
-    position: "absolute",
-    bottom: "-290%",
-    right: "2%",
-    zIndex: 3,
-  },
 
   koala: {
     height: "35%",
@@ -362,101 +351,7 @@ const styles = {
     left: 0,
   },
 
-  bottomDiv: {
-    color: "black",
-    fontSize: "18px",
-    backgroundImage: "linear-gradient(to right, #80562D, #BB461A)",
-    alignItems: "center",
-    textAlign: "left",
-    justifyContent: "center",
-    borderRadius: "30px",
-    border: "2px solid black",
 
-    position: "absolute",
-
-    minWidth: "10%",
-    minHeight: "5%",
-
-    width: "64%",
-    height: "15%",
-    margin: "5px",
-    padding: "20px",
-    right: "17.5%",
-    bottom: "-292%"
-
-  },
-
-  topDiv: {
-    color: "black",
-    fontSize: "18px",
-    backgroundColor: "#C44F1E",
-    alignItems: "center",
-    textAlign: "left",
-    justifyContent: "center",
-    borderRadius: "30px",
-    border: "none",
-
-    position: "absolute",
-
-    minWidth: "10%",
-    minHeight: "5%",
-
-    width: "64%",
-    height: "65%",
-    margin: "5px",
-    padding: "20px",
-    right: "17.5%",
-    bottom: "-275%"
-
-  },
-
-  // kangarooDiv: {
-  //   color: "black",
-  //   fontSize: "18px",
-  //   backgroundColor: "#F19611",
-  //   alignItems: "center",
-  //   textAlign: "left",
-  //   justifyContent: "center",
-  //   borderRadius: "30px",
-  //   border: "5px solid #C2501E",
-
-  //   position: "absolute",
-
-  //   minWidth: "10%",
-  //   minHeight: "25%",
-
-  //   width: "15%",
-  //   height: "45%",
-  //   margin: "5px",
-  //   padding: "20px",
-  //   right: "1%",
-  //   bottom: "-265%"
-
-  // },
-
-  // koalaDiv: {
-  //   color: "black",
-  //   fontSize: "18px",
-  //   backgroundColor: "#A7A8AC",
-  //   alignItems: "center",
-  //   textAlign: "left",
-  //   justifyContent: "center",
-  //   borderRadius: "30px",
-  //   border: "5px solid #494A4E",
-
-  //   position: "absolute",
-
-  //   minWidth: "10%",
-  //   minHeight: "25%",
-
-  //   width: "15%",
-  //   height: "45%",
-  //   margin: "5px",
-  //   padding: "20px",
-  //   left: "1%",
-  //   bottom: "-265%"
-
-  // },
 
 
 

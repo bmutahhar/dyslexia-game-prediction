@@ -3,6 +3,10 @@ import { HashLink as Link } from "react-router-hash-link";
 import styled, { keyframes } from "styled-components";
 import { pulse } from "react-animations";
 import { FiChevronsDown, FiChevronRight } from "react-icons/fi";
+import { BsCircleFill } from "react-icons/bs";
+
+
+
 import { Button } from "./Button";
 export default class Jumbotron extends Component {
   render() {
@@ -31,7 +35,7 @@ export default class Jumbotron extends Component {
           <PulseDiv>
             <Link smooth to="#howitworks" style={styles.link}>
               Scroll below <br />
-              <FiChevronsDown color="white" size="32px" />
+              <BsCircleFill color="white" size="32px" />
             </Link>
           </PulseDiv>
         </div>

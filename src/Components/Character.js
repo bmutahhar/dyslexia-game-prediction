@@ -44,5 +44,5 @@ const Animated = styled.img`
 
 `;
 const NonAnimated = styled.img`
-  animation: none;
+  
 `;
