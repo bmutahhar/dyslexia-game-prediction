@@ -7,7 +7,7 @@ import About from "./Components/Screens/About";
 import Contact from "./Components/Screens/ContactUs";
 import HowItWorks from "./Components/Screens/HowItWorks";
 import Login from "./Components/Screens/Login";
-import Formpage from "./Components/Screens/Formpage";
+import Signup from "./Components/Screens/Signup";
 
 function App() {
   return (
@@ -16,6 +16,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={MainPage} />
           <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
         </Switch>
       </div>
     </Router>
@@ -28,13 +29,13 @@ class MainPage extends Component {
   render() {
     return (
       <>
-        {/* <Navbar />
+        <Navbar />
         <Home />
         <HowItWorks />
         <About />
-        <Contact /> */}
+        <Contact />
 
-        <Formpage />
+
       </>
     );
   }

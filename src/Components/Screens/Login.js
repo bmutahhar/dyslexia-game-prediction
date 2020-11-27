@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import { fadeIn, slideInDown } from "react-animations";
+import { slideInDown } from "react-animations";
 import Character from "../Character";
 import Home from "./Home";
 import { Button } from "../Button";
@@ -73,7 +73,7 @@ const LoginComponent = () => {
   );
 };
 
-const fadeInAnimation = keyframes`${slideInDown}`;
+const slideInAnimation = keyframes`${slideInDown}`;
 
 const AnimatedDiv = styled.div`
   position: absolute;
@@ -88,7 +88,7 @@ const AnimatedDiv = styled.div`
   width: 100%;
   height: 100vh;
   z-index: 2;
-  animation: 0.6s ${fadeInAnimation};
+  animation: 0.6s ${slideInAnimation};
 `;
 const Form = styled.div`
   margin-top: 20px;

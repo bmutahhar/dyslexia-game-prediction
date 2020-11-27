@@ -35,7 +35,7 @@ export default class Jumbotron extends Component {
           <PulseDiv>
             <Link smooth to="#howitworks" style={styles.link}>
               Scroll below <br />
-              <BsCircleFill color="white" size="32px" />
+              <FiChevronsDown color="white" size="32px" />
             </Link>
           </PulseDiv>
         </div>

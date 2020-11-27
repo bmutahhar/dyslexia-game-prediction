@@ -12,7 +12,7 @@ import sun from "../Images/Characters/sun.png";
 import cloud from "../Images/Characters/cloud.png";
 import cloudsun from "../Images/Characters/cloudsun.png";
 import cloudfooter from "../Images/Characters/cloudfooter1.png";
-import Background from "../../Components/Background";
+import Background from "../Background";
 
 import Character from "../Character";
 import Video from "../Video";
