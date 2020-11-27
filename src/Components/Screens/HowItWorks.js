@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { zoomInUp, zoomInDown, bounceInRight, bounceInDown, bounce, zoomIn } from "react-animations";
+import { zoomInUp, zoomInDown, bounce, zoomIn } from "react-animations";
 import image from "../Images/third.png";
 import bird1 from "../Images/Characters/bird1.png";
 import bird2 from "../Images/Characters/bird2.png";
@@ -40,13 +40,13 @@ const Howitworkspage = () => {
 
   const displaySunMessage = () => {
     setSunAnimation(!sunAnimation);
-    setSunPopup(!sunpopup);
+    setSunPopup(false);
     setSunMessage(!sunMessage);
   }
 
   const displayEagleMessage = () => {
     setEagleAnimation(!eagleAnimation);
-    setEaglePopup(!eaglepopup);
+    setEaglePopup(false);
     setEagleMessage(!eagleMessage);
   }
   return (
@@ -57,13 +57,7 @@ const Howitworkspage = () => {
         customStyle={false}
         src={image}
       >
-        {/* <Background
-          className="d-flex justify-justify-content-between flex-column"
-          style={styles.blueDiv}
-          customStyle={true}
-        >
-          <Video className="Video" style={styles.Video} />
-        </Background> */}
+
 
         <BlueDiv className="d-flex justify-justify-content-between flex-column wow">
           <Video className="Video" style={styles.Video} />
@@ -280,7 +274,7 @@ z-index: 3;
 padding-top: 20px;
 left: 8%;
 bottom: -35%;
-animation: 2s ${bounce2};
+animation: 2s 1s 3 ${bounce1};
 
 
 `;
@@ -305,7 +299,7 @@ padding-top: 20px;
 right: 13%;
 bottom: -95%;
 z-index: 2;
-animation: 2s ${bounce1};
+animation: 2s 1s 3 ${bounce1};
 
 
 `;

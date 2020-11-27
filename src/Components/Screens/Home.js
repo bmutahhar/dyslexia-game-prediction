@@ -34,13 +34,13 @@ const HomePage = () => {
   const displayMonkeyMessage = () => {
     setMonkeyMessage(!monkeyMessage);
     setMonkeyAnimation(!monkeyAnimation);
-    setMonkeyPopup(!monkeypopup);
+    setMonkeyPopup(false);
 
   }
   const displayLionMessage = () => {
     setLionMessage(!lionMessage);
     setLionAnimation(!lionAnimation);
-    setLionPopup(!lionpopup);
+    setLionPopup(false);
 
 
   }
@@ -168,7 +168,7 @@ margin: 5px;
 padding-top: 20px;
 left: 8%;
 bottom: 31%;
-animation: 2s ${bounce1};
+animation: 2s 1s 3 ${bounce1};
 
 
 `;
@@ -192,7 +192,7 @@ margin: 5px;
 padding-top: 20px;
 right: 10%;
 bottom: 31%;
-animation: 2s ${bounce1};
+animation: 2s 1s 3 ${bounce1};
 
 
 `;

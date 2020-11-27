@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
-import { pulse } from "react-animations";
+import { pulse, bounce, bounceIn, hinge, jello, rubberBand, shake, swing, tada, wobble } from "react-animations";
 
 export default class Character extends Component {
   render() {
@@ -33,7 +33,9 @@ export default class Character extends Component {
 const pulseAnimation = keyframes`${pulse}`;
 const Container = styled.div``;
 const Animated = styled.img`
-  animation: infinite 1s ${pulseAnimation};
+  
+  animation: 1.2s ease-in 0.5s infinite ${pulseAnimation};
+
 
   &:hover {
     cursor: pointer;
