@@ -18,6 +18,7 @@ function App() {
           <Route exact path="/" component={MainPage} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
+          <Route path="/userform" component={Formpage} />
         </Switch>
       </div>
     </Router>
@@ -30,15 +31,11 @@ class MainPage extends Component {
   render() {
     return (
       <>
-        {/* <Navbar />
+        <Navbar />
         <Home />
         <HowItWorks />
         <About />
-        <Contact /> */}
-
-        <Formpage />
-
-
+        <Contact />
       </>
     );
   }

@@ -13,7 +13,6 @@ import signupbg from "../Images/signupbg.png";
 import lion from "../Images/Characters/lion.png";
 import eagle from "../Images/Characters/eagle.png";
 import pacifier from "../Images/Characters/pacifier.svg";
-import "./Signup.css";
 
 export default class Signup extends Component {
   render() {
