@@ -135,12 +135,11 @@ const Formpage = () => {
         <Column className="col-11 m-auto" style={styles.coll_11}>
           <Row className="row">
             <Column className="col-12" style={styles.questions}>
-              {/* <Select>
-                                <MenuItem value="1">1</MenuItem>
-                                <MenuItem value="2">2</MenuItem>
-                                <MenuItem value="3">3</MenuItem>
-
-                            </Select> */}
+              <Select>
+                <MenuItem value="1">1</MenuItem>
+                <MenuItem value="2">2</MenuItem>
+                <MenuItem value="3">3</MenuItem>
+              </Select>
             </Column>
           </Row>
           <Row className="row">
@@ -264,7 +263,7 @@ const styles = {
   iceanimals: {
     position: "absolute",
     zIndex: 1,
-
+    pointerEvents: "none",
     height: "110%",
 
     bottom: "-7%",
