@@ -174,7 +174,7 @@ const Howitworkspage = () => {
 const zoomInupAnimation = keyframes`${zoomInUp}`;
 const zoomIndownAnimation = keyframes`${zoomInDown}`;
 const bounce1 = keyframes`${bounce}`;
-const bounce2 = keyframes`${bounce}`;
+
 
 const zoomAnimation = keyframes`${zoomIn}`;
 

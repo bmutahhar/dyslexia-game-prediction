@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
-import { pulse, bounce, bounceIn, hinge, jello, rubberBand, shake, swing, tada, wobble } from "react-animations";
+import { pulse } from "react-animations";
 
 export default class Character extends Component {
   render() {
