@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { fadeIn } from "react-animations";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Background from "../Background";
 import Character from "../Character";
 import { Button } from "../Button";
@@ -19,17 +19,24 @@ import girlpink from "../Images/Characters/girlpink.svg";
 import boyblue from "../Images/Characters/boyblue.svg";
 import google from "../Images/Characters/google.png";
 
-export default function Signup() {
-  return (
-    <Animation>
-      <SignupComponent />
-    </Animation>
-  );
-}
-
-class SignupComponent extends Component {
-  onSubmit = (e) => {
-    e.preventDefault();
+class Signup extends Component {
+  state = {
+    username: "",
+    password: "",
+    retypePassword: "",
+    email: "",
+    parentName: "",
+    childName: "",
+    childAge: "",
+    childGender: "",
+  };
+  onSubmit = (event) => {
+    event.preventDefault();
+    console.log(this.state);
+    // this.props.history.push("/userform");
+  };
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   changeBoySrc() {
@@ -47,170 +54,197 @@ class SignupComponent extends Component {
 
   render() {
     return (
-      <Background
-        className="d-flex align-items-center justify-content-between flex-row"
-        customStyle={false}
-        src={signupbg}
-      >
-        <Header>
-          <h1>DyxsisML</h1>
-          <p>Sign up to track your child's performance</p>
-        </Header>
-        <Form onSubmit={this.onSubmit}>
-          <InputGroup>
-            <Input
-              type="text"
-              className="inputText"
-              placeholder="Username"
-              required
-            />
-            <Label className="floating-label">
-              <Icon>
-                <BiUser />
-              </Icon>
-              Username
-            </Label>
-          </InputGroup>
-          <InputGroup>
-            <Input
-              type="password"
-              className="inputText"
-              placeholder="Password"
-              required
-            />
-            <Label className="floating-label">
-              <Icon>
-                <BiLockOpenAlt />
-              </Icon>
-              Password
-            </Label>
-          </InputGroup>
-          <InputGroup>
-            <Input
-              type="password"
-              className="inputText"
-              placeholder="Password"
-              required
-            />
-            <Label className="floating-label">
-              <Icon>
-                <BiLockAlt />
-              </Icon>
-              Re-type Password
-            </Label>
-          </InputGroup>
-          <InputGroup>
-            <Input
-              type="email"
-              className="inputText"
-              placeholder="Email"
-              required
-            />
-            <Label className="floating-label">
-              <Icon>
-                <HiOutlineMail />
-              </Icon>
-              Email
-            </Label>
-          </InputGroup>
-          <InputGroup>
-            <Input
-              type="text"
-              className="inputText"
-              placeholder="Parent Name"
-              required
-            />
-            <Label className="floating-label">
-              <Icon>
-                <RiParentLine />
-              </Icon>
-              Parent's Full Name
-            </Label>
-          </InputGroup>
-          <InputGroup>
-            <Input
-              type="text"
-              className="inputText"
-              placeholder="Child Name"
-              required
-            />
-            <Label className="floating-label">
-              <Icon>
-                <MdChildCare />
-              </Icon>
-              Child's Full Name
-            </Label>
-          </InputGroup>
-          <InputGroup>
-            <Input
-              type="number"
-              min="1"
-              max="10"
-              className="inputText"
-              placeholder="Child's Age"
-              required
-            />
-            <Label className="floating-label">
-              <Icon>
-                <img
-                  id="pacifier"
-                  src={pacifier}
-                  alt="Pacifier"
-                  width="15px"
-                  height="15px"
-                />
-              </Icon>
-              Child's Age
-            </Label>
-          </InputGroup>
-          <InputGroup>
-            <RadioButtons
-              onBoy={this.changeBoySrc}
-              onGirl={this.changeGirlSrc}
-            />
-          </InputGroup>
-          <Container>
-            <Link to="/" className="signup-btn">
-              <Button buttonSize="btn--wide" buttonColor="green">
+      <Animation>
+        <Background
+          className="d-flex align-items-center justify-content-between flex-row"
+          customStyle={false}
+          src={signupbg}
+        >
+          <Header>
+            <h1>DyxsisML</h1>
+            <p>Sign up to track your child's performance</p>
+          </Header>
+          <Form onSubmit={this.onSubmit} method="post" autoComplete="off">
+            <InputGroup>
+              <Input
+                type="text"
+                className="inputText"
+                placeholder="Username"
+                name="username"
+                required
+                value={this.state.username}
+                onChange={this.onChange}
+              />
+              <Label className="floating-label">
+                <Icon>
+                  <BiUser />
+                </Icon>
+                Username
+              </Label>
+            </InputGroup>
+            <InputGroup>
+              <Input
+                type="password"
+                className="inputText"
+                placeholder="Password"
+                name="password"
+                required
+                value={this.state.password}
+                onChange={this.onChange}
+              />
+              <Label className="floating-label">
+                <Icon>
+                  <BiLockOpenAlt />
+                </Icon>
+                Password
+              </Label>
+            </InputGroup>
+            <InputGroup>
+              <Input
+                type="password"
+                className="inputText"
+                placeholder="Password"
+                name="retypePassword"
+                required
+                value={this.state.retypePassword}
+                onChange={this.onChange}
+              />
+              <Label className="floating-label">
+                <Icon>
+                  <BiLockAlt />
+                </Icon>
+                Re-type Password
+              </Label>
+            </InputGroup>
+            <InputGroup>
+              <Input
+                type="email"
+                className="inputText"
+                placeholder="Email"
+                name="email"
+                required
+                value={this.state.email}
+                onChange={this.onChange}
+              />
+              <Label className="floating-label">
+                <Icon>
+                  <HiOutlineMail />
+                </Icon>
+                Email
+              </Label>
+            </InputGroup>
+            <InputGroup>
+              <Input
+                type="text"
+                className="inputText"
+                placeholder="Parent Name"
+                name="parentName"
+                required
+                value={this.state.parentName}
+                onChange={this.onChange}
+              />
+              <Label className="floating-label">
+                <Icon>
+                  <RiParentLine />
+                </Icon>
+                Parent's Full Name
+              </Label>
+            </InputGroup>
+            <InputGroup>
+              <Input
+                type="text"
+                className="inputText"
+                placeholder="Child Name"
+                name="childName"
+                required
+                value={this.state.childName}
+                onChange={this.onChange}
+              />
+              <Label className="floating-label">
+                <Icon>
+                  <MdChildCare />
+                </Icon>
+                Child's Full Name
+              </Label>
+            </InputGroup>
+            <InputGroup>
+              <Input
+                type="number"
+                min="1"
+                max="10"
+                className="inputText"
+                placeholder="Child's Age"
+                name="childAge"
+                value={this.state.childAge}
+                onChange={this.onChange}
+                required
+              />
+              <Label className="floating-label">
+                <Icon>
+                  <img
+                    id="pacifier"
+                    src={pacifier}
+                    alt="Pacifier"
+                    width="15px"
+                    height="15px"
+                  />
+                </Icon>
+                Child's Age
+              </Label>
+            </InputGroup>
+            <InputGroup>
+              <RadioButtons
+                onBoy={this.changeBoySrc}
+                onGirl={this.changeGirlSrc}
+                onChange={this.onChange}
+              />
+            </InputGroup>
+            <Container>
+              <Button buttonSize="btn--wide" buttonColor="green" type="submit">
                 Sign Up
               </Button>
-            </Link>
-          </Container>
-        </Form>
-        <OtherSignupComponent>
-          <strong>OR</strong>
-          <p>You can sign up with google</p>
-          <a
-            href="https://www.google.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div>
-              <img src={google} alt="Google logo" width={30} height={30} />
-              <span>Sign up with Google</span>
-            </div>
-          </a>
-        </OtherSignupComponent>
-        <Character
-          className="eagle wow"
-          src={eagle}
-          alt="Eagle"
-          style={styles.eagle}
-        />
-        <Character className="lion" src={lion} alt="Lion" style={styles.lion} />
-      </Background>
+            </Container>
+          </Form>
+          <OtherSignupComponent>
+            <strong>OR</strong>
+            <p>You can sign up with google</p>
+            <a
+              href="https://www.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div>
+                <img src={google} alt="Google logo" width={30} height={30} />
+                <span>Sign up with Google</span>
+              </div>
+            </a>
+          </OtherSignupComponent>
+          <Character
+            className="eagle wow"
+            src={eagle}
+            alt="Eagle"
+            style={styles.eagle}
+          />
+          <Character
+            className="lion"
+            src={lion}
+            alt="Lion"
+            style={styles.lion}
+          />
+        </Background>
+      </Animation>
     );
   }
 }
 
 const RadioButtons = (props) => {
   return (
-    <RadioButtonGroup>
-      <Label className="" for="gender">
+    <RadioButtonGroup onChange={props.onChange}>
+      <Label className="" htmlFor="gender">
         Child's Gender:
       </Label>
-      <Label class="male">
-        <input type="radio" name="gender" id="male" checked />
+      <Label className="male">
+        <input type="radio" name="gender" id="male" value="male" required />
         <img
           id="boy"
           src={boy}
@@ -220,8 +254,8 @@ const RadioButtons = (props) => {
           onClick={props.onBoy}
         />
       </Label>
-      <Label class="female">
-        <input type="radio" name="gender" id="female" />
+      <Label className="female">
+        <input type="radio" name="gender" id="female" value="female" />
         <img
           id="girl"
           src={girl}
@@ -259,7 +293,7 @@ const Form = styled.form`
   border-radius: 15px;
 `;
 const Label = styled.label.attrs((props) => ({
-  for: props.for,
+  htmlFor: props.htmlFor,
 }))``;
 
 const Input = styled.input.attrs((props) => ({
@@ -268,6 +302,7 @@ const Input = styled.input.attrs((props) => ({
   placeholder: props.placeholder,
   value: props.value,
   name: props.name,
+  onChange: props.onChange,
 }))`
   width: 100%;
   font-size: 14px;
@@ -458,3 +493,5 @@ const signupAnimation = keyframes`${fadeIn}`;
 const Animation = styled.div`
   animation: 1s ${signupAnimation};
 `;
+
+export default withRouter(Signup);

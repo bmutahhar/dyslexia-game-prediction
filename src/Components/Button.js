@@ -3,7 +3,13 @@ import "./styles/Button.css";
 
 const STYLES = ["btn--primary", "btn--outline"];
 
-const SIZES = ["btn--large", "btn--medium", "btn--mobile", "btn--wide","btn--small"];
+const SIZES = [
+  "btn--large",
+  "btn--medium",
+  "btn--mobile",
+  "btn--wide",
+  "btn--small",
+];
 
 const COLORS = ["primary", "blue", "green", "red"];
 
@@ -11,6 +17,7 @@ export const Button = ({
   children,
   type,
   onClick,
+  onSubmit,
   buttonStyle,
   buttonSize,
   buttonColor,
@@ -26,6 +33,7 @@ export const Button = ({
     <button
       className={`btn ${checkButtonStyle} ${checkButtonSize} ${checkButtonColor}`}
       onClick={onClick}
+      onSubmit={onSubmit}
       type={type}
     >
       {children}

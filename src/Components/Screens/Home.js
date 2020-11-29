@@ -24,29 +24,19 @@ const HomePage = () => {
   const [monkeyAnimation, setMonkeyAnimation] = useState(true);
   const [monkeypopup, setMonkeyPopup] = useState(true);
 
-
   const [lionAnimation, setLionAnimation] = useState(true);
   const [lionpopup, setLionPopup] = useState(true);
-
-
-
 
   const displayMonkeyMessage = () => {
     setMonkeyMessage(!monkeyMessage);
     setMonkeyAnimation(!monkeyAnimation);
     setMonkeyPopup(false);
-
-  }
+  };
   const displayLionMessage = () => {
     setLionMessage(!lionMessage);
     setLionAnimation(!lionAnimation);
     setLionPopup(false);
-
-
-  }
-
-
-
+  };
 
   return (
     <Background
@@ -74,7 +64,6 @@ const HomePage = () => {
         </MonkeyMessage>
       )}
 
-
       {monkeypopup && (
         <MonkeyPopup>
           <h6>Hey!</h6>
@@ -86,8 +75,6 @@ const HomePage = () => {
           <h6>Hey!</h6>
         </LionPopup>
       )}
-
-
 
       <Character
         className="top-monkey"
@@ -102,6 +89,7 @@ const HomePage = () => {
         onClick={displayMonkeyMessage}
         style={styles.bottomMonkey}
         isAnimated={monkeyAnimation}
+        animation="pulse"
       />
 
       <Character
@@ -111,13 +99,14 @@ const HomePage = () => {
         style={styles.lion}
         onClick={displayLionMessage}
         isAnimated={lionAnimation}
+        animation="pulse"
       />
       <Character
         className="grass"
         src={grass}
         alt="Grass"
         style={styles.grass}
-        onerror={`this.src=${altGrass}`}
+        onError={() => `this.src=${altGrass}`}
       />
     </Background>
   );
@@ -126,9 +115,7 @@ const HomePage = () => {
 const fadeInAnimation = keyframes`${zoomInUp}`;
 const bounce1 = keyframes`${bounce}`;
 
-
 const LionMessage = styled.div`
-  
   color: black;
   font-size: 18px;
   background-color: #f3a61f;
@@ -150,51 +137,45 @@ const LionMessage = styled.div`
 `;
 
 const MonkeyPopup = styled.div`
+  color: black;
 
-color: black;
-
-background-color: #F9CEAE;
-align-items: center;
-text-align: center;
-justify-content: center;
-border-radius: 50%;
-border: 2px solid #5B3E36;
-position: absolute;
-min-width: 5%;
-min-height: 10%;
-width: 5%;
-height: 5%;
-margin: 5px;
-padding-top: 20px;
-left: 8%;
-bottom: 31%;
-animation: 2s 1s 3 ${bounce1};
-
-
+  background-color: #f9ceae;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #5b3e36;
+  position: absolute;
+  min-width: 5%;
+  min-height: 10%;
+  width: 5%;
+  height: 5%;
+  margin: 5px;
+  padding-top: 20px;
+  left: 8%;
+  bottom: 31%;
+  animation: 2s 1s 3 ${bounce1};
 `;
 
 const LionPopup = styled.div`
+  color: black;
 
-color: black;
-
-background-color: #f3a61f;
-align-items: center;
-text-align: center;
-justify-content: center;
-border-radius: 50%;
-border: 2px solid #993a02;
-position: absolute;
-min-width: 5%;
-min-height: 10%;
-width: 5%;
-height: 5%;
-margin: 5px;
-padding-top: 20px;
-right: 10%;
-bottom: 31%;
-animation: 2s 1s 3 ${bounce1};
-
-
+  background-color: #f3a61f;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #993a02;
+  position: absolute;
+  min-width: 5%;
+  min-height: 10%;
+  width: 5%;
+  height: 5%;
+  margin: 5px;
+  padding-top: 20px;
+  right: 10%;
+  bottom: 31%;
+  animation: 2s 1s 3 ${bounce1};
 `;
 
 const MonkeyMessage = styled.div`

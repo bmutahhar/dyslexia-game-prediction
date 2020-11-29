@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
-import { pulse, zoomIn } from "react-animations";
+import { pulse, zoomInUp, zoomInDown, bounce, zoomIn } from "react-animations";
 
 export default class Character extends Component {
   render() {
@@ -12,38 +12,42 @@ export default class Character extends Component {
             onClick={this.props.onClick}
             src={this.props.src}
             alt={this.props.alt}
-            onerror={this.props.onerror}
+            onError={this.props.onError}
             style={this.props.style}
+            animation={this.props.animation}
           ></Animated>
         ) : (
-            <NonAnimated
-              className={this.props.className}
-              onClick={this.props.onClick}
-              src={this.props.src}
-              alt={this.props.alt}
-              onerror={this.props.onerror}
-              style={this.props.style}
-            ></NonAnimated>
-          )}
+          <NonAnimated
+            className={this.props.className}
+            onClick={this.props.onClick}
+            src={this.props.src}
+            alt={this.props.alt}
+            onError={this.props.onError}
+            style={this.props.style}
+          ></NonAnimated>
+        )}
       </Container>
     );
   }
 }
 
-const pulseAnimation = keyframes`${pulse}`;
-const zoomAnimation = keyframes`${zoomIn}`;
+const animations = {
+  pulse: keyframes`${pulse}`,
+  zoomInUp: keyframes`${zoomInUp}`,
+  zoomIn: keyframes`${zoomIn}`,
+  zoomInDown: keyframes`${zoomInDown}`,
+  bounce: keyframes`${bounce}`,
+};
+
 const Container = styled.div``;
 const Animated = styled.img`
-  
-  animation: 1.2s ease-in 0.5s infinite ${pulseAnimation};
-
+  animation: 1.2s ease-in 0.5s infinite
+    ${(props) => {
+      return animations[props.animation];
+    }};
 
   &:hover {
     cursor: pointer;
   }
-
-
 `;
-const NonAnimated = styled.img`
-
-`;
+const NonAnimated = styled.img``;

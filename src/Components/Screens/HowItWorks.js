@@ -105,6 +105,7 @@ const Howitworkspage = () => {
 
           style={styles.eagle}
           isAnimated={eagleAnimation}
+          animation="pulse"
         />
 
         <Character
@@ -147,9 +148,9 @@ const Howitworkspage = () => {
           src={sun}
           alt="sun"
           onClick={displaySunMessage}
-
           style={styles.sun}
           isAnimated={sunAnimation}
+          animation="pulse"
         />
 
         <Character
