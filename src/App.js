@@ -9,6 +9,7 @@ import HowItWorks from "./Components/Screens/HowItWorks";
 import Login from "./Components/Screens/Login";
 import Signup from "./Components/Screens/Signup";
 import Formpage from "./Components/Screens/Formpage";
+import Playground from "./playground";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/userform" component={Formpage} />
+          <Route path="/playground" component={Playground} />
         </Switch>
       </div>
     </Router>

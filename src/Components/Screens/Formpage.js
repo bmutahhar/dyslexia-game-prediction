@@ -12,7 +12,8 @@ import penguin2 from "../Images/Characters/penguin2.png";
 import Select from "@material-ui/core/Select";
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
+
 import "../Screens/Form.css";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { BsCircleFill } from "react-icons/bs";
@@ -26,30 +27,53 @@ export default class Form extends Component {
 
 
 const Formpage = () => {
-    const active = "30px";
+    const active = "33px";
     const nonactive = "20px";
-
+    const [answer1, setAnswer1] = useState("");
+    const updateAnswer1 = (e) => {
+        setAnswer1(e.target.value);
+    }
+    const [answer2, setAnswer2] = useState("");
+    const updateAnswer2 = (e) => {
+        setAnswer2(e.target.value);
+    }
+    const [answer3, setAnswer3] = useState("");
+    const updateAnswer3 = (e) => {
+        setAnswer3(e.target.value);
+    }
+    const [answer4, setAnswer4] = useState("");
+    const updateAnswer4 = (e) => {
+        setAnswer4(e.target.value);
+    }
     const [QA, setQA] = useState({
         q1: "",
         q1options: 0,
+        q1sf: false,
+        q1if: false,
         q1opt1: "",
         q1opt2: "",
         q1opt3: "",
         q1opt4: "",
         q2: "",
         q2options: 0,
+        q2sf: false,
+        q2if: false,
         q2opt1: "",
         q2opt2: "",
         q2opt3: "",
         q2opt4: "",
         q3: "",
         q3options: 0,
+        q3sf: false,
+        q3if: false,
         q3opt1: "",
         q3opt2: "",
         q3opt3: "",
         q3opt4: "",
         q4: "",
         q4options: 0,
+        q4sf: false,
+        q4if: false,
         q4opt1: "",
         q4opt2: "",
         q4opt3: "",
@@ -61,10 +85,10 @@ const Formpage = () => {
     var q3arr = [QA.q3opt1, QA.q3opt2, QA.q3opt3, QA.q3opt4];
     var q4arr = [QA.q4opt1, QA.q4opt2, QA.q4opt3, QA.q4opt4];
 
-    var menuitem1 = [];
-    var menuitem2 = [];
-    var menuitem3 = [];
-    var menuitem4 = [];
+    var menuitem1 = [<MenuItem value="" disabled>select your answer</MenuItem>];
+    var menuitem2 = [<MenuItem value="" disabled>select your answer</MenuItem>];
+    var menuitem3 = [<MenuItem value="" disabled>select your answer</MenuItem>];
+    var menuitem4 = [<MenuItem value="" disabled>select your answer</MenuItem>];
 
     for (var i = 0; i < QA.q1options; i++) {
         menuitem1.push(<MenuItem value={q1arr[i]} style={styles.menuitem}>{q1arr[i]}</MenuItem>)
@@ -90,6 +114,7 @@ const Formpage = () => {
         c4: nonactive,
         c5: nonactive,
         animal: penguin1,
+        submitbutton: false,
     });
 
     var counter = runs;
@@ -132,24 +157,32 @@ const Formpage = () => {
                 setQA({
                     q1: QandA.qna1.Q,
                     q1options: QandA.qna1.noofopt,
+                    q1sf: QandA.qna1.fieldselect,
+                    q1if: QandA.qna1.fieldinput,
                     q1opt1: QandA.qna1.A1,
                     q1opt2: QandA.qna1.A2,
                     q1opt3: QandA.qna1.A3,
                     q1opt4: "",
                     q2: QandA.qna2.Q,
                     q2options: QandA.qna2.noofopt,
+                    q2sf: QandA.qna2.fieldselect,
+                    q2if: QandA.qna2.fieldinput,
                     q2opt1: QandA.qna2.A1,
                     q2opt2: QandA.qna2.A2,
                     q2opt3: "",
                     q2opt4: "",
                     q3: QandA.qna3.Q,
                     q3options: QandA.qna3.noofopt,
+                    q3sf: QandA.qna3.fieldselect,
+                    q3if: QandA.qna3.fieldinput,
                     q3opt1: QandA.qna3.A1,
                     q3opt2: QandA.qna3.A2,
                     q3opt3: QandA.qna3.A3,
                     q3opt4: "",
                     q4: QandA.qna4.Q,
                     q4options: QandA.qna4.noofopt,
+                    q4sf: QandA.qna4.fieldselect,
+                    q4if: QandA.qna4.fieldinput,
                     q4opt1: QandA.qna4.A1,
                     q4opt2: QandA.qna4.A2,
                     q4opt3: "",
@@ -234,6 +267,7 @@ const Formpage = () => {
                     c4: nonactive,
                     c5: active,
                     animal: penguin2,
+                    submitbutton: true,
                 });
 
                 break;
@@ -249,49 +283,86 @@ const Formpage = () => {
                         <Column className="col-12" style={styles.questions}>
                             <FormControl style={styles.formControl}>
                                 <Question>{QA.q1}</Question>
-                                <Select style={styles.select}>
 
-                                    {menuitem1}
+                                {QA.q1sf && (
+                                    <Select value={answer1}
+                                        displayEmpty
+                                        onChange={updateAnswer1}
+                                        style={styles.select}>
 
-                                    {/* <MenuItem value="" style={styles.menuitem}><em>None</em></MenuItem>
-                                    <MenuItem value="yes" style={styles.menuitem}>"yes"</MenuItem>
-                                    <MenuItem value="no" style={styles.menuitem}>no</MenuItem>
-                                    <MenuItem value="offcourse" style={styles.menuitem}>offcourse</MenuItem> */}
-                                </Select>
+                                        {menuitem1}
+
+
+                                    </Select>
+                                )}
+
+                                {QA.q1if && (
+
+                                    <TextField id="outlined-basic" variant="outlined" style={styles.select} />
+
+                                )}
+
                                 <Question>{QA.q2}</Question>
-                                <Select style={styles.select}>
-                                    {menuitem2}
-                                    {/* <MenuItem value="" style={styles.menuitem}><em>None</em></MenuItem>
-                                    <MenuItem value="should this even be a question" style={styles.menuitem}>should this even be a question</MenuItem>
-                                    <MenuItem value="yes a 100%" style={styles.menuitem}>yes a 100%</MenuItem> */}
+                                {QA.q2sf && (
+                                    <Select value={answer2}
+                                        displayEmpty
+                                        onChange={updateAnswer2}
+                                        style={styles.select}>
 
-                                </Select>
+                                        {menuitem2}
+
+
+                                    </Select>
+                                )}
+
+                                {QA.q2if && (
+
+                                    <TextField id="outlined-basic" variant="outlined" style={styles.select} />
+
+                                )}
                                 <Question>{QA.q3}</Question>
-                                <Select style={styles.select}>
+                                {QA.q3sf && (
+                                    <Select value={answer3}
+                                        displayEmpty
+                                        onChange={updateAnswer3}
+                                        style={styles.select}>
 
-                                    {menuitem3}
+                                        {menuitem3}
 
-                                    {/* <MenuItem value="" style={styles.menuitem}><em>None</em></MenuItem>
-                                    <MenuItem value="alam" style={styles.menuitem}>alam</MenuItem>
-                                    <MenuItem value="sher alam" style={styles.menuitem}>sher alam</MenuItem> */}
 
-                                </Select>
+                                    </Select>
+                                )}
+
+                                {QA.q3if && (
+
+                                    <TextField id="outlined-basic" variant="outlined" style={styles.select} />
+
+                                )}
                                 <Question>{QA.q4}</Question>
-                                <Select style={styles.select}>
+                                {QA.q4sf && (
+                                    <Select value={answer4}
+                                        displayEmpty
+                                        onChange={updateAnswer4}
+                                        style={styles.select}>
 
-                                    {menuitem4}
-                                    {/* <MenuItem value="" style={styles.menuitem}><em>None</em></MenuItem>
-                                    <MenuItem value="always" style={styles.menuitem}>always</MenuItem>
-                                    <MenuItem value="i envy him" style={styles.menuitem}>i envy him</MenuItem> */}
+                                        {menuitem4}
 
-                                </Select>
+
+                                    </Select>
+                                )}
+
+                                {QA.q4if && (
+
+                                    <TextField id="outlined-basic" variant="outlined" style={styles.select} />
+
+                                )}
                             </FormControl>
                         </Column>
                     </Row>
                     <Row className="row">
                         <Column className="col-6" style={styles.cartoon}>
                             <Character
-                                className="iceanimals"
+                                className="iceanimals "
                                 src={cvalues.animal}
                                 alt="iceanimals"
                                 style={styles.iceanimals}
@@ -299,15 +370,21 @@ const Formpage = () => {
                         </Column>
 
                         <Column className="col-6" style={styles.navigation}>
-                            {/* <h1>{QandA.qna1.noofopt}</h1> */}
+
+                            {cvalues.submitbutton && (
+                                <Submitbutton>DONE</Submitbutton>
+                            )}
+
 
                             <NavIcons>
-                                <IoIosArrowBack
-                                    onClick={Backwardnavigate}
-                                    color="blue"
-                                    size="55px"
-                                    style={styles.navicon}
-                                />
+                                <FrontBackIcon>
+                                    <IoIosArrowBack
+                                        onClick={Backwardnavigate}
+                                        color="blue"
+                                        size="58px"
+                                        style={styles.navicon}
+                                    />
+                                </FrontBackIcon>
                                 <BsCircleFill
                                     color="#0AC811"
                                     size={cvalues.c1}
@@ -333,12 +410,15 @@ const Formpage = () => {
                                     size={cvalues.c5}
                                     style={styles.circle}
                                 />
-                                <IoIosArrowForward
-                                    onClick={Forwardnavigate}
-                                    color="blue"
-                                    size="55px"
-                                    style={styles.navicon}
-                                />
+                                <FrontBackIcon>
+                                    <IoIosArrowForward
+                                        onClick={Forwardnavigate}
+                                        color="blue"
+                                        size="58px"
+                                        style={styles.navicon}
+                                    />
+                                </FrontBackIcon>
+
                             </NavIcons>
                         </Column>
                     </Row>
@@ -348,22 +428,81 @@ const Formpage = () => {
     );
 };
 
-// const Select = styled.select`
-// border: none;
-// margin-top: 10px;
-// width: 100%;
-// height: 10%;
+const zoomAnimation = keyframes`${zoomIn}`;
 
-// `;
+const Submitbutton = styled.button`
+display: flex;
+position: absolute;
+bottom: 20%;
+width: 25%;
+height: 40%;
+font-weight: bold;
+font-size: 20px;
+align-items: center;
+padding-left: 8%;
+background-color: #21768D;
+color: white;
+border: none;
+margin-left: -18%;
+border-radius: 12px;
+box-shadow: 0 10px 6px 0 rgba(0, 0, 0, 0.4);
+outline: none;
+transition: 0.2s;
+animation: 1s ${zoomAnimation};
 
+
+&:hover {
+    background-color: #175060;
+    
+}
+&: focus {
+    outline:none;
+}
+&: active {
+
+    background-color: #175060;
+    box-shadow: 0 7px 6px 0 rgba(0, 0, 0, 0.8);
+
+    transform: translateY(4px);
+    outline: none;
+
+}
+
+`;
+
+const FrontBackIcon = styled.div`
+display: inline-block;
+&:hover {
+    cursor: pointer;}
+    
+`;
 const NavIcons = styled.div`
   position: absolute;
-  right: 2%;
+  right: 5%;
   bottom: 10%;
 `;
 
+// const Container = styled.div`
+//   height: 100vh;
+// `;
+
 const Container = styled.div`
   height: 100vh;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  
+ -ms-user-select: none;
+  user-select: none;
+
+  
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  
+  &::selection {
+    background-color: transparent;
+  }
+  &::-moz-selection {
+    background-color: transparent;
+  }
 `;
 
 const Question = styled.h3`
@@ -417,11 +556,14 @@ const styles = {
 
         bottom: "-6%",
         left: "0.3%",
+
     },
 
     circle: {
         marginLeft: "3px",
         marginRight: "3px",
+        transition: "0.2s",
+        transitionTimingFunction: "ease-in-out",
     },
 
     formControl: {
@@ -437,11 +579,12 @@ const styles = {
     },
 
     select: {
+        fontSize: "14px",
         textAlign: "center",
         borderRadius: "5px",
         fontWeight: "bold",
         fontColor: "black",
-        opacity: "0.8",
+        opacity: "0.9",
         // paddingLeft: "3px",
         // paddingRight: "3px",
 
@@ -468,19 +611,13 @@ const styles = {
 
     },
 
-    // navicon: {
 
-    //     '&:hover': {
-    //         cursor: "pointer"
-    //     },
-
-    // },
 };
 
 const QandA = {
 
-    qna1: { Q: 'is mutahar noob?', A1: 'yes', A2: 'no', A3: 'OFFCOURSE', noofopt: 3, field: 'input' },
-    qna2: { Q: 'is mutahar sexy?', A1: 'yes', A2: 'no', noofopt: 2, field: 'select' },
-    qna3: { Q: 'is mutahar smart?', A1: 'yes', A2: 'is that a question', A3: 'OFFCOURSE', noofopt: 3, field: 'select' },
-    qna4: { Q: 'is mutahar?', A1: 'yes he is', A2: 'no he is not', noofopt: 2, field: 'select' }
+    qna1: { Q: 'is mutahar noob?', A1: 'yes', A2: 'no', A3: 'OFFCOURSE', noofopt: 3, fieldselect: true, fieldinput: false },
+    qna2: { Q: 'is mutahar sexy?', A1: 'yes', A2: 'no', noofopt: 2, fieldselect: true, fieldinput: false },
+    qna3: { Q: 'is mutahar smart?', A1: 'yes', A2: 'is that a question', A3: 'OFFCOURSE', noofopt: 3, fieldselect: false, fieldinput: true },
+    qna4: { Q: 'is mutahar?', A1: 'yes he is', A2: 'no he is not', noofopt: 2, field: 'select', fieldselect: false, fieldinput: true }
 }
