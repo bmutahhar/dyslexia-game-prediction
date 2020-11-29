@@ -13,6 +13,9 @@ import Select from "@material-ui/core/Select";
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 
 import "../Screens/Form.css";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
@@ -105,7 +108,15 @@ const Formpage = () => {
     for (var i3 = 0; i3 < QA.q4options; i3++) {
         menuitem4.push(<MenuItem value={q4arr[i3]} style={styles.menuitem}>{q4arr[i3]}</MenuItem>)
     }
+    const [consentf, setConsentf] = useState(true);
+    const [questionf, setQuestionf] = useState(false);
 
+    const Proceed = () => {
+        setConsentf(false);
+        setQuestionf(true);
+
+        navigation();
+    }
     const [runs, setRun] = useState(1);
     const [cvalues, setCvalues] = useState({
         c1: active,
@@ -162,15 +173,14 @@ const Formpage = () => {
                     q1opt1: QandA.qna1.A1,
                     q1opt2: QandA.qna1.A2,
                     q1opt3: QandA.qna1.A3,
-                    q1opt4: "",
+
                     q2: QandA.qna2.Q,
                     q2options: QandA.qna2.noofopt,
                     q2sf: QandA.qna2.fieldselect,
                     q2if: QandA.qna2.fieldinput,
                     q2opt1: QandA.qna2.A1,
                     q2opt2: QandA.qna2.A2,
-                    q2opt3: "",
-                    q2opt4: "",
+
                     q3: QandA.qna3.Q,
                     q3options: QandA.qna3.noofopt,
                     q3sf: QandA.qna3.fieldselect,
@@ -178,15 +188,14 @@ const Formpage = () => {
                     q3opt1: QandA.qna3.A1,
                     q3opt2: QandA.qna3.A2,
                     q3opt3: QandA.qna3.A3,
-                    q3opt4: "",
+
                     q4: QandA.qna4.Q,
                     q4options: QandA.qna4.noofopt,
                     q4sf: QandA.qna4.fieldselect,
                     q4if: QandA.qna4.fieldinput,
                     q4opt1: QandA.qna4.A1,
                     q4opt2: QandA.qna4.A2,
-                    q4opt3: "",
-                    q4opt4: "",
+
                 });
 
                 break;
@@ -281,145 +290,193 @@ const Formpage = () => {
                 <Column className="col-11 m-auto" style={styles.coll_11}>
                     <Row className="row">
                         <Column className="col-12" style={styles.questions}>
-                            <FormControl style={styles.formControl}>
-                                <Question>{QA.q1}</Question>
+                            {questionf && (
+                                <FormControl style={styles.formControl}>
+                                    <Question>{QA.q1}</Question>
 
-                                {QA.q1sf && (
-                                    <Select value={answer1}
-                                        displayEmpty
-                                        onChange={updateAnswer1}
-                                        style={styles.select}>
+                                    {QA.q1sf && (
+                                        <Select value={answer1}
+                                            displayEmpty
+                                            onChange={updateAnswer1}
+                                            style={styles.select}>
 
-                                        {menuitem1}
-
-
-                                    </Select>
-                                )}
-
-                                {QA.q1if && (
-
-                                    <TextField id="outlined-basic" variant="outlined" style={styles.select} />
-
-                                )}
-
-                                <Question>{QA.q2}</Question>
-                                {QA.q2sf && (
-                                    <Select value={answer2}
-                                        displayEmpty
-                                        onChange={updateAnswer2}
-                                        style={styles.select}>
-
-                                        {menuitem2}
+                                            {menuitem1}
 
 
-                                    </Select>
-                                )}
+                                        </Select>
+                                    )}
 
-                                {QA.q2if && (
+                                    {QA.q1if && (
 
-                                    <TextField id="outlined-basic" variant="outlined" style={styles.select} />
+                                        <TextField id="outlined-basic" variant="outlined" style={styles.select} />
 
-                                )}
-                                <Question>{QA.q3}</Question>
-                                {QA.q3sf && (
-                                    <Select value={answer3}
-                                        displayEmpty
-                                        onChange={updateAnswer3}
-                                        style={styles.select}>
+                                    )}
 
-                                        {menuitem3}
+                                    <Question>{QA.q2}</Question>
+                                    {QA.q2sf && (
+                                        <Select value={answer2}
+                                            displayEmpty
+                                            onChange={updateAnswer2}
+                                            style={styles.select}>
 
-
-                                    </Select>
-                                )}
-
-                                {QA.q3if && (
-
-                                    <TextField id="outlined-basic" variant="outlined" style={styles.select} />
-
-                                )}
-                                <Question>{QA.q4}</Question>
-                                {QA.q4sf && (
-                                    <Select value={answer4}
-                                        displayEmpty
-                                        onChange={updateAnswer4}
-                                        style={styles.select}>
-
-                                        {menuitem4}
+                                            {menuitem2}
 
 
-                                    </Select>
-                                )}
+                                        </Select>
+                                    )}
 
-                                {QA.q4if && (
+                                    {QA.q2if && (
 
-                                    <TextField id="outlined-basic" variant="outlined" style={styles.select} />
+                                        <TextField id="outlined-basic" variant="outlined" style={styles.select} />
 
-                                )}
-                            </FormControl>
+                                    )}
+                                    <Question>{QA.q3}</Question>
+                                    {QA.q3sf && (
+                                        <Select value={answer3}
+                                            displayEmpty
+                                            onChange={updateAnswer3}
+                                            style={styles.select}>
+
+                                            {menuitem3}
+
+
+                                        </Select>
+                                    )}
+
+                                    {QA.q3if && (
+
+                                        <TextField id="outlined-basic" variant="outlined" style={styles.select} />
+
+                                    )}
+                                    <Question>{QA.q4}</Question>
+                                    {QA.q4sf && (
+                                        <Select value={answer4}
+                                            displayEmpty
+                                            onChange={updateAnswer4}
+                                            style={styles.select}>
+
+                                            {menuitem4}
+
+
+                                        </Select>
+                                    )}
+
+                                    {QA.q4if && (
+
+                                        <TextField id="outlined-basic" variant="outlined" style={styles.select} />
+
+                                    )}
+                                </FormControl>
+                            )}
+                            {consentf && (
+                                <ConsentForm>
+                                    <Heading>Consent Form:</Heading>
+                                    <Content>The purpose of this study is to analyze how people with and without Dyslexia perceive music and visual elements.</Content>
+                                    <Heading>Procedure:</Heading>
+                                    <Content>It is important that you play the game without interruptions on a computer (desktop or laptop)
+                                If you agree to participate, you will be asked to answer a few background questions about the child that is going to play. The questions will be about whether the child have been diagnosed with dyslexia, metadata (e.g. age, sex) and the language learning environment (e.g. mother tongue)</Content>
+                                    <Heading>Participant Requirements:</Heading>
+                                    <Content>Participation in this study is limited to individuals’ age 3 and older. Please use a device with wifi connection for participating in this study. If possible use headphones while playing. Make sure you put the sound level comfortable for you to understand the audio. Please play the game without interruption</Content>
+                                    <Heading>Voluntary Participation:</Heading>
+                                    <Content>Your participation in this research is voluntary, and you may choose not to participate or discontinue participation at any time during the study. Because the participant is under the age of 18, a parent, guardian leader or teacher will need to approve the participation in this study.you must be accompanied throughout the entire game by a parent or legal guardian. By entering your information below, you agree that the above information has been explained to you and all your current questions have been answered</Content>
+
+                                </ConsentForm>
+                            )}
                         </Column>
                     </Row>
                     <Row className="row">
                         <Column className="col-6" style={styles.cartoon}>
-                            <Character
-                                className="iceanimals "
-                                src={cvalues.animal}
-                                alt="iceanimals"
-                                style={styles.iceanimals}
-                            />
+                            {questionf && (
+                                <Character
+                                    className="iceanimals "
+                                    src={cvalues.animal}
+                                    alt="iceanimals"
+                                    style={styles.iceanimals}
+                                />
+
+                            )}
+
+                            {consentf && (
+
+                                <FormControlLabel
+                                    style={styles.check}
+                                    control={
+                                        <Checkbox
+
+                                            color="primary"
+                                        />
+                                    }
+                                    label="i have read and accept the agreement form"
+                                />
+                            )}
+
+
+
+
                         </Column>
 
                         <Column className="col-6" style={styles.navigation}>
+
+
 
                             {cvalues.submitbutton && (
                                 <Submitbutton>DONE</Submitbutton>
                             )}
 
+                            {questionf && (
 
-                            <NavIcons>
-                                <FrontBackIcon>
-                                    <IoIosArrowBack
-                                        onClick={Backwardnavigate}
-                                        color="blue"
-                                        size="58px"
-                                        style={styles.navicon}
-                                    />
-                                </FrontBackIcon>
-                                <BsCircleFill
-                                    color="#0AC811"
-                                    size={cvalues.c1}
-                                    style={styles.circle}
-                                />
-                                <BsCircleFill
-                                    color="#0A41F5"
-                                    size={cvalues.c2}
-                                    style={styles.circle}
-                                />
-                                <BsCircleFill
-                                    color="#0BCECE"
-                                    size={cvalues.c3}
-                                    style={styles.circle}
-                                />
-                                <BsCircleFill
-                                    color="#FF8000"
-                                    size={cvalues.c4}
-                                    style={styles.circle}
-                                />
-                                <BsCircleFill
-                                    color="#EFF60F"
-                                    size={cvalues.c5}
-                                    style={styles.circle}
-                                />
-                                <FrontBackIcon>
-                                    <IoIosArrowForward
-                                        onClick={Forwardnavigate}
-                                        color="blue"
-                                        size="58px"
-                                        style={styles.navicon}
-                                    />
-                                </FrontBackIcon>
 
-                            </NavIcons>
+                                <NavIcons>
+                                    <FrontBackIcon>
+                                        <IoIosArrowBack
+                                            onClick={Backwardnavigate}
+                                            color="blue"
+                                            size="58px"
+                                            style={styles.navicon}
+                                        />
+                                    </FrontBackIcon>
+                                    <BsCircleFill
+                                        color="#0AC811"
+                                        size={cvalues.c1}
+                                        style={styles.circle}
+                                    />
+                                    <BsCircleFill
+                                        color="#0A41F5"
+                                        size={cvalues.c2}
+                                        style={styles.circle}
+                                    />
+                                    <BsCircleFill
+                                        color="#0BCECE"
+                                        size={cvalues.c3}
+                                        style={styles.circle}
+                                    />
+                                    <BsCircleFill
+                                        color="#FF8000"
+                                        size={cvalues.c4}
+                                        style={styles.circle}
+                                    />
+                                    <BsCircleFill
+                                        color="#EFF60F"
+                                        size={cvalues.c5}
+                                        style={styles.circle}
+                                    />
+                                    <FrontBackIcon>
+                                        <IoIosArrowForward
+                                            onClick={Forwardnavigate}
+                                            color="blue"
+                                            size="58px"
+                                            style={styles.navicon}
+                                        />
+                                    </FrontBackIcon>
+
+                                </NavIcons>
+
+                            )}
+
+                            {consentf && (
+
+                                <Proceedbutton onClick={Proceed}>Proceed</Proceedbutton>
+                            )}
                         </Column>
                     </Row>
                 </Column>
@@ -430,6 +487,25 @@ const Formpage = () => {
 
 const zoomAnimation = keyframes`${zoomIn}`;
 
+const Verificatonconsent = styled.div`
+
+
+postion: absolute;
+bottom: 3%;
+`;
+const Heading = styled.h2`
+font-weight: bold;
+color: red;
+`;
+const Content = styled.p`
+font-weight: bold;
+
+`;
+const ConsentForm = styled.div`
+margin-top: 8px;
+align-items: left;
+justify-content: center;
+`;
 const Submitbutton = styled.button`
 display: flex;
 position: absolute;
@@ -467,6 +543,50 @@ animation: 1s ${zoomAnimation};
     outline: none;
 
 }
+
+
+
+`;
+
+const Proceedbutton = styled.button`
+display: flex;
+position: absolute;
+bottom: 20%;
+width: 25%;
+height: 40%;
+font-weight: bold;
+font-size: 20px;
+align-items: center;
+padding-left: 6%;
+background-color: #21768D;
+color: white;
+border: none;
+right: 3%;
+border-radius: 12px;
+box-shadow: 0 10px 6px 0 rgba(0, 0, 0, 0.4);
+outline: none;
+transition: 0.2s;
+animation: 1s ${zoomAnimation};
+
+
+&:hover {
+    background-color: #175060;
+    
+}
+&: focus {
+    outline:none;
+}
+&: active {
+
+    background-color: #175060;
+    box-shadow: 0 7px 6px 0 rgba(0, 0, 0, 0.8);
+
+    transform: translateY(4px);
+    outline: none;
+
+}
+
+
 
 `;
 
@@ -557,6 +677,13 @@ const styles = {
         bottom: "-6%",
         left: "0.3%",
 
+    },
+
+    check: {
+
+        position: "absolute",
+        bottom: "15%",
+        left: "5%",
     },
 
     circle: {
