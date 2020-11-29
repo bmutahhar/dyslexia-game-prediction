@@ -15,6 +15,7 @@ export default class Character extends Component {
             onError={this.props.onError}
             style={this.props.style}
             animation={this.props.animation}
+            transition={this.props.transition}
           ></Animated>
         ) : (
           <NonAnimated
@@ -41,10 +42,10 @@ const animations = {
 
 const Container = styled.div``;
 const Animated = styled.img`
-  animation: 1.2s ease-in 0.5s infinite
-    ${(props) => {
-      return animations[props.animation];
-    }};
+  animation: ${(props) => {
+    return `${props.transition}`;
+  }}
+  ${(props) => animations[props.animation]};}
 
   &:hover {
     cursor: pointer;

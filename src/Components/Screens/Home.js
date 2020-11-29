@@ -90,6 +90,7 @@ const HomePage = () => {
         style={styles.bottomMonkey}
         isAnimated={monkeyAnimation}
         animation="pulse"
+        transition=" infinite 1s"
       />
 
       <Character
@@ -100,6 +101,7 @@ const HomePage = () => {
         onClick={displayLionMessage}
         isAnimated={lionAnimation}
         animation="pulse"
+        transition=" infinite 1s"
       />
       <Character
         className="grass"
