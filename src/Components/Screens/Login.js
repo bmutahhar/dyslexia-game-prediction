@@ -100,6 +100,7 @@ const Form = styled.div`
   justify-content: center;
   width: 40%;
   font-size: 18px;
+  z-index:2;
 `;
 
 const Background = styled.div`
@@ -115,7 +116,7 @@ const Background = styled.div`
   justify-content: center;
   color: white;
   text-align: left;
-  z-index: 2;
+  z-index: 1;
 `;
 
 const Span = styled.span`
@@ -160,7 +161,7 @@ const FormFooter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 1.4vw;
 `;
 
 const Blur = styled.div`
@@ -170,7 +171,7 @@ const Blur = styled.div`
   right: 0;
   width: 100%;
   height: 100vh;
-  z-index: 2;
+  z-index: 1;
   backdrop-filter: blur(10px) brightness(45%) saturate(150%) opacity(100%);
 `;
 

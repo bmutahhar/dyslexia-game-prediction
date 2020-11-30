@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 import { fadeIn } from "react-animations";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Background from "../Background";
 import Character from "../Character";
-import { Button } from "../Button";
 import { MdChildCare } from "react-icons/md";
 import { BiUser, BiLockOpenAlt, BiLockAlt } from "react-icons/bi";
 import { HiOutlineMail } from "react-icons/hi";
@@ -28,15 +29,120 @@ class Signup extends Component {
     parentName: "",
     childName: "",
     childAge: "",
-    childGender: "",
+    gender: "",
+    errors: {
+      username: "",
+      password: "",
+      retypePassword: "",
+      email: "",
+      parentName: "",
+      childName: "",
+      childAge: "",
+      gender: "",
+    },
+    disabled: true,
   };
+
+  checkAge(val) {
+    const numRegex = /^[0-9]*$/;
+    let check = false;
+    if (numRegex.test(val)) {
+      let num = parseInt(val);
+      if (num >= 1 && num <= 10) {
+        check = true;
+      }
+    }
+    return check;
+  }
+
+  enableButton = () => {
+    const {
+      username,
+      password,
+      retypePassword,
+      email,
+      parentName,
+      childName,
+      childAge,
+      gender,
+      errors,
+    } = this.state;
+
+    const disable =
+      username.trim().length !== 0 &&
+      password.trim().length !== 0 &&
+      retypePassword.trim().length !== 0 &&
+      email.trim().length !== 0 &&
+      parentName.trim().length !== 0 &&
+      childName.trim().length !== 0 &&
+      childAge.trim().length !== 0 &&
+      gender.trim().length !== 0 &&
+      errors.username.trim().length === 0 &&
+      errors.password.trim().length === 0 &&
+      errors.retypePassword.trim().length === 0 &&
+      errors.email.trim().length === 0 &&
+      errors.parentName.trim().length === 0 &&
+      errors.childName.trim().length === 0 &&
+      errors.childAge.trim().length === 0 &&
+      errors.gender.trim().length === 0
+        ? false
+        : true;
+    this.setState({ disabled: disable });
+  };
+
   onSubmit = (event) => {
     event.preventDefault();
-    console.log(this.state);
-    // this.props.history.push("/userform");
+    this.props.history.push("/userform");
   };
   onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    e.preventDefault();
+    let { name, value } = e.target;
+    value = value.trim();
+    let errors = this.state.errors;
+    switch (name) {
+      case "username":
+        errors.username =
+          value.length < 5 ? "Username must be at least 5 characters long" : "";
+        break;
+      case "password":
+        errors.password = validPasswordRegex.test(value)
+          ? ""
+          : "Password must be minimum eight characters, at least one letter, one number and one special character";
+        break;
+      case "retypePassword":
+        errors.retypePassword =
+          this.state.password.trim() === value.trim()
+            ? ""
+            : "Password do not match correctly";
+        break;
+      case "email":
+        errors.email = validEmailRegex.test(value)
+          ? ""
+          : "Email address must be a valid email";
+        break;
+      case "parentName":
+        errors.parentName =
+          value.length < 5
+            ? "Parent name must be at least 5 characters long"
+            : "";
+        break;
+      case "childName":
+        errors.childName =
+          value.length < 5
+            ? "Child name must be at least 5 characters long"
+            : "";
+        break;
+      case "childAge":
+        errors.childAge = this.checkAge(value)
+          ? ""
+          : "Age must a number between 1 and 10";
+        break;
+
+      default:
+        break;
+    }
+
+    this.setState({ errors, [name]: value }, this.enableButton);
   };
 
   changeBoySrc() {
@@ -82,6 +188,9 @@ class Signup extends Component {
                 Username
               </Label>
             </InputGroup>
+            {this.state.errors.username.length > 0 && (
+              <Error>{this.state.errors.username}</Error>
+            )}
             <InputGroup>
               <Input
                 type="password"
@@ -99,6 +208,9 @@ class Signup extends Component {
                 Password
               </Label>
             </InputGroup>
+            {this.state.errors.password.length > 0 && (
+              <Error>{this.state.errors.password}</Error>
+            )}
             <InputGroup>
               <Input
                 type="password"
@@ -116,6 +228,9 @@ class Signup extends Component {
                 Re-type Password
               </Label>
             </InputGroup>
+            {this.state.errors.retypePassword.length > 0 && (
+              <Error>{this.state.errors.retypePassword}</Error>
+            )}
             <InputGroup>
               <Input
                 type="email"
@@ -133,6 +248,9 @@ class Signup extends Component {
                 Email
               </Label>
             </InputGroup>
+            {this.state.errors.email.length > 0 && (
+              <Error>{this.state.errors.email}</Error>
+            )}
             <InputGroup>
               <Input
                 type="text"
@@ -150,6 +268,9 @@ class Signup extends Component {
                 Parent's Full Name
               </Label>
             </InputGroup>
+            {this.state.errors.parentName.length > 0 && (
+              <Error>{this.state.errors.parentName}</Error>
+            )}
             <InputGroup>
               <Input
                 type="text"
@@ -167,6 +288,9 @@ class Signup extends Component {
                 Child's Full Name
               </Label>
             </InputGroup>
+            {this.state.errors.childName.length > 0 && (
+              <Error>{this.state.errors.childName}</Error>
+            )}
             <InputGroup>
               <Input
                 type="number"
@@ -192,6 +316,9 @@ class Signup extends Component {
                 Child's Age
               </Label>
             </InputGroup>
+            {this.state.errors.childAge.length > 0 && (
+              <Error>{this.state.errors.childAge}</Error>
+            )}
             <InputGroup>
               <RadioButtons
                 onBoy={this.changeBoySrc}
@@ -199,10 +326,17 @@ class Signup extends Component {
                 onChange={this.onChange}
               />
             </InputGroup>
+            {this.state.errors.gender.length > 0 && (
+              <Error>{this.state.errors.gender}</Error>
+            )}
             <Container>
-              <Button buttonSize="btn--wide" buttonColor="green" type="submit">
+              <SignupButton
+                variant="contained"
+                type="submit"
+                disabled={this.state.disabled}
+              >
                 Sign Up
-              </Button>
+              </SignupButton>
             </Container>
           </Form>
           <OtherSignupComponent>
@@ -240,11 +374,11 @@ class Signup extends Component {
 const RadioButtons = (props) => {
   return (
     <RadioButtonGroup onChange={props.onChange}>
-      <Label className="" htmlFor="gender">
+      <Label className="label" htmlFor="gender">
         Child's Gender:
       </Label>
       <Label className="male">
-        <input type="radio" name="gender" id="male" value="male" required />
+        <input type="radio" name="gender" id="male" value="male" />
         <img
           id="boy"
           src={boy}
@@ -305,12 +439,12 @@ const Input = styled.input.attrs((props) => ({
   onChange: props.onChange,
 }))`
   width: 100%;
-  font-size: 14px;
+  font-size: 1.2vw;
   line-height: 35px;
   letter-spacing: 1px;
   border: none;
   border-radius: 5px;
-  padding: 5px 10px;
+  padding: 5px 10px 2px 10px;
   color: white;
   background-color: rgba(145, 255, 215, 0.6);
   &:focus {
@@ -326,16 +460,19 @@ const Input = styled.input.attrs((props) => ({
 `;
 
 const InputGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
   background-color: transparent;
-  margin: 15px 5px;
+  margin: 5px 5px;
   width: 60%;
-  height: 30px;
+  height: 45px;
   input:focus ~ .floating-label,
   input:not(:placeholder-shown) ~ .floating-label {
     position: relative;
-    bottom: 50px;
-    ${"" /* left: -105px; */}
-    ${"" /* right: 0; */}
+    bottom: 55px;
+    right: 1px;
     font-size: 10px;
     opacity: 1;
     letter-spacing: 1.5;
@@ -345,17 +482,18 @@ const InputGroup = styled.div`
     justify-content: flex-start;
     align-content: center;
     align-items: center;
+    text-align: center;
     height: 100%;
-    ${"" /* width: 50%; */}
+    font-size: 1.5vw;
     padding: 2px 10px;
     background-color: transparent;
     text-align: left;
     color: #eee;
     position: relative;
-    bottom: 38px;
-    ${"" /* right: 100px; */}
+    bottom: 45px;
     pointer-events: none;
-    transition: all 0.5s ease-out;
+    transition: all 0.3s ease-out;
+    z-index: 2;
   }
   input:focus {
     outline: none;
@@ -386,7 +524,6 @@ const Header = styled.div`
 display: flex;
 flex-flow: column wrap;
 color: white;
-${"" /* background-color:rgba(0, 0, 0, 0.5); */}
 margin-left:5px;
 margin-right:5px;
 
@@ -404,6 +541,7 @@ p{
 const OtherSignupComponent = styled.div`
   display: flex;
   flex-direction: column;
+  font-size: 1.4vw;
   width: 25%;
   height: 20%;
   margin-left: 35px;
@@ -419,13 +557,28 @@ const OtherSignupComponent = styled.div`
     align-items: center;
     justify-content: center;
     background-color: #4286f5;
+    width: 100%;
     padding: 5px 10px;
     position: relative;
+    font-size: inherit;
     margin-top: -10px;
-
+    border-radius: 5px;
     pointer: cursor;
     &:hover {
       pointer: cursor;
+    }
+    &:hover {
+      background-color: #2e68c7;
+    }
+    &: focus {
+      outline: none;
+    }
+    &: active {
+      background-color: #2e68c7;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.8);
+
+      transform: translateY(2px);
+      outline: none;
     }
   }
   a {
@@ -436,7 +589,7 @@ const OtherSignupComponent = styled.div`
     }
   }
   img {
-    background-color: #4286f5;
+    background-color: inherit;
   }
 `;
 
@@ -444,8 +597,9 @@ const RadioButtonGroup = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  text-align: center;
   width: 100%;
-  font-size: 15px;
+  font-size: 1.5vw;
   height: 45px;
   letter-spacing: 1px;
   border: none;
@@ -453,7 +607,11 @@ const RadioButtonGroup = styled.div`
   padding: 5px 10px;
   color: white;
   background-color: transparent;
-  ${"" /* background-color: rgba(145, 255, 215, 0.6); */}
+
+  .label {
+    position: relative;
+    top: 4px;
+  }
 
   /* HIDE RADIO */
   [type="radio"] {
@@ -467,9 +625,65 @@ const RadioButtonGroup = styled.div`
     cursor: pointer;
     position: relative;
     left: -35px;
-    top: -5px;
+    top: -3px;
   }
 `;
+
+const Error = styled.span`
+  color: #e31414;
+  font-size: 10px;
+  padding-left: 10px;
+  margin-top: -5px;
+  width: 60%;
+  text-align: left;
+`;
+
+const SignupButton = withStyles({
+  root: {
+    color: "#fff",
+    boxShadow: "none",
+    textTransform: "none",
+    fontSize: 16,
+    fontWeight: 400,
+    width: "60%",
+    padding: "6px 12px",
+    border: "1px solid",
+    lineHeight: 1.5,
+    backgroundColor: "#25ce4a",
+    borderColor: "#25ce4a",
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:hover": {
+      backgroundColor: "#027719",
+      borderColor: "#027719",
+      boxShadow: "none",
+    },
+    "&:active": {
+      outline: "none",
+      boxShadow: "none",
+      backgroundColor: "#027719",
+      borderColor: "#027719",
+    },
+    "&:disabled": {
+      backgroundColor: "#90ab95",
+      color: "white",
+      border: "none",
+    },
+    "&:focus": {
+      outline: "none",
+    },
+  },
+})(Button);
 
 const styles = {
   eagle: {
@@ -493,5 +707,9 @@ const signupAnimation = keyframes`${fadeIn}`;
 const Animation = styled.div`
   animation: 1s ${signupAnimation};
 `;
+
+const validEmailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+
+const validPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 export default withRouter(Signup);
