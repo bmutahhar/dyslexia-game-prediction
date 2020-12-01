@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { fadeIn, slideInDown } from "react-animations";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Background from "../Background";
 import Character from "../Character";
 import { MdChildCare } from "react-icons/md";
@@ -340,18 +340,24 @@ class Signup extends Component {
             </Container>
           </Form>
           <OtherSignupComponent>
+            <SignInLinkComponent>
+              Already have an account?
+              <Link to="/login">Log In</Link>
+            </SignInLinkComponent>
             <strong>OR</strong>
             <p>You can sign up with google</p>
-            <a
-              href="https://www.google.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div>
-                <img src={google} alt="Google logo" width={30} height={30} />
-                <span>Sign up with Google</span>
-              </div>
-            </a>
+            <GoogleButton>
+              <a
+                href="https://www.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div>
+                  <img src={google} alt="Google logo" width={30} height={30} />
+                  <span>Sign up with Google</span>
+                </div>
+              </a>
+            </GoogleButton>
           </OtherSignupComponent>
           <Character
             className="eagle wow"
@@ -545,9 +551,9 @@ p{
 const OtherSignupComponent = styled.div`
   display: flex;
   flex-direction: column;
-  font-size: 1.4vw;
+  font-size: 1.3vw;
   width: 25%;
-  height: 20%;
+  height: 30%;
   margin-left: 35px;
   margin-right: 5px;
   justify-content: center;
@@ -557,34 +563,53 @@ const OtherSignupComponent = styled.div`
   color: white;
   border-radius: 15px;
   animation: 1s ${slideInAnimation};
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #4286f5;
-    width: 100%;
-    padding: 5px 10px;
-    position: relative;
-    font-size: inherit;
-    margin-top: -10px;
-    border-radius: 5px;
-    pointer: cursor;
-    &:hover {
-      pointer: cursor;
-    }
-    &:hover {
-      background-color: #2e68c7;
-    }
-    &: focus {
-      outline: none;
-    }
-    &: active {
-      background-color: #2e68c7;
-      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.8);
+`;
 
-      transform: translateY(2px);
-      outline: none;
+const SignInLinkComponent = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  font-size: 1.3vw;
+  width: 100%;
+  a {
+    width: 21%;
+    text-align:center;
+    color: white;
+    &:hover {
+      color: #30b7f0;
+      text-decoration: none;
     }
+  }
+`;
+
+const GoogleButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4286f5;
+  width: 70%;
+  padding: 5px 10px;
+  position: relative;
+  font-size: 1.3vw;
+  margin-top: -10px;
+  border-radius: 5px;
+  pointer: cursor;
+  &:hover {
+    pointer: cursor;
+  }
+  &:hover {
+    background-color: #2e68c7;
+  }
+  &: focus {
+    outline: none;
+  }
+  &: active {
+    background-color: #2e68c7;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.8);
+
+    transform: translateY(2px);
+    outline: none;
   }
   a {
     color: #fff;

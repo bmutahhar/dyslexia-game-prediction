@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { shake } from "react-animations";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -27,18 +27,57 @@ export default class Login extends Component {
 
 const LoginComponent = () => {
   const classes = useStyles();
+  let history = useHistory();
   const [errorMessage, setErrorMessage] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    let message = "";
+    if (username.trim().length === 0 && password.trim().length === 0) {
+      message = "Please enter your username and password";
+    } else if (username.trim().length !== 0 && password.trim().length === 0) {
+      message = "Please enter your password before proceeding";
+    } else if (username.trim().length === 0 && password.trim().length !== 0) {
+      message = "Please enter your username before proceeding";
+    } else {
+      console.log(username, password);
+      history.push("/userform");
+    }
+    setErrorMessage(message.trim());
+  };
+
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    switch (name.trim()) {
+      case "username":
+        setUsername(value.trim());
+        break;
+      case "password":
+        setPassword(value.trim());
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const onClick = () => setErrorMessage("");
 
   return (
     <Background>
-      <Form>
+      <Form method="post" onSubmit={onSubmit} autoComplete="off">
         <InputTextField
           className={classes.margin}
           label="Username or email"
           variant="outlined"
           id="username"
           fullWidth
-          autoComplete="off"
+          name="username"
+          value={username}
+          onChange={onChange}
+          onFocus={onClick}
         />
         <InputTextField
           className={classes.margin}
@@ -46,15 +85,16 @@ const LoginComponent = () => {
           variant="outlined"
           id="password"
           fullWidth
-          autoComplete="off"
+          name="password"
+          value={password}
+          onChange={onChange}
+          onClick={onClick}
         />
-        <Error>{errorMessage}</Error>
+        {errorMessage.trim().length > 0 && <Error>{errorMessage}</Error>}
         <FormButtonGroup>
-          <Link to="/">
-            <UserButton variant="contained" fullWidth>
-              Sign In
-            </UserButton>
-          </Link>
+          <UserButton type="submit" variant="contained" fullWidth>
+            Sign In
+          </UserButton>
           <Link to="/userform">
             <UserButton variant="contained" fullWidth>
               Play As Guest
@@ -134,33 +174,6 @@ const Background = styled.div`
   color: white;
   text-align: left;
   z-index: 1;
-`;
-
-const Span = styled.span`
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  margin-left: 5px;
-  padding-left: 5px;
-`;
-
-const Input = styled.input.attrs((props) => ({
-  id: props.id,
-  type: props.type,
-  placeholder: props.placeholder,
-}))`
-  border-radius: 41px;
-  padding: 2px;
-  border: none;
-  width: 100%;
-  text-align: left;
-  padding-left: 15px;
-  background-color: #c9e3d2;
-  margin-bottom: 5px;
-
-  &:focus {
-    outline: none;
-  }
 `;
 const InputTextField = withStyles({
   root: {
@@ -291,7 +304,6 @@ const Blur = styled.div`
 const Error = styled.span`
   color: #8f0909;
   font-size: 14px;
-  padding-left: 10px;
   margin-top: -5px;
   width: 100%;
   text-align: left;
