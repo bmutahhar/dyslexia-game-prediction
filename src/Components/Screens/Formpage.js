@@ -139,6 +139,10 @@ const Formpage = () => {
         }
 
         navigation();
+        setAnswer1("");
+        setAnswer2("");
+        setAnswer3("");
+        setAnswer4("");
     };
 
     const Backwardnavigate = () => {
@@ -167,12 +171,8 @@ const Formpage = () => {
                 });
                 setQA({
                     q1: QandA.qna1.Q,
-                    q1options: QandA.qna1.noofopt,
                     q1sf: QandA.qna1.fieldselect,
                     q1if: QandA.qna1.fieldinput,
-                    q1opt1: QandA.qna1.A1,
-                    q1opt2: QandA.qna1.A2,
-                    q1opt3: QandA.qna1.A3,
 
                     q2: QandA.qna2.Q,
                     q2options: QandA.qna2.noofopt,
@@ -188,13 +188,12 @@ const Formpage = () => {
                     q3opt1: QandA.qna3.A1,
                     q3opt2: QandA.qna3.A2,
                     q3opt3: QandA.qna3.A3,
+                    q3opt4: QandA.qna3.A4,
+
 
                     q4: QandA.qna4.Q,
-                    q4options: QandA.qna4.noofopt,
                     q4sf: QandA.qna4.fieldselect,
                     q4if: QandA.qna4.fieldinput,
-                    q4opt1: QandA.qna4.A1,
-                    q4opt2: QandA.qna4.A2,
 
                 });
 
@@ -213,30 +212,37 @@ const Formpage = () => {
 
                 setQA({
 
-                    q1: "",
-                    q1options: 0,
-                    q1opt1: "",
-                    q1opt2: "",
-                    q1opt3: "",
-                    q1opt4: "",
-                    q2: "",
-                    q2options: 0,
-                    q2opt1: "",
-                    q2opt2: "",
-                    q2opt3: "",
-                    q2opt4: "",
-                    q3: "",
-                    q3options: 0,
-                    q3opt1: "",
-                    q3opt2: "",
-                    q3opt3: "",
-                    q3opt4: "",
-                    q4: "",
-                    q4options: 0,
-                    q4opt1: "",
-                    q4opt2: "",
-                    q4opt3: "",
-                    q4opt4: "",
+                    q1: QandA.qna5.Q,
+                    q1options: QandA.qna5.noofopt,
+                    q1sf: QandA.qna5.fieldselect,
+                    q1if: QandA.qna5.fieldinput,
+                    q1opt1: QandA.qna5.A1,
+                    q1opt2: QandA.qna5.A2,
+                    q1opt3: QandA.qna5.A3,
+                    q1opt4: QandA.qna5.A4,
+
+                    q2: QandA.qna6.Q,
+                    q2options: QandA.qna6.noofopt,
+                    q2sf: QandA.qna6.fieldselect,
+                    q2if: QandA.qna6.fieldinput,
+                    q2opt1: QandA.qna6.A1,
+                    q2opt2: QandA.qna6.A2,
+                    q2opt3: QandA.qna6.A3,
+                    q2opt4: QandA.qna6.A4,
+
+                    q3: QandA.qna7.Q,
+                    q3options: QandA.qna7.noofopt,
+                    q3sf: QandA.qna7.fieldselect,
+                    q3if: QandA.qna7.fieldinput,
+                    q3opt1: QandA.qna7.A1,
+                    q3opt2: QandA.qna7.A2,
+                    q3opt3: QandA.qna7.A3,
+                    q3opt4: QandA.qna7.A4,
+
+                    q4: QandA.qna8.Q,
+                    q4sf: QandA.qna4.fieldselect,
+                    q4if: QandA.qna4.fieldinput,
+
                 });
 
                 break;
@@ -252,6 +258,36 @@ const Formpage = () => {
                     animal: polar,
                 });
 
+                setQA({
+
+                    q1: QandA.qna9.Q,
+                    q1options: QandA.qna9.noofopt,
+                    q1sf: QandA.qna9.fieldselect,
+                    q1if: QandA.qna9.fieldinput,
+                    q1opt1: QandA.qna9.A1,
+                    q1opt2: QandA.qna9.A2,
+
+
+                    q2: QandA.qna10.Q,
+                    q2options: QandA.qna10.noofopt,
+                    q2sf: QandA.qna10.fieldselect,
+                    q2if: QandA.qna10.fieldinput,
+                    q2opt1: QandA.qna10.A1,
+                    q2opt2: QandA.qna10.A2,
+                    q2opt3: QandA.qna10.A3,
+
+
+                    q3: QandA.qna11.Q,
+                    q3sf: QandA.qna11.fieldselect,
+                    q3if: QandA.qna11.fieldinput,
+
+
+                    q4: QandA.qna12.Q,
+                    q4sf: QandA.qna12.fieldselect,
+                    q4if: QandA.qna12.fieldinput,
+
+                });
+
                 break;
             }
 
@@ -263,6 +299,35 @@ const Formpage = () => {
                     c4: active,
                     c5: nonactive,
                     animal: seal,
+                });
+
+                setQA({
+
+                    q1: QandA.qna13.Q,
+                    q1sf: QandA.qna13.fieldselect,
+                    q1if: QandA.qna13.fieldinput,
+
+
+                    q2: QandA.qna14.Q,
+                    q2sf: QandA.qna14.fieldselect,
+                    q2if: QandA.qna14.fieldinput,
+
+
+                    q3: QandA.qna15.Q,
+                    q3options: QandA.qna15.noofopt,
+
+                    q3sf: QandA.qna15.fieldselect,
+                    q3if: QandA.qna15.fieldinput,
+                    q3opt1: QandA.qna15.A1,
+                    q3opt2: QandA.qna15.A2,
+                    q3opt3: QandA.qna15.A3,
+                    q3opt4: QandA.qna15.A4,
+
+
+                    q4: QandA.qna16.Q,
+                    q4sf: QandA.qna16.fieldselect,
+                    q4if: QandA.qna16.fieldinput,
+
                 });
 
                 break;
@@ -277,6 +342,37 @@ const Formpage = () => {
                     c5: active,
                     animal: penguin2,
                     submitbutton: true,
+                });
+
+                setQA({
+
+                    q1: QandA.qna17.Q,
+                    q1options: QandA.qna17.noofopt,
+                    q1sf: QandA.qna17.fieldselect,
+                    q1if: QandA.qna17.fieldinput,
+                    q1opt1: QandA.qna17.A1,
+                    q1opt2: QandA.qna17.A2,
+                    q1opt3: QandA.qna17.A3,
+                    q1opt4: QandA.qna17.A4,
+
+                    q2: QandA.qna18.Q,
+                    q2options: QandA.qna18.noofopt,
+                    q2sf: QandA.qna18.fieldselect,
+                    q2if: QandA.qna18.fieldinput,
+                    q2opt1: QandA.qna18.A1,
+                    q2opt2: QandA.qna18.A2,
+                    q2opt3: QandA.qna18.A3,
+
+
+                    q3: QandA.qna19.Q,
+                    q3sf: QandA.qna19.fieldselect,
+                    q3if: QandA.qna19.fieldinput,
+
+
+                    q4: "",
+                    q4sf: false,
+                    q4if: false,
+
                 });
 
                 break;
@@ -737,9 +833,32 @@ const styles = {
 };
 
 const QandA = {
+    // first set of questions
+    qna1: { Q: 'How old is the participant (your child) ?', fieldselect: false, fieldinput: true },
+    qna2: { Q: 'What is the gender of the participant (your child) ?', A1: 'male', A2: 'female', noofopt: 2, fieldselect: true, fieldinput: false },
+    qna3: { Q: 'Does the participant (your child) have Dyslexia ?', A1: 'no', A2: 'yes', A3: 'yes-diagnosed', A4: 'not-known', noofopt: 4, fieldselect: true, fieldinput: false },
+    qna4: { Q: 'If Yes, diagnosed: in which year was your child diagnosed of Dyslexia?', fieldselect: false, fieldinput: true },
+    // secound set of questions
+    qna5: { Q: 'Is the dyslexia more an impairment in reading?', A1: 'no', A2: 'yes', A3: 'yes-diagnosed', A4: 'not-known', noofopt: 4, fieldselect: true, fieldinput: false },
+    qna6: { Q: 'Or — is the dyslexia more an impairment in written expression?', A1: 'no', A2: 'yes', A3: 'yes-diagnosed', A4: 'not-known', noofopt: 4, fieldselect: true, fieldinput: false },
+    qna7: { Q: 'Does a family member has dyslexia (e.g. dad, mom or siblings)?', A1: 'no', A2: 'yes', A3: 'yes-diagnosed', A4: 'not-known', noofopt: 4, fieldselect: true, fieldinput: false },
+    qna8: { Q: 'Please enter which languages your child speaks.', fieldselect: false, fieldinput: true },
 
-    qna1: { Q: 'is mutahar noob?', A1: 'yes', A2: 'no', A3: 'OFFCOURSE', noofopt: 3, fieldselect: true, fieldinput: false },
-    qna2: { Q: 'is mutahar sexy?', A1: 'yes', A2: 'no', noofopt: 2, fieldselect: true, fieldinput: false },
-    qna3: { Q: 'is mutahar smart?', A1: 'yes', A2: 'is that a question', A3: 'OFFCOURSE', noofopt: 3, fieldselect: false, fieldinput: true },
-    qna4: { Q: 'is mutahar?', A1: 'yes he is', A2: 'no he is not', noofopt: 2, field: 'select', fieldselect: false, fieldinput: true }
+    // third set of questions 
+    qna9: { Q: 'Is English the mother tongue of your child?', A1: 'no', A2: 'yes', noofopt: 2, fieldselect: true, fieldinput: false },
+    qna10: { Q: 'Does your child go to School or Kindergarten ', A1: 'School', A2: 'Kindergarten', A3: 'Not School and Not Kindergarten', noofopt: 3, fieldselect: true, fieldinput: false },
+    qna11: { Q: 'Please enter the actual class/nursery school year that your child is attending at the moment (e.g. first class, nursery school first year)', fieldselect: false, fieldinput: true },
+    qna12: { Q: 'Please enter the actual school grade of your child for English here(A-F):', fieldselect: false, fieldinput: true },
+
+    // fourth set of questions
+    qna13: { Q: 'Please enter the actual school grade of your child for Math here(A-F):', fieldselect: false, fieldinput: true },
+    qna14: { Q: 'Please enter the range of school grade here (e.g. A - F, or 1 - 6):', fieldselect: false, fieldinput: true },
+    qna15: { Q: 'Which kind of writing and reading skills has your child?', A1: 'the child is not reading or writing yet', A2: 'the child is able to read and write letters and easy words', A3: 'the child is able to read and write easy sentences', A4: 'the child reads and write fluently', noofopt: 4, fieldselect: true, fieldinput: false },
+    qna16: { Q: 'Does your child have any hearing limitations? Or hearing aid? Please describe shortly.', fieldselect: false, fieldinput: true },
+    // fifth set of questions
+    qna17: { Q: 'Does the participant has attention deficit hyperactivity disorder (ADHD) or attention deficit disorder (ADD)?', A1: 'no', A2: 'yes', A3: 'yes-diagnosed', A4: 'not-known', noofopt: 4, fieldselect: true, fieldinput: false },
+    qna18: { Q: 'Does you child play an music instrument (e.g. piano)?', A1: 'no', A2: 'yes-less then 6 months', A3: 'yes-more then 6 months', noofopt: 3, fieldselect: true, fieldinput: false },
+    qna19: { Q: 'If Yes (your child plays an instrument): which instrument is your child playing?', fieldselect: false, fieldinput: true }
+
+
 }
