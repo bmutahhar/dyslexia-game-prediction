@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import { fadeIn } from "react-animations";
+import { fadeIn, slideInDown } from "react-animations";
 import { withRouter } from "react-router-dom";
 import Background from "../Background";
 import Character from "../Character";
@@ -413,6 +413,8 @@ const Container = styled.div`
   justify-content: center;
 `;
 
+const slideInAnimation = keyframes`${slideInDown}`;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -425,6 +427,7 @@ const Form = styled.form`
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border-radius: 15px;
+  animation: 1s ${slideInAnimation};
 `;
 const Label = styled.label.attrs((props) => ({
   htmlFor: props.htmlFor,
@@ -526,6 +529,7 @@ flex-flow: column wrap;
 color: white;
 margin-left:5px;
 margin-right:5px;
+animation: 1s ${slideInAnimation};
 
 h1{
   font-size:48px;
@@ -552,6 +556,7 @@ const OtherSignupComponent = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border-radius: 15px;
+  animation: 1s ${slideInAnimation};
   div {
     display: flex;
     align-items: center;
@@ -704,6 +709,7 @@ const styles = {
 };
 
 const signupAnimation = keyframes`${fadeIn}`;
+
 const Animation = styled.div`
   animation: 1s ${signupAnimation};
 `;

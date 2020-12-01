@@ -484,10 +484,13 @@ const Formpage = () => {
                         <Column className="col-6" style={styles.cartoon}>
                             {questionf && (
                                 <Character
-                                    className="iceanimals "
+                                    className="iceanimals  "
                                     src={cvalues.animal}
                                     alt="iceanimals"
                                     style={styles.iceanimals}
+                                    isAnimated={true}
+                                    animation='zoomIn'
+                                    transition='0.5s'
                                 />
 
                             )}
