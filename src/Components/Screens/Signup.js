@@ -96,8 +96,7 @@ class Signup extends Component {
   };
   onChange = (e) => {
     e.preventDefault();
-    let { name, value } = e.target;
-    value = value.trim();
+    const { name, value } = e.target;
     let errors = this.state.errors;
     switch (name) {
       case "username":
@@ -588,7 +587,7 @@ const GoogleButton = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #4286f5;
-  width: 70%;
+  width: 80%;
   padding: 5px 10px;
   position: relative;
   font-size: 1.3vw;

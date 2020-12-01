@@ -1,3 +1,8 @@
 .App {
   text-align: center;
+  outline: none;
+}
+
+button:focus {
+  outline: none;
 }

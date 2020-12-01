@@ -17,6 +17,7 @@
     "react-spring": "^8.0.27",
     "styled-components": "^5.2.1"
   },
+  "proxy": "http://localhost:5000/",
   "scripts": {
     "start": "react-scripts start",
     "start-flask": "cd API && activate G:\\React-Projects\\dyslexia-game-prediction\\API\\env && flask run",

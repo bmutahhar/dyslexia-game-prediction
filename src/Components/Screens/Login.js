@@ -3,9 +3,15 @@ import { Link, useHistory } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { shake } from "react-animations";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Zoom from "@material-ui/core/Zoom";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { slideInDown } from "react-animations";
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import Character from "../Character";
 import Home from "./Home";
 import monkeytree from "../Images/Characters/monkeytree.png";
@@ -28,24 +34,60 @@ export default class Login extends Component {
 const LoginComponent = () => {
   const classes = useStyles();
   let history = useHistory();
-  const [errorMessage, setErrorMessage] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [visibility, setVisibility] = useState(false);
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: "",
+  });
+
+  function postData(data) {
+    fetch("/api/v1/user/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((resp) => resp.json())
+      .then((respJson) => {
+        if (respJson.error.trim().length === 0) {
+          setStatus({ loading: false, success: true, error: "" });
+        } else {
+          setStatus({ loading: false, success: false, error: respJson.error });
+        }
+      })
+      .catch((error) => {
+        alert(error);
+        setStatus({ loading: false, success: false, error: error });
+      });
+  }
 
   const onSubmit = (event) => {
     event.preventDefault();
     let message = "";
     if (username.trim().length === 0 && password.trim().length === 0) {
       message = "Please enter your username and password";
+      setStatus({ success: false, loading: false, error: message });
     } else if (username.trim().length !== 0 && password.trim().length === 0) {
       message = "Please enter your password before proceeding";
+      setStatus({ success: false, loading: false, error: message });
     } else if (username.trim().length === 0 && password.trim().length !== 0) {
       message = "Please enter your username before proceeding";
+      setStatus({ success: false, loading: false, error: message });
     } else {
-      console.log(username, password);
-      history.push("/userform");
+      setStatus({ loading: true, success: false, error: "" });
+      postData(
+        JSON.stringify({
+          username: username,
+          password: password,
+        })
+      );
+      // history.push("/userform");
     }
-    setErrorMessage(message.trim());
   };
 
   const onChange = (event) => {
@@ -63,7 +105,8 @@ const LoginComponent = () => {
     }
   };
 
-  const onClick = () => setErrorMessage("");
+  const onClick = () =>
+    setStatus({ loading: false, success: false, error: "" });
 
   return (
     <Background>
@@ -84,16 +127,42 @@ const LoginComponent = () => {
           label="Password"
           variant="outlined"
           id="password"
+          type={visibility ? "text" : "password"}
           fullWidth
           name="password"
           value={password}
           onChange={onChange}
           onClick={onClick}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setVisibility(!visibility)} style={{
+                  "MuiButtonBase-root MuiIconButton-root": {
+                    outline: "none",
+                  }
+                }}>
+                  {visibility ? (
+                    <MdVisibility color="white" size={20} />
+                  ) : (
+                    <MdVisibilityOff color="white" size={20} />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
-        {errorMessage.trim().length > 0 && <Error>{errorMessage}</Error>}
+        {status.error.trim().length > 0 && <Error>{status.error}</Error>}
         <FormButtonGroup>
           <UserButton type="submit" variant="contained" fullWidth>
-            Sign In
+            {status.loading ? (
+              <CircularProgress style={{ color: "white" }} size={30} />
+            ) : status.success ? (
+              <Zoom in={true} style={{ transitionDelay: "200ms" }}>
+                <IoIosCheckmarkCircleOutline color="white" size={28} />
+              </Zoom>
+            ) : (
+              "Sign In"
+            )}
           </UserButton>
           <Link to="/userform">
             <UserButton variant="contained" fullWidth>
@@ -191,7 +260,7 @@ const InputTextField = withStyles({
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
-        borderColor: "transparent",
+        borderColor: "#5BA945",
         borderRadius: "5px",
         color: "#fff",
       },
@@ -201,6 +270,7 @@ const InputTextField = withStyles({
       },
       "& .MuiOutlinedInput-input": {
         color: "#fff",
+        borderColor: "#5BA945",
       },
     },
   },
@@ -297,13 +367,13 @@ const Blur = styled.div`
   right: 0;
   width: 100%;
   height: 100vh;
-  z-index: 1;
+  z-index: 2;
   backdrop-filter: blur(10px) brightness(45%) saturate(150%) opacity(100%);
 `;
 
 const Error = styled.span`
   color: #8f0909;
-  font-size: 14px;
+  font-size: 12px;
   margin-top: -5px;
   width: 100%;
   text-align: left;
