@@ -32,7 +32,10 @@ export default class Navbar extends Component {
     window.addEventListener("resize", this.showButton);
 
     return (
-      <nav className="navbar navbar-expand-lg fixed-top navbar-light bg-transparent" style={{fontSize:"18px",fontWeight:"600"}}>
+      <nav
+        className="navbar navbar-expand-lg fixed-top navbar-light bg-transparent"
+        style={{ fontSize: "18px", fontWeight: "600" }}
+      >
         <Link smooth to="#home" className="navbar-brand mr-auto">
           <img
             src={logo}
@@ -69,18 +72,23 @@ export default class Navbar extends Component {
             <Link smooth to="#contact" className="nav-link text-white">
               Contact Us
             </Link>
-            {/* <Link to="/login" className="nav-link">
-              <button className="btn btn-outline-sucess btn-success text-white align-self-center btn-sm">
-                Log In
-              </button>
-            </Link> */}
             {this.state.button ? (
               <Link to="/login" className="login-btn">
-                <Button buttonStyle="btn--outline" buttonColor="green" buttonSize="btn--small">Login</Button>
+                <Button
+                  buttonStyle="btn--outline"
+                  buttonColor="green"
+                  buttonSize="btn--small"
+                >
+                  Login
+                </Button>
               </Link>
             ) : (
               <Link to="/login" className="login-btn">
-                <Button buttonStyle="btn--outline" buttonColor="green" buttonSize="btn--wide">
+                <Button
+                  buttonStyle="btn--outline"
+                  buttonColor="green"
+                  buttonSize="btn--wide"
+                >
                   Login
                 </Button>
               </Link>
