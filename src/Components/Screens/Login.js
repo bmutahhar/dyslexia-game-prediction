@@ -1,10 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
+import { shake } from "react-animations";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import { slideInDown } from "react-animations";
 import Character from "../Character";
 import Home from "./Home";
-import { Button } from "../Button";
 import monkeytree from "../Images/Characters/monkeytree.png";
 import tree from "../Images/Characters/tree.png";
 
@@ -23,37 +26,43 @@ export default class Login extends Component {
 }
 
 const LoginComponent = () => {
+  const classes = useStyles();
+  const [errorMessage, setErrorMessage] = useState("");
+
   return (
     <Background>
       <Form>
-        <Span>Username</Span>
-        <Input id="username" type="text" placeholder="Username or Email" />
-        <Span>Password</Span>
-        <Input id="password" type="password" placeholder="Password" />
+        <InputTextField
+          className={classes.margin}
+          label="Username or email"
+          variant="outlined"
+          id="username"
+          fullWidth
+          autoComplete="off"
+        />
+        <InputTextField
+          className={classes.margin}
+          label="Password"
+          variant="outlined"
+          id="password"
+          fullWidth
+          autoComplete="off"
+        />
+        <Error>{errorMessage}</Error>
         <FormButtonGroup>
           <Link to="/">
-            <Button
-              buttonStyle="btn--primary"
-              buttonColor="green"
-              buttonSize="btn--small"
-            >
+            <UserButton variant="contained" fullWidth>
               Sign In
-            </Button>
+            </UserButton>
           </Link>
           <Link to="/userform">
-            <Button
-              buttonStyle="btn--primary"
-              buttonColor="green"
-              buttonSize="btn--small"
-            >
+            <UserButton variant="contained" fullWidth>
               Play As Guest
-            </Button>
+            </UserButton>
           </Link>
           <FormFooter>
             Don't have an account?
-            <Link to="/signup" style={styles.link}>
-              Sign up
-            </Link>
+            <Link to="/signup">Sign up</Link>
           </FormFooter>
         </FormButtonGroup>
       </Form>
@@ -73,7 +82,14 @@ const LoginComponent = () => {
   );
 };
 
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(1),
+  },
+}));
+
 const slideInAnimation = keyframes`${slideInDown}`;
+const shakeAnimation = keyframes`${shake}`;
 
 const AnimatedDiv = styled.div`
   position: absolute;
@@ -90,17 +106,18 @@ const AnimatedDiv = styled.div`
   z-index: 2;
   animation: 0.6s ${slideInAnimation};
 `;
-const Form = styled.div`
+const Form = styled.form`
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   padding: 5px;
-  align-items: start;
+  align-items: center;
+  align-content: center;
   justify-content: center;
   width: 40%;
   font-size: 18px;
-  z-index:2;
+  z-index: 2;
 `;
 
 const Background = styled.div`
@@ -145,23 +162,119 @@ const Input = styled.input.attrs((props) => ({
     outline: none;
   }
 `;
+const InputTextField = withStyles({
+  root: {
+    backgroundColor: "rgba(145, 255, 215, 0.6)",
+    borderRadius: "5px",
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#5BA945",
+    },
+    "& label": {
+      color: "#fff",
+      fontSize: "1.3vw",
+    },
+    "& label.Mui-focused": {
+      color: "#fff",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "transparent",
+        borderRadius: "5px",
+        color: "#fff",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#5BA945",
+        color: "#fff",
+      },
+      "& .MuiOutlinedInput-input": {
+        color: "#fff",
+      },
+    },
+  },
+})(TextField);
+
+const UserButton = withStyles({
+  root: {
+    color: "#fff",
+    boxShadow: "none",
+    textTransform: "none",
+    fontSize: 16,
+    fontWeight: 400,
+    padding: "6px 12px",
+    margin: "5px 0px",
+    border: "1px solid",
+    lineHeight: 1.5,
+    backgroundColor: "#25ce4a",
+    borderColor: "#25ce4a",
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:hover": {
+      backgroundColor: "#027719",
+      borderColor: "#027719",
+      boxShadow: "none",
+      color: "#fff",
+    },
+    "&:active": {
+      outline: "none",
+      boxShadow: "none",
+      backgroundColor: "#027719",
+      borderColor: "#027719",
+    },
+    "&:disabled": {
+      backgroundColor: "#89e093",
+      color: "white",
+      border: "none",
+    },
+    "&:focus": {
+      outline: "none",
+    },
+  },
+})(Button);
 
 const FormButtonGroup = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  padding: 5px;
+  padding: 5px 0px;
   margin: 5px;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  a {
+    width: 100%;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 `;
 
 const FormFooter = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   justify-content: center;
   font-size: 1.4vw;
+  width: 100%;
+  a {
+    width: 25%;
+    color: white;
+    margin: 2px;
+    padding: 2px;
+    &:hover {
+      color: #30b7f0;
+    }
+  }
 `;
 
 const Blur = styled.div`
@@ -173,6 +286,17 @@ const Blur = styled.div`
   height: 100vh;
   z-index: 1;
   backdrop-filter: blur(10px) brightness(45%) saturate(150%) opacity(100%);
+`;
+
+const Error = styled.span`
+  color: #8f0909;
+  font-size: 14px;
+  padding-left: 10px;
+  margin-top: -5px;
+  width: 100%;
+  text-align: left;
+  text-align: center;
+  animation: 1s ${shakeAnimation};
 `;
 
 const styles = {
@@ -193,11 +317,5 @@ const styles = {
     bottom: "10%",
     right: "19%",
     zIndex: 1,
-  },
-  link: {
-    color: "white",
-    margin: "2px",
-    padding: "2px",
-    textDecoration: "none",
   },
 };
