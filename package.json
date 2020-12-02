@@ -20,7 +20,8 @@
   "proxy": "http://localhost:5000/",
   "scripts": {
     "start": "react-scripts start",
-    "start-flask": "cd API && activate G:\\React-Projects\\dyslexia-game-prediction\\API\\env && flask run",
+    "start-flask-mutahhar": "cd API && activate G:\\React-Projects\\dyslexia-game-prediction\\API\\env && flask run",
+    "start-flask-alam": "cd API && activate C:\\Users\\IDEAPAD\\Desktop\\fyp\\dyslexia-game-prediction\\API\\env && flask run",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
