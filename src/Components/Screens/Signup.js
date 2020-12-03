@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { fadeIn, slideInDown } from "react-animations";
 import { Link, withRouter } from "react-router-dom";
 import Background from "../Background";
@@ -24,12 +27,12 @@ class Signup extends Component {
   state = {
     username: "",
     password: "",
-    retypePassword: "",
     email: "",
     parentName: "",
     childName: "",
     childAge: "",
     gender: "",
+    retypePassword: "",
     errors: {
       username: "",
       password: "",
@@ -41,6 +44,10 @@ class Signup extends Component {
       gender: "",
     },
     disabled: true,
+    loading: false,
+    success: false,
+    open: false,
+    alertMessage: "You have an error",
   };
 
   checkAge(val) {
@@ -59,40 +66,94 @@ class Signup extends Component {
     const {
       username,
       password,
-      retypePassword,
       email,
       parentName,
       childName,
       childAge,
       gender,
+      retypePassword,
       errors,
     } = this.state;
 
     const disable =
       username.trim().length !== 0 &&
-        password.trim().length !== 0 &&
-        retypePassword.trim().length !== 0 &&
-        email.trim().length !== 0 &&
-        parentName.trim().length !== 0 &&
-        childName.trim().length !== 0 &&
-        childAge.trim().length !== 0 &&
-        gender.trim().length !== 0 &&
-        errors.username.trim().length === 0 &&
-        errors.password.trim().length === 0 &&
-        errors.retypePassword.trim().length === 0 &&
-        errors.email.trim().length === 0 &&
-        errors.parentName.trim().length === 0 &&
-        errors.childName.trim().length === 0 &&
-        errors.childAge.trim().length === 0 &&
-        errors.gender.trim().length === 0
+      password.trim().length !== 0 &&
+      retypePassword.trim().length !== 0 &&
+      email.trim().length !== 0 &&
+      parentName.trim().length !== 0 &&
+      childName.trim().length !== 0 &&
+      childAge.trim().length !== 0 &&
+      gender.trim().length !== 0 &&
+      errors.username.trim().length === 0 &&
+      errors.password.trim().length === 0 &&
+      errors.retypePassword.trim().length === 0 &&
+      errors.email.trim().length === 0 &&
+      errors.parentName.trim().length === 0 &&
+      errors.childName.trim().length === 0 &&
+      errors.childAge.trim().length === 0 &&
+      errors.gender.trim().length === 0
         ? false
         : true;
     this.setState({ disabled: disable });
   };
 
+  postData(data) {
+    fetch("/api/v1/user/signup", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((resp) => resp.json())
+      .then((respJson) => {
+        if (respJson.error.trim().length === 0) {
+          this.setState(
+            {
+              loading: false,
+              open: true,
+              success: true,
+              alertMessage: "Account created successfully",
+            },
+            () => setTimeout(() => this.props.history.push("/userform"), 1000)
+          );
+        } else {
+          this.setState({
+            loading: false,
+            open: true,
+            success: false,
+            alertMessage: respJson.error.trim(),
+          });
+        }
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
+
   onSubmit = (event) => {
     event.preventDefault();
-    this.props.history.push("/userform");
+    const {
+      username,
+      password,
+      email,
+      parentName,
+      childName,
+      childAge,
+      gender,
+    } = this.state;
+    const data = {
+      username: username.trim(),
+      password: password.trim(),
+      email: email.trim(),
+      parentName: parentName.trim(),
+      childName: childName.trim(),
+      childAge: childAge.trim(),
+      gender: gender.trim(),
+    };
+    this.setState({ loading: true });
+    this.postData(data);
   };
   onChange = (e) => {
     e.preventDefault();
@@ -144,6 +205,14 @@ class Signup extends Component {
     this.setState({ errors, [name]: value }, this.enableButton);
   };
 
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({ open: false });
+  };
+
   changeBoySrc() {
     var boyEl = document.getElementById("boy");
     var girlEl = document.getElementById("girl");
@@ -169,6 +238,19 @@ class Signup extends Component {
             <h1>DyxsisML</h1>
             <p>Sign up to track your child's performance</p>
           </Header>
+          <Snackbar
+            open={this.state.open}
+            autoHideDuration={5000}
+            onClose={this.handleClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          >
+            <Alert
+              severity={this.state.success ? "success" : "error"}
+              onClose={this.handleClose}
+            >
+              {this.state.alertMessage}
+            </Alert>
+          </Snackbar>
           <Form onSubmit={this.onSubmit} method="post" autoComplete="off">
             <InputGroup>
               <Input
@@ -179,12 +261,13 @@ class Signup extends Component {
                 required
                 value={this.state.username}
                 onChange={this.onChange}
+                onClick={this.handleClose}
               />
               <Label className="floating-label">
                 <Icon>
                   <BiUser />
                 </Icon>
-                Username
+                Username<small>*</small>
               </Label>
             </InputGroup>
             {this.state.errors.username.length > 0 && (
@@ -199,12 +282,13 @@ class Signup extends Component {
                 required
                 value={this.state.password}
                 onChange={this.onChange}
+                onClick={this.handleClose}
               />
               <Label className="floating-label">
                 <Icon>
                   <BiLockOpenAlt />
                 </Icon>
-                Password
+                Password<small>*</small>
               </Label>
             </InputGroup>
             {this.state.errors.password.length > 0 && (
@@ -219,12 +303,13 @@ class Signup extends Component {
                 required
                 value={this.state.retypePassword}
                 onChange={this.onChange}
+                onClick={this.handleClose}
               />
               <Label className="floating-label">
                 <Icon>
                   <BiLockAlt />
                 </Icon>
-                Re-type Password
+                Re-type Password<small>*</small>
               </Label>
             </InputGroup>
             {this.state.errors.retypePassword.length > 0 && (
@@ -239,12 +324,13 @@ class Signup extends Component {
                 required
                 value={this.state.email}
                 onChange={this.onChange}
+                onClick={this.handleClose}
               />
               <Label className="floating-label">
                 <Icon>
                   <HiOutlineMail />
                 </Icon>
-                Email
+                Email<small>*</small>
               </Label>
             </InputGroup>
             {this.state.errors.email.length > 0 && (
@@ -259,12 +345,13 @@ class Signup extends Component {
                 required
                 value={this.state.parentName}
                 onChange={this.onChange}
+                onClick={this.handleClose}
               />
               <Label className="floating-label">
                 <Icon>
                   <RiParentLine />
                 </Icon>
-                Parent's Full Name
+                Parent's Full Name<small>*</small>
               </Label>
             </InputGroup>
             {this.state.errors.parentName.length > 0 && (
@@ -279,12 +366,13 @@ class Signup extends Component {
                 required
                 value={this.state.childName}
                 onChange={this.onChange}
+                onClick={this.handleClose}
               />
               <Label className="floating-label">
                 <Icon>
                   <MdChildCare />
                 </Icon>
-                Child's Full Name
+                Child's Full Name<small>*</small>
               </Label>
             </InputGroup>
             {this.state.errors.childName.length > 0 && (
@@ -300,6 +388,7 @@ class Signup extends Component {
                 name="childAge"
                 value={this.state.childAge}
                 onChange={this.onChange}
+                onClick={this.handleClose}
                 required
               />
               <Label className="floating-label">
@@ -312,7 +401,7 @@ class Signup extends Component {
                     height="15px"
                   />
                 </Icon>
-                Child's Age
+                Child's Age<small>*</small>
               </Label>
             </InputGroup>
             {this.state.errors.childAge.length > 0 && (
@@ -323,6 +412,7 @@ class Signup extends Component {
                 onBoy={this.changeBoySrc}
                 onGirl={this.changeGirlSrc}
                 onChange={this.onChange}
+                onClick={this.handleClose}
               />
             </InputGroup>
             {this.state.errors.gender.length > 0 && (
@@ -334,7 +424,11 @@ class Signup extends Component {
                 type="submit"
                 disabled={this.state.disabled}
               >
-                Sign Up
+                {this.state.loading ? (
+                  <CircularProgress style={{ color: "white" }} size={30} />
+                ) : (
+                  "Sign Up"
+                )}
               </SignupButton>
             </Container>
           </Form>
@@ -378,9 +472,9 @@ class Signup extends Component {
 
 const RadioButtons = (props) => {
   return (
-    <RadioButtonGroup onChange={props.onChange}>
+    <RadioButtonGroup onChange={props.onChange} onClick={props.onClick}>
       <Label className="label" htmlFor="gender">
-        Child's Gender:
+        Child's Gender<small>*</small>
       </Label>
       <Label className="male">
         <input type="radio" name="gender" id="male" value="male" />
@@ -573,7 +667,7 @@ const SignInLinkComponent = styled.div`
   width: 100%;
   a {
     width: 21%;
-    text-align:center;
+    text-align: center;
     color: white;
     &:hover {
       color: #30b7f0;
@@ -713,6 +807,10 @@ const SignupButton = withStyles({
     },
   },
 })(Button);
+
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+};
 
 const styles = {
   eagle: {

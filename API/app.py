@@ -19,49 +19,72 @@ except Exception as e:
     print(e)
 
 
-@app.route('/api/home', methods=["GET"])
-def home():
-    return json.dumps({"API": "Request received successfully!"})
-    # return "<h2>Api working</h2>"
+@app.route('/api/v1/user/signup', methods=['POST'])
+def signup():
+    try:
 
+        if request.method.strip() == "POST":
+            content = request.json
+            username = content['username']
+            email = content['email']
+            existingUsername = db.users.find_one({'username': username})
+            if existingUsername is None:
+                existingEmail = db.users.find_one({'email': email})
+                if existingEmail is None:
+                    print(
+                        '****************************************************************')
+                    print(username)
+                    dbResponse = db.users.insert_one(content)
+                    print(content['password'])
+                    print("Record inserted successfully!")
+                    print(dbResponse.inserted_id)
+                    print(dbResponse.acknowledged)
+                    print(
+                        '****************************************************************')
+                    return Response(
+                        response=json.dumps(
+                            {'message': 'Record inserted successfully', 'id': f"{dbResponse.inserted_id}", 'error': ""}),
+                        status=200,
+                        mimetype='application/json')
+                else:
+                    print("This email already exists")
+                    return Response(
+                        response=json.dumps(
+                            {'message': 'Data could not be inserted in database', "error": "This email is already used by another user"}),
+                        status=500,
+                        mimetype='application/json')
+            else:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Data could not be inserted in database', "error": "Username already exists"}),
+                    status=500,
+                    mimetype='application/json')
 
-# @app.route('/api/v1/user/login', methods=['POST'])
-# def index():
-#     try:
-#         print('****************************************************************')
-#         if (request.is_json):
-#             print(json.loads(request.json)['username'])
-#             dbResponse = db.users.insert_one(json.loads(request.json))
-#             print(json.loads(request.json)['password'])
-#             print("Record inserted successfully!")
-#             print('****************************************************************')
-#             return Response(
-#                 response=json.dumps(
-#                     {'message': 'data received successfully', 'id': f"{dbResponse.inserted_id}"}),
-#                 status=200,
-#                 mimetype='application/json')
-#         else:
-#             return Response(
-#                 response=json.dumps(
-#                     {'message': 'Data could not be inserted in database'}),
-#                 status=500,
-#                 mimetype='application/json')
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Data could not be inserted in database', "error": "Only POST requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
 
-#     except Exception as e:
-#         print(e)
+    except Exception as e:
+        print(e)
+
 
 @app.route('/api/v1/user/login', methods=['POST'])
 def login():
     try:
         print('****************************************************************')
-        if (request.method.strip() == "POST"):
+        if request.method.strip() == "POST":
             content = json.loads(request.json)
             username = content['username'].strip()
             password = content['password'].strip()
             print(username)
-            dbResponse = db.users.find_one({'username': username})
+            dbResponse = db.users.find_one({'$or': [{'username': username}, {'email': username}]}, {
+                                           'username': 1, 'password': 1})
             if dbResponse is not None:
-                print(password)
+                print('****************************************************************')
+                print(dbResponse)
                 print('****************************************************************')
                 if dbResponse['password'].strip() == password:
                     return Response(
@@ -72,7 +95,7 @@ def login():
                 else:
                     return Response(
                         response=json.dumps(
-                            {'message': 'Password incorrect', "error": "Username or password incorrect"}),
+                            {'message': 'Password incorrect', "error": "Password incorrect"}),
                         status=500,
                         mimetype='application/json')
             elif dbResponse is None:
@@ -85,7 +108,7 @@ def login():
         else:
             return Response(
                 response=json.dumps(
-                    {'message': 'Data could not be inserted in database', "error": "Internal DB Error"}),
+                    {'message': 'Data could not be inserted in database', "error": "Only POST requests allowed on this URI"}),
                 status=500,
                 mimetype='application/json')
 

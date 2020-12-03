@@ -640,6 +640,7 @@ const ConsentForm = styled.div`
   margin-top: 8px;
   align-items: left;
   justify-content: center;
+  
 `;
 const Submitbutton = styled.button`
   display: flex;

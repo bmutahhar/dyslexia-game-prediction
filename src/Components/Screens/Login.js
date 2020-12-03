@@ -11,8 +11,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { slideInDown } from "react-animations";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import { MdVisibility, MdVisibilityOff, MdCancel } from "react-icons/md";
-import { ImCancelCircle } from "react-icons/im";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import Character from "../Character";
 import Home from "./Home";
 import monkeytree from "../Images/Characters/monkeytree.png";
@@ -20,7 +19,7 @@ import tree from "../Images/Characters/tree.png";
 
 class Login extends Component {
   dismiss = () => {
-    this.props.history.push("/");
+    this.props.history.replace("/");
   };
   render() {
     return (
@@ -60,6 +59,7 @@ const LoginComponent = () => {
       .then((respJson) => {
         if (respJson.error.trim().length === 0) {
           setStatus({ loading: false, success: true, error: "" });
+          setTimeout(() => history.push("/userform"), 1000)
         } else {
           setStatus({ loading: false, success: false, error: respJson.error });
         }
@@ -68,10 +68,6 @@ const LoginComponent = () => {
         alert(error);
         setStatus({ loading: false, success: false, error: error });
       });
-  }
-
-  const dismiss = () => {
-    history.replace("/")
   }
 
   const onSubmit = (event) => {
@@ -94,7 +90,6 @@ const LoginComponent = () => {
           password: password,
         })
       );
-      // history.push("/userform");
     }
   };
 
@@ -183,9 +178,6 @@ const LoginComponent = () => {
           </FormFooter>
         </FormButtonGroup>
       </Form>
-      <IconButton style={styles.icon}>
-        <MdCancel color="#4d9c2a" size="40px" onClick={dismiss}></MdCancel>
-      </IconButton>
 
       <Character
         className="monkeytree"
