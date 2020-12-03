@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, withRouter } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { shake } from "react-animations";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -11,19 +11,23 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { slideInDown } from "react-animations";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { MdVisibility, MdVisibilityOff, MdCancel } from "react-icons/md";
+import { ImCancelCircle } from "react-icons/im";
 import Character from "../Character";
 import Home from "./Home";
 import monkeytree from "../Images/Characters/monkeytree.png";
 import tree from "../Images/Characters/tree.png";
 
-export default class Login extends Component {
+class Login extends Component {
+  dismiss = () => {
+    this.props.history.push("/");
+  };
   render() {
     return (
       <>
         <Home />
-        <Blur />
-        <AnimatedDiv>
+        <Blur onClick={this.dismiss} />
+        <AnimatedDiv >
           <LoginComponent />
         </AnimatedDiv>
       </>
@@ -64,6 +68,10 @@ const LoginComponent = () => {
         alert(error);
         setStatus({ loading: false, success: false, error: error });
       });
+  }
+
+  const dismiss = () => {
+    history.replace("/")
   }
 
   const onSubmit = (event) => {
@@ -144,8 +152,8 @@ const LoginComponent = () => {
                   {visibility ? (
                     <MdVisibility color="white" size={20} />
                   ) : (
-                    <MdVisibilityOff color="white" size={20} />
-                  )}
+                      <MdVisibilityOff color="white" size={20} />
+                    )}
                 </IconButton>
               </InputAdornment>
             ),
@@ -161,8 +169,8 @@ const LoginComponent = () => {
                 <IoIosCheckmarkCircleOutline color="white" size={28} />
               </Zoom>
             ) : (
-              "Sign In"
-            )}
+                  "Sign In"
+                )}
           </UserButton>
           <Link to="/userform">
             <UserButton variant="contained" fullWidth>
@@ -175,6 +183,10 @@ const LoginComponent = () => {
           </FormFooter>
         </FormButtonGroup>
       </Form>
+      <IconButton style={styles.icon}>
+        <MdCancel color="#4d9c2a" size="40px" onClick={dismiss}></MdCancel>
+      </IconButton>
+
       <Character
         className="monkeytree"
         src={monkeytree}
@@ -201,17 +213,18 @@ const slideInAnimation = keyframes`${slideInDown}`;
 const shakeAnimation = keyframes`${shake}`;
 
 const AnimatedDiv = styled.div`
+  
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 8%;
+  left: 18%;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 100%;
-  min-height: 100vh;
-  width: 100%;
-  height: 100vh;
+  width: 62%;
+  border-radius: 50px;
+
+  
+  height: 82vh;
   z-index: 2;
   animation: 0.6s ${slideInAnimation};
 `;
@@ -233,7 +246,7 @@ const Background = styled.div`
   background-image: linear-gradient(to top right, #597e87, #0b8835);
   box-shadow: 10px 15px 10px rgba(0, 0, 0, 0.4);
   min-height: 80vh;
-  min-width: 60%;
+  min-width: 97%;
   border-radius: 50px;
   display: flex;
   flex-direction: column;
@@ -387,17 +400,25 @@ const styles = {
     color: "white",
   },
   monkeyTree: {
-    height: "48%",
+    height: "60%",
     position: "absolute",
-    top: "13%",
-    left: "19.90%",
+    top: "3%",
+    left: "1.50%",
     zIndex: 1,
   },
   Tree: {
-    height: "35%",
+    height: "40%",
     position: "absolute",
-    bottom: "10%",
-    right: "19%",
+    bottom: "1%",
+    right: "1%",
     zIndex: 1,
   },
+  icon: {
+    position: "absolute",
+    top: "4%",
+    right: "4%",
+
+  }
 };
+
+export default withRouter(Login)

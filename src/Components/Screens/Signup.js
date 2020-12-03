@@ -70,21 +70,21 @@ class Signup extends Component {
 
     const disable =
       username.trim().length !== 0 &&
-      password.trim().length !== 0 &&
-      retypePassword.trim().length !== 0 &&
-      email.trim().length !== 0 &&
-      parentName.trim().length !== 0 &&
-      childName.trim().length !== 0 &&
-      childAge.trim().length !== 0 &&
-      gender.trim().length !== 0 &&
-      errors.username.trim().length === 0 &&
-      errors.password.trim().length === 0 &&
-      errors.retypePassword.trim().length === 0 &&
-      errors.email.trim().length === 0 &&
-      errors.parentName.trim().length === 0 &&
-      errors.childName.trim().length === 0 &&
-      errors.childAge.trim().length === 0 &&
-      errors.gender.trim().length === 0
+        password.trim().length !== 0 &&
+        retypePassword.trim().length !== 0 &&
+        email.trim().length !== 0 &&
+        parentName.trim().length !== 0 &&
+        childName.trim().length !== 0 &&
+        childAge.trim().length !== 0 &&
+        gender.trim().length !== 0 &&
+        errors.username.trim().length === 0 &&
+        errors.password.trim().length === 0 &&
+        errors.retypePassword.trim().length === 0 &&
+        errors.email.trim().length === 0 &&
+        errors.parentName.trim().length === 0 &&
+        errors.childName.trim().length === 0 &&
+        errors.childAge.trim().length === 0 &&
+        errors.gender.trim().length === 0
         ? false
         : true;
     this.setState({ disabled: disable });

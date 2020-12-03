@@ -12,6 +12,8 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import InputBase from '@material-ui/core/InputBase';
+
 
 
 import TextField from "@material-ui/core/TextField";
@@ -102,22 +104,22 @@ const Formpage = () => {
 
     var menuitem1 = [
         <MenuItem value="" disabled>
-            select your answer
+            Select your answer
     </MenuItem>,
     ];
     var menuitem2 = [
         <MenuItem value="" disabled>
-            select your answer
+            Select your answer
     </MenuItem>,
     ];
     var menuitem3 = [
         <MenuItem value="" disabled>
-            select your answer
+            Select your answer
     </MenuItem>,
     ];
     var menuitem4 = [
         <MenuItem value="" disabled>
-            select your answer
+            Select your answer
     </MenuItem>,
     ];
 
@@ -427,7 +429,7 @@ const Formpage = () => {
                                             value={answer1}
                                             displayEmpty
                                             onChange={updateAnswer1}
-                                            style={styles.select}
+                                            input={<BootstrapInput />}
                                         >
                                             {menuitem1}
                                         </Select>
@@ -444,7 +446,7 @@ const Formpage = () => {
                                             value={answer2}
                                             displayEmpty
                                             onChange={updateAnswer2}
-                                            style={styles.select}
+                                            input={<BootstrapInput />}
                                         >
                                             {menuitem2}
                                         </Select>
@@ -460,7 +462,7 @@ const Formpage = () => {
                                             value={answer3}
                                             displayEmpty
                                             onChange={updateAnswer3}
-                                            style={styles.select}
+                                            input={<BootstrapInput />}
                                         >
                                             {menuitem3}
                                         </Select>
@@ -476,7 +478,7 @@ const Formpage = () => {
                                             value={answer4}
                                             displayEmpty
                                             onChange={updateAnswer4}
-                                            style={styles.select}
+                                            input={<BootstrapInput />}
                                         >
                                             {menuitem4}
                                         </Select>
@@ -552,7 +554,7 @@ const Formpage = () => {
                                     onClick={verifications}
                                     checked={verify}
                                     control={<Checkbox color="primary" />}
-                                    label="i have read and accept the agreement form"
+                                    label="I have read and accept the agreement form"
                                 />
                             )}
                         </Column>
@@ -628,9 +630,11 @@ const zoomAnimation = keyframes`${zoomIn}`;
 const Heading = styled.h2`
   font-weight: bold;
   color: red;
+  font-size: 2.0vw;
 `;
 const Content = styled.p`
   font-weight: bold;
+  font-size: 1.2vw;
 `;
 const ConsentForm = styled.div`
   margin-top: 8px;
@@ -878,6 +882,37 @@ const InputTextField = withStyles({
     }
 })(TextField);
 
+
+const BootstrapInput = withStyles((theme) => ({
+
+    input: {
+        borderRadius: 4,
+        width: '100%',
+        height: '6vh',
+        position: 'relative',
+        backgroundColor: theme.palette.background.paper,
+        border: '1px solid black',
+        fontSize: 19,
+        padding: '19px 26px 2px 18px',
+        transition: theme.transitions.create(['border-color', 'box-shadow']),
+        // Use the system font instead of the default Roboto font.
+
+        '&:focus': {
+            borderRadius: 4,
+            borderColor: '#21768d',
+            border: '2px solid #21768d ',
+            backgroundColor: 'white',
+
+        },
+
+        '&:hover': {
+            borderRadius: 4,
+            borderColor: '#21768d',
+
+        },
+    },
+}))(InputBase);
+
 const QandA = {
     // first set of questions
     qna1: {
@@ -887,18 +922,18 @@ const QandA = {
     },
     qna2: {
         Q: "What is the gender of the participant (your child) ?",
-        A1: "male",
-        A2: "female",
+        A1: "Male",
+        A2: "Female",
         noofopt: 2,
         fieldselect: true,
         fieldinput: false,
     },
     qna3: {
         Q: "Does the participant (your child) have Dyslexia ?",
-        A1: "no",
-        A2: "yes",
-        A3: "yes-diagnosed",
-        A4: "not-known",
+        A1: "No",
+        A2: "Yes",
+        A3: "Yes-diagnosed",
+        A4: "Not-known",
         noofopt: 4,
         fieldselect: true,
         fieldinput: false,
@@ -911,30 +946,30 @@ const QandA = {
     // secound set of questions
     qna5: {
         Q: "Is the dyslexia more an impairment in reading?",
-        A1: "no",
-        A2: "yes",
-        A3: "yes-diagnosed",
-        A4: "not-known",
+        A1: "No",
+        A2: "Yes",
+        A3: "Yes-diagnosed",
+        A4: "Not-known",
         noofopt: 4,
         fieldselect: true,
         fieldinput: false,
     },
     qna6: {
         Q: "Or — is the dyslexia more an impairment in written expression?",
-        A1: "no",
-        A2: "yes",
-        A3: "yes-diagnosed",
-        A4: "not-known",
+        A1: "No",
+        A2: "Yes",
+        A3: "Yes-diagnosed",
+        A4: "Not-known",
         noofopt: 4,
         fieldselect: true,
         fieldinput: false,
     },
     qna7: {
         Q: "Does a family member has dyslexia (e.g. dad, mom or siblings)?",
-        A1: "no",
-        A2: "yes",
-        A3: "yes-diagnosed",
-        A4: "not-known",
+        A1: "No",
+        A2: "Yes",
+        A3: "Yes-diagnosed",
+        A4: "Not-known",
         noofopt: 4,
         fieldselect: true,
         fieldinput: false,
@@ -948,8 +983,8 @@ const QandA = {
     // third set of questions
     qna9: {
         Q: "Is English the mother tongue of your child?",
-        A1: "no",
-        A2: "yes",
+        A1: "No",
+        A2: "Yes",
         noofopt: 2,
         fieldselect: true,
         fieldinput: false,
@@ -989,10 +1024,10 @@ const QandA = {
     },
     qna15: {
         Q: "Which kind of writing and reading skills has your child?",
-        A1: "the child is not reading or writing yet",
-        A2: "the child is able to read and write letters and easy words",
-        A3: "the child is able to read and write easy sentences",
-        A4: "the child reads and write fluently",
+        A1: "The child is not reading or writing yet",
+        A2: "The child is able to read and write letters and easy words",
+        A3: "The child is able to read and write easy sentences",
+        A4: "The child reads and write fluently",
         noofopt: 4,
         fieldselect: true,
         fieldinput: false,
@@ -1007,19 +1042,19 @@ const QandA = {
     qna17: {
         Q:
             "Does the participant has attention deficit hyperactivity disorder (ADHD) or attention deficit disorder (ADD)?",
-        A1: "no",
-        A2: "yes",
-        A3: "yes-diagnosed",
-        A4: "not-known",
+        A1: "No",
+        A2: "Yes",
+        A3: "Yes-diagnosed",
+        A4: "Not-known",
         noofopt: 4,
         fieldselect: true,
         fieldinput: false,
     },
     qna18: {
         Q: "Does you child play an music instrument (e.g. piano)?",
-        A1: "no",
-        A2: "yes-less then 6 months",
-        A3: "yes-more then 6 months",
+        A1: "No",
+        A2: "Yes-less then 6 months",
+        A3: "Yes-more then 6 months",
         noofopt: 3,
         fieldselect: true,
         fieldinput: false,
