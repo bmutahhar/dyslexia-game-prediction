@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { zoomIn } from "react-animations";
+import { zoomIn, fadeIn } from "react-animations";
 import bg from "../Images/bg.jpg";
 import Character from "../Character";
 import penguin1 from "../Images/Characters/penguin1.png";
@@ -185,6 +185,7 @@ const Formpage = () => {
         } else {
             setRun(counter);
         }
+
 
 
         setAnswer1("");
@@ -417,7 +418,7 @@ const Formpage = () => {
     return (
         <Container className="container-fluid">
             <Row className="row" style={styles.bgCOLOR}>
-                <Column className="col-11 m-auto" style={styles.coll_11}>
+                <ColumnAni className="col-11 m-auto" style={styles.coll_11}>
                     <Row className="row">
                         <Column className="col-12" style={styles.questions}>
                             {questionf && (
@@ -536,7 +537,7 @@ const Formpage = () => {
                         <Column className="col-6" style={styles.cartoon}>
                             {questionf && (
                                 <Character
-                                    className="iceanimals  "
+                                    className="iceanimals"
                                     src={cvalues.animal}
                                     alt="iceanimals"
                                     style={styles.iceanimals}
@@ -619,28 +620,31 @@ const Formpage = () => {
 
                         </Column>
                     </Row>
-                </Column>
+                </ColumnAni>
             </Row>
         </Container>
     );
 };
 
 const zoomAnimation = keyframes`${zoomIn}`;
-
+const fadeInAnimation = keyframes`${fadeIn}`;
 const Heading = styled.h2`
   font-weight: bold;
   color: red;
   font-size: 2.0vw;
+  animation: 5s ${fadeInAnimation};
+
 `;
 const Content = styled.p`
   font-weight: bold;
   font-size: 1.2vw;
+  animation: 5s ${fadeInAnimation};
+
 `;
 const ConsentForm = styled.div`
   margin-top: 8px;
   align-items: left;
   justify-content: center;
-  
 `;
 const Submitbutton = styled.button`
   display: flex;
@@ -751,10 +755,15 @@ const Question = styled.h3`
   margin-top: 15px;
   font-size: 22px;
   font-weight:500;
+  transition: 2s;
 `;
 const Row = styled.div``;
 
 const Column = styled.div``;
+const ColumnAni = styled.div`
+animation: 2s ${zoomAnimation};
+
+`;
 
 const styles = {
     bgCOLOR: {
