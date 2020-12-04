@@ -121,5 +121,33 @@ def login():
             mimetype='application/json')
 
 
+@app.route('api/v1/userform/addData', methods=['POST'])
+def addData():
+    if request.method.strip() == "POST":
+        content = request.json
+        dbResponse = db.data.insert_one(content)
+        if dbResponse.acknowledged:
+            print('****************************************************************')
+            print("Data submitted successfully")
+            print("Record id: " + dbResponse.inserted_id)
+            print('****************************************************************')
+            return Response(
+                response=json.dumps(
+                    {'message': 'Data inserted successfully', 'id': f"{dbResponse.inserted_id}", 'error': ""}),
+                status=200,
+                mimetype='application/json')
+        else:
+            print('****************************************************************')
+            print("Error occurred")
+            print(dbResponse)
+            print('****************************************************************')
+            return Response(
+                response=json.dumps(
+                    {'message': 'Data could not be inserted in database', 'error': "Data not added successfully"}),
+                status=500,
+                mimetype='application/json')
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
