@@ -52,7 +52,7 @@ const Formpage = () => {
     setAnswer4(e.target.value);
   };
   const [index, setIndex] = useState(0);
-  let data = [];
+  const [data, setData] = useState([]);
 
   const [QA, setQA] = useState({
     q1: "",
@@ -168,12 +168,20 @@ const Formpage = () => {
     submitbutton: false,
   });
 
-  const getAnswers = () => {
-    data[index] = { question: QA.q1, answer: answer1 };
-    data[index + 1] = { question: QA.q2, answer: answer2 };
-    data[index + 2] = { question: QA.q3, answer: answer3 };
-    data[index + 3] = { question: QA.q4, answer: answer4 };
+  const addAnswers = () => {
+    let tempAnswers = data;
+    tempAnswers[index] = { question: QA.q1, answer: answer1 };
+    tempAnswers[index + 1] = { question: QA.q2, answer: answer2 };
+    tempAnswers[index + 2] = { question: QA.q3, answer: answer3 };
+    tempAnswers[index + 3] = { question: QA.q4, answer: answer4 };
     setIndex(index + 4);
+    setData(tempAnswers);
+  };
+
+  const printAnswers = (data) => {
+    data.map((item, index) => {
+      console.log(`Index: ${index}, Item: ${item}`);
+    });
   };
 
   var counter = runs;
@@ -185,7 +193,7 @@ const Formpage = () => {
     } else {
       setRun(counter);
     }
-    getAnswers();
+    addAnswers();
     console.log(data);
     setAnswer1("");
     setAnswer2("");
