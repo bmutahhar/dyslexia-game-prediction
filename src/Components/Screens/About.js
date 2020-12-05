@@ -231,7 +231,14 @@ export default class About extends Component {
             transition="4.2s"
           />
 
-
+          <Cardinfo>
+            <Header>Team Leader</Header>
+            <Info>Mutahhar-bin-Muzaffar</Info>
+            <Header>Institute</Header>
+            <Info>Comsats university Islamabad</Info>
+            <Header>Work Division</Header>
+            <Info>Coding, Backend</Info>
+          </Cardinfo>
 
 
         </Card1>
@@ -265,6 +272,15 @@ export default class About extends Component {
             animation="zoomIn"
             transition="4.2s"
           />
+
+          <Cardinfo>
+            <Header>Team Member</Header>
+            <Info>Sher Alam Khan</Info>
+            <Header>Institute</Header>
+            <Info>Comsats university Islamabad</Info>
+            <Header>Work Division</Header>
+            <Info>Coding, Designing</Info>
+          </Cardinfo>
         </Card2>
         <Card3 className="wow">
           <Character
@@ -295,6 +311,14 @@ export default class About extends Component {
             animation="zoomIn"
             transition="4.2s"
           />
+          <Cardinfo>
+            <Header>Supervisor</Header>
+            <Info>Gulmina Rextina</Info>
+            <Header>Institute</Header>
+            <Info>Comsats university Islamabad</Info>
+            {/* <Header>Work Division</Header>
+            <Info>Coding, Designing</Info> */}
+          </Cardinfo>
 
         </Card3>
 
@@ -350,6 +374,34 @@ animation: 2s ${zoomAnimation};
 const Card3 = styled(Card1)`
 right: 5%;
 animation: 2s ${zoomAnimation};
+
+`;
+
+const Header = styled.h3`
+color: white;
+font-size: 2vw;
+`;
+const Info = styled.p`
+color: #e6e9ed;
+font-size: 1.3vw;
+`;
+
+const Cardinfo = styled.div`
+
+border-radius: 9px;
+position: absolute;
+padding-top: 10%;
+background-color: rgba(3, 42, 94, 0.3);
+width: 95%;
+height: 65%;
+bottom: 4%;
+jusity-content: center;
+left: 2%;
+transition: 0.1s;
+
+&:hover {
+  padding-top: 14%;
+}
 
 `;
 

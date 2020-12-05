@@ -20,15 +20,15 @@ export default class Character extends Component {
             transition={this.props.transition}
           ></Animated>
         ) : (
-          <NonAnimated
-            className={this.props.className}
-            onClick={this.props.onClick}
-            src={this.props.src}
-            alt={this.props.alt}
-            onError={this.props.onError}
-            style={this.props.style}
-          ></NonAnimated>
-        )}
+            <NonAnimated
+              className={this.props.className}
+              onClick={this.props.onClick}
+              src={this.props.src}
+              alt={this.props.alt}
+              onError={this.props.onError}
+              style={this.props.style}
+            ></NonAnimated>
+          )}
       </Container>
     );
   }
