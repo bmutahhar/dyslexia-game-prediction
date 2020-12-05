@@ -38,6 +38,8 @@ const animations = {
   zoomIn: keyframes`${zoomIn}`,
   zoomInDown: keyframes`${zoomInDown}`,
   bounce: keyframes`${bounce}`,
+
+
 };
 
 const Container = styled.div``;
