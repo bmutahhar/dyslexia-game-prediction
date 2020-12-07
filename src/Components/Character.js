@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { pulse, zoomInUp, zoomInDown, bounce, zoomIn } from "react-animations";
-import shortid from "shortid";
 
 export default class Character extends Component {
   render() {
@@ -9,7 +8,6 @@ export default class Character extends Component {
       <Container>
         {this.props.isAnimated ? (
           <Animated
-            key={shortid.generate()}
             className={this.props.className}
             onClick={this.props.onClick}
             src={this.props.src}

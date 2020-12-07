@@ -1,6 +1,9 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { zoomIn, fadeIn } from "react-animations";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import bg from "../Images/bg.jpg";
 import Character from "../Character";
 import penguin1 from "../Images/Characters/penguin1.png";
@@ -53,6 +56,11 @@ const Formpage = () => {
   };
   const [index, setIndex] = useState(0);
   const [data, setData] = useState([]);
+  const [status, setStatus] = useState({
+    success: false,
+    loading: false,
+    alertMessage: "",
+  });
 
   const [QA, setQA] = useState({
     q1: "",
@@ -178,12 +186,6 @@ const Formpage = () => {
     setData(tempAnswers);
   };
 
-  const printAnswers = (data) => {
-    data.map((item, index) => {
-      console.log(`Index: ${index}, Item: ${item}`);
-    });
-  };
-
   var counter = runs;
   const Forwardnavigate = () => {
     if (runs < 5) {
@@ -194,7 +196,6 @@ const Formpage = () => {
       setRun(counter);
     }
     addAnswers();
-    console.log(data);
     setAnswer1("");
     setAnswer2("");
     setAnswer3("");
@@ -420,6 +421,38 @@ const Formpage = () => {
     }
   };
 
+  const postData = (data) => {
+    fetch("api/v1/userform/addData", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((resp) => resp.json())
+      .then((respJson) => {
+        if (respJson.error.trim().length === 0) {
+          console.log(respJson);
+        } else {
+          console.log(respJson);
+        }
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
+  const onSubmit = () => {
+    console.log(11);
+    setStatus({...status,loading:true});
+    console.log(22)
+    // postData(data);
+    addAnswers();
+    console.log(data);
+    setStatus({...status,loading:false})
+  };
+
   return (
     <Container className="container-fluid">
       <Row className="row" style={styles.bgCOLOR}>
@@ -427,7 +460,7 @@ const Formpage = () => {
           <Row className="row">
             <Column className="col-12" style={styles.questions}>
               {questionf && (
-                <FormControl style={styles.formControl}>
+                <FormControl style={styles.formControl} onSubmit={onSubmit}>
                   <Question>{QA.q1}</Question>
 
                   {QA.q1sf && (
@@ -600,7 +633,15 @@ const Formpage = () => {
             </Column>
 
             <Column className="col-6" style={styles.navigation}>
-              {cvalues.submitbutton && <Submitbutton>DONE</Submitbutton>}
+              {cvalues.submitbutton && (
+                <Submitbutton type="submit">
+                {status.loading ? (
+                  <CircularProgress style={{ color: "white" }} size={30} />
+                ) : (
+                  "Done"
+                )}
+                </Submitbutton>
+              )}
 
               {questionf && (
                 <NavIcons>
