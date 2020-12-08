@@ -1,5 +1,5 @@
 import json
-
+from datetime import datetime
 import pymongo
 from bson.json_util import dumps, loads
 from bson.objectid import ObjectId
@@ -121,16 +121,16 @@ def login():
             mimetype='application/json')
 
 
-@app.route('api/v1/userform/addData', methods=['POST'])
+@app.route('/api/v1/userform/addData', methods=['POST'])
 def addData():
     try:
         if request.method.strip() == "POST":
-            content = request.json
+            content = {"datetime":datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'data':request.json}
             dbResponse = db.data.insert_one(content)
             if dbResponse.acknowledged:
                 print('****************************************************************')
                 print("Data submitted successfully")
-                print("Record id: " + dbResponse.inserted_id)
+                print("Record id: ",dbResponse.inserted_id)
                 print('****************************************************************')
                 return Response(
                     response=json.dumps(

@@ -129,6 +129,12 @@ class Signup extends Component {
       })
       .catch((error) => {
         alert(error);
+        this.setState({
+          loading: false,
+          open: true,
+          success: false,
+          alertMessage: error,
+        });
       });
   }
 

@@ -59,6 +59,7 @@ const Formpage = () => {
   const [status, setStatus] = useState({
     success: false,
     loading: false,
+    open: false,
     alertMessage: "",
   });
 
@@ -421,6 +422,10 @@ const Formpage = () => {
     }
   };
 
+  const handleClose = () => {
+    setStatus({ ...status, open: false });
+  };
+
   const postData = (data) => {
     fetch("api/v1/userform/addData", {
       method: "POST",
@@ -434,23 +439,37 @@ const Formpage = () => {
       .then((respJson) => {
         if (respJson.error.trim().length === 0) {
           console.log(respJson);
+          setStatus({
+            open: true,
+            success: true,
+            loading: false,
+            alertMessage: "Information Registered Successfully",
+          });
         } else {
           console.log(respJson);
+          setStatus({
+            open: true,
+            success: false,
+            loading: false,
+            alertMessage: respJson.error,
+          });
         }
       })
       .catch((error) => {
         alert(error);
+        setStatus({
+          open: true,
+          success: false,
+          loading: false,
+          alertMessage: error,
+        });
       });
   };
 
-  const onSubmit = () => {
-    console.log(11);
-    setStatus({...status,loading:true});
-    console.log(22)
-    // postData(data);
+  const onClick = () => {
+    setStatus({ ...status, loading: true });
     addAnswers();
-    console.log(data);
-    setStatus({...status,loading:false})
+    postData(data);
   };
 
   return (
@@ -460,7 +479,7 @@ const Formpage = () => {
           <Row className="row">
             <Column className="col-12" style={styles.questions}>
               {questionf && (
-                <FormControl style={styles.formControl} onSubmit={onSubmit}>
+                <FormControl style={styles.formControl}>
                   <Question>{QA.q1}</Question>
 
                   {QA.q1sf && (
@@ -634,12 +653,12 @@ const Formpage = () => {
 
             <Column className="col-6" style={styles.navigation}>
               {cvalues.submitbutton && (
-                <Submitbutton type="submit">
-                {status.loading ? (
-                  <CircularProgress style={{ color: "white" }} size={30} />
-                ) : (
-                  "Done"
-                )}
+                <Submitbutton type="submit" onClick={onClick}>
+                  {status.loading ? (
+                    <CircularProgress style={{ color: "white" }} size={30} />
+                  ) : (
+                    "Done"
+                  )}
                 </Submitbutton>
               )}
 
@@ -696,6 +715,19 @@ const Formpage = () => {
           </Row>
         </ColumnAni>
       </Row>
+      <Snackbar
+        open={status.open}
+        autoHideDuration={3500}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert
+          severity={status.success ? "success" : "error"}
+          onClose={handleClose}
+        >
+          {status.alertMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
@@ -727,6 +759,8 @@ const Submitbutton = styled.button`
   font-weight: 600;
   font-size: 1.5vw;
   align-items: center;
+  justify-content:center;
+  align-content: center;
   padding-left: 8%;
 
   background-color: #21768d;
@@ -836,6 +870,10 @@ const Column = styled.div``;
 const ColumnAni = styled.div`
   animation: 1s ${zoomAnimation};
 `;
+
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+};
 
 const styles = {
   bgCOLOR: {

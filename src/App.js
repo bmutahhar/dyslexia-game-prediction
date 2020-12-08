@@ -8,7 +8,7 @@ import Contact from "./Components/Screens/ContactUs";
 import HowItWorks from "./Components/Screens/HowItWorks";
 import Login from "./Components/Screens/Login";
 import Signup from "./Components/Screens/Signup";
-import Formpage from "./Components/Screens/Formpage";
+import UserForm from "./Components/Screens/Formpage";
 import Playground from "./playground";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
           <Route exact path="/" component={MainPage} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
-          <Route path="/userform" component={Formpage} />
+          <Route path="/userform" component={UserForm} />
           <Route path="/playground" component={Playground} />
         </Switch>
       </div>
