@@ -124,6 +124,7 @@ def login():
 @app.route('api/v1/userform/addData', methods=['POST'])
 def addData():
     if request.method.strip() == "POST":
+
         content = request.json
         dbResponse = db.data.insert_one(content)
         if dbResponse.acknowledged:
@@ -146,7 +147,6 @@ def addData():
                     {'message': 'Data could not be inserted in database', 'error': "Data not added successfully"}),
                 status=500,
                 mimetype='application/json')
-
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
-import { pulse, zoomInUp, zoomInDown, bounce, zoomIn } from "react-animations";
+import { pulse, zoomInUp, zoomInDown, bounce, zoomIn, fadeIn } from "react-animations";
 import shortid from "shortid";
 
 export default class Character extends Component {
@@ -40,6 +40,7 @@ const animations = {
   zoomIn: keyframes`${zoomIn}`,
   zoomInDown: keyframes`${zoomInDown}`,
   bounce: keyframes`${bounce}`,
+  fadeIn: keyframes`${fadeIn}`,
 
 
 };
