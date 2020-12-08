@@ -281,8 +281,7 @@ const styles = {
     height: "15%",
     top: "-2%",
     right: "-10%",
-    transform: "rotate(25deg)",
-    transform: "scaleX(-1)",
+    transform: "rotate(25deg) scaleX(-1)",
   },
   fish1: {
     position: "absolute",

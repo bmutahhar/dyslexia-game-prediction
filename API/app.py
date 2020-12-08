@@ -123,30 +123,15 @@ def login():
 
 @app.route('/api/v1/userform/addData', methods=['POST'])
 def addData():
-<<<<<<< HEAD
-    if request.method.strip() == "POST":
-
-        content = request.json
-        dbResponse = db.data.insert_one(content)
-        if dbResponse.acknowledged:
-            print('****************************************************************')
-            print("Data submitted successfully")
-            print("Record id: " + dbResponse.inserted_id)
-            print('****************************************************************')
-            return Response(
-                response=json.dumps(
-                    {'message': 'Data inserted successfully', 'id': f"{dbResponse.inserted_id}", 'error': ""}),
-                status=200,
-                mimetype='application/json')
-=======
     try:
         if request.method.strip() == "POST":
-            content = {"datetime":datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'data':request.json}
+            content = {"datetime": datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"), 'data': request.json}
             dbResponse = db.data.insert_one(content)
             if dbResponse.acknowledged:
                 print('****************************************************************')
                 print("Data submitted successfully")
-                print("Record id: ",dbResponse.inserted_id)
+                print("Record id: ", dbResponse.inserted_id)
                 print('****************************************************************')
                 return Response(
                     response=json.dumps(
@@ -163,13 +148,12 @@ def addData():
                         {'message': 'Data could not be inserted in database', 'error': "Data not added successfully"}),
                     status=500,
                     mimetype='application/json')
->>>>>>> 989859afb066510ff375dde6dfa3b8d00ce37e3a
         else:
-                return Response(
-                    response=json.dumps(
-                        {'message': 'Data could not be inserted in database', "error": "Only POST requests allowed on this URI"}),
-                    status=500,
-                    mimetype='application/json')
+            return Response(
+                response=json.dumps(
+                    {'message': 'Data could not be inserted in database', "error": "Only POST requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
     except Exception as e:
         print(e)
         return Response(
@@ -177,8 +161,6 @@ def addData():
                 {'message': 'Data could not be inserted in database', "error": str(e)}),
             status=500,
             mimetype='application/json')
-
-
 
 
 if __name__ == '__main__':

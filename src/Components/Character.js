@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
-<<<<<<< HEAD
 import { pulse, zoomInUp, zoomInDown, bounce, zoomIn, fadeIn } from "react-animations";
-import shortid from "shortid";
-=======
-import { pulse, zoomInUp, zoomInDown, bounce, zoomIn } from "react-animations";
->>>>>>> 989859afb066510ff375dde6dfa3b8d00ce37e3a
 
 export default class Character extends Component {
   render() {
