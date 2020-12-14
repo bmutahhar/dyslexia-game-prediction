@@ -437,7 +437,7 @@ const Formpage = () => {
   // eslint-disable-next-line no-lone-blocks
   {
     backdisabled && (
-      arrowcolorb = "#4d6166"
+      arrowcolorb = "#5b6163"
     )
   }
   // eslint-disable-next-line no-lone-blocks
@@ -1001,7 +1001,12 @@ const styles = {
     fontWeight: "bold",
     fontColor: "black",
   },
+  navicon: {
+    transition: "0.3s",
+  }
 };
+
+
 
 // const Iconb = withStyles({
 //   root: {

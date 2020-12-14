@@ -10,6 +10,7 @@ import Login from "./Components/Screens/Login";
 import Signup from "./Components/Screens/Signup";
 import UserForm from "./Components/Screens/Formpage";
 import Playground from "./playground";
+import Levelselect from "./Components/Screens/Levelselect";
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/userform" component={UserForm} />
           <Route path="/playground" component={Playground} />
+          <Route path="/levelselect" component={Levelselect} />
+
         </Switch>
       </div>
     </Router>
