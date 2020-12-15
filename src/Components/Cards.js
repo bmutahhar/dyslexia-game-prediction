@@ -5,12 +5,11 @@ import styled from "styled-components";
 
 export default class Cards extends Component {
     render() {
-        return <Card circles={this.props.circles} level={this.props.level} description={this.props.description} image={this.props.image} />;
+        return <Card buttonborder={this.props.buttonborder} buttoncolorh={this.props.buttoncolorh} buttoncolor={this.props.buttoncolor} cardcolor={this.props.cardcolor} circles={this.props.circles} level={this.props.level} description={this.props.description} image={this.props.image} />;
 
     }
 }
 function Card(props) {
-
     const Animate = () => {
         //Movement Animation to happen
 
@@ -30,7 +29,7 @@ function Card(props) {
         const description = document.querySelectorAll(".info h3");
 
 
-        const sizes = document.querySelectorAll(".sizes");
+        const sizes = document.querySelectorAll(".active");
 
         for (let i = 0; i <= 2; i++) {
             //Moving Animation Event
@@ -56,7 +55,7 @@ function Card(props) {
 
             //Animate Out
             card[i].addEventListener("mouseleave", (e) => {
-                card[i].style.transition = "all 0.5s ease";
+                card[i].style.transition = "all 0.7s ease";
                 card[i].style.transform = `rotateY(0deg) rotateX(0deg)`;
                 //Popback
                 title[i].style.transform = "translateZ(0px)";
@@ -78,7 +77,7 @@ function Card(props) {
 
 
 
-        <Crd className="card" onLoad={Animate}>
+        <Crd className="card" onLoad={Animate} style={{ border: props.cardcolor }}>
             <Animal className="sneaker">
                 <Circle style={props.circles}></Circle>
                 <Animalimg src={props.image} alt="bird" />
@@ -87,15 +86,12 @@ function Card(props) {
             <Info className="info">
                 <Infoh1 className="title">{props.level}</Infoh1>
                 <Infoh3>{props.description}</Infoh3>
-                <Sizes className="sizes">
-
-                    <Button className="active">more-info</Button>
-
-                </Sizes>
-                <div className="purchase">
-                    <Button >START</Button>
-                </div>
             </Info>
+
+            <Buttonstart className="purchase" buttoncolor={props.buttoncolor} buttoncolorh={props.buttoncolorh} buttonborder={props.buttonborder}>START</Buttonstart>
+            <Buttoninfo className="active">more-info</Buttoninfo>
+
+
         </Crd>
 
 
@@ -103,16 +99,22 @@ function Card(props) {
     );
 };
 
+
 const Circle = styled.div``;
 
 const Crd = styled.div`
 background-color: white;
   transform-style: preserve-3d;
   height: 90vh;
-  width: 23rem;
+  width: 28%;
   border-radius: 30px;
   padding: 1rem 5rem;
-  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2), 0px 0px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 10px rgba(0, 0, 0, 0.2), 0px 0px 30px rgba(0, 0, 0, 0.2);
+  transition: 0.45s;
+  &:hover {
+    
+
+  }
 `;
 
 const Animal = styled.div`
@@ -147,20 +149,58 @@ font-size: 1.3rem;
 
 `;
 
-const Sizes = styled.div`
-display: flex;
-  justify-content: center;
-  transition: all 0.75s ease-out;
-`;
+// const Sizes = styled.div`
+// display: flex;
+//   justify-content: center;
+//   transition: all 0.75s ease-out;
+// `;
 
-const Button = styled.button`
-padding: 0.7rem 2rem;
-  background: none;
+const Buttonstart = styled.button`
+position: absolute;
+bottom: 18%;
+left: 25%;
+width: 50%;
+height: 8%;
   border: none;
+
+  background-color: ${(props) => {
+        return `${props.buttoncolor}`;
+    }};
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   border-radius: 30px;
-  cursor: pointer;
   font-weight: bold;
-  color: #585858;
+  color: black;
+  
+  transition: 0.2s ease-in;
+  
+  &:hover {
+      border : ${(props) => {
+        return `${props.buttonborder}`;
+
+    }};
+      outline: none;
+      
+    cursor: pointer;
+    background-color: ${(props) => {
+        return `${props.buttoncolorh}`;
+
+    }};
+
+
+  }
 `;
 
+const Buttoninfo = styled(Buttonstart)`
+
+bottom: 7%;
+width: 38%;
+left: 31.5%;
+background-color: grey;
+&:hover {
+    
+    background-color: #f04b22;
+border: none;
+  }
+`;

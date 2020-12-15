@@ -6,9 +6,7 @@ import styled, { keyframes } from "styled-components";
 import lion from "../Images/Characters/lion.png";
 import kangaroo from "../Images/Characters/kangaroo.png";
 import bird from "../Images/Characters/eagle.png";
-import image from "../../Components/Images/second.png";
 
-import Background from "../../Components/Background";
 
 
 
@@ -25,18 +23,38 @@ const Levelselect = () => {
         <Backdisplay
 
         >
-            <Cards circles={styles.circle} level="PRE-SCHOOL LEVEL" description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 2-4"
+            <Cards buttonborder="3px solid #04c1f0"
+                buttoncolorh="#067a96"
+                buttoncolor="#04c1f0"
+                cardcolor="5px solid #04c1f0"
+                circles={styles.circle}
+                level="PRE-SCHOOL LEVEL"
+                description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 2-4"
                 image={bird} />
-            <Cards circles={styles.circle1} level="LEARNER LEVEL" description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 5-7"
+
+            <Cards buttonborder="3px solid #02fc7f"
+                buttoncolorh="#08a154"
+                buttoncolor="#02fc7f"
+                cardcolor="5px solid #02fc7f"
+                circles={styles.circle1}
+                level="LEARNER LEVEL"
+                description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 5-7"
                 image={lion} />
-            <Cards circles={styles.circle2} level="ELEMENTARY LEVEL" description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 7-10"
+
+            <Cards buttonborder="3px solid #ff8f05"
+                buttoncolorh="#c76b08"
+                buttoncolor="#ff8f05"
+                cardcolor="5px solid  #ff8f05"
+                circles={styles.circle2}
+                level="ELEMENTARY LEVEL"
+                description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 7-10"
                 image={kangaroo} />
         </Backdisplay>
     );
 };
 
 const Backdisplay = styled.div`
-background-image: linear-gradient(to right, blue, black);
+background-color: red;
 display: flex;
 flex-direction: row;
 height: 100vh;
