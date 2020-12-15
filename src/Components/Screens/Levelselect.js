@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Cards from "../../Components/Cards";
 
+import styled, { keyframes } from "styled-components";
 
 import lion from "../Images/Characters/lion.png";
 import kangaroo from "../Images/Characters/kangaroo.png";
@@ -9,7 +10,6 @@ import image from "../../Components/Images/second.png";
 
 import Background from "../../Components/Background";
 
-import "../../Components/Cardstyle.css";
 
 
 export default class level extends Component {
@@ -22,18 +22,60 @@ const Levelselect = () => {
 
 
     return (
-        <Background
-            src={image}
-            className="d-flex align-items-center justify-content-center flex-row"
-            customStyle={false}
-            id="about"
+        <Backdisplay
+
         >
-            <Cards circles="circle" level="PRE-SCHOOL LEVEL" description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 2-4"
+            <Cards circles={styles.circle} level="PRE-SCHOOL LEVEL" description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 2-4"
                 image={bird} />
-            <Cards circles="circle1" level="LEARNER LEVEL" description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 5-7"
+            <Cards circles={styles.circle1} level="LEARNER LEVEL" description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 5-7"
                 image={lion} />
-            <Cards circles="circle2" level="ELEMENTARY LEVEL" description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 7-10"
+            <Cards circles={styles.circle2} level="ELEMENTARY LEVEL" description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 7-10"
                 image={kangaroo} />
-        </Background>
+        </Backdisplay>
     );
 };
+
+const Backdisplay = styled.div`
+background-image: linear-gradient(to right, blue, black);
+display: flex;
+flex-direction: row;
+height: 100vh;
+margin: 0;
+justify-content: space-around;
+align-items: center;
+width: 100%;
+
+`;
+
+const styles = {
+
+    circle: {
+        width: "9rem",
+        height: "9rem",
+        backgroundImage: "linear-gradient(to right, #08539c,#04c1f0)",
+
+        position: "absolute",
+        borderRadius: "50%",
+        zIndex: "1",
+    },
+
+    circle1: {
+        width: "9rem",
+        height: "9rem",
+        backgroundImage: "linear-gradient(to right, #17ec04,#02fc7f)",
+
+        position: "absolute",
+        borderRadius: "50%",
+        zIndex: "1",
+    },
+
+    circle2: {
+        width: "9rem",
+        height: "9rem",
+        backgroundImage: "linear-gradient(to right, #e04b06,#ddf504)",
+
+        position: "absolute",
+        borderRadius: "50%",
+        zIndex: "1",
+    }
+}

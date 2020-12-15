@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import "./Cardstyle.css";
+// import "./Cardstyle.css";
 
 
 export default class Cards extends Component {
@@ -9,7 +9,6 @@ export default class Cards extends Component {
 
     }
 }
-
 function Card(props) {
 
     const Animate = () => {
@@ -37,8 +36,8 @@ function Card(props) {
             //Moving Animation Event
             card[i].addEventListener("mousemove", (e) => {
 
-                let xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-                let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                let xAxis = (window.innerWidth / 2 - e.pageX) / 75;
+                let yAxis = (window.innerHeight / 2 - e.pageY) / 30;
                 card[i].style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
             });
 
@@ -77,45 +76,27 @@ function Card(props) {
     return (
 
 
-        // <Crd onLoad={Animate}>
-        //     <Animal>
-        //         <Circle className={props.circles}></Circle>
-        //         <Animalimg src={props.image} alt="bird" />
 
-        //     </Animal>
-        //     <Info>
-        //         <Infoh1>{props.level}</Infoh1>
-        //         <Infoh3>{props.description}</Infoh3>
-        //         <Sizes>
 
-        //             <Button>more-info</Button>
+        <Crd className="card" onLoad={Animate}>
+            <Animal className="sneaker">
+                <Circle style={props.circles}></Circle>
+                <Animalimg src={props.image} alt="bird" />
 
-        //         </Sizes>
-        //         <div className="purchase">
-        //             <button >START</button>
-        //         </div>
-        //     </Info>
-        // </Crd>
+            </Animal>
+            <Info className="info">
+                <Infoh1 className="title">{props.level}</Infoh1>
+                <Infoh3>{props.description}</Infoh3>
+                <Sizes className="sizes">
 
-        <div className="card" onLoad={Animate}>
-            <div className="sneaker">
-                <div className={props.circles}></div>
-                <img src={props.image} alt="bird" />
+                    <Button className="active">more-info</Button>
 
-            </div>
-            <div className="info">
-                <h1 className="title">{props.level}</h1>
-                <h3>{props.description}</h3>
-                <div className="sizes">
-
-                    <button className="active">more-info</button>
-
-                </div>
+                </Sizes>
                 <div className="purchase">
-                    <button >START</button>
+                    <Button >START</Button>
                 </div>
-            </div>
-        </div>
+            </Info>
+        </Crd>
 
 
 
@@ -126,7 +107,6 @@ const Circle = styled.div``;
 
 const Crd = styled.div`
 background-color: white;
-  margin-left: 2rem;
   transform-style: preserve-3d;
   height: 90vh;
   width: 23rem;
@@ -184,35 +164,3 @@ padding: 0.7rem 2rem;
   color: #585858;
 `;
 
-const styles = {
-
-    circle: {
-        width: "9rem",
-        height: "9rem",
-        backgroundImage: "linear-gradient(to right, #08539c,#04c1f0)",
-
-        position: "absolute",
-        borderRadius: "50%",
-        zIndex: "1",
-    },
-
-    circle1: {
-        width: "9rem",
-        height: "9rem",
-        backgroundImage: "linear-gradient(to right, #08539c,#04c1f0)",
-
-        position: "absolute",
-        borderRadius: "50%",
-        zIndex: "1",
-    },
-
-    circle2: {
-        width: "9rem",
-        height: "9rem",
-        backgroundImage: "linear-gradient(to right, #08539c,#04c1f0)",
-
-        position: "absolute",
-        borderRadius: "50%",
-        zIndex: "1",
-    }
-}
