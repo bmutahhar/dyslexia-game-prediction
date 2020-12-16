@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Cards from "../../Components/Cards";
 
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 import lion from "../Images/Characters/lion.png";
 import kangaroo from "../Images/Characters/kangaroo.png";

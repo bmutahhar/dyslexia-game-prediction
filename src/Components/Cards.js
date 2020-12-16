@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 
 import styled, { keyframes } from "styled-components";
-import { zoomIn, slideInUp, fadeIn } from "react-animations";
+import { zoomIn, fadeIn } from "react-animations";
 // import "./Cardstyle.css";
 
 
@@ -210,7 +210,7 @@ const Info = styled.div``;
 const Infoh1 = styled.h1`
 margin-left: 0rem;
   margin-top: 2rem;
-  font-size: 25px;
+  font-size: 2vw;
   transition: all 0.75s ease-out;
   font-weight: bold;
   &:hover {
@@ -234,7 +234,7 @@ margin-top: 0.05rem;
 `;
 
 const Infoh3 = styled.h3`
-  font-size: 1.3rem;
+  font-size: 1.5vw;
   padding: 2rem 0rem;
   margin-bottom: 0rem;
   color: #585858;
@@ -250,7 +250,7 @@ const Infoh3 = styled.h3`
 const Subheader = styled(Infoh3)`
 padding: 1rem 0rem;
 padding-left: 1rem;
-font-size: 18px;
+font-size: 1.25vw;
 color: black;
 text-align: left;
 text-justify: inter-word;
@@ -261,7 +261,7 @@ text-justify: inter-word;
 `;
 
 const Moreinfo = styled.li`
-font-size: 15px;
+font-size: 1.17vw;
 font-weight: light;
 align-items: left;
 justify-content: left;
