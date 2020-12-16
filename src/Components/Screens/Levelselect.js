@@ -34,6 +34,7 @@ const Levelselect = () => {
                 circles={styles.circle}
                 level="PRE-SCHOOL LEVEL"
                 description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 2-4"
+                descriptioninfo="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 2-4. THIS LEVEL WILL FOCUS ON THE CHILD'S MOTOR SKILLS AND MEMORY. THE QUESTIONS WILL CONSISTS OF SHAPES AND OBJECTS"
                 moreinfoq1="SHAPE MATCHING/INVERTED SHAPES"
                 moreinfoq2="OBJECT ROTATION TO MATCH THE GIVEN SHAPE"
                 image={bird} />
@@ -50,8 +51,9 @@ const Levelselect = () => {
                 buttoncolor="#02fc7f"
                 cardcolor="5px solid #02fc7f"
                 circles={styles.circle1}
-                level="LEARNER LEVEL"
                 description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 5-7"
+                level="LEARNER LEVEL"
+                descriptioninfo="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 5-7. THIS LEVEL WILL FOCUS ON THE CHILD'S MOTOR SKILLS AS WELL AS LISTENING CAPABILITIES. THE QUESTIONS WILL CONSIST OF NUMBERS AND 2-3 LETTER WORDS "
                 moreinfoq1="WRITTEN LETTER MATCHING"
                 moreinfoq2="SOUND TO LETTER MATCHING"
                 moreinfoq3="MISSING LETTER MATCHING BY USING DRAGABLE TILES TO CHECK MOTOR SKILLS"
@@ -72,6 +74,7 @@ const Levelselect = () => {
                 circles={styles.circle2}
                 level="ELEMENTARY LEVEL"
                 description="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 7-10"
+                descriptioninfo="THIS LEVEL IS FOR CHILDREN BETWEEN THE AGE OF 7-10.  THIS LEVEL WILL FOCUS ON THE CHILD'S MOTOR SKILLS, LISTENING CAPABILITIES AND PUZZLE SOLVING CAPABILITIES. THE QUESTIONS WILL ALSO CONSIST OF PSUEDO WORDS AND SMALL PUZZLES"
                 moreinfoq1="COMPLETE SOUND TO WORD MATCHING, 3 TO 5 LETTER WORDS"
                 moreinfoq2="PSEUDO WORD SOUND MATCHING"
                 moreinfoq3="PUZZLE SOLVING BY REARRANGING TILES"

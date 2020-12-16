@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 
 import styled, { keyframes } from "styled-components";
-import { zoomIn } from "react-animations";
+import { zoomIn, slideInUp, fadeIn } from "react-animations";
 // import "./Cardstyle.css";
 
 
@@ -17,6 +17,7 @@ export default class Cards extends Component {
             circles={this.props.circles}
             level={this.props.level}
             description={this.props.description}
+            descriptioninfo={this.props.descriptioninfo}
             moreinfoq1={this.props.moreinfoq1}
             moreinfoq2={this.props.moreinfoq2}
             moreinfoq3={this.props.moreinfoq3}
@@ -127,9 +128,9 @@ function Card(props) {
             )}
 
             {displayinfo && (
-                <Levelinfo className="info" buttoncolorh={props.buttoncolorh}>
-                    <Header className="title">{props.level}</Header>
-                    <Subheader>{props.description}</Subheader>
+                <Levelinfo buttoncolorh={props.buttoncolorh}>
+                    <Header >{props.level}</Header>
+                    <Subheader>{props.descriptioninfo}</Subheader>
                     <Header>TYPES OF QUESTION:</Header>
                     <ul>
                         <Moreinfo>{props.moreinfoq1}</Moreinfo>
@@ -137,7 +138,7 @@ function Card(props) {
                         <Moreinfo>{props.moreinfoq3}</Moreinfo>
 
                     </ul>
-                    <Buttonclose className="moreinfo" onClick={displaymoreinfo}>Close</Buttonclose>
+                    <Buttonclose onClick={displaymoreinfo}>Close</Buttonclose>
                 </Levelinfo>
             )}
 
@@ -149,6 +150,7 @@ function Card(props) {
 };
 
 const zoomAnimation = keyframes`${zoomIn}`;
+const fadeAnimation = keyframes`${fadeIn}`;
 
 
 const Circle = styled.div``;
@@ -166,7 +168,12 @@ const Levelinfo = styled.div`
    bottom: 0%;
    left: 0.02%;
   border-radius: 25px;
-  padding: 1rem 5rem;
+  padding: 1rem 3rem;
+  
+ 
+  
+  animation:  0.6s ${fadeAnimation};
+
 `;
 const Crd = styled.div`
 
@@ -206,12 +213,23 @@ margin-left: 0rem;
   font-size: 25px;
   transition: all 0.75s ease-out;
   font-weight: bold;
+  &:hover {
+    cursor: default;
+
+}
 
 `;
 
 const Header = styled(Infoh1)`
 color: black;
-margin-top: 0.1rem;
+margin-left: 0rem;
+margin-top: 0.05rem;
+
+&:hover {
+    cursor: default;
+
+}
+
 
 `;
 
@@ -222,18 +240,39 @@ const Infoh3 = styled.h3`
   color: #585858;
   font-weight: lighter;
   transition: all 0.75s ease-out;
+  &:hover {
+    cursor: default;
+
+}
 
 `;
 
 const Subheader = styled(Infoh3)`
+padding: 1rem 0rem;
+padding-left: 1rem;
+font-size: 18px;
 color: black;
+text-align: left;
+text-justify: inter-word;
+&:hover {
+    cursor: default;
+
+}
 `;
 
 const Moreinfo = styled.li`
+font-size: 15px;
+font-weight: light;
 align-items: left;
 justify-content: left;
 text-align: left;
 color: black;
+ text-align: left;
+  text-justify: inter-word;
+&:hover {
+    cursor: default;
+
+}
 `;
 
 
@@ -299,4 +338,7 @@ const Buttonclose = styled(Buttoninfo)`
 
 background-color: #f04b22;
 
+&:hover {
+    cursor: pointer;
+}
 `;
