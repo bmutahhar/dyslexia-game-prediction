@@ -17,7 +17,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { withStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
-
+import IconButton from '@material-ui/core/IconButton';
 import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -43,6 +43,8 @@ const Formpage = () => {
   const [answer1, setAnswer1] = useState("");
   const updateAnswer1 = (e) => {
     setAnswer1(e.target.value);
+
+
   };
   const [answer2, setAnswer2] = useState("");
   const updateAnswer2 = (e) => {
@@ -64,6 +66,9 @@ const Formpage = () => {
     open: false,
     alertMessage: "",
   });
+
+  const [backdisabled, setBackDisabled] = useState(true);
+  const [frontdisabled, setFrontDisabled] = useState(false);
 
   const [QA, setQA] = useState({
     q1: "",
@@ -231,6 +236,9 @@ const Formpage = () => {
           c5: nonactive,
           animal: penguin1,
         });
+        setBackDisabled(true);
+        setFrontDisabled(false);
+
         setQA({
           q1: QandA.qna1.Q,
           q1sf: QandA.qna1.fieldselect,
@@ -269,7 +277,8 @@ const Formpage = () => {
           c5: nonactive,
           animal: leapord,
         });
-
+        setBackDisabled(false);
+        setFrontDisabled(false);
         setQA({
           q1: QandA.qna5.Q,
           q1options: QandA.qna5.noofopt,
@@ -315,7 +324,7 @@ const Formpage = () => {
           c5: nonactive,
           animal: polar,
         });
-
+        setFrontDisabled(false);
         setQA({
           q1: QandA.qna9.Q,
           q1options: QandA.qna9.noofopt,
@@ -353,7 +362,7 @@ const Formpage = () => {
           c5: nonactive,
           animal: seal,
         });
-
+        setFrontDisabled(false);
         setQA({
           q1: QandA.qna13.Q,
           q1sf: QandA.qna13.fieldselect,
@@ -391,7 +400,7 @@ const Formpage = () => {
           animal: penguin2,
           submitbutton: true,
         });
-
+        setFrontDisabled(true);
         setQA({
           q1: QandA.qna17.Q,
           q1options: QandA.qna17.noofopt,
@@ -423,7 +432,20 @@ const Formpage = () => {
       }
     }
   };
-
+  var arrowcolorb = "#21768d";
+  var arrowcolorf = "#21768d";
+  // eslint-disable-next-line no-lone-blocks
+  {
+    backdisabled && (
+      arrowcolorb = "#5b6163"
+    )
+  }
+  // eslint-disable-next-line no-lone-blocks
+  {
+    frontdisabled && (
+      arrowcolorf = "#4d6166"
+    )
+  }
   const handleClose = () => {
     setStatus({ ...status, open: false });
   };
@@ -447,7 +469,7 @@ const Formpage = () => {
             loading: false,
             alertMessage: "Information Registered Successfully",
           });
-          setTimeout(() => history.push("/game/levels"), 1000)
+          setTimeout(() => history.push("/Levelselect"), 1000)
         } else {
           console.log(respJson);
           setStatus({
@@ -667,14 +689,18 @@ const Formpage = () => {
 
               {questionf && (
                 <NavIcons>
-                  <FrontBackIcon>
+                  {/* <FrontBackIcon> */}
+                  <IconButton disabled={backdisabled}
+                  >
                     <IoIosArrowBack
                       onClick={Backwardnavigate}
-                      color="#21768d"
+                      color={arrowcolorb}
                       size="58px"
                       style={styles.navicon}
                     />
-                  </FrontBackIcon>
+                  </IconButton>
+
+                  {/* </FrontBackIcon> */}
                   <BsCircleFill
                     color="#24bf4b"
                     size={cvalues.c1}
@@ -700,14 +726,17 @@ const Formpage = () => {
                     size={cvalues.c5}
                     style={styles.circle}
                   />
-                  <FrontBackIcon>
+                  {/* <FrontBackIcon> */}
+                  <IconButton disabled={frontdisabled}>
                     <IoIosArrowForward
                       onClick={Forwardnavigate}
-                      color="#21768d"
+                      color={arrowcolorf}
                       size="58px"
                       style={styles.navicon}
                     />
-                  </FrontBackIcon>
+                  </IconButton>
+
+                  {/* </FrontBackIcon> */}
                 </NavIcons>
               )}
 
@@ -825,12 +854,12 @@ const Proceedbutton = styled.button`
   }
 `;
 
-const FrontBackIcon = styled.div`
-  display: inline-block;
-  &:hover {
-    cursor: pointer;
-  }
-`;
+// const FrontBackIcon = styled.div`
+//   display: inline-block;
+//   &:hover {
+//     cursor: pointer;
+//   }
+// `;
 const NavIcons = styled.div`
   position: absolute;
   right: 5%;
@@ -972,7 +1001,24 @@ const styles = {
     fontWeight: "bold",
     fontColor: "black",
   },
+  navicon: {
+    transition: "0.3s",
+  }
 };
+
+
+
+// const Iconb = withStyles({
+//   root: {
+
+//     "&:disabled": {
+//       backgroundColor: "#90ab95",
+//       color: "white",
+//       border: "none",
+//     },
+//   },
+
+// })(IconButton);
 
 const InputTextField = withStyles({
   root: {
