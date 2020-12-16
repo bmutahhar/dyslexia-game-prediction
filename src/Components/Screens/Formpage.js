@@ -469,7 +469,7 @@ const Formpage = () => {
             loading: false,
             alertMessage: "Information Registered Successfully",
           });
-          setTimeout(() => history.push("/game/levels"), 1000)
+          setTimeout(() => history.push("/Levelselect"), 1000)
         } else {
           console.log(respJson);
           setStatus({

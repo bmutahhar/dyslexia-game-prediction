@@ -1,38 +1,64 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React, { Component, useState } from "react";
+
+import styled, { keyframes } from "styled-components";
+import { zoomIn } from "react-animations";
 // import "./Cardstyle.css";
 
 
 export default class Cards extends Component {
     render() {
-        return <Card buttonborder={this.props.buttonborder} buttoncolorh={this.props.buttoncolorh} buttoncolor={this.props.buttoncolor} cardcolor={this.props.cardcolor} circles={this.props.circles} level={this.props.level} description={this.props.description} image={this.props.image} />;
+        return <Card cardstate={this.props.cardstate}
+            moreinfostate={this.props.moreinfostate}
+            buttonshadow={this.props.buttonshadow}
+            buttonborder={this.props.buttonborder}
+            buttoncolorh={this.props.buttoncolorh}
+            buttoncolor={this.props.buttoncolor}
+            cardcolor={this.props.cardcolor}
+            circles={this.props.circles}
+            level={this.props.level}
+            description={this.props.description}
+            moreinfoq1={this.props.moreinfoq1}
+            moreinfoq2={this.props.moreinfoq2}
+            moreinfoq3={this.props.moreinfoq3}
+
+            image={this.props.image} />;
 
     }
 }
 function Card(props) {
+    const [displaycard, setDisplaycard] = useState(props.cardstate);
+
+    const [displayinfo, setDisplayinfo] = useState(props.moreinfostate);
+
+    const displaymoreinfo = () => {
+
+        setDisplayinfo(!displayinfo);
+        setDisplaycard(!displaycard);
+
+    }
     const Animate = () => {
-        //Movement Animation to happen
+
 
 
         const card = document.querySelectorAll(".card");
 
-        //Items
+
         const title = document.querySelectorAll(".title");
 
 
-        const sneaker = document.querySelectorAll(".sneaker img");
+        const sneaker = document.querySelectorAll(".animal img");
 
 
-        const purchase = document.querySelectorAll(".purchase");
+        const purchase = document.querySelectorAll(".start");
 
 
         const description = document.querySelectorAll(".info h3");
 
 
-        const sizes = document.querySelectorAll(".active");
+        const sizes = document.querySelectorAll(".moreinfo");
 
         for (let i = 0; i <= 2; i++) {
-            //Moving Animation Event
+
             card[i].addEventListener("mousemove", (e) => {
 
                 let xAxis = (window.innerWidth / 2 - e.pageX) / 75;
@@ -40,10 +66,10 @@ function Card(props) {
                 card[i].style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
             });
 
-            //Animate In
+
             card[i].addEventListener("mouseenter", (e) => {
                 card[i].style.transition = "none";
-                //Popout
+
                 title[i].style.transform = "translateZ(200px)";
                 sneaker[i].style.transform = "translateZ(230px) rotateZ(-45deg)";
                 description[i].style.transform = "translateZ(125px)";
@@ -53,11 +79,10 @@ function Card(props) {
 
 
 
-            //Animate Out
             card[i].addEventListener("mouseleave", (e) => {
                 card[i].style.transition = "all 0.7s ease";
                 card[i].style.transform = `rotateY(0deg) rotateX(0deg)`;
-                //Popback
+
                 title[i].style.transform = "translateZ(0px)";
                 sneaker[i].style.transform = "translateZ(0px) rotateZ(0deg)";
                 description[i].style.transform = "translateZ(0px)";
@@ -77,20 +102,44 @@ function Card(props) {
 
 
 
-        <Crd className="card" onLoad={Animate} style={{ border: props.cardcolor }}>
-            <Animal className="sneaker">
-                <Circle style={props.circles}></Circle>
-                <Animalimg src={props.image} alt="bird" />
+        <Crd className="card wow" onLoad={Animate} style={{ border: props.cardcolor }}>
 
-            </Animal>
-            <Info className="info">
-                <Infoh1 className="title">{props.level}</Infoh1>
-                <Infoh3>{props.description}</Infoh3>
-            </Info>
+            {displaycard && (
+                <>
+                    <Animal className="animal">
+                        <Circle style={props.circles}></Circle>
+                        <Animalimg src={props.image} alt="bird" />
 
-            <Buttonstart className="purchase" buttoncolor={props.buttoncolor} buttoncolorh={props.buttoncolorh} buttonborder={props.buttonborder}>START</Buttonstart>
-            <Buttoninfo className="active">more-info</Buttoninfo>
+                    </Animal>
+                    <Info className="info">
+                        <Infoh1 className="title">{props.level}</Infoh1>
+                        <Infoh3>{props.description}</Infoh3>
+                    </Info>
 
+                    <Buttonstart className="start"
+                        buttoncolor={props.buttoncolor}
+                        buttoncolorh={props.buttoncolorh}
+                        buttonborder={props.buttonborder}
+                        buttonshadow={props.buttonshadow}>START</Buttonstart>
+
+                    <Buttoninfo className="moreinfo" onClick={displaymoreinfo}>More-info</Buttoninfo>
+                </>
+            )}
+
+            {displayinfo && (
+                <Levelinfo className="info" buttoncolorh={props.buttoncolorh}>
+                    <Header className="title">{props.level}</Header>
+                    <Subheader>{props.description}</Subheader>
+                    <Header>TYPES OF QUESTION:</Header>
+                    <ul>
+                        <Moreinfo>{props.moreinfoq1}</Moreinfo>
+                        <Moreinfo>{props.moreinfoq2}</Moreinfo>
+                        <Moreinfo>{props.moreinfoq3}</Moreinfo>
+
+                    </ul>
+                    <Buttonclose className="moreinfo" onClick={displaymoreinfo}>Close</Buttonclose>
+                </Levelinfo>
+            )}
 
         </Crd>
 
@@ -99,10 +148,28 @@ function Card(props) {
     );
 };
 
+const zoomAnimation = keyframes`${zoomIn}`;
+
 
 const Circle = styled.div``;
 
+const Levelinfo = styled.div`
+  position: absolute;
+  transform: none;
+
+  background-color: ${(props) => {
+        return `${props.buttoncolorh}`;
+
+    }};
+  height: 100%;
+   width: 100%;
+   bottom: 0%;
+   left: 0.02%;
+  border-radius: 25px;
+  padding: 1rem 5rem;
+`;
 const Crd = styled.div`
+
 background-color: white;
   transform-style: preserve-3d;
   height: 90vh;
@@ -110,6 +177,8 @@ background-color: white;
   border-radius: 30px;
   padding: 1rem 5rem;
   box-shadow: 0 20px 10px rgba(0, 0, 0, 0.2), 0px 0px 30px rgba(0, 0, 0, 0.2);
+  animation:  2s  -0.2s ${zoomAnimation};
+
   transition: 0.45s;
   &:hover {
     
@@ -133,27 +202,40 @@ const Animalimg = styled.img`
 const Info = styled.div``;
 const Infoh1 = styled.h1`
 margin-left: 0rem;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
   font-size: 25px;
   transition: all 0.75s ease-out;
   font-weight: bold;
 
 `;
 
+const Header = styled(Infoh1)`
+color: black;
+margin-top: 0.1rem;
+
+`;
+
 const Infoh3 = styled.h3`
-font-size: 1.3rem;
+  font-size: 1.3rem;
   padding: 2rem 0rem;
+  margin-bottom: 0rem;
   color: #585858;
   font-weight: lighter;
   transition: all 0.75s ease-out;
 
 `;
 
-// const Sizes = styled.div`
-// display: flex;
-//   justify-content: center;
-//   transition: all 0.75s ease-out;
-// `;
+const Subheader = styled(Infoh3)`
+color: black;
+`;
+
+const Moreinfo = styled.li`
+align-items: left;
+justify-content: left;
+text-align: left;
+color: black;
+`;
+
 
 const Buttonstart = styled.button`
 position: absolute;
@@ -161,7 +243,7 @@ bottom: 18%;
 left: 25%;
 width: 50%;
 height: 8%;
-  border: none;
+border: none;
 
   background-color: ${(props) => {
         return `${props.buttoncolor}`;
@@ -190,6 +272,14 @@ height: 8%;
 
 
   }
+
+  &: active {
+    box-shadow: ${(props) => {
+        return `${props.buttonshadow}`;
+    }};
+
+    
+    outline: none;
 `;
 
 const Buttoninfo = styled(Buttonstart)`
@@ -203,4 +293,10 @@ background-color: grey;
     background-color: #f04b22;
 border: none;
   }
+`;
+
+const Buttonclose = styled(Buttoninfo)`
+
+background-color: #f04b22;
+
 `;
