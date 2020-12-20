@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-
+import {useHistory} from "react-router-dom"
 import styled, { keyframes } from "styled-components";
 import { zoomIn, fadeIn } from "react-animations";
 
@@ -23,6 +23,12 @@ export default class Avatarcard extends Component {
 }
 function AvatarCard(props) {
 
+    const history = useHistory();
+
+    const nextPage = () => {
+        history.push("/")
+    }
+
 
     return (
         <Card className="card" cardborder={props.cardborder} cardmargin={props.cardmargin}>
@@ -35,7 +41,9 @@ function AvatarCard(props) {
             <Selectbutton buttonborder={props.buttonborder}
                 buttoncolor={props.buttoncolor}
                 buttoncolorh={props.buttoncolorh}
-                buttonshadow={props.buttonshadow}>Select Me</Selectbutton>
+                buttonshadow={props.buttonshadow}
+                onClick={nextPage}
+                >Select Me</Selectbutton>
         </Card>
     );
 };
