@@ -469,7 +469,7 @@ const Formpage = () => {
             loading: false,
             alertMessage: "Information Registered Successfully",
           });
-          setTimeout(() => history.push("/Levelselect"), 1000)
+          setTimeout(() => history.push("/levelselect"), 1000)
         } else {
           console.log(respJson);
           setStatus({
@@ -640,7 +640,7 @@ const Formpage = () => {
                     Your participation in this research is voluntary, and you
                     may choose not to participate or discontinue participation
                     at any time during the study. Because the participant is
-                    under the age of 18, a parent, guardian leader or teacher
+                    under or equal to the age of 10, a parent, guardian leader or teacher
                     will need to approve the participation in this study.you
                     must be accompanied throughout the entire game by a parent
                     or legal guardian. By entering your information below, you
@@ -775,6 +775,8 @@ const Heading = styled.h2`
 const Content = styled.p`
   font-weight: bold;
   font-size: 1.2vw;
+  text-align:justify;
+  text-justify:inter-word;
   animation: 1s ${fadeInAnimation};
 `;
 const ConsentForm = styled.div`

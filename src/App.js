@@ -11,6 +11,7 @@ import Signup from "./Components/Screens/Signup";
 import UserForm from "./Components/Screens/Formpage";
 import Playground from "./playground";
 import Levelselect from "./Components/Screens/Levelselect";
+import Avatar from "./Components/Screens/AvatarSelection"
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
           <Route path="/signup" component={Signup} />
           <Route path="/userform" component={UserForm} />
           <Route path="/playground" component={Playground} />
-          <Route path="/levelselect" component={Levelselect} />
+          <Route path="/levelSelect" component={Levelselect} />
+          <Route path="/selectAvatar" component={Avatar} />
 
         </Switch>
       </div>
