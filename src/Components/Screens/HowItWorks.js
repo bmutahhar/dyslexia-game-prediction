@@ -116,31 +116,46 @@ const Howitworkspage = () => {
         />
 
         <Character
-          className="bird1"
+          className="bird1 wow"
           src={bird1}
           alt="bird1"
           style={styles.bird1}
+          isAnimated={true}
+          animation="zoomIn"
+          transition="3s"
         />
 
         <Character
-          className="bird2"
+          className="bird2 wow"
           src={bird2}
           alt="bird2"
           style={styles.bird2}
+          isAnimated={true}
+
+          animation="zoomIn"
+          transition="3.1s"
         />
 
         <Character
-          className="bird3"
+          className="bird3 wow"
           src={bird3}
           alt="bird3"
           style={styles.bird3}
+          isAnimated={true}
+
+          animation="zoomIn"
+          transition="3.2s"
         />
 
         <Character
-          className="bird4"
+          className="bird4 wow"
           src={bird4}
           alt="bird4"
           style={styles.bird4}
+          isAnimated={true}
+
+          animation="zoomIn"
+          transition="3.3s"
         />
 
         <Character
@@ -224,7 +239,7 @@ background-image: linear-gradient(#17E2D4, #1050CE);
     margin: 2px;
     padding: 20px;
     border-radius: 20px;
-    animation: 6s ${zoomAnimation};
+    animation: 4s ${zoomAnimation};
 
 `;
 

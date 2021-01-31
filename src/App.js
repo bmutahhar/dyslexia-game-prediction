@@ -8,8 +8,10 @@ import Contact from "./Components/Screens/ContactUs";
 import HowItWorks from "./Components/Screens/HowItWorks";
 import Login from "./Components/Screens/Login";
 import Signup from "./Components/Screens/Signup";
-import Formpage from "./Components/Screens/Formpage";
+import UserForm from "./Components/Screens/Formpage";
 import Playground from "./playground";
+import Levelselect from "./Components/Screens/Levelselect";
+import Avatar from "./Components/Screens/AvatarSelection"
 
 function App() {
   return (
@@ -19,8 +21,11 @@ function App() {
           <Route exact path="/" component={MainPage} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
-          <Route path="/userform" component={Formpage} />
+          <Route path="/userform" component={UserForm} />
           <Route path="/playground" component={Playground} />
+          <Route path="/levelSelect" component={Levelselect} />
+          <Route path="/selectAvatar" component={Avatar} />
+
         </Switch>
       </div>
     </Router>

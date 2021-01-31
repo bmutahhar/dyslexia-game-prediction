@@ -1,6 +1,10 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { zoomIn } from "react-animations";
+import { zoomIn, fadeIn } from "react-animations";
+import { useHistory } from "react-router-dom";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import bg from "../Images/bg.jpg";
 import Character from "../Character";
 import penguin1 from "../Images/Characters/penguin1.png";
@@ -11,12 +15,15 @@ import penguin2 from "../Images/Characters/penguin2.png";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
+import { withStyles } from "@material-ui/core/styles";
+import InputBase from "@material-ui/core/InputBase";
+import IconButton from '@material-ui/core/IconButton';
 import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { BsCircleFill } from "react-icons/bs";
-
+import { QandA } from "../FormpageData";
 export default class Form extends Component {
   render() {
     return <Formpage />;
@@ -26,9 +33,18 @@ export default class Form extends Component {
 const Formpage = () => {
   const active = "33px";
   const nonactive = "20px";
+  const [verify, setVerify] = useState(false);
+  const history = useHistory();
+
+  const verifications = () => {
+    setVerify(!verify);
+  };
+
   const [answer1, setAnswer1] = useState("");
   const updateAnswer1 = (e) => {
     setAnswer1(e.target.value);
+
+
   };
   const [answer2, setAnswer2] = useState("");
   const updateAnswer2 = (e) => {
@@ -42,6 +58,18 @@ const Formpage = () => {
   const updateAnswer4 = (e) => {
     setAnswer4(e.target.value);
   };
+  const [index, setIndex] = useState(0);
+  const [data, setData] = useState([]);
+  const [status, setStatus] = useState({
+    success: false,
+    loading: false,
+    open: false,
+    alertMessage: "",
+  });
+
+  const [backdisabled, setBackDisabled] = useState(true);
+  const [frontdisabled, setFrontDisabled] = useState(false);
+
   const [QA, setQA] = useState({
     q1: "",
     q1options: 0,
@@ -84,22 +112,22 @@ const Formpage = () => {
 
   var menuitem1 = [
     <MenuItem value="" disabled>
-      select your answer
+      Select your answer
     </MenuItem>,
   ];
   var menuitem2 = [
     <MenuItem value="" disabled>
-      select your answer
+      Select your answer
     </MenuItem>,
   ];
   var menuitem3 = [
     <MenuItem value="" disabled>
-      select your answer
+      Select your answer
     </MenuItem>,
   ];
   var menuitem4 = [
     <MenuItem value="" disabled>
-      select your answer
+      Select your answer
     </MenuItem>,
   ];
 
@@ -140,9 +168,11 @@ const Formpage = () => {
   const Proceed = () => {
     setConsentf(false);
     setQuestionf(true);
+    setVerify(false);
 
     navigation();
   };
+
   const [runs, setRun] = useState(1);
   const [cvalues, setCvalues] = useState({
     c1: "",
@@ -154,6 +184,16 @@ const Formpage = () => {
     submitbutton: false,
   });
 
+  const addAnswers = () => {
+    let tempAnswers = data;
+    tempAnswers[index] = { question: QA.q1, answer: answer1 };
+    tempAnswers[index + 1] = { question: QA.q2, answer: answer2 };
+    tempAnswers[index + 2] = { question: QA.q3, answer: answer3 };
+    tempAnswers[index + 3] = { question: QA.q4, answer: answer4 };
+    setIndex(index + 4);
+    setData(tempAnswers);
+  };
+
   var counter = runs;
   const Forwardnavigate = () => {
     if (runs < 5) {
@@ -163,12 +203,12 @@ const Formpage = () => {
     } else {
       setRun(counter);
     }
-
-    navigation();
+    addAnswers();
     setAnswer1("");
     setAnswer2("");
     setAnswer3("");
     setAnswer4("");
+    navigation();
   };
 
   const Backwardnavigate = () => {
@@ -178,6 +218,7 @@ const Formpage = () => {
     } else {
       setRun(counter);
     }
+    setIndex(index - 4);
     navigation();
   };
 
@@ -195,6 +236,9 @@ const Formpage = () => {
           c5: nonactive,
           animal: penguin1,
         });
+        setBackDisabled(true);
+        setFrontDisabled(false);
+
         setQA({
           q1: QandA.qna1.Q,
           q1sf: QandA.qna1.fieldselect,
@@ -233,7 +277,8 @@ const Formpage = () => {
           c5: nonactive,
           animal: leapord,
         });
-
+        setBackDisabled(false);
+        setFrontDisabled(false);
         setQA({
           q1: QandA.qna5.Q,
           q1options: QandA.qna5.noofopt,
@@ -279,7 +324,7 @@ const Formpage = () => {
           c5: nonactive,
           animal: polar,
         });
-
+        setFrontDisabled(false);
         setQA({
           q1: QandA.qna9.Q,
           q1options: QandA.qna9.noofopt,
@@ -317,7 +362,7 @@ const Formpage = () => {
           c5: nonactive,
           animal: seal,
         });
-
+        setFrontDisabled(false);
         setQA({
           q1: QandA.qna13.Q,
           q1sf: QandA.qna13.fieldselect,
@@ -355,7 +400,7 @@ const Formpage = () => {
           animal: penguin2,
           submitbutton: true,
         });
-
+        setFrontDisabled(true);
         setQA({
           q1: QandA.qna17.Q,
           q1options: QandA.qna17.noofopt,
@@ -387,11 +432,75 @@ const Formpage = () => {
       }
     }
   };
+  var arrowcolorb = "#21768d";
+  var arrowcolorf = "#21768d";
+  // eslint-disable-next-line no-lone-blocks
+  {
+    backdisabled && (
+      arrowcolorb = "#5b6163"
+    )
+  }
+  // eslint-disable-next-line no-lone-blocks
+  {
+    frontdisabled && (
+      arrowcolorf = "#4d6166"
+    )
+  }
+  const handleClose = () => {
+    setStatus({ ...status, open: false });
+  };
+
+  const postData = (data) => {
+    fetch("api/v1/userform/addData", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((resp) => resp.json())
+      .then((respJson) => {
+        if (respJson.error.trim().length === 0) {
+          console.log(respJson);
+          setStatus({
+            open: true,
+            success: true,
+            loading: false,
+            alertMessage: "Information Registered Successfully",
+          });
+          setTimeout(() => history.push("/levelselect"), 1000)
+        } else {
+          console.log(respJson);
+          setStatus({
+            open: true,
+            success: false,
+            loading: false,
+            alertMessage: respJson.error,
+          });
+        }
+      })
+      .catch((error) => {
+        alert(error);
+        setStatus({
+          open: true,
+          success: false,
+          loading: false,
+          alertMessage: error,
+        });
+      });
+  };
+
+  const onClick = () => {
+    setStatus({ ...status, loading: true });
+    addAnswers();
+    postData(data);
+  };
 
   return (
     <Container className="container-fluid">
       <Row className="row" style={styles.bgCOLOR}>
-        <Column className="col-11 m-auto" style={styles.coll_11}>
+        <ColumnAni className="col-11 m-auto" style={styles.coll_11}>
           <Row className="row">
             <Column className="col-12" style={styles.questions}>
               {questionf && (
@@ -403,18 +512,23 @@ const Formpage = () => {
                       value={answer1}
                       displayEmpty
                       onChange={updateAnswer1}
-                      style={styles.select}
+                      input={<BootstrapInput />}
                     >
                       {menuitem1}
                     </Select>
                   )}
 
                   {QA.q1if && (
-                    <TextField
-                      placeholder="enter your answer"
-                      id="outlined-basic"
+                    <InputTextField
                       variant="outlined"
-                      style={styles.select}
+                      placeholder="Enter your answer"
+                      value={answer1}
+                      onChange={updateAnswer1}
+                      inputProps={{
+                        style: {
+                          padding: "15px 10px",
+                        },
+                      }}
                     />
                   )}
 
@@ -424,18 +538,23 @@ const Formpage = () => {
                       value={answer2}
                       displayEmpty
                       onChange={updateAnswer2}
-                      style={styles.select}
+                      input={<BootstrapInput />}
                     >
                       {menuitem2}
                     </Select>
                   )}
 
                   {QA.q2if && (
-                    <TextField
-                      id="outlined-basic"
-                      placeholder="enter your answer"
+                    <InputTextField
                       variant="outlined"
-                      style={styles.select}
+                      placeholder="Enter your answer"
+                      value={answer2}
+                      onChange={updateAnswer2}
+                      inputProps={{
+                        style: {
+                          padding: "15px 10px",
+                        },
+                      }}
                     />
                   )}
                   <Question>{QA.q3}</Question>
@@ -444,18 +563,23 @@ const Formpage = () => {
                       value={answer3}
                       displayEmpty
                       onChange={updateAnswer3}
-                      style={styles.select}
+                      input={<BootstrapInput />}
                     >
                       {menuitem3}
                     </Select>
                   )}
 
                   {QA.q3if && (
-                    <TextField
-                      id="outlined-basic"
-                      placeholder="enter your answer"
+                    <InputTextField
                       variant="outlined"
-                      style={styles.select}
+                      placeholder="Enter your answer"
+                      value={answer3}
+                      onChange={updateAnswer3}
+                      inputProps={{
+                        style: {
+                          padding: "15px 10px",
+                        },
+                      }}
                     />
                   )}
                   <Question>{QA.q4}</Question>
@@ -464,18 +588,23 @@ const Formpage = () => {
                       value={answer4}
                       displayEmpty
                       onChange={updateAnswer4}
-                      style={styles.select}
+                      input={<BootstrapInput />}
                     >
                       {menuitem4}
                     </Select>
                   )}
 
                   {QA.q4if && (
-                    <TextField
-                      id="outlined-basic"
-                      placeholder="enter your answer"
+                    <InputTextField
                       variant="outlined"
-                      style={styles.select}
+                      placeholder="Enter your answer"
+                      value={answer4}
+                      onChange={updateAnswer4}
+                      inputProps={{
+                        style: {
+                          padding: "15px 10px",
+                        },
+                      }}
                     />
                   )}
                 </FormControl>
@@ -511,7 +640,7 @@ const Formpage = () => {
                     Your participation in this research is voluntary, and you
                     may choose not to participate or discontinue participation
                     at any time during the study. Because the participant is
-                    under the age of 18, a parent, guardian leader or teacher
+                    under or equal to the age of 10, a parent, guardian leader or teacher
                     will need to approve the participation in this study.you
                     must be accompanied throughout the entire game by a parent
                     or legal guardian. By entering your information below, you
@@ -526,7 +655,7 @@ const Formpage = () => {
             <Column className="col-6" style={styles.cartoon}>
               {questionf && (
                 <Character
-                  className="iceanimals  "
+                  className="iceanimals"
                   src={cvalues.animal}
                   alt="iceanimals"
                   style={styles.iceanimals}
@@ -539,32 +668,46 @@ const Formpage = () => {
               {consentf && (
                 <FormControlLabel
                   style={styles.check}
+                  onClick={verifications}
+                  checked={verify}
                   control={<Checkbox color="primary" />}
-                  label="i have read and accept the agreement form"
+                  label="I have read and accept the agreement form"
                 />
               )}
             </Column>
 
             <Column className="col-6" style={styles.navigation}>
-              {cvalues.submitbutton && <Submitbutton>DONE</Submitbutton>}
+              {cvalues.submitbutton && (
+                <Submitbutton type="submit" onClick={onClick}>
+                  {status.loading ? (
+                    <CircularProgress style={{ color: "white" }} size={30} />
+                  ) : (
+                      "Done"
+                    )}
+                </Submitbutton>
+              )}
 
               {questionf && (
                 <NavIcons>
-                  <FrontBackIcon>
+                  {/* <FrontBackIcon> */}
+                  <IconButton disabled={backdisabled}
+                  >
                     <IoIosArrowBack
                       onClick={Backwardnavigate}
-                      color="blue"
+                      color={arrowcolorb}
                       size="58px"
                       style={styles.navicon}
                     />
-                  </FrontBackIcon>
+                  </IconButton>
+
+                  {/* </FrontBackIcon> */}
                   <BsCircleFill
-                    color="#0AC811"
+                    color="#24bf4b"
                     size={cvalues.c1}
                     style={styles.circle}
                   />
                   <BsCircleFill
-                    color="#0A41F5"
+                    color="#096fd6"
                     size={cvalues.c2}
                     style={styles.circle}
                   />
@@ -579,40 +722,62 @@ const Formpage = () => {
                     style={styles.circle}
                   />
                   <BsCircleFill
-                    color="#EFF60F"
+                    color="#e1e817"
                     size={cvalues.c5}
                     style={styles.circle}
                   />
-                  <FrontBackIcon>
+                  {/* <FrontBackIcon> */}
+                  <IconButton disabled={frontdisabled}>
                     <IoIosArrowForward
                       onClick={Forwardnavigate}
-                      color="blue"
+                      color={arrowcolorf}
                       size="58px"
                       style={styles.navicon}
                     />
-                  </FrontBackIcon>
+                  </IconButton>
+
+                  {/* </FrontBackIcon> */}
                 </NavIcons>
               )}
 
-              {consentf && (
+              {verify && (
                 <Proceedbutton onClick={Proceed}>Proceed</Proceedbutton>
               )}
             </Column>
           </Row>
-        </Column>
+        </ColumnAni>
       </Row>
+      <Snackbar
+        open={status.open}
+        autoHideDuration={3500}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert
+          severity={status.success ? "success" : "error"}
+          onClose={handleClose}
+        >
+          {status.alertMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
 
 const zoomAnimation = keyframes`${zoomIn}`;
-
+const fadeInAnimation = keyframes`${fadeIn}`;
 const Heading = styled.h2`
   font-weight: bold;
   color: red;
+  font-size: 2vw;
+  animation: 1s ${fadeInAnimation};
 `;
 const Content = styled.p`
   font-weight: bold;
+  font-size: 1.2vw;
+  text-align:justify;
+  text-justify:inter-word;
+  animation: 1s ${fadeInAnimation};
 `;
 const ConsentForm = styled.div`
   margin-top: 8px;
@@ -625,10 +790,11 @@ const Submitbutton = styled.button`
   bottom: 20%;
   width: 25%;
   height: 40%;
-  font-weight: bold;
-  font-size: 2vw;
+  font-weight: 600;
+  font-size: 1.5vw;
   align-items: center;
-  padding-left: 6%;
+  justify-content:center;
+  align-content: center;
 
   background-color: #21768d;
   color: white;
@@ -661,10 +827,10 @@ const Proceedbutton = styled.button`
   bottom: 20%;
   width: 25%;
   height: 40%;
-  font-weight: bold;
-  font-size: 2vw;
+  font-weight: 600;
+  font-size: 1.5vw;
   align-items: center;
-  padding-left: 4%;
+  padding-left: 6%;
   background-color: #21768d;
   color: white;
   border: none;
@@ -690,12 +856,12 @@ const Proceedbutton = styled.button`
   }
 `;
 
-const FrontBackIcon = styled.div`
-  display: inline-block;
-  &:hover {
-    cursor: pointer;
-  }
-`;
+// const FrontBackIcon = styled.div`
+//   display: inline-block;
+//   &:hover {
+//     cursor: pointer;
+//   }
+// `;
 const NavIcons = styled.div`
   position: absolute;
   right: 5%;
@@ -725,11 +891,22 @@ const Container = styled.div`
 `;
 
 const Question = styled.h3`
-  margin-top: 12px;
+  margin-top: 15px;
+  margin-left: 2px;
+  font-size: 1.4vw;
+  font-weight: 500;
+  transition: 2s;
 `;
 const Row = styled.div``;
 
 const Column = styled.div``;
+const ColumnAni = styled.div`
+  animation: 1s ${zoomAnimation};
+`;
+
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+};
 
 const styles = {
   bgCOLOR: {
@@ -779,8 +956,8 @@ const styles = {
 
   check: {
     position: "absolute",
-    bottom: "15%",
-    left: "5%",
+    bottom: "20%",
+    left: "7%",
   },
 
   circle: {
@@ -800,14 +977,14 @@ const styles = {
   },
 
   select: {
-    fontSize: "14px",
-    textAlign: "center",
+    fontSize: "18px",
+    textAlign: "left",
     borderRadius: "5px",
-    fontWeight: "bold",
+    // fontWeight: "bold",
     fontColor: "black",
     opacity: "0.9",
-    // paddingLeft: "3px",
-    // paddingRight: "3px",
+    paddingLeft: "3px",
+    paddingRight: "3px",
 
     backgroundColor: "white",
 
@@ -826,158 +1003,74 @@ const styles = {
     fontWeight: "bold",
     fontColor: "black",
   },
+  navicon: {
+    transition: "0.3s",
+  }
 };
 
-const QandA = {
-  // first set of questions
-  qna1: {
-    Q: "How old is the participant (your child) ?",
-    fieldselect: false,
-    fieldinput: true,
-  },
-  qna2: {
-    Q: "What is the gender of the participant (your child) ?",
-    A1: "male",
-    A2: "female",
-    noofopt: 2,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna3: {
-    Q: "Does the participant (your child) have Dyslexia ?",
-    A1: "no",
-    A2: "yes",
-    A3: "yes-diagnosed",
-    A4: "not-known",
-    noofopt: 4,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna4: {
-    Q: "If Yes, diagnosed: in which year was your child diagnosed of Dyslexia?",
-    fieldselect: false,
-    fieldinput: true,
-  },
-  // secound set of questions
-  qna5: {
-    Q: "Is the dyslexia more an impairment in reading?",
-    A1: "no",
-    A2: "yes",
-    A3: "yes-diagnosed",
-    A4: "not-known",
-    noofopt: 4,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna6: {
-    Q: "Or — is the dyslexia more an impairment in written expression?",
-    A1: "no",
-    A2: "yes",
-    A3: "yes-diagnosed",
-    A4: "not-known",
-    noofopt: 4,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna7: {
-    Q: "Does a family member has dyslexia (e.g. dad, mom or siblings)?",
-    A1: "no",
-    A2: "yes",
-    A3: "yes-diagnosed",
-    A4: "not-known",
-    noofopt: 4,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna8: {
-    Q: "Please enter which languages your child speaks.",
-    fieldselect: false,
-    fieldinput: true,
-  },
 
-  // third set of questions
-  qna9: {
-    Q: "Is English the mother tongue of your child?",
-    A1: "no",
-    A2: "yes",
-    noofopt: 2,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna10: {
-    Q: "Does your child go to School or Kindergarten ",
-    A1: "School",
-    A2: "Kindergarten",
-    A3: "Not School and Not Kindergarten",
-    noofopt: 3,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna11: {
-    Q:
-      "Please enter the actual class/nursery school year that your child is attending at the moment (e.g. first class, nursery school first year)",
-    fieldselect: false,
-    fieldinput: true,
-  },
-  qna12: {
-    Q:
-      "Please enter the actual school grade of your child for English here(A-F):",
-    fieldselect: false,
-    fieldinput: true,
-  },
 
-  // fourth set of questions
-  qna13: {
-    Q: "Please enter the actual school grade of your child for Math here(A-F):",
-    fieldselect: false,
-    fieldinput: true,
+// const Iconb = withStyles({
+//   root: {
+
+//     "&:disabled": {
+//       backgroundColor: "#90ab95",
+//       color: "white",
+//       border: "none",
+//     },
+//   },
+
+// })(IconButton);
+
+const InputTextField = withStyles({
+  root: {
+    backgroundColor: "white",
+    borderRadius: "5px",
+    border: "2px",
+    color: "black",
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#21768d",
+    },
+
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderWidth: "1px",
+        borderColor: "#000",
+        width: "100%",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#21768d",
+      },
+      "& .MuiOutlinedInput-input": {
+        fontSize: "1.5vw",
+      },
+    },
   },
-  qna14: {
-    Q: "Please enter the range of school grade here (e.g. A - F, or 1 - 6):",
-    fieldselect: false,
-    fieldinput: true,
+})(TextField);
+
+const BootstrapInput = withStyles((theme) => ({
+  input: {
+    borderRadius: 4,
+    width: "100%",
+    height: "5vh",
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid black",
+    fontSize: "1.4vw",
+    padding: "18px 10px 5px 10px",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    // Use the system font instead of the default Roboto font.
+
+    "&:focus": {
+      borderRadius: 4,
+      borderColor: "#21768d",
+      border: "2px solid #21768d ",
+      backgroundColor: "white",
+    },
+
+    "&:hover": {
+      borderRadius: 4,
+      borderColor: "#21768d",
+    },
   },
-  qna15: {
-    Q: "Which kind of writing and reading skills has your child?",
-    A1: "the child is not reading or writing yet",
-    A2: "the child is able to read and write letters and easy words",
-    A3: "the child is able to read and write easy sentences",
-    A4: "the child reads and write fluently",
-    noofopt: 4,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna16: {
-    Q:
-      "Does your child have any hearing limitations? Or hearing aid? Please describe shortly.",
-    fieldselect: false,
-    fieldinput: true,
-  },
-  // fifth set of questions
-  qna17: {
-    Q:
-      "Does the participant has attention deficit hyperactivity disorder (ADHD) or attention deficit disorder (ADD)?",
-    A1: "no",
-    A2: "yes",
-    A3: "yes-diagnosed",
-    A4: "not-known",
-    noofopt: 4,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna18: {
-    Q: "Does you child play an music instrument (e.g. piano)?",
-    A1: "no",
-    A2: "yes-less then 6 months",
-    A3: "yes-more then 6 months",
-    noofopt: 3,
-    fieldselect: true,
-    fieldinput: false,
-  },
-  qna19: {
-    Q:
-      "If Yes (your child plays an instrument): which instrument is your child playing?",
-    fieldselect: false,
-    fieldinput: true,
-  },
-};
+}))(InputBase);

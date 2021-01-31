@@ -1,6 +1,8 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { zoomInUp, bounce } from "react-animations";
+import { useMediaQuery } from "react-responsive";
+
 import image from "../Images/first.png";
 import topMonkey from "../Images/Characters/topmonkey.png";
 import bottomMonkey from "../Images/Characters/bottommonkey.png";
@@ -27,6 +29,10 @@ const HomePage = () => {
   const [lionAnimation, setLionAnimation] = useState(true);
   const [lionpopup, setLionPopup] = useState(true);
 
+  const isNotMobileDevice = useMediaQuery({
+    query: "(min-device-width:600px)",
+  });
+
   const displayMonkeyMessage = () => {
     setMonkeyMessage(!monkeyMessage);
     setMonkeyAnimation(!monkeyAnimation);
@@ -46,7 +52,7 @@ const HomePage = () => {
       src={image}
     >
       <Jumbotron />
-      {lionMessage && (
+      {isNotMobileDevice && lionMessage && (
         <LionMessage>
           <h3>Hey, I'M SIMBA</h3>
           <p>
@@ -55,7 +61,7 @@ const HomePage = () => {
           </p>
         </LionMessage>
       )}
-      {monkeyMessage && (
+      {isNotMobileDevice && monkeyMessage && (
         <MonkeyMessage>
           <h3>HI, I'M JONNY</h3>
           <p>
@@ -64,45 +70,40 @@ const HomePage = () => {
         </MonkeyMessage>
       )}
 
-      {monkeypopup && (
-        <MonkeyPopup>
-          <h6>Hey!</h6>
-        </MonkeyPopup>
+      {isNotMobileDevice && monkeypopup && <MonkeyPopup>Hey!</MonkeyPopup>}
+
+      {isNotMobileDevice && lionpopup && <LionPopup>Hey!</LionPopup>}
+      {isNotMobileDevice && (
+        <>
+          <Character
+            className="top-monkey"
+            src={topMonkey}
+            alt="Top Monkey"
+            style={styles.topMonkey}
+          />
+          <Character
+            className="bottom-monkey"
+            src={bottomMonkey}
+            alt="Bottom Monkey"
+            onClick={displayMonkeyMessage}
+            style={styles.bottomMonkey}
+            isAnimated={monkeyAnimation}
+            animation="pulse"
+            transition=" infinite 1s"
+          />
+
+          <Character
+            className="lion"
+            src={lion}
+            alt="Lion"
+            style={styles.lion}
+            onClick={displayLionMessage}
+            isAnimated={lionAnimation}
+            animation="pulse"
+            transition=" infinite 1s"
+          />
+        </>
       )}
-
-      {lionpopup && (
-        <LionPopup>
-          <h6>Hey!</h6>
-        </LionPopup>
-      )}
-
-      <Character
-        className="top-monkey"
-        src={topMonkey}
-        alt="Top Monkey"
-        style={styles.topMonkey}
-      />
-      <Character
-        className="bottom-monkey"
-        src={bottomMonkey}
-        alt="Bottom Monkey"
-        onClick={displayMonkeyMessage}
-        style={styles.bottomMonkey}
-        isAnimated={monkeyAnimation}
-        animation="pulse"
-        transition=" infinite 1s"
-      />
-
-      <Character
-        className="lion"
-        src={lion}
-        alt="Lion"
-        style={styles.lion}
-        onClick={displayLionMessage}
-        isAnimated={lionAnimation}
-        animation="pulse"
-        transition=" infinite 1s"
-      />
       <Character
         className="grass"
         src={grass}
@@ -119,10 +120,10 @@ const bounce1 = keyframes`${bounce}`;
 
 const LionMessage = styled.div`
   color: black;
-  font-size: 18px;
+  font-size: 16px;
   background-color: #f3a61f;
   align-items: center;
-  text-align: left;
+  text-align: center;
   justify-content: center;
   border-radius: 30px;
   border: 5px solid #993a02;
@@ -132,93 +133,256 @@ const LionMessage = styled.div`
   width: 15%;
   height: 45%;
   margin: 5px;
-  padding: 20px;
+  padding: 10px;
   right: 3%;
   bottom: 30%;
   animation: 0.6s ${fadeInAnimation};
+  z-index: 1;
+
+  @media (min-width: 1920px) {
+    h3 {
+      font-size: 44px;
+    }
+    font-size: 36px;
+  }
+
+  @media (min-width: 900px) and (max-width: 1024px) {
+    h3 {
+      font-size: 18px;
+    }
+    font-size: 14px;
+    width: 15%;
+    height: 40%;
+  }
+
+  @media (min-width: 768px) and (max-width: 900px) {
+    h3 {
+      font-size: 18px;
+    }
+    font-size: 14px;
+    width: 20%;
+    height: 35%;
+    padding: 5px;
+    right:1%;
+    bottom:25%;
+  }
+  @media (min-width: 600px) and (max-width: 767px) {
+    h3{
+      font-size: 18px;
+    }
+    font-size: 14px;
+    width: 20%;
+    height: 35%;
+    padding: 10px 5px 5px 5px;
+    right:0%;
+    bottom:20%;
 `;
 
 const MonkeyPopup = styled.div`
   color: black;
-
   background-color: #f9ceae;
+  display: flex;
   align-items: center;
   text-align: center;
   justify-content: center;
   border-radius: 50%;
+  font-size: 14px;
+  font-weight: 500;
   border: 2px solid #5b3e36;
   position: absolute;
-  min-width: 5%;
-  min-height: 10%;
-  width: 5%;
-  height: 5%;
+  width: 70px;
+  height: 70px;
   margin: 5px;
-  padding-top: 20px;
-  left: 8%;
-  bottom: 31%;
+  left: 6%;
+  bottom: 27%;
   animation: 2s 1s 3 ${bounce1};
+  z-index: 2;
+  @media (min-width: 1920px) {
+    width: 5%;
+    height: 12%;
+    font-size: 24px;
+    bottom: 35%;
+    left: 7%;
+  }
+  @media (min-width: 1440px) and (max-width: 1920px) {
+    bottom: 35%;
+    font-size: 20px;
+  }
+  @media (min-width: 1280px) and (max-width: 1439px) {
+    font-size: 18px;
+    font-weight: 500;
+    bottom: 30%;
+  }
+  @media (min-width: 960px) and (max-width: 1279px){
+    width:60px;
+    height:60px;
+
+  }
+ 
+  @media (min-width: 768px) and (max-width: 960px) {
+    bottom: 21%;
+    left: 5%;
+    width:60px;
+    height:60px;
+  }
+  @media (min-width: 700px) and (max-width: 767px) {
+    bottom: 20%;
+    left: 4%;
+    width:60px;
+    height:60px;
+  }
+  @media (min-width: 600px) and (max-width: 699px) {
+    bottom: 18%;
+    left: 4%;
+    width:50px;
+    height:50px;
+  }
 `;
 
 const LionPopup = styled.div`
   color: black;
 
   background-color: #f3a61f;
+  display: flex;
   align-items: center;
   text-align: center;
   justify-content: center;
+  font-weight: 500;
   border-radius: 50%;
   border: 2px solid #993a02;
   position: absolute;
-  min-width: 5%;
-  min-height: 10%;
-  width: 5%;
-  height: 5%;
+  width: 70px;
+  height: 70px;
+  font-size: 14px;
   margin: 5px;
-  padding-top: 20px;
-  right: 10%;
-  bottom: 31%;
+  right: 8%;
+  bottom: 27%;
   animation: 2s 1s 3 ${bounce1};
+  z-index: 2;
+  @media (min-width: 1920px) {
+    width: 5%;
+    height: 12%;
+    font-size: 24px;
+    bottom: 35%;
+    right: 9%;
+  }
+
+  @media (min-width: 1440px) and (max-width: 1920px) {
+    bottom: 35%;
+    font-size: 20px;
+  }
+
+  @media (min-width: 1280px) and (max-width: 1439px) {
+    font-size: 18px;
+    font-weight: 500;
+    bottom: 30%;
+  }
+
+  @media (min-width: 960px) and (max-width: 1279px){
+    width:60px;
+    height:60px;
+
+  }
+ 
+  @media (min-width: 768px) and (max-width: 959px) {
+    bottom: 22%;
+    right: 7%;
+    width:60px;
+    height:60px;
+  }
+  @media (min-width: 700px) and (max-width: 767px) {
+    bottom: 20%;
+    right: 6%;
+    width:60px;
+    height:60px;
+  }
+  @media (min-width: 600px) and (max-width: 699px) {
+    bottom: 18%;
+    right: 6%;
+    width:50px;
+    height:50px;
+  }
 `;
 
 const MonkeyMessage = styled.div`
-    
-    color: black;
-    font-size: 18px;
-    background-color: #F9CEAE;
-    align-items: center
-    text-align: left;
-    justify-content: center;
-    border-radius: 30px;
-    border: 5px solid #5B3E36;
-    position: absolute;
-    min-width: 10%;
-    min-height: 25%;
+  color: black;
+  font-size: 16px;
+  background-color: #f9ceae;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  border-radius: 30px;
+  border: 5px solid #5b3e36;
+  position: absolute;
+  min-width: 10%;
+  min-height: 25%;
+  width: 15%;
+  height: 45%;
+  margin: 5px;
+  padding: 10px;
+  left: 2%;
+  bottom: 30%;
+  animation: 0.6s ${fadeInAnimation};
+
+  @media (min-width: 1920px) {
+    h3 {
+      font-size: 44px;
+    }
+    font-size: 36px;
+  }
+
+  @media (min-width: 901px) and (max-width: 1024px) {
+    h3 {
+      font-size: 18px;
+    }
+    font-size: 14px;
     width: 15%;
-    height: 45%;
-    margin: 5px;
-    padding: 20px;
-    left: 3%;
-    bottom: 30%;
-    animation: 0.6s ${fadeInAnimation};
+    height: 40%;
+  }
+
+  @media (min-width: 768px) and (max-width: 900px) {
+    h3 {
+      font-size: 18px;
+    }
+    font-size: 14px;
+    width: 20%;
+    height: 35%;
+    padding: 5px;
+    left:1%;
+    bottom:25%;
+  }
+
+  @media (min-width: 600px) and (max-width: 767px) {
+    h3{
+      font-size: 18px;
+    }
+    font-size: 14px;
+    width: 20%;
+    height: 35%;
+    padding: 10px 5px 5px 5px;
+    left:0%;
+    bottom:20%;
+
+  }
 `;
 
 const styles = {
   topMonkey: {
-    height: "30%",
+    height: "13vw",
     position: "absolute",
     top: 0,
     right: "15%",
     zIndex: 1,
   },
   bottomMonkey: {
-    height: "30%",
+    height: "13vw",
     position: "absolute",
     bottom: 5,
     left: "3%",
     zIndex: 1,
   },
   lion: {
-    height: "30%",
+    height: "13vw",
     position: "absolute",
     bottom: 5,
     right: "5%",
