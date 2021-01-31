@@ -73,7 +73,7 @@ export default class Navbar extends Component {
               Contact Us
             </Link>
             {this.state.button ? (
-              <Link to="/login" className="login-btn">
+              <Link to={this.props.isNotMobileDevice? "/login": "/notSupported"} className="login-btn">
                 <Button
                   buttonStyle="btn--outline"
                   buttonColor="green"
@@ -83,7 +83,7 @@ export default class Navbar extends Component {
                 </Button>
               </Link>
             ) : (
-              <Link to="/login" className="login-btn">
+              <Link to={this.props.isNotMobileDevice? "/login": "/notSupported"} className="login-btn">
                 <Button
                   buttonStyle="btn--outline"
                   buttonColor="green"

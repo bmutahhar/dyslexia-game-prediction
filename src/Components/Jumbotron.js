@@ -2,12 +2,16 @@ import React from "react";
 import { Typography, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { HashLink as Link } from "react-router-hash-link";
+import { useMediaQuery } from "react-responsive";
 import styled, { keyframes } from "styled-components";
 import { pulse } from "react-animations";
 import { FiChevronsDown, FiChevronRight } from "react-icons/fi";
 
 const Jumbotron = () => {
   const classes = useStyles();
+  const isNotMobileDevice = useMediaQuery({
+    query: "(min-device-width:600px)",
+  });
   return (
     <>
       <Container>
@@ -23,7 +27,7 @@ const Jumbotron = () => {
           variant="contained"
           endIcon={<FiChevronRight className={classes.icon} />}
           component={Link}
-          to="/login"
+          to={isNotMobileDevice? "/login":"/notSupported"}
           className={classes.button}
         >
           Start
