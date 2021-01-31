@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { Typography, Button } from "@material-ui/core";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { HashLink as Link } from "react-router-hash-link";
 import styled, { keyframes } from "styled-components";
 import { pulse } from "react-animations";
@@ -65,16 +65,15 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "2vw",
       width: "40%",
     },
-    [theme.breakpoints.down("550")]:{
+    [theme.breakpoints.down("550")]: {
       fontSize: "2.5vw",
     },
-    [theme.breakpoints.down("425")]:{
+    [theme.breakpoints.down("425")]: {
       fontSize: "3vw",
-    }
+    },
   },
-  icon:{fontSize: "1.8vw", color: "white",},
+  icon: { fontSize: "1.8vw", color: "white" },
   jumbotron: {},
-
 }));
 
 const Container = styled.div`
@@ -95,30 +94,30 @@ const Container = styled.div`
     font-size: 1vw;
   }
 
-  @media (min-width:769px) and (max-width:850px){
+  @media (min-width: 769px) and (max-width: 850px) {
     width: 70%;
   }
 
-  @media (min-width: 600px) and (max-width:768px){
+  @media (min-width: 600px) and (max-width: 768px) {
     width: 60%;
     h3 {
       font-size: 36px;
     }
-    font-size:16px;
+    font-size: 16px;
   }
-  @media (min-width: 425px) and (max-width: 599px){
-    width:80%;
+  @media (min-width: 425px) and (max-width: 599px) {
+    width: 80%;
     h3 {
       font-size: 36px;
     }
-    font-size:16px;
+    font-size: 16px;
   }
-  @media (max-width: 424px){
-    width:80%;
+  @media (max-width: 424px) {
+    width: 80%;
     h3 {
       font-size: 30px;
     }
-    font-size:12px;
+    font-size: 12px;
   }
 `;
 
