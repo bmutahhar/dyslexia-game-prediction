@@ -3,7 +3,7 @@ import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 
-import foxy from "../Images/Characters/foxy.gif";
+import foxy from "../../Images/characters/foxy.gif";
 
 const NotSupported = () => {
   const classes = useStyles();

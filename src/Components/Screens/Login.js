@@ -14,8 +14,8 @@ import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import Character from "../Character";
 import Home from "./Home";
-import monkeytree from "../Images/Characters/monkeytree.png";
-import tree from "../Images/Characters/tree.png";
+import monkeytree from "../../Images/characters/monkeytree.png";
+import tree from "../../Images/characters/tree.png";
 
 class Login extends Component {
   dismiss = () => {

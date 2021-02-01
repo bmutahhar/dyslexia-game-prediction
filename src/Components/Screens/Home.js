@@ -3,12 +3,11 @@ import styled, { keyframes } from "styled-components";
 import { zoomInUp, bounce } from "react-animations";
 import { useMediaQuery } from "react-responsive";
 
-import image from "../Images/first.png";
-import topMonkey from "../Images/Characters/topmonkey.png";
-import bottomMonkey from "../Images/Characters/bottommonkey.png";
-import grass from "../Images/Characters/grass.svg";
-import altGrass from "../Images/Characters/grass.png";
-import lion from "../Images/Characters/lion.png";
+import image from "../../Images/backgrounds/first.jpg";
+import topMonkey from "../../Images/characters/topmonkey.png";
+import bottomMonkey from "../../Images/characters/bottommonkey.png";
+import grass from "../../Images/pagefooter/grass.svg";
+import lion from "../../Images/characters/lion.png";
 import Background from "../Background";
 import Character from "../Character";
 import Jumbotron from "../Jumbotron";
@@ -109,7 +108,6 @@ const HomePage = () => {
         src={grass}
         alt="Grass"
         style={styles.grass}
-        onError={() => `this.src=${altGrass}`}
       />
     </Background>
   );

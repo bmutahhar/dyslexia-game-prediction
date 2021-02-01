@@ -3,10 +3,10 @@ import styled, { keyframes } from "styled-components";
 import { zoomInUp, bounce, zoomIn, wobble, bounceInUp } from "react-animations";
 import Background from "../../Components/Background";
 import { HashLink as Link } from "react-router-hash-link"
-import image from "../Images/last.png";
-import stone from "../Images/Characters/stonefooter.png";
-import kangaroo from "../Images/Characters/kangaroo.png";
-import koala from "../Images/Characters/koala.png";
+import image from "../../Images/backgrounds/last.jpg";
+import stone from "../../Images/pagefooter/stonefooter.svg";
+import kangaroo from "../../Images/characters/kangaroo.png";
+import koala from "../../Images/characters/koala.png";
 
 
 

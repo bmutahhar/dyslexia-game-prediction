@@ -3,9 +3,9 @@ import Cards from "../../Components/Cards";
 
 import styled from "styled-components";
 
-import lion from "../Images/Characters/lion.png";
-import kangaroo from "../Images/Characters/kangaroo.png";
-import bird from "../Images/Characters/eagle.png";
+import lion from "../../Images/characters/lion.png";
+import kangaroo from "../../Images/characters/kangaroo.png";
+import bird from "../../Images/characters/eagle.png";
 
 
 

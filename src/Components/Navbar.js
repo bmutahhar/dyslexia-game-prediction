@@ -3,7 +3,7 @@ import React, { Component } from "react";
 // import {Link} from "react-router-dom";
 import { HashLink as Link } from "react-router-hash-link";
 import { FaTimes, FaBars } from "react-icons/fa";
-import logo from "./Images/logo-cropped.png";
+import logo from "../Images/backgrounds/logo-cropped.png";
 import { Button } from "./Button";
 
 export default class Navbar extends Component {

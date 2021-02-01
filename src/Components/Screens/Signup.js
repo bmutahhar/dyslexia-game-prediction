@@ -13,15 +13,15 @@ import { MdChildCare } from "react-icons/md";
 import { BiUser, BiLockOpenAlt, BiLockAlt } from "react-icons/bi";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiParentLine } from "react-icons/ri";
-import signupbg from "../Images/signupbg.png";
-import lion from "../Images/Characters/lion.png";
-import eagle from "../Images/Characters/eagle.png";
-import pacifier from "../Images/Characters/pacifier.svg";
-import girl from "../Images/Characters/girl.svg";
-import boy from "../Images/Characters/boy.svg";
-import girlpink from "../Images/Characters/girlpink.svg";
-import boyblue from "../Images/Characters/boyblue.svg";
-import google from "../Images/Characters/google.png";
+import signupbg from "../../Images/backgrounds/signupbg.jpg";
+import lion from "../../Images/characters/lion.png";
+import eagle from "../../Images/characters/eagle.png";
+import pacifier from "../../Images/characters/pacifier.svg";
+import girl from "../../Images/characters/girl.svg";
+import boy from "../../Images/characters/boy.svg";
+import girlpink from "../../Images/characters/girlpink.svg";
+import boyblue from "../../Images/characters/boyblue.svg";
+import google from "../../Images/characters/google.png";
 
 class Signup extends Component {
   state = {

@@ -1,17 +1,16 @@
 import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { zoomInUp, zoomInDown, bounce, zoomIn } from "react-animations";
-import image from "../Images/third.png";
-import bird1 from "../Images/Characters/bird1.png";
-import bird2 from "../Images/Characters/bird2.png";
-import bird3 from "../Images/Characters/bird3.png";
-import bird4 from "../Images/Characters/bird4.png";
-
-import eagle from "../Images/Characters/eagle.png";
-import sun from "../Images/Characters/sun.png";
-import cloud from "../Images/Characters/cloud.png";
-import cloudsun from "../Images/Characters/cloudsun.png";
-import cloudfooter from "../Images/Characters/cloudfooter1.png";
+import image from "../../Images/backgrounds/third.jpg";
+import bird1 from "../../Images/characters/bird1.png";
+import bird2 from "../../Images/characters/bird2.png";
+import bird3 from "../../Images/characters/bird3.png";
+import bird4 from "../../Images/characters/bird4.png";
+import eagle from "../../Images/characters/eagle.png";
+import sun from "../../Images/characters/sun.png";
+import cloud from "../../Images/characters/cloud.png";
+import cloudsun from "../../Images/characters/cloudsun.png";
+import cloudfooter from "../../Images/pagefooter/cloudfooter.png";
 import Background from "../Background";
 
 import Character from "../Character";

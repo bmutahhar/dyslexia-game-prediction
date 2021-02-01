@@ -1,22 +1,21 @@
 import React, { Component } from "react";
 import Background from "../../Components/Background";
 import Character from "../Character";
-import image from "../../Components/Images/second.png";
+import image from "../../Images/backgrounds/second.jpg";
 import styled, { keyframes } from "styled-components";
 import { zoomIn } from "react-animations";
 
-import dolphin from "../Images/Characters/dolphin.png";
-import fish1 from "../Images/Characters/fish1.png";
-import fish2 from "../Images/Characters/fish2.png";
-import fish3 from "../Images/Characters/fish3.png";
-import fish4 from "../Images/Characters/fish4.png";
-import fish5 from "../Images/Characters/fish5.png";
-import fish6 from "../Images/Characters/fish6.png";
-import dp1 from "../Images/Characters/dp1.png";
-import dp2 from "../Images/Characters/dp2.png";
-import dp3 from "../Images/Characters/dp3.png";
-
-import waves from "../Images/Characters/waves.svg";
+import dolphin from "../../Images/characters/dolphin.png";
+import fish1 from "../../Images/characters/fish1.png";
+import fish2 from "../../Images/characters/fish2.png";
+import fish3 from "../../Images/characters/fish3.png";
+import fish4 from "../../Images/characters/fish4.png";
+import fish5 from "../../Images/characters/fish5.png";
+import fish6 from "../../Images/characters/fish6.png";
+import dp1 from "../../Images/characters/dp1.png";
+import dp2 from "../../Images/characters/dp2.png";
+import dp3 from "../../Images/characters/dp3.png";
+import waves from "../../Images/pagefooter/waves.svg";
 
 
 
