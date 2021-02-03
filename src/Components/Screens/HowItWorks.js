@@ -12,6 +12,7 @@ import cloud from "../../Images/characters/cloud.png";
 import cloudsun from "../../Images/characters/cloudsun.png";
 import cloudfooter from "../../Images/pagefooter/cloudfooter.png";
 import Background from "../Background";
+import { useMediaQuery } from "react-responsive";
 
 import Character from "../Character";
 import Video from "../Video";
@@ -48,6 +49,8 @@ const Howitworkspage = () => {
     setEaglePopup(false);
     setEagleMessage(!eagleMessage);
   }
+
+  const isTablet = useMediaQuery({ query: "(max-device-width: 768px)" })
   return (
     <>
       <Background
@@ -118,7 +121,7 @@ const Howitworkspage = () => {
           className="bird1 wow"
           src={bird1}
           alt="bird1"
-          style={styles.bird1}
+          style={isTablet ? styles.bird1tablet : styles.bird1}
           isAnimated={true}
           animation="zoomIn"
           transition="3s"
@@ -230,8 +233,6 @@ background-image: linear-gradient(#17E2D4, #1050CE);
     box-shadow: 5px 20px 20px 5px rgba(0, 0, 0, 0.5);
     display: flex;
 
-    min-width: 50%;
-    min-height: 40%;
 
     width: 60%;
     height: 65%;
@@ -240,6 +241,18 @@ background-image: linear-gradient(#17E2D4, #1050CE);
     border-radius: 20px;
     animation: 4s ${zoomAnimation};
 
+    @media (min-width: 1920px) {
+      height: 65%;
+    }
+    @media (min-width: 1440px) and (max-width: 1920px) {
+      height: 60%;
+    }
+    @media (min-width: 1280px) and (max-width: 1439px) {
+      height: 55%;
+    }
+    @media (min-width: 600px) and (max-width: 1279px){
+     height: 40%;
+    }
 `;
 
 const SunMessage = styled.div`
@@ -290,7 +303,40 @@ padding-top: 20px;
 left: 8%;
 bottom: -35%;
 animation: 2s 1s 3 ${bounce1};
+@media (min-width: 1920px) {
+  width: 5%;
+  height: 12%;
+  font-size: 24px;
+  
+}
+@media (min-width: 1440px) and (max-width: 1920px) {
+  font-size: 20px;
+}
+@media (min-width: 1280px) and (max-width: 1439px) {
+  font-size: 18px;
+  font-weight: 500;
+}
+@media (min-width: 960px) and (max-width: 1279px){
+  width:60px;
+  height:60px;
 
+}
+
+@media (min-width: 768px) and (max-width: 960px) {
+  
+  width:60px;
+  height:60px;
+}
+@media (min-width: 700px) and (max-width: 767px) {
+  
+  width:60px;
+  height:60px;
+}
+@media (min-width: 600px) and (max-width: 699px) {
+  
+  width:50px;
+  height:50px;
+}
 
 `;
 
@@ -315,7 +361,40 @@ right: 13%;
 bottom: -95%;
 z-index: 2;
 animation: 2s 1s 3 ${bounce1};
+@media (min-width: 1920px) {
+  width: 5%;
+  height: 12%;
+  font-size: 24px;
+  
+}
+@media (min-width: 1440px) and (max-width: 1920px) {
+  font-size: 20px;
+}
+@media (min-width: 1280px) and (max-width: 1439px) {
+  font-size: 18px;
+  font-weight: 500;
+}
+@media (min-width: 960px) and (max-width: 1279px){
+  width:60px;
+  height:60px;
 
+}
+
+@media (min-width: 768px) and (max-width: 960px) {
+  
+  width:60px;
+  height:60px;
+}
+@media (min-width: 700px) and (max-width: 767px) {
+  
+  width:60px;
+  height:60px;
+}
+@media (min-width: 600px) and (max-width: 699px) {
+  
+  width:50px;
+  height:50px;
+}
 
 `;
 
@@ -331,7 +410,7 @@ const styles = {
   sun: {
     position: "absolute",
     zIndex: 1,
-    height: "25%",
+    height: "13vw",
     bottom: "-35%",
     left: "0%",
   },
@@ -339,7 +418,7 @@ const styles = {
   cloudsun: {
     position: "absolute",
     zIndex: 2,
-    height: "13%",
+    height: "6vw",
     bottom: "-35%",
     left: "4%",
   },
@@ -347,7 +426,7 @@ const styles = {
   cloud: {
     position: "absolute",
     zIndex: 1,
-    height: "13%",
+    height: "6vw",
     bottom: "-20%",
     right: "4%",
   },
@@ -356,15 +435,19 @@ const styles = {
     transform: "scaleX(-1)",
     position: "absolute",
     zIndex: 3,
-
+    height: "8vw",
     bottom: "-30%",
     right: "17%",
+  },
+
+  bird1tablet: {
+
   },
 
   bird2: {
     position: "absolute",
     zIndex: 3,
-
+    height: "6vw",
     bottom: "-25%",
     left: "19%",
   },
@@ -372,7 +455,7 @@ const styles = {
   bird3: {
     position: "absolute",
     zIndex: 3,
-
+    height: "6vw",
     bottom: "-85%",
     left: "18%",
   },
@@ -380,13 +463,13 @@ const styles = {
   bird4: {
     position: "absolute",
     zIndex: 3,
-
+    height: "8vw",
     bottom: "-84%",
     right: "16%",
   },
 
   eagle: {
-    height: "30%",
+    height: "13vw",
     position: "absolute",
     bottom: "-100%",
     right: "1%",
@@ -394,8 +477,8 @@ const styles = {
   },
   cloudfooter: {
     width: "100%",
-    position: "absolute",
-    zIndex: 1,
+    position: "fixed",
+    zIndex: 30,
 
     bottom: "-100%",
     right: 0,

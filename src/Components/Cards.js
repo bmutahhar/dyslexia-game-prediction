@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import {useHistory} from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import styled, { keyframes } from "styled-components";
 import { zoomIn, fadeIn } from "react-animations";
 // import "./Cardstyle.css";
@@ -130,8 +130,8 @@ function Card(props) {
             {props.moreinfoq3 !== undefined ? (
               <Moreinfo>{props.moreinfoq3}</Moreinfo>
             ) : (
-              <></>
-            )}
+                <></>
+              )}
           </ul>
           <Buttonclose onClick={displaymoreinfo}>Close</Buttonclose>
         </Levelinfo>
@@ -271,22 +271,22 @@ border: none;
   
   &:hover {
       border : ${(props) => {
-        return `${props.buttonborder}`;
-      }};
+    return `${props.buttonborder}`;
+  }};
       outline: none;
       
     cursor: pointer;
     background-color: ${(props) => {
-      return `${props.buttoncolorh}`;
-    }};
+    return `${props.buttoncolorh}`;
+  }};
 
 
   }
 
   &: active {
     box-shadow: ${(props) => {
-      return `${props.buttonshadow}`;
-    }};
+    return `${props.buttonshadow}`;
+  }};
 
     
     outline: none;
