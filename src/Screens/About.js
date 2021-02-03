@@ -1,23 +1,20 @@
 import React, { Component } from "react";
-import Background from "../../Components/Background";
-import Character from "../Character";
-import image from "../../Images/backgrounds/second.jpg";
+import { Background, Character } from "../Components";
 import styled, { keyframes } from "styled-components";
 import { zoomIn } from "react-animations";
 
-import dolphin from "../../Images/characters/dolphin.png";
-import fish1 from "../../Images/characters/fish1.png";
-import fish2 from "../../Images/characters/fish2.png";
-import fish3 from "../../Images/characters/fish3.png";
-import fish4 from "../../Images/characters/fish4.png";
-import fish5 from "../../Images/characters/fish5.png";
-import fish6 from "../../Images/characters/fish6.png";
-import dp1 from "../../Images/characters/dp1.png";
-import dp2 from "../../Images/characters/dp2.png";
-import dp3 from "../../Images/characters/dp3.png";
-import waves from "../../Images/pagefooter/waves.svg";
-
-
+import image from "../Images/backgrounds/second.jpg";
+import dolphin from "../Images/characters/dolphin.png";
+import fish1 from "../Images/characters/fish1.png";
+import fish2 from "../Images/characters/fish2.png";
+import fish3 from "../Images/characters/fish3.png";
+import fish4 from "../Images/characters/fish4.png";
+import fish5 from "../Images/characters/fish5.png";
+import fish6 from "../Images/characters/fish6.png";
+import dp1 from "../Images/characters/dp1.png";
+import dp2 from "../Images/characters/dp2.png";
+import dp3 from "../Images/characters/dp3.png";
+import waves from "../Images/pagefooter/waves.svg";
 
 export default class About extends Component {
   render() {
@@ -28,10 +25,7 @@ export default class About extends Component {
         customStyle={false}
         id="about"
       >
-
-
         <Card1 className="wow">
-
           <Character
             src={dp2}
             alt="alam"
@@ -70,8 +64,6 @@ export default class About extends Component {
             <Header>Work Division</Header>
             <Info>Coding, Backend</Info>
           </Cardinfo>
-
-
         </Card1>
         <Card2 className="wow">
           <Character
@@ -147,9 +139,7 @@ export default class About extends Component {
             <Info>Gulmina Rextina</Info>
             <Header>Institute</Header>
             <Info>Comsats university Islamabad</Info>
-
           </Cardinfo>
-
         </Card3>
 
         <Character
@@ -167,103 +157,85 @@ export default class About extends Component {
           alt="waves"
           className="waves wow"
           style={styles.waves}
-
         />
-
-      </Background >
+      </Background>
     );
   }
 }
 
 const zoomAnimation = keyframes`${zoomIn}`;
 
-
-
-
 const Card1 = styled.div`
-display: flex;
-position: absolute;
-width: 25%;
-height: 80%;
-bottom: -192%;
-background-image: linear-gradient(to top right,#1088BB,#0C1263);
-border-radius: 20px;
-box-shadow: 10px 15px 6px rgba(0,0,0,0.25);
-animation: 1.5s ${zoomAnimation};
-transition: 0.3s;
-z-index: 1;
+  display: flex;
+  position: absolute;
+  width: 25%;
+  height: 80%;
+  bottom: -192%;
+  background-image: linear-gradient(to top right, #1088bb, #0c1263);
+  border-radius: 20px;
+  box-shadow: 10px 15px 6px rgba(0, 0, 0, 0.25);
+  animation: 1.5s ${zoomAnimation};
+  transition: 0.3s;
+  z-index: 1;
 
-&:hover {
-  width: 27%;
-  height: 87%;
-  bottom: -195%;
-  box-shadow: 12px 15px 7px rgba(0,0,0,0.35);
-
-
-
-
-}
+  &:hover {
+    width: 27%;
+    height: 87%;
+    bottom: -195%;
+    box-shadow: 12px 15px 7px rgba(0, 0, 0, 0.35);
+  }
 `;
 
 const Card2 = styled(Card1)`
-left: 5%;
-animation: 2s ${zoomAnimation};
-
+  left: 5%;
+  animation: 2s ${zoomAnimation};
 `;
 const Card3 = styled(Card1)`
-right: 5%;
-animation: 2s ${zoomAnimation};
-
+  right: 5%;
+  animation: 2s ${zoomAnimation};
 `;
 
 const Header = styled.h3`
-color: white;
-font-size: 2vw;
+  color: white;
+  font-size: 2vw;
 `;
 const Info = styled.p`
-color: #e6e9ed;
-font-size: 1.3vw;
+  color: #e6e9ed;
+  font-size: 1.3vw;
 `;
 
 const Cardinfo = styled.div`
+  border-radius: 9px;
+  position: absolute;
+  padding-top: 10%;
+  background-color: rgba(3, 42, 94, 0.3);
+  width: 95%;
+  height: 65%;
+  bottom: 4%;
+  jusity-content: center;
+  left: 2%;
+  transition: 0.1s;
+  z-index: 1;
 
-border-radius: 9px;
-position: absolute;
-padding-top: 10%;
-background-color: rgba(3, 42, 94, 0.3);
-width: 95%;
-height: 65%;
-bottom: 4%;
-jusity-content: center;
-left: 2%;
-transition: 0.1s;
-z-index:1;
-
-&:hover {
-  padding-top: 14%;
-}
-
+  &:hover {
+    padding-top: 14%;
+  }
 `;
 
-
 const styles = {
-
   waves: {
     position: "absolute",
     zIndex: 0,
     bottom: "-200%",
     right: "0%",
     left: "0%",
-
   },
 
   dp: {
     height: "23%",
-    position: 'absolute',
+    position: "absolute",
     top: "6%",
     left: "30%",
-
-
   },
 
   dolphin: {
@@ -272,7 +244,6 @@ const styles = {
     height: "25%",
     bottom: "-200%",
     left: "1%",
-
   },
   fish2: {
     position: "absolute",

@@ -1,17 +1,19 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Navbar from "./Components/Navbar";
-import Home from "./Components/Screens/Home";
-import About from "./Components/Screens/About";
-import Contact from "./Components/Screens/ContactUs";
-import HowItWorks from "./Components/Screens/HowItWorks";
-import Login from "./Components/Screens/Login";
-import Signup from "./Components/Screens/Signup";
-import UserForm from "./Components/Screens/Formpage";
-import Levelselect from "./Components/Screens/Levelselect";
-import Avatar from "./Components/Screens/AvatarSelection";
-import NotSupported from "./Components/Screens/NotSupported";
+import { Navbar } from "./Components";
+import {
+  Home,
+  HowItWorks,
+  About,
+  Contact,
+  Avatar,
+  UserForm,
+  Levelselect,
+  Login,
+  Signup,
+  NotSupported
+} from "./Screens";
 
 import { useMediaQuery } from "react-responsive";
 
@@ -50,7 +52,7 @@ const MainPage = () => {
   });
   return (
     <>
-      <Navbar isNotMobileDevice={isNotMobileDevice}  />
+      <Navbar isNotMobileDevice={isNotMobileDevice} />
       <Home />
       <HowItWorks />
       <About />

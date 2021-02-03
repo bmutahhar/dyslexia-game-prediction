@@ -12,10 +12,11 @@ import TextField from "@material-ui/core/TextField";
 import { slideInDown } from "react-animations";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import Character from "../Character";
-import Home from "./Home";
-import monkeytree from "../../Images/characters/monkeytree.png";
-import tree from "../../Images/characters/tree.png";
+import { Home } from "../Screens";
+import { Character } from "../Components";
+
+import monkeytree from "../Images/characters/monkeytree.png";
+import tree from "../Images/characters/tree.png";
 
 class Login extends Component {
   dismiss = () => {
@@ -26,7 +27,7 @@ class Login extends Component {
       <>
         <Home />
         <Blur onClick={this.dismiss} />
-        <AnimatedDiv >
+        <AnimatedDiv>
           <LoginComponent />
         </AnimatedDiv>
       </>
@@ -59,7 +60,7 @@ const LoginComponent = () => {
       .then((respJson) => {
         if (respJson.error.trim().length === 0) {
           setStatus({ loading: false, success: true, error: "" });
-          setTimeout(() => history.push("/userform"), 1000)
+          setTimeout(() => history.push("/userform"), 1000);
         } else {
           setStatus({ loading: false, success: false, error: respJson.error });
         }
@@ -139,16 +140,19 @@ const LoginComponent = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setVisibility(!visibility)} style={{
-                  "MuiButtonBase-root MuiIconButton-root": {
-                    outline: "none",
-                  }
-                }}>
+                <IconButton
+                  onClick={() => setVisibility(!visibility)}
+                  style={{
+                    "MuiButtonBase-root MuiIconButton-root": {
+                      outline: "none",
+                    },
+                  }}
+                >
                   {visibility ? (
                     <MdVisibility color="white" size={20} />
                   ) : (
-                      <MdVisibilityOff color="white" size={20} />
-                    )}
+                    <MdVisibilityOff color="white" size={20} />
+                  )}
                 </IconButton>
               </InputAdornment>
             ),
@@ -164,8 +168,8 @@ const LoginComponent = () => {
                 <IoIosCheckmarkCircleOutline color="white" size={28} />
               </Zoom>
             ) : (
-                  "Sign In"
-                )}
+              "Sign In"
+            )}
           </UserButton>
           <Link to="/userform">
             <UserButton variant="contained" fullWidth>
@@ -205,7 +209,6 @@ const slideInAnimation = keyframes`${slideInDown}`;
 const shakeAnimation = keyframes`${shake}`;
 
 const AnimatedDiv = styled.div`
-  
   position: absolute;
   top: 8%;
   left: 18%;
@@ -215,7 +218,6 @@ const AnimatedDiv = styled.div`
   width: 62%;
   border-radius: 50px;
 
-  
   height: 82vh;
   z-index: 2;
   animation: 0.6s ${slideInAnimation};
@@ -409,8 +411,7 @@ const styles = {
     position: "absolute",
     top: "4%",
     right: "4%",
-
-  }
+  },
 };
 
-export default withRouter(Login)
+export default withRouter(Login);

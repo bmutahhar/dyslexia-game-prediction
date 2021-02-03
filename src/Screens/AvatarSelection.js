@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Avatarcard from "../../Components/Avatarcard";
+import { Avatarcard } from "../Components";
 
 import styled, { keyframes } from "styled-components";
 import { fadeIn } from "react-animations";
-import larka from "../../Images/characters/larka2.svg";
-import larki from "../../Images/characters/larki2.svg";
+import larka from "../Images/characters/larka2.svg";
+import larki from "../Images/characters/larki2.svg";
 
 
 

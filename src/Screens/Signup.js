@@ -7,21 +7,21 @@ import MuiAlert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { fadeIn, slideInDown } from "react-animations";
 import { Link, withRouter } from "react-router-dom";
-import Background from "../Background";
-import Character from "../Character";
+import { Background, Character } from "../Components";
 import { MdChildCare } from "react-icons/md";
 import { BiUser, BiLockOpenAlt, BiLockAlt } from "react-icons/bi";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiParentLine } from "react-icons/ri";
-import signupbg from "../../Images/backgrounds/signupbg.jpg";
-import lion from "../../Images/characters/lion.png";
-import eagle from "../../Images/characters/eagle.png";
-import pacifier from "../../Images/characters/pacifier.svg";
-import girl from "../../Images/characters/girl.svg";
-import boy from "../../Images/characters/boy.svg";
-import girlpink from "../../Images/characters/girlpink.svg";
-import boyblue from "../../Images/characters/boyblue.svg";
-import google from "../../Images/characters/google.png";
+
+import signupbg from "../Images/backgrounds/signupbg.jpg";
+import lion from "../Images/characters/lion.png";
+import eagle from "../Images/characters/eagle.png";
+import pacifier from "../Images/characters/pacifier.svg";
+import girl from "../Images/characters/girl.svg";
+import boy from "../Images/characters/boy.svg";
+import girlpink from "../Images/characters/girlpink.svg";
+import boyblue from "../Images/characters/boyblue.svg";
+import google from "../Images/characters/google.png";
 
 class Signup extends Component {
   state = {
@@ -77,21 +77,21 @@ class Signup extends Component {
 
     const disable =
       username.trim().length !== 0 &&
-        password.trim().length !== 0 &&
-        retypePassword.trim().length !== 0 &&
-        email.trim().length !== 0 &&
-        parentName.trim().length !== 0 &&
-        childName.trim().length !== 0 &&
-        childAge.trim().length !== 0 &&
-        gender.trim().length !== 0 &&
-        errors.username.trim().length === 0 &&
-        errors.password.trim().length === 0 &&
-        errors.retypePassword.trim().length === 0 &&
-        errors.email.trim().length === 0 &&
-        errors.parentName.trim().length === 0 &&
-        errors.childName.trim().length === 0 &&
-        errors.childAge.trim().length === 0 &&
-        errors.gender.trim().length === 0
+      password.trim().length !== 0 &&
+      retypePassword.trim().length !== 0 &&
+      email.trim().length !== 0 &&
+      parentName.trim().length !== 0 &&
+      childName.trim().length !== 0 &&
+      childAge.trim().length !== 0 &&
+      gender.trim().length !== 0 &&
+      errors.username.trim().length === 0 &&
+      errors.password.trim().length === 0 &&
+      errors.retypePassword.trim().length === 0 &&
+      errors.email.trim().length === 0 &&
+      errors.parentName.trim().length === 0 &&
+      errors.childName.trim().length === 0 &&
+      errors.childAge.trim().length === 0 &&
+      errors.gender.trim().length === 0
         ? false
         : true;
     this.setState({ disabled: disable });
@@ -411,11 +411,9 @@ class Signup extends Component {
               </Label>
             </InputGroup>
 
-
             {this.state.errors.childAge.length > 0 && (
               <Error>{this.state.errors.childAge}</Error>
             )}
-
 
             <InputGroup>
               <RadioButtons
@@ -437,8 +435,8 @@ class Signup extends Component {
                 {this.state.loading ? (
                   <CircularProgress style={{ color: "white" }} size={30} />
                 ) : (
-                    "Sign Up"
-                  )}
+                  "Sign Up"
+                )}
               </SignupButton>
             </Container>
           </Form>

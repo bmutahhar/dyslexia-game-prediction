@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { HashLink as Link } from "react-router-hash-link";
 import { FaTimes, FaBars } from "react-icons/fa";
 import logo from "../Images/backgrounds/logo-cropped.png";
-import { Button } from "./Button";
+import { Button } from "../Components";
 
 export default class Navbar extends Component {
   constructor(props) {

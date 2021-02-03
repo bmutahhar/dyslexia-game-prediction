@@ -2,28 +2,30 @@ import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { zoomIn, fadeIn } from "react-animations";
 import { useHistory } from "react-router-dom";
+import { Character } from "../Components";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import bg from "../../Images/backgrounds/bg.jpg";
-import Character from "../Character";
-import penguin1 from "../../Images/characters/penguin1.png";
-import leapord from "../../Images/characters/leapord.png";
-import polar from "../../Images/characters/polar.png";
-import seal from "../../Images/characters/seal.png";
-import penguin2 from "../../Images/characters/penguin2.png";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { withStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { BsCircleFill } from "react-icons/bs";
-import { QandA } from "../FormpageData";
+import { QandA } from "../Components";
+
+import bg from "../Images/backgrounds/bg.jpg";
+import penguin1 from "../Images/characters/penguin1.png";
+import leapord from "../Images/characters/leapord.png";
+import polar from "../Images/characters/polar.png";
+import seal from "../Images/characters/seal.png";
+import penguin2 from "../Images/characters/penguin2.png";
+
 export default class Form extends Component {
   render() {
     return <Formpage />;
@@ -43,8 +45,6 @@ const Formpage = () => {
   const [answer1, setAnswer1] = useState("");
   const updateAnswer1 = (e) => {
     setAnswer1(e.target.value);
-
-
   };
   const [answer2, setAnswer2] = useState("");
   const updateAnswer2 = (e) => {
@@ -436,15 +436,11 @@ const Formpage = () => {
   var arrowcolorf = "#21768d";
   // eslint-disable-next-line no-lone-blocks
   {
-    backdisabled && (
-      arrowcolorb = "#5b6163"
-    )
+    backdisabled && (arrowcolorb = "#5b6163");
   }
   // eslint-disable-next-line no-lone-blocks
   {
-    frontdisabled && (
-      arrowcolorf = "#4d6166"
-    )
+    frontdisabled && (arrowcolorf = "#4d6166");
   }
   const handleClose = () => {
     setStatus({ ...status, open: false });
@@ -469,7 +465,7 @@ const Formpage = () => {
             loading: false,
             alertMessage: "Information Registered Successfully",
           });
-          setTimeout(() => history.push("/levelselect"), 1000)
+          setTimeout(() => history.push("/levelselect"), 1000);
         } else {
           console.log(respJson);
           setStatus({
@@ -640,12 +636,13 @@ const Formpage = () => {
                     Your participation in this research is voluntary, and you
                     may choose not to participate or discontinue participation
                     at any time during the study. Because the participant is
-                    under or equal to the age of 10, a parent, guardian leader or teacher
-                    will need to approve the participation in this study.you
-                    must be accompanied throughout the entire game by a parent
-                    or legal guardian. By entering your information below, you
-                    agree that the above information has been explained to you
-                    and all your current questions have been answered
+                    under or equal to the age of 10, a parent, guardian leader
+                    or teacher will need to approve the participation in this
+                    study.you must be accompanied throughout the entire game by
+                    a parent or legal guardian. By entering your information
+                    below, you agree that the above information has been
+                    explained to you and all your current questions have been
+                    answered
                   </Content>
                 </ConsentForm>
               )}
@@ -682,16 +679,15 @@ const Formpage = () => {
                   {status.loading ? (
                     <CircularProgress style={{ color: "white" }} size={30} />
                   ) : (
-                      "Done"
-                    )}
+                    "Done"
+                  )}
                 </Submitbutton>
               )}
 
               {questionf && (
                 <NavIcons>
                   {/* <FrontBackIcon> */}
-                  <IconButton disabled={backdisabled}
-                  >
+                  <IconButton disabled={backdisabled}>
                     <IoIosArrowBack
                       onClick={Backwardnavigate}
                       color={arrowcolorb}
@@ -775,8 +771,8 @@ const Heading = styled.h2`
 const Content = styled.p`
   font-weight: bold;
   font-size: 1.2vw;
-  text-align:justify;
-  text-justify:inter-word;
+  text-align: justify;
+  text-justify: inter-word;
   animation: 1s ${fadeInAnimation};
 `;
 const ConsentForm = styled.div`
@@ -793,7 +789,7 @@ const Submitbutton = styled.button`
   font-weight: 600;
   font-size: 1.5vw;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
   align-content: center;
 
   background-color: #21768d;
@@ -1005,10 +1001,8 @@ const styles = {
   },
   navicon: {
     transition: "0.3s",
-  }
+  },
 };
-
-
 
 // const Iconb = withStyles({
 //   root: {

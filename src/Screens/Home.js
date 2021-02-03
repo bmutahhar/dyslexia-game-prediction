@@ -2,15 +2,13 @@ import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { zoomInUp, bounce } from "react-animations";
 import { useMediaQuery } from "react-responsive";
+import { Background, Jumbotron, Character } from "../Components";
 
-import image from "../../Images/backgrounds/first.jpg";
-import topMonkey from "../../Images/characters/topmonkey.png";
-import bottomMonkey from "../../Images/characters/bottommonkey.png";
-import grass from "../../Images/pagefooter/grass.svg";
-import lion from "../../Images/characters/lion.png";
-import Background from "../Background";
-import Character from "../Character";
-import Jumbotron from "../Jumbotron";
+import image from "../Images/backgrounds/first.jpg";
+import topMonkey from "../Images/characters/topmonkey.png";
+import bottomMonkey from "../Images/characters/bottommonkey.png";
+import grass from "../Images/pagefooter/grass.svg";
+import lion from "../Images/characters/lion.png";
 
 export default class Home extends Component {
   render() {
@@ -211,29 +209,28 @@ const MonkeyPopup = styled.div`
     font-weight: 500;
     bottom: 30%;
   }
-  @media (min-width: 960px) and (max-width: 1279px){
-    width:60px;
-    height:60px;
-
+  @media (min-width: 960px) and (max-width: 1279px) {
+    width: 60px;
+    height: 60px;
   }
- 
-  @media (min-width: 768px) and (max-width: 960px) {
+
+  @media (min-width: 769px) and (max-width: 960px) {
     bottom: 21%;
     left: 5%;
-    width:60px;
-    height:60px;
+    width: 60px;
+    height: 60px;
   }
-  @media (min-width: 700px) and (max-width: 767px) {
+  @media (min-width: 700px) and (max-width: 768px) {
     bottom: 20%;
     left: 4%;
-    width:60px;
-    height:60px;
+    width: 60px;
+    height: 60px;
   }
   @media (min-width: 600px) and (max-width: 699px) {
     bottom: 18%;
     left: 4%;
-    width:50px;
-    height:50px;
+    width: 50px;
+    height: 50px;
   }
 `;
 
@@ -276,29 +273,28 @@ const LionPopup = styled.div`
     bottom: 30%;
   }
 
-  @media (min-width: 960px) and (max-width: 1279px){
-    width:60px;
-    height:60px;
-
+  @media (min-width: 960px) and (max-width: 1279px) {
+    width: 60px;
+    height: 60px;
   }
- 
+
   @media (min-width: 768px) and (max-width: 959px) {
     bottom: 22%;
     right: 7%;
-    width:60px;
-    height:60px;
+    width: 60px;
+    height: 60px;
   }
   @media (min-width: 700px) and (max-width: 767px) {
     bottom: 20%;
     right: 6%;
-    width:60px;
-    height:60px;
+    width: 60px;
+    height: 60px;
   }
   @media (min-width: 600px) and (max-width: 699px) {
     bottom: 18%;
     right: 6%;
-    width:50px;
-    height:50px;
+    width: 50px;
+    height: 50px;
   }
 `;
 
@@ -346,21 +342,20 @@ const MonkeyMessage = styled.div`
     width: 20%;
     height: 35%;
     padding: 5px;
-    left:1%;
-    bottom:25%;
+    left: 1%;
+    bottom: 25%;
   }
 
   @media (min-width: 600px) and (max-width: 767px) {
-    h3{
+    h3 {
       font-size: 18px;
     }
     font-size: 14px;
     width: 20%;
     height: 35%;
     padding: 10px 5px 5px 5px;
-    left:0%;
-    bottom:20%;
-
+    left: 0%;
+    bottom: 20%;
   }
 `;
 

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import Cards from "../../Components/Cards";
+import {Cards} from "../Components";
 
 import styled from "styled-components";
 
-import lion from "../../Images/characters/lion.png";
-import kangaroo from "../../Images/characters/kangaroo.png";
-import bird from "../../Images/characters/eagle.png";
+import lion from "../Images/characters/lion.png";
+import kangaroo from "../Images/characters/kangaroo.png";
+import bird from "../Images/characters/eagle.png";
 
 
 

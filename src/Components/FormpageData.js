@@ -1,4 +1,4 @@
-export const QandA = {
+const QandA = {
     // first set of questions
     qna1: {
       Q: "How old is the participant (your child)?",
@@ -152,3 +152,4 @@ export const QandA = {
     },
   };
   
+  export default QandA;
