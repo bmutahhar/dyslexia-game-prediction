@@ -177,6 +177,7 @@ const Card1 = styled.div`
   animation: 1.5s ${zoomAnimation};
   transition: 0.3s;
   z-index: 1;
+  text-align: center;
 
   &:hover {
     width: 27%;

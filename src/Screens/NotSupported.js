@@ -1,12 +1,14 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
+import { Typography, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 import foxy from "../Images/characters/foxy.gif";
 
 const NotSupported = () => {
   const classes = useStyles();
+  const history = useHistory();
   return (
     <Container>
       {/* <Space /> */}
@@ -19,10 +21,19 @@ const NotSupported = () => {
         paragraph
         align="justify"
         className={classes.message}
+        gutterBottom
       >
         We don't support mobile devices currently. Please visit us again by
         using a tablet, a laptop, or a desktop computer.
       </Typography>
+      <Button
+        variant="contained"
+        size="large"
+        className={classes.button}
+        onClick={() => history.goBack()}
+      >
+        Go Back
+      </Button>
     </Container>
   );
 };
@@ -36,7 +47,11 @@ const useStyles = makeStyles((theme) => ({
   },
   message: {
     margin: theme.spacing(2),
-    fontWeight:500,
+    fontWeight: 500,
+  },
+  button: {
+    backgroundColor: "#FE6100",
+    color: "white",
   },
 }));
 

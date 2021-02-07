@@ -77,7 +77,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   icon: { fontSize: "1.8vw", color: "white" },
-  jumbotron: {},
 }));
 
 const Container = styled.div`

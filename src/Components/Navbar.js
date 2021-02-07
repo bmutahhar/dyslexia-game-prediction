@@ -1,17 +1,18 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { Component } from "react";
-// import {Link} from "react-router-dom";
-import { HashLink as Link } from "react-router-hash-link";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { HashLink as LinkHash } from "react-router-hash-link";
 import { FaTimes, FaBars } from "react-icons/fa";
 import logo from "../Images/backgrounds/logo-cropped.png";
-import { Button } from "../Components";
+import "./styles/Navbar.css";
 
 export default class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       click: false,
-      button: true,
+      button: false,
     };
   }
   handleClick = () => {
@@ -22,9 +23,9 @@ export default class Navbar extends Component {
   };
   showButton = () => {
     if (window.innerWidth <= 960) {
-      this.setState({ button: false });
-    } else {
       this.setState({ button: true });
+    } else {
+      this.setState({ button: false });
     }
   };
 
@@ -33,10 +34,10 @@ export default class Navbar extends Component {
 
     return (
       <nav
-        className="navbar navbar-expand-lg fixed-top navbar-light bg-transparent"
+        className="navbar navbar-expand-md fixed-top navbar-dark bg-transparent text-center"
         style={{ fontSize: "18px", fontWeight: "600" }}
       >
-        <Link smooth to="#home" className="navbar-brand mr-auto">
+        <LinkHash smooth to="#home" className="navbar-brand mr-auto">
           <img
             src={logo}
             alt="Dyslexia"
@@ -44,7 +45,7 @@ export default class Navbar extends Component {
             width="100"
             height="50"
           />
-        </Link>
+        </LinkHash>
         <button
           className="navbar-toggler"
           type="button"
@@ -60,42 +61,74 @@ export default class Navbar extends Component {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav  ml-auto">
-            <Link smooth to="#home" className="nav-link text-white active">
+            <LinkHash smooth to="#home" className="nav-link  active m-2">
               Home
-            </Link>
-            <Link smooth to="#howitworks" className="nav-link text-white">
+            </LinkHash>
+            <LinkHash smooth to="#howitworks" className="nav-link  m-2">
               How it works?
-            </Link>
-            <Link smooth to="#about" className="nav-link text-white">
+            </LinkHash>
+            <LinkHash smooth to="#about" className="nav-link  m-2">
               About Us
-            </Link>
-            <Link smooth to="#contact" className="nav-link text-white">
+            </LinkHash>
+            <LinkHash smooth to="#contact" className="nav-link  m-2">
               Contact Us
-            </Link>
-            {this.state.button ? (
-              <Link to={this.props.isNotMobileDevice? "/login": "/notSupported"} className="login-btn">
-                <Button
-                  buttonStyle="btn--outline"
-                  buttonColor="green"
-                  buttonSize="btn--small"
-                >
-                  Login
-                </Button>
-              </Link>
-            ) : (
-              <Link to={this.props.isNotMobileDevice? "/login": "/notSupported"} className="login-btn">
-                <Button
-                  buttonStyle="btn--outline"
-                  buttonColor="green"
-                  buttonSize="btn--wide"
-                >
-                  Login
-                </Button>
-              </Link>
-            )}
+            </LinkHash>
+            <NavButtonContainer>
+              <NavButton
+                to={this.props.isNotMobileDevice ? "/login" : "/notSupported"}
+              >
+                Log In
+              </NavButton>
+            </NavButtonContainer>
           </div>
         </div>
       </nav>
     );
   }
 }
+
+const NavButton = styled(Link)`
+  background-color: #25ce4a;
+  border-radius: 5px;
+  border: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 20px;
+  height: 70%;
+  color: #fff;
+  transition: 0.2s all ease-in-out;
+
+  &:hover {
+    background-color: #027719;
+    transition: 0.2s all ease-in-out;
+    color: #fff;
+    text-decoration: none;
+    outline: none;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    background-color: #027719;
+    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.8);
+    transform: scale(1);
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 25%;
+    height: 25%;
+  }
+`;
+
+const NavButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: white;
+
+  @media screen and (max-width: 768px) {
+    height: 25%;
+  }
+`;
