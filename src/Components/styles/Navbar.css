@@ -1,16 +1,21 @@
 .navbar-nav > a {
   color: white !important;
+  text-shadow: 0px 0px 5px black;
 }
 
 .navbar-nav > a:hover {
   text-shadow: 0px 0px 5px white;
 }
 
+.navbar-nav > a:active {
+  text-shadow: 0px 0px 5px black;
+  transform: scale(1.1);
+}
+
 
 @media screen and (max-width: 768px) {
   .navbar-collapse {
     height: 95vh;
-    width: 100vw;
     /* background-color: black; */
     backdrop-filter: blur(5px);
   }

@@ -1,5 +1,6 @@
 import React, { Component, useState } from "react";
 import { Link, useHistory, withRouter } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { shake } from "react-animations";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -14,6 +15,7 @@ import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { Home } from "../Screens";
 import { Character } from "../Components";
+import { signin } from "../actions";
 
 import monkeytree from "../Images/characters/monkeytree.png";
 import tree from "../Images/characters/tree.png";
@@ -46,6 +48,8 @@ const LoginComponent = () => {
     success: false,
     error: "",
   });
+  const userLoggedIn = useSelector((state) => state.userLoggedIn);
+  const dispatch = useDispatch();
 
   function postData(data) {
     fetch("/api/v1/user/login", {
@@ -60,6 +64,7 @@ const LoginComponent = () => {
       .then((respJson) => {
         if (respJson.error.trim().length === 0) {
           setStatus({ loading: false, success: true, error: "" });
+          dispatch(signin());
           setTimeout(() => history.push("/userform"), 1000);
         } else {
           setStatus({ loading: false, success: false, error: respJson.error });
