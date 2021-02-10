@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -12,6 +13,7 @@ import { MdChildCare } from "react-icons/md";
 import { BiUser, BiLockOpenAlt, BiLockAlt } from "react-icons/bi";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiParentLine } from "react-icons/ri";
+import { signin } from "../actions";
 
 import signupbg from "../Images/backgrounds/signupbg.jpg";
 import lion from "../Images/characters/lion.png";
@@ -49,7 +51,6 @@ class Signup extends Component {
     open: false,
     alertMessage: "You have an error",
   };
-
   checkAge(val) {
     const numRegex = /^[0-9]*$/;
     let check = false;
@@ -98,6 +99,7 @@ class Signup extends Component {
   };
 
   postData(data) {
+    const { signIn } = this.props;
     fetch("/api/v1/user/signup", {
       method: "POST",
       headers: {
@@ -116,7 +118,11 @@ class Signup extends Component {
               success: true,
               alertMessage: "Account created successfully",
             },
-            () => setTimeout(() => this.props.history.push("/userform"), 1000)
+            () =>
+              setTimeout(() => {
+                signIn();
+                this.props.history.push("/userform");
+              }, 1000)
           );
         } else {
           this.setState({
@@ -848,4 +854,14 @@ const validEmailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))
 
 const validPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
-export default withRouter(Signup);
+const mapStateToProps = (state) => ({
+  isUserLoggedIn: state.userLoggedIn,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signIn: () => dispatch(signin()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Signup));

@@ -15,13 +15,11 @@ import "./styles/Navbar.css";
 const Navbar = ({ isNotMobileDevice }) => {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(false);
-  const [menu, setMenu] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isUserLoggedIn = useSelector((state) => state.userLoggedIn);
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
-
   const handleClick = () => {
     setClick(!click);
   };
@@ -164,12 +162,12 @@ const NavButton = styled(Link)`
     color: #fff;
     text-decoration: none;
     outline: none;
-    ${'' /* transform: scale(1.1); */}
+    ${"" /* transform: scale(1.1); */}
   }
 
   &:active {
     background-color: #027719;
-    ${'' /* box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.8); */}
+    ${"" /* box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.8); */}
     transform: translateY(2px);
     transition: 0.1s all ease-in;
   }
