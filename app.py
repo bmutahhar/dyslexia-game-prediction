@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime
 
 import pymongo
@@ -6,7 +7,7 @@ from flask import Flask, Response, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "DyxsisMLFYPMutahhar&Alam"
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") if os.environ.get("SECRET_KEY") is not None else "FLASKAPI!@#"
 try:
 
     mongo = pymongo.MongoClient(
