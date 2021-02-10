@@ -1,17 +1,18 @@
 import json
 from datetime import datetime
-import pymongo
-from bson.json_util import dumps, loads
-from bson.objectid import ObjectId
-from flask import Flask, Response, request
 
+import pymongo
+from flask import Flask, Response, request
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = "DyxsisMLFYPMutahhar&Alam"
 try:
 
     mongo = pymongo.MongoClient(
-        "mongodb+srv://root:root@dyxsisml.anbn7.mongodb.net/playground?retryWrites=true&w=majority", serverSelectionTimeoutMS=1000)
-    db = mongo["test"]
+        "mongodb+srv://root:root@dyxsisml.anbn7.mongodb.net/playground?retryWrites=true&w=majority",
+        serverSelectionTimeoutMS=1000)
+    db = mongo["dyxsis"]
 
     mongo.server_info()  # trigger exception if cannot connect to database
     print("Connected to MongoDB server...")
@@ -27,30 +28,26 @@ def signup():
             content = request.json
             username = content['username']
             email = content['email']
+            passwordHash = generate_password_hash(content['password'])
+            content['password'] = passwordHash
             existingUsername = db.users.find_one({'username': username})
             if existingUsername is None:
                 existingEmail = db.users.find_one({'email': email})
                 if existingEmail is None:
-                    print(
-                        '****************************************************************')
-                    print(username)
                     dbResponse = db.users.insert_one(content)
-                    print(content['password'])
                     print("Record inserted successfully!")
-                    print(dbResponse.inserted_id)
-                    print(dbResponse.acknowledged)
-                    print(
-                        '****************************************************************')
                     return Response(
                         response=json.dumps(
-                            {'message': 'Record inserted successfully', 'id': f"{dbResponse.inserted_id}", 'error': ""}),
+                            {'message': 'Record inserted successfully', 'id': f"{dbResponse.inserted_id}",
+                             'error': ""}),
                         status=200,
                         mimetype='application/json')
                 else:
                     print("This email already exists")
                     return Response(
                         response=json.dumps(
-                            {'message': 'Data could not be inserted in database', "error": "This email is already used by another user"}),
+                            {'message': 'Data could not be inserted in database',
+                             "error": "This email is already used by another user"}),
                         status=500,
                         mimetype='application/json')
             else:
@@ -63,7 +60,8 @@ def signup():
         else:
             return Response(
                 response=json.dumps(
-                    {'message': 'Data could not be inserted in database', "error": "Only POST requests allowed on this URI"}),
+                    {'message': 'Data could not be inserted in database',
+                     "error": "Only POST requests allowed on this URI"}),
                 status=500,
                 mimetype='application/json')
 
@@ -74,19 +72,15 @@ def signup():
 @app.route('/api/v1/user/login', methods=['POST'])
 def login():
     try:
-        print('****************************************************************')
         if request.method.strip() == "POST":
             content = json.loads(request.json)
             username = content['username'].strip()
             password = content['password'].strip()
             print(username)
             dbResponse = db.users.find_one({'$or': [{'username': username}, {'email': username}]}, {
-                                           'username': 1, 'password': 1})
+                'username': 1, 'password': 1})
             if dbResponse is not None:
-                print('****************************************************************')
-                print(dbResponse)
-                print('****************************************************************')
-                if dbResponse['password'].strip() == password:
+                if check_password_hash(dbResponse['password'].strip(), password):
                     return Response(
                         response=json.dumps(
                             {'message': 'Login successful!', "error": ""}),
@@ -101,14 +95,16 @@ def login():
             elif dbResponse is None:
                 return Response(
                     response=json.dumps(
-                        {'message': 'Credentials not found', "error": "Username doesn't exist. Have you signed up yet?"}),
+                        {'message': 'Credentials not found',
+                         "error": "Username doesn't exist. Have you signed up yet?"}),
                     status=500,
                     mimetype='application/json')
 
         else:
             return Response(
                 response=json.dumps(
-                    {'message': 'Data could not be inserted in database', "error": "Only POST requests allowed on this URI"}),
+                    {'message': 'Login Credentials could not be verified. Only POST requests allowed on this URI',
+                     "error": "Only POST requests allowed on this URI"}),
                 status=500,
                 mimetype='application/json')
 
@@ -127,12 +123,10 @@ def addData():
         if request.method.strip() == "POST":
             content = {"datetime": datetime.now().strftime(
                 "%Y-%m-%d %H:%M:%S"), 'data': request.json}
-            dbResponse = db.data.insert_one(content)
+            dbResponse = db.initialFormData.insert_one(content)
             if dbResponse.acknowledged:
-                print('****************************************************************')
                 print("Data submitted successfully")
                 print("Record id: ", dbResponse.inserted_id)
-                print('****************************************************************')
                 return Response(
                     response=json.dumps(
                         {'message': 'Data inserted successfully', 'id': f"{dbResponse.inserted_id}", 'error': ""}),
@@ -151,7 +145,8 @@ def addData():
         else:
             return Response(
                 response=json.dumps(
-                    {'message': 'Data could not be inserted in database', "error": "Only POST requests allowed on this URI"}),
+                    {'message': 'Data could not be inserted in database',
+                     "error": "Only POST requests allowed on this URI"}),
                 status=500,
                 mimetype='application/json')
     except Exception as e:
