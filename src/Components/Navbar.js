@@ -2,7 +2,16 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, IconButton, Menu, MenuItem } from "@material-ui/core";
+import {
+  Avatar,
+  IconButton,
+  MenuItem,
+  ClickAwayListener,
+  Grow,
+  Popper,
+  Paper,
+  MenuList,
+} from "@material-ui/core";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { HashLink as LinkHash } from "react-router-hash-link";
@@ -15,20 +24,22 @@ import "./styles/Navbar.css";
 const Navbar = ({ isNotMobileDevice }) => {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const isUserLoggedIn = useSelector((state) => state.userLoggedIn);
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+  const isUserLoggedIn = useSelector((state) => state.user.loggedIn);
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
   const handleClick = () => {
     setClick(!click);
   };
-  const handleProfileMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+
+  const handleToggle = () => {
+    setOpen(!open);
   };
 
-  const closeProfileMenu = () => {
-    setAnchorEl(null);
+  const handleClose = (event) => {
+    setOpen(false);
   };
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -38,7 +49,9 @@ const Navbar = ({ isNotMobileDevice }) => {
     }
   };
 
-  useEffect(() => window.addEventListener("resize", showButton), []);
+  useEffect(() => {
+    window.addEventListener("resize", showButton);
+  }, []);
 
   return (
     <nav
@@ -87,41 +100,61 @@ const Navbar = ({ isNotMobileDevice }) => {
                 Log In
               </NavButton>
             ) : (
-                <>
-                  <IconButton
-                    className={classes.iconButton}
-                    onClick={handleProfileMenu}
-                  >
-                    <Avatar
-                      alt="Mutahhar bin Muzaffar"
-                      src={dp}
-                      className={classes.avatar}
-                    />
-                  </IconButton>
-                  <Menu
-                    id="profile-menu"
-                    anchorEl={anchorEl}
-                    getContentAnchorEl={null}
-                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                    transformOrigin={{ vertical: "top", horizontal: "center" }}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={closeProfileMenu}
-                  >
-                    <MenuItem onClick={closeProfileMenu}>Profile</MenuItem>
-                    <MenuItem onClick={closeProfileMenu}>My account</MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        closeProfileMenu();
-                        dispatch(signout());
-                        history.replace("/");
+              <>
+                <IconButton
+                  className={classes.iconButton}
+                  ref={anchorRef}
+                  aria-controls={open ? "menu-list-grow" : undefined}
+                  aria-haspopup="true"
+                  onClick={handleToggle}
+                >
+                  <Avatar
+                    alt="Mutahhar bin Muzaffar"
+                    src={dp}
+                    className={classes.avatar}
+                  />
+                </IconButton>
+                <Popper
+                  open={open}
+                  anchorEl={anchorRef.current}
+                  role={undefined}
+                  transition
+                  disablePortal
+                >
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      style={{
+                        transformOrigin:
+                          placement === "bottom"
+                            ? "center top"
+                            : "center bottom",
                       }}
                     >
-                      Logout
-                  </MenuItem>
-                  </Menu>
-                </>
-              )}
+                      <Paper>
+                        <ClickAwayListener onClickAway={handleClose}>
+                          <MenuList autoFocusItem={open} id="menu-list-grow">
+                            <MenuItem onClick={handleClose}>Profile</MenuItem>
+                            <MenuItem onClick={handleClose}>
+                              My account
+                            </MenuItem>
+                            <MenuItem
+                              onClick={(event) => {
+                                handleClose(event);
+                                dispatch(signout());
+                                history.replace("/");
+                              }}
+                            >
+                              Logout
+                            </MenuItem>
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+              </>
+            )}
           </NavButtonContainer>
         </div>
       </div>
@@ -133,15 +166,20 @@ export default Navbar;
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
+    width: theme.spacing(6),
+    height: theme.spacing(6),
   },
   iconButton: {
     padding: 0,
     margin: 0,
   },
+  root: {
+    display: "flex",
+  },
+  paper: {
+    marginRight: theme.spacing(2),
+  },
 }));
-
 
 const NavButton = styled(Link)`
   background-color: #25ce4a;

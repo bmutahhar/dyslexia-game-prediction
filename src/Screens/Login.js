@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import { Link, useHistory, withRouter } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { shake } from "react-animations";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -48,7 +48,6 @@ const LoginComponent = () => {
     success: false,
     error: "",
   });
-  const userLoggedIn = useSelector((state) => state.userLoggedIn);
   const dispatch = useDispatch();
 
   function postData(data) {
@@ -64,7 +63,7 @@ const LoginComponent = () => {
       .then((respJson) => {
         if (respJson.error.trim().length === 0) {
           setStatus({ loading: false, success: true, error: "" });
-          dispatch(signin());
+          dispatch(signin(respJson.token));
           setTimeout(() => history.push("/userform"), 1000);
         } else {
           setStatus({ loading: false, success: false, error: respJson.error });

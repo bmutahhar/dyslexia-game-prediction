@@ -1,5 +1,6 @@
-export const signin = () => ({
+export const signin = (token) => ({
   type: "SIGN_IN",
+  payload: token,
 });
 
 export const signout = () => ({

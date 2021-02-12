@@ -56,7 +56,7 @@ class Signup extends Component {
     let check = false;
     if (numRegex.test(val)) {
       let num = parseInt(val);
-      if (num >= 1 && num <= 10) {
+      if (num >= 1 && num <= 12) {
         check = true;
       }
     }
@@ -120,7 +120,7 @@ class Signup extends Component {
             },
             () =>
               setTimeout(() => {
-                signIn();
+                signIn(respJson.token);
                 this.props.history.push("/userform");
               }, 1000)
           );
@@ -207,7 +207,7 @@ class Signup extends Component {
       case "childAge":
         errors.childAge = this.checkAge(value)
           ? ""
-          : "Age must a number between 1 and 10";
+          : "Age must a number between 1 and 12";
         break;
 
       default:
@@ -394,7 +394,7 @@ class Signup extends Component {
               <Input
                 type="number"
                 min="1"
-                max="10"
+                max="12"
                 className="inputText"
                 placeholder="Child's Age"
                 name="childAge"
@@ -855,12 +855,12 @@ const validEmailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))
 const validPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 const mapStateToProps = (state) => ({
-  isUserLoggedIn: state.userLoggedIn,
+  isUserLoggedIn: state.user.loggedIn,
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signIn: () => dispatch(signin()),
+    signIn: (token) => dispatch(signin(token)),
   };
 };
 
