@@ -214,10 +214,10 @@ const BlueDiv = styled.div`
     height: 65%;
   }
   @media (min-width: 1440px) and (max-width: 1920px) {
-    height: 60%;
+    height: 65%;
   }
   @media (min-width: 1280px) and (max-width: 1439px) {
-    height: 55%;
+    height: 60%;
   }
   @media (min-width: 600px) and (max-width: 1279px) {
     height: 40%;
@@ -426,7 +426,7 @@ const styles = {
   cloudfooter: {
     width: "100%",
     position: "absolute",
-    zIndex: 30,
+    zIndex: 1,
 
     bottom: "-100%",
     right: 0,

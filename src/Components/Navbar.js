@@ -87,41 +87,41 @@ const Navbar = ({ isNotMobileDevice }) => {
                 Log In
               </NavButton>
             ) : (
-              <>
-                <IconButton
-                  className={classes.iconButton}
-                  onClick={handleProfileMenu}
-                >
-                  <Avatar
-                    alt="Mutahhar bin Muzaffar"
-                    src={dp}
-                    className={classes.avatar}
-                  />
-                </IconButton>
-                <Menu
-                  id="profile-menu"
-                  anchorEl={anchorEl}
-                  getContentAnchorEl={null}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                  transformOrigin={{ vertical: "top", horizontal: "center" }}
-                  keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={closeProfileMenu}
-                >
-                  <MenuItem onClick={closeProfileMenu}>Profile</MenuItem>
-                  <MenuItem onClick={closeProfileMenu}>My account</MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      closeProfileMenu();
-                      dispatch(signout());
-                      history.replace("/");
-                    }}
+                <>
+                  <IconButton
+                    className={classes.iconButton}
+                    onClick={handleProfileMenu}
                   >
-                    Logout
+                    <Avatar
+                      alt="Mutahhar bin Muzaffar"
+                      src={dp}
+                      className={classes.avatar}
+                    />
+                  </IconButton>
+                  <Menu
+                    id="profile-menu"
+                    anchorEl={anchorEl}
+                    getContentAnchorEl={null}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                    transformOrigin={{ vertical: "top", horizontal: "center" }}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={closeProfileMenu}
+                  >
+                    <MenuItem onClick={closeProfileMenu}>Profile</MenuItem>
+                    <MenuItem onClick={closeProfileMenu}>My account</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        closeProfileMenu();
+                        dispatch(signout());
+                        history.replace("/");
+                      }}
+                    >
+                      Logout
                   </MenuItem>
-                </Menu>
-              </>
-            )}
+                  </Menu>
+                </>
+              )}
           </NavButtonContainer>
         </div>
       </div>
@@ -141,6 +141,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
 }));
+
 
 const NavButton = styled(Link)`
   background-color: #25ce4a;

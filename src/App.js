@@ -12,7 +12,8 @@ import {
   Levelselect,
   Login,
   Signup,
-  NotSupported
+  NotSupported,
+  PreSchooler
 } from "./Screens";
 
 import { useMediaQuery } from "react-responsive";
@@ -34,10 +35,12 @@ function App() {
               <Route path="/userform" component={UserForm} />
               <Route path="/levelSelect" component={Levelselect} />
               <Route path="/selectAvatar" component={Avatar} />
+              <Route path="/preschooler" component={PreSchooler} />
+
             </>
           ) : (
-            <Route path="/notSupported" component={NotSupported} />
-          )}
+              <Route path="/notSupported" component={NotSupported} />
+            )}
         </Switch>
       </div>
     </Router>
