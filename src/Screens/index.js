@@ -9,3 +9,4 @@ export { default as Login } from "./Login";
 export { default as NotSupported } from "./NotSupported";
 export { default as Signup } from "./Signup";
 export { default as PreSchooler } from "./PreSchooler";
+export { default as ObjectRotationScreen } from "./ObjectRotationScreen";

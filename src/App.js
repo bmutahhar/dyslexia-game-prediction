@@ -13,7 +13,8 @@ import {
   Login,
   Signup,
   NotSupported,
-  PreSchooler
+  PreSchooler,
+  ObjectRotationScreen
 } from "./Screens";
 
 import { useMediaQuery } from "react-responsive";
@@ -36,6 +37,7 @@ function App() {
               <Route path="/levelSelect" component={Levelselect} />
               <Route path="/selectAvatar" component={Avatar} />
               <Route path="/preschooler" component={PreSchooler} />
+              <Route path="/objectrotation" component={ObjectRotationScreen} />
 
             </>
           ) : (
