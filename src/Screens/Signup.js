@@ -14,6 +14,7 @@ import { BiUser, BiLockOpenAlt, BiLockAlt } from "react-icons/bi";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiParentLine } from "react-icons/ri";
 import { signin } from "../actions";
+import { GoogleLogin } from "react-google-login";
 
 import signupbg from "../Images/backgrounds/signupbg.jpg";
 import lion from "../Images/characters/lion.png";
@@ -163,6 +164,7 @@ class Signup extends Component {
       childName: childName.trim(),
       childAge: childAge.trim(),
       gender: gender.trim(),
+      googleLogin: false,
     };
     this.setState({ loading: true });
     this.postData(data);
@@ -237,6 +239,32 @@ class Signup extends Component {
     boyEl.setAttribute("src", boy);
     girlEl.setAttribute("src", girlpink);
   }
+  googleSuccess = (response) => {
+    console.log(response);
+    const data = {
+      username: response.profileObj.email.split("@")[0],
+      password: "",
+      email: response.profileObj.email,
+      parentName: response.profileObj.name,
+      childName: "",
+      childAge: "",
+      gender: "",
+      imageUrl: response.profileObj.imageUrl,
+      googleLogin: true,
+    };
+    this.setState({ loading: true, disabled: false });
+    this.postData(data);
+  };
+
+  googleFailure = (response) => {
+    console.log(response);
+    this.setState({
+      loading: false,
+      open: true,
+      success: false,
+      alertMessage: response.details,
+    });
+  };
 
   render() {
     return (
@@ -453,18 +481,22 @@ class Signup extends Component {
             </SignInLinkComponent>
             <strong>OR</strong>
             <p>You can sign up with google</p>
-            <GoogleButton>
-              <a
-                href="https://www.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div>
+            <GoogleLogin
+              clientId={process.env.REACT_APP_GOOGLE_ID}
+              render={(renderProps) => (
+                <GoogleButton
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                >
                   <img src={google} alt="Google logo" width={30} height={30} />
                   <span>Sign up with Google</span>
-                </div>
-              </a>
-            </GoogleButton>
+                </GoogleButton>
+              )}
+              buttonText="Login"
+              onSuccess={this.googleSuccess}
+              onFailure={this.googleFailure}
+              cookiePolicy={"single_host_origin"}
+            />
           </OtherSignupComponent>
           <Character
             className="eagle wow"
@@ -701,9 +733,9 @@ const GoogleButton = styled.div`
   font-size: 1.3vw;
   margin-top: -10px;
   border-radius: 5px;
-  pointer: cursor;
+  cursor: pointer;
   &:hover {
-    pointer: cursor;
+    cursor: pointer;
   }
   &:hover {
     background-color: #2e68c7;

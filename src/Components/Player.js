@@ -5,7 +5,7 @@ import { PlayArrowRounded, PauseRounded } from "@material-ui/icons";
 
 import { a } from "../Sounds";
 
-const Player = ({color}) => {
+const Player = ({ color }) => {
   const [iconName, setIconName] = useState("play");
   const [time, setTime] = useState("00:00");
   const player = useRef(null);
@@ -20,8 +20,7 @@ const Player = ({color}) => {
     }
   };
   function calculateCurrentValue(currentTime) {
-    var current_hour = parseInt(currentTime / 3600) % 24,
-      current_minute = parseInt(currentTime / 60) % 60,
+    var current_minute = parseInt(currentTime / 60) % 60,
       current_seconds_long = currentTime % 60,
       current_seconds = current_seconds_long.toFixed(),
       current_time =
@@ -55,9 +54,9 @@ const Player = ({color}) => {
           style={{ margin: 5, padding: 5, display: "inline" }}
         >
           {iconName === "play" ? (
-            <PlayArrowRounded fontSize="large" style={{color:color}} />
+            <PlayArrowRounded fontSize="large" style={{ color: color }} />
           ) : (
-            <PauseRounded fontSize="large" style={{color:color}}/>
+            <PauseRounded fontSize="large" style={{ color: color }} />
           )}
         </IconButton>
         <ProgressBarAndTimer>
