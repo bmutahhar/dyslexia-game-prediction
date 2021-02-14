@@ -1,13 +1,14 @@
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
+import jwt
 import pymongo
 from flask import Flask, Response, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") if os.environ.get("SECRET_KEY") is not None else "FLASKAPI!@#"
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)
 try:
 
     mongo = pymongo.MongoClient(
@@ -24,13 +25,16 @@ except Exception as e:
 @app.route('/api/v1/user/signup', methods=['POST'])
 def signup():
     try:
-
         if request.method.strip() == "POST":
             content = request.json
             username = content['username']
             email = content['email']
-            passwordHash = generate_password_hash(content['password'])
+            password = content['password'] if content['password'].strip() != "" and content[
+                'password'] is not None else os.urandom(24)
+            passwordHash = generate_password_hash(password)
             content['password'] = passwordHash
+            token = jwt.encode({'username': username, 'expire': str(datetime.utcnow() + timedelta(minutes=60))},
+                               app.config['SECRET_KEY'])
             existingUsername = db.users.find_one({'username': username})
             if existingUsername is None:
                 existingEmail = db.users.find_one({'email': email})
@@ -40,7 +44,7 @@ def signup():
                     return Response(
                         response=json.dumps(
                             {'message': 'Record inserted successfully', 'id': f"{dbResponse.inserted_id}",
-                             'error': ""}),
+                             'error': "", "token": token}),
                         status=200,
                         mimetype='application/json')
                 else:
@@ -68,6 +72,12 @@ def signup():
 
     except Exception as e:
         print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Data could not be inserted in database',
+                 "error": str(e)}),
+            status=500,
+            mimetype='application/json')
 
 
 @app.route('/api/v1/user/login', methods=['POST'])
@@ -77,14 +87,15 @@ def login():
             content = json.loads(request.json)
             username = content['username'].strip()
             password = content['password'].strip()
-            print(username)
+            token = jwt.encode({'username': username, 'expire': str(datetime.utcnow() + timedelta(minutes=60))},
+                               app.config['SECRET_KEY'])
             dbResponse = db.users.find_one({'$or': [{'username': username}, {'email': username}]}, {
                 'username': 1, 'password': 1})
             if dbResponse is not None:
                 if check_password_hash(dbResponse['password'].strip(), password):
                     return Response(
                         response=json.dumps(
-                            {'message': 'Login successful!', "error": ""}),
+                            {'message': 'Login successful!', "error": "", 'token': token}),
                         status=200,
                         mimetype='application/json')
                 else:
@@ -97,7 +108,7 @@ def login():
                 return Response(
                     response=json.dumps(
                         {'message': 'Credentials not found',
-                         "error": "Username doesn't exist. Have you signed up yet?"}),
+                         "error": "Username or email doesn't exist. Have you signed up yet?"}),
                     status=500,
                     mimetype='application/json')
 
@@ -111,6 +122,54 @@ def login():
 
     except Exception as e:
         print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Data could not be inserted in database', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/user/login-google", methods=["POST"])
+def googleLogin():
+    try:
+        if request.method.strip() == "POST":
+            content = json.loads(request.json)
+            username = content['username'].strip()
+            email = content['email'].strip()
+            loginType = content['googleLogin']
+            token = jwt.encode({'username': username, 'expire': str(datetime.utcnow() + timedelta(minutes=60))},
+                               app.config['SECRET_KEY'])
+            dbResponse = db.users.find_one({'email': email})
+            if dbResponse is not None and loginType:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Login successful!', "error": "", 'token': token}),
+                    status=200,
+                    mimetype='application/json')
+            elif not loginType:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Login unsuccessful!', "error": "Not Originated from Google Login"}),
+                    status=500,
+                    mimetype='application/json')
+            elif dbResponse is None:
+                print("1234")
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Credentials not found',
+                         "error": "Username or email doesn't exist. Have you signed up yet?"}),
+                    status=500,
+                    mimetype='application/json')
+
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Login Credentials could not be verified. Only POST requests allowed on this URI',
+                     "error": "Only POST requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
+
+    except Exception as e:
         return Response(
             response=json.dumps(
                 {'message': 'Data could not be inserted in database', "error": str(e)}),
