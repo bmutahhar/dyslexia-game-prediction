@@ -1,45 +1,20 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  Avatar,
-  IconButton,
-  MenuItem,
-  ClickAwayListener,
-  Grow,
-  Popper,
-  Paper,
-  MenuList,
-} from "@material-ui/core";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HashLink as LinkHash } from "react-router-hash-link";
 import { FaTimes, FaBars } from "react-icons/fa";
-import { signout } from "../actions";
+import { ProfileAvatar } from "../Components";
 import logo from "../Images/backgrounds/logo-cropped.png";
-import dp from "../Images/characters/dp2.png";
 import "./styles/Navbar.css";
 
 const Navbar = ({ isNotMobileDevice }) => {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(false);
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
   const isUserLoggedIn = useSelector((state) => state.user.loggedIn);
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const classes = useStyles();
   const handleClick = () => {
     setClick(!click);
-  };
-
-  const handleToggle = () => {
-    setOpen(!open);
-  };
-
-  const handleClose = (event) => {
-    setOpen(false);
   };
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -100,60 +75,7 @@ const Navbar = ({ isNotMobileDevice }) => {
                 Log In
               </NavButton>
             ) : (
-              <>
-                <IconButton
-                  className={classes.iconButton}
-                  ref={anchorRef}
-                  aria-controls={open ? "menu-list-grow" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleToggle}
-                >
-                  <Avatar
-                    alt="Mutahhar bin Muzaffar"
-                    src={dp}
-                    className={classes.avatar}
-                  />
-                </IconButton>
-                <Popper
-                  open={open}
-                  anchorEl={anchorRef.current}
-                  role={undefined}
-                  transition
-                  disablePortal
-                >
-                  {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin:
-                          placement === "bottom"
-                            ? "center top"
-                            : "center bottom",
-                      }}
-                    >
-                      <Paper>
-                        <ClickAwayListener onClickAway={handleClose}>
-                          <MenuList autoFocusItem={open} id="menu-list-grow">
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>
-                              My account
-                            </MenuItem>
-                            <MenuItem
-                              onClick={(event) => {
-                                handleClose(event);
-                                dispatch(signout());
-                                history.replace("/");
-                              }}
-                            >
-                              Logout
-                            </MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
-                  )}
-                </Popper>
-              </>
+              <ProfileAvatar menu />
             )}
           </NavButtonContainer>
         </div>
@@ -163,23 +85,6 @@ const Navbar = ({ isNotMobileDevice }) => {
 };
 
 export default Navbar;
-
-const useStyles = makeStyles((theme) => ({
-  avatar: {
-    width: theme.spacing(6),
-    height: theme.spacing(6),
-  },
-  iconButton: {
-    padding: 0,
-    margin: 0,
-  },
-  root: {
-    display: "flex",
-  },
-  paper: {
-    marginRight: theme.spacing(2),
-  },
-}));
 
 const NavButton = styled(Link)`
   background-color: #25ce4a;
