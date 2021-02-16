@@ -100,61 +100,61 @@ const Navbar = ({ isNotMobileDevice }) => {
                 Log In
               </NavButton>
             ) : (
-              <>
-                <IconButton
-                  className={classes.iconButton}
-                  ref={anchorRef}
-                  aria-controls={open ? "menu-list-grow" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleToggle}
-                >
-                  <Avatar
-                    alt="Mutahhar bin Muzaffar"
-                    src={dp}
-                    className={classes.avatar}
-                  />
-                </IconButton>
-                <Popper
-                  open={open}
-                  anchorEl={anchorRef.current}
-                  role={undefined}
-                  transition
-                  disablePortal
-                >
-                  {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin:
-                          placement === "bottom"
-                            ? "center top"
-                            : "center bottom",
-                      }}
-                    >
-                      <Paper>
-                        <ClickAwayListener onClickAway={handleClose}>
-                          <MenuList autoFocusItem={open} id="menu-list-grow">
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>
-                              My account
+                <>
+                  <IconButton
+                    className={classes.iconButton}
+                    ref={anchorRef}
+                    aria-controls={open ? "menu-list-grow" : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
+                  >
+                    <Avatar
+                      alt="Mutahhar bin Muzaffar"
+                      src={dp}
+                      className={classes.avatar}
+                    />
+                  </IconButton>
+                  <Popper
+                    open={open}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    transition
+                    disablePortal
+                  >
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin:
+                            placement === "bottom"
+                              ? "center top"
+                              : "center bottom",
+                        }}
+                      >
+                        <Paper>
+                          <ClickAwayListener onClickAway={handleClose}>
+                            <MenuList autoFocusItem={open} id="menu-list-grow">
+                              <MenuItem onClick={handleClose}>Profile</MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                My account
                             </MenuItem>
-                            <MenuItem
-                              onClick={(event) => {
-                                handleClose(event);
-                                dispatch(signout());
-                                history.replace("/");
-                              }}
-                            >
-                              Logout
+                              <MenuItem
+                                onClick={(event) => {
+                                  handleClose(event);
+                                  dispatch(signout());
+                                  history.replace("/");
+                                }}
+                              >
+                                Logout
                             </MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
-                  )}
-                </Popper>
-              </>
-            )}
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </>
+              )}
           </NavButtonContainer>
         </div>
       </div>

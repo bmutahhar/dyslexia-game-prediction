@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { IconButton } from "@material-ui/core";
 import { PlayArrowRounded, PauseRounded } from "@material-ui/icons";
 
-import { a } from "../Sounds";
+import { stunners } from "../Sounds";
 
-const Player = ({color}) => {
+const Player = ({ color }) => {
   const [iconName, setIconName] = useState("play");
   const [time, setTime] = useState("00:00");
   const player = useRef(null);
@@ -48,17 +48,17 @@ const Player = ({color}) => {
 
   return (
     <Container>
-      <audio ref={player} src={a} onTimeUpdate={initProgressBar} />
+      <audio ref={player} src={stunners} onTimeUpdate={initProgressBar} />
       <Controls>
         <IconButton
           onClick={togglePlay}
           style={{ margin: 5, padding: 5, display: "inline" }}
         >
           {iconName === "play" ? (
-            <PlayArrowRounded fontSize="large" style={{color:color}} />
+            <PlayArrowRounded fontSize="large" style={{ color: color }} />
           ) : (
-            <PauseRounded fontSize="large" style={{color:color}}/>
-          )}
+              <PauseRounded fontSize="large" style={{ color: color }} />
+            )}
         </IconButton>
         <ProgressBarAndTimer>
           <ProgressBar ref={progressbar} max="1" value="0" />
@@ -72,11 +72,11 @@ const Player = ({color}) => {
 export default Player;
 
 const Container = styled.div`
-  background-color: rgba(94, 255, 209, 0.25);
   border-radius: 50px;
-  border: 1px solid white;
   width: 40%;
-  backdrop-filter: blur(50px) opacity(25%);
+  background-color: rgba(255, 255, 255, 0.11);
+  backdrop-filter: blur(10px);
+  border: 3px solid #C9C4C4;
 `;
 
 const Controls = styled.div`
@@ -93,17 +93,20 @@ const ProgressBar = styled.progress`
   display: flex;
   flex-basis: 80%;
   flex-grow: 2;
-  height: 2px;
+  height: 4px;
+  border-radius: 50px;
   &[value] {
     appearance: none;
     -webkit-appearance: none;
     ::-webkit-progress-bar {
       background-color: #eee;
-      height: 2px;
+      height: 4px;
+      border-radius: 50px;
     }
     ::-webkit-progress-value {
-      background-color: green;
-      height: 2px;
+      background-color: #00FF2B;
+      height: 4px;
+      border-radius: 50px;
     }
   }
 `;

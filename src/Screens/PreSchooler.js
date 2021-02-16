@@ -2,10 +2,15 @@ import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import gamebg from "../Images/backgrounds/gamebg.png";
 import tilebg from "../Images/backgrounds/tilebg.png";
+import { Player } from "../Components";
+import { motion } from "framer-motion";
 
 export default class PreSchooler extends Component {
     render() {
         return <PreSchoolerLevel />;
+        <script src="C:\Users\IDEAPAD\Desktop\fyp\dyslexia-game-prediction\public\plain-draggable.min.js"></script>
+
+        const draggable = new PlainDraggable(document.getElementById('draggable'));
     }
 }
 
@@ -13,6 +18,7 @@ export default class PreSchooler extends Component {
 
 
 const PreSchoolerLevel = () => {
+
 
     return (
 
@@ -27,10 +33,16 @@ const PreSchoolerLevel = () => {
             <GameArea className="row">
                 <Avatarmsg className="col-2"><Name>avatarmsg</Name></Avatarmsg>
                 <Mainarea className="col-8">
-                    <Tileplacer></Tileplacer>
-                    <Tileplacer></Tileplacer>
-                    <Tileplacer></Tileplacer>
-                    <Tileplacer></Tileplacer>
+                    <DragArea>
+                        <Tileplacer></Tileplacer>
+                        <Tileplacer></Tileplacer>
+                        <Tileplacer></Tileplacer>
+                        <Tileplacer></Tileplacer>
+                    </DragArea>
+
+                    <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
+                    <Player color="white"></Player>
+
 
 
                 </Mainarea>
@@ -39,11 +51,20 @@ const PreSchoolerLevel = () => {
             <Gameoption className="row">
                 <Avatar className="col-2"><Name>avatar</Name></Avatar>
                 <AnswerSelection className="col-8">
-                    <Tile background={tilebg}>E</Tile>
-                    {/* <Tile style={styles.Tile}></Tile> */}
-                    {/* <Tile style={styles.Tile}></Tile> */}
-                    {/* <Tile style={styles.Tile}></Tile> */}
-                    {/* <Tile style={styles.Tile}></Tile> */}
+                    <motion.div
+                        drag
+
+
+                    >
+                        <Tile background={tilebg}
+
+                        >E</Tile>
+                    </motion.div>
+
+                    <Tile background={tilebg}>F</Tile>
+                    <Tile background={tilebg}>C</Tile>
+                    <Tile background={tilebg}>D</Tile>
+                    <Tile background={tilebg}>C</Tile>
 
                 </AnswerSelection>
                 <AnswerSubmit className="col-2"><Name>submit/next buttons</Name></AnswerSubmit>
@@ -55,7 +76,8 @@ const PreSchoolerLevel = () => {
 };
 
 const Qinfo = styled.p`
-font-size: 0.8vw;
+margin-top: 30px;
+font-size: 1vw;
 color: white;
 `;
 const Name = styled.h2`
@@ -109,12 +131,22 @@ border: 2px solid yellow;
 const Mainarea = styled.div`
 border: 2px solid yellow;
 display: flex;
+flex-direction: column;
 
 align-items: center;
 justify-content: center;
 
 
 `;
+
+const DragArea = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+
+
+`;
+
 const AnswerSelection = styled.div`
 display: flex;
 border: 2px solid yellow;
@@ -153,6 +185,20 @@ margin-right: 5px;
 
 `;
 
+const Audioplayer = styled.div`
+box-sizing: border-box;
+height: 4vw;
+width: 35vw;
+background-color: rgba(255, 255, 255, 0.11);
+backdrop-filter: blur(10px);
+border: 2px solid #C9C4C4;
+border-radius: 50px;
+margin-top: 20px;
+
+
+
+`;
+
 const Tileholder = styled.div`
 box-sizing: border-box;
 height: 10vw;
@@ -165,6 +211,9 @@ border-radius: 5px;
 `;
 
 const Tile = styled.div`
+font-size: 4vw;
+font-family: 'Russo One', sans-serif;
+color: #910D0A;
 box-sizing: border-box;
 height: 8vw;
 width: 8vw;
@@ -176,6 +225,14 @@ display:flex;
 align-items: center;
 justify-content: center;
 background-image: url(${(props) => props.background});
+transition: 0.2s ease-in-out;
+
+transform : perspective(500px) translateZ(0px);
+
+
+&:hover {
+ transform : perspective(500px) translateZ(50px);
+}
 
 
 `;

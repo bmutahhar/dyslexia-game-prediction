@@ -1,4 +1,6 @@
 export { default as a } from "./Alphabets/a.mp3";
+export { default as stunners } from "./Alphabets/stunners.mp3";
+
 export { default as b } from "./Alphabets/b.mp3";
 export { default as c } from "./Alphabets/c.mp3";
 export { default as d } from "./Alphabets/d.mp3";
