@@ -2,15 +2,15 @@ import React from "react";
 import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
-const SubmitButton = ({ variant, disabled, type, children }) => {
+const UIButton = ({ children,...props }) => {
   return (
     <>
-      <CustomButton variant={variant} disabled={disabled} type={type}>{children}</CustomButton>
+      <CustomButton {...props}>{children}</CustomButton>
     </>
   );
 };
 
-export default SubmitButton;
+export default UIButton;
 
 const CustomButton = withStyles({
   root: {
@@ -19,7 +19,7 @@ const CustomButton = withStyles({
     textTransform: "none",
     fontSize: 18,
     fontWeight: 400,
-    width: "80%",
+    // width: "80%",
     padding: "6px 10px",
     border: "1px solid",
     // lineHeight: 1.5,
