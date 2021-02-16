@@ -2,10 +2,12 @@ import React from "react";
 import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
-const UIButton = ({ children,...props }) => {
+const UIButton = ({ onClick, children, ...props }) => {
   return (
     <>
-      <CustomButton {...props}>{children}</CustomButton>
+      <CustomButton onClick={onClick} {...props}>
+        {children}
+      </CustomButton>
     </>
   );
 };

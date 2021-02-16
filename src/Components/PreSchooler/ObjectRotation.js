@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { IconButton, Typography } from "@material-ui/core";
+import { IconButton, Typography, Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { RotateLeft, RotateRight, Info } from "@material-ui/icons";
 import { BsInfoCircleFill } from "react-icons/bs";
@@ -9,7 +9,18 @@ import { NextButton, UIButton } from "../../Components";
 import triangle from "../../Images/shapes/triangle.png";
 
 const ObjectRotation = () => {
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
+
+  const handleOpen = () => {
+    console.log(open)
+    setOpen(true);
+    // setTimeout(handleClose, 5000);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <>
       <Container className="col-10">
@@ -20,7 +31,7 @@ const ObjectRotation = () => {
                 <IconButton>
                   <RotateLeft className={classes.icons} />
                 </IconButton>
-                <Typography variant="subtitle1" className={classes.title}>
+                <Typography variant="subtitle1" className={classes.info}>
                   Left
                 </Typography>
               </IconContainer>
@@ -31,7 +42,7 @@ const ObjectRotation = () => {
                 <IconButton>
                   <RotateRight className={classes.icons} />
                 </IconButton>
-                <Typography variant="subtitle1" className={classes.title}>
+                <Typography variant="subtitle1" className={classes.info}>
                   Right
                 </Typography>
               </IconContainer>
@@ -42,17 +53,22 @@ const ObjectRotation = () => {
               </Typography>
               <InfoContainer>
                 <BsInfoCircleFill className={classes.info} />
-                <Typography variant="subtitle1" className={classes.title}>
+                <Typography variant="subtitle1" className={classes.info}>
                   Rotate the object as was shown
                 </Typography>
               </InfoContainer>
-              <UIButton variant="filled" type="button" onClick={{}}>Show Image</UIButton>
+              <UIButton variant="filled" type="button" onClick={handleOpen}>
+                Show Image
+              </UIButton>
             </AnswerSelection>
           </GameContainer>
           <AnswerSubmit className="col-2">
             <NextButton />
           </AnswerSubmit>
         </MainArea>
+        <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
+          <PopUp src={triangle} alt="Triangle" />
+        </Backdrop>
       </Container>
     </>
   );
@@ -60,18 +76,32 @@ const ObjectRotation = () => {
 
 export default ObjectRotation;
 
+const PopUp = ({ src, alt }) => {
+  return (
+    <PopImageContainer>
+      <Image src={src} alt={alt} />
+    </PopImageContainer>
+  );
+};
+
 const useStyles = makeStyles(({ theme }) => ({
   icons: {
-    fontSize: "5rem",
+    fontSize: "5.5vw",
     color: "white",
   },
   title: {
     color: "white",
+    fontSize:"2.5vw",
   },
   info: {
     color: "white",
     margin: "2px 5px",
-    fontSize: 20,
+    fontSize: "1.5vw",
+  },
+  backdrop: {
+    zIndex: 10,
+    backgroundColor:"rgba(0,0,0,0.8)",
+    backdropFilter:"blur(5px)"
   },
 }));
 
@@ -129,8 +159,8 @@ const ImageContainer = styled.div`
 `;
 
 const Image = styled.img`
-  ${"" /* height: 80%; */}
-  border: 2px solid white;
+  ${'' /* border: 2px solid white; */}
+  height:25vw;
 `;
 
 const IconContainer = styled.div`
@@ -139,7 +169,7 @@ const IconContainer = styled.div`
   align-items: center;
   justify-content: center;
   border: 2px solid white;
-  margin: 5px 25px;
+  margin: 5px 10px;
 `;
 
 const InfoContainer = styled.div`
@@ -147,7 +177,7 @@ const InfoContainer = styled.div`
   align-items: center;
   justify-content: center;
   border: 2px solid black;
-  margin-bottom:15px;
+  margin-bottom: 15px;
 `;
 
 const QuestionContainer = styled.div`
@@ -157,4 +187,11 @@ const QuestionContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+`;
+
+const PopImageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.7);
 `;

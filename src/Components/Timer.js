@@ -13,6 +13,6 @@ export default Timer;
 
 const Time = styled.time`
   color: #ffffff;
-  font-size: 2rem;
+  font-size: 2.5vw;
   margin:2px 5px;
 `;
