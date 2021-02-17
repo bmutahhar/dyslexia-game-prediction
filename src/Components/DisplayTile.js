@@ -1,22 +1,25 @@
 import React, { Component } from "react";
-import styled, { keyframes } from "styled-components";
-import tilebg from "../Images/backgrounds/tilebg.png";
+import styled from "styled-components";
 
 import {
 
     Timer,
 
     Tile,
+    UIButton,
 
 } from "../Components";
 
 export default class DisplayTile extends Component {
     render() {
 
-        const Container = styled.div`
+        const QuestionContainer = styled.div`
+        padding-top: 5%;
+        height: 70%;
         display: flex;
-flex-direction: column;
-align-items: center;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid green;
         `;
         const Qinfo = styled.p`
         margin-top: 30px;
@@ -39,29 +42,62 @@ box-sizing: border-box;
 
 `;
 
-        const AgainButton = styled.button`
-width: 11vw;
-height: 4vw;
+        //         const AgainButton = styled.button`
+        // width: 11vw;
+        // height: 4vw;
 
-border-radius: 50px;
+        // border-radius: 50px;
 
-background-color: green;
-color: white;
-align-items: center;
-font-size: 1vw;
+        // background-color: green;
+        // color: white;
+        // align-items: center;
+        // font-size: 1vw;
 
-`;
+        // `;
+
+        const AnswerContainer = styled.div`
+        
+        display: flex;
+        height: 30%;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid yellow;
+
+        `;
+
+        const MainContainer = styled.div`
+        height: 100%;
+        width: 66.66%;
+        display: flex;
+        flex-direction: column;
+
+        `;
 
         return (
-            <Container>
-                <DisplayTile>
-                    <Timer>00:00</Timer>
-                    <Tile></Tile>
-                </DisplayTile>
-                <Qinfo>Select the matching tile from below as shown above</Qinfo>
-                <AgainButton>Show Again</AgainButton>
+            <MainContainer>
 
-            </Container>
+                <QuestionContainer >
+                    <DisplayTile>
+                        <Timer initialSeconds={0} initialMinutes={0} />
+
+                        <Tile></Tile>
+                    </DisplayTile>
+                    <Qinfo>Select the matching tile from below as shown above</Qinfo>
+                    <UIButton variant="filled" type="button">
+                        Show Again
+            </UIButton>
+                </QuestionContainer>
+                <AnswerContainer >
+
+                    <Tile></Tile>
+                    <Tile></Tile>
+                    <Tile></Tile>
+                    <Tile></Tile>
+
+                </AnswerContainer>
+
+            </MainContainer>
+
 
         );
     }

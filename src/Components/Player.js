@@ -72,7 +72,7 @@ export default Player;
 
 const Container = styled.div`
   border-radius: 50px;
-  width: 60%;
+  width: 50%;
   background-color: rgba(255, 255, 255, 0.11);
   backdrop-filter: blur(10px);
   border: 3px solid #C9C4C4;

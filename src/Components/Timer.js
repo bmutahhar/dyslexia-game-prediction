@@ -26,11 +26,11 @@ const Timer = ({ initialMinutes, initialSeconds }) => {
       {minutes === 0 && seconds === 0 ? (
         "00:00"
       ) : (
-        <Time>
-          {minutes < 10 ? `0${minutes}` : minutes}:
-          {seconds < 10 ? `0${seconds}` : seconds}
-        </Time>
-      )}
+          <Time>
+            {minutes < 10 ? `0${minutes}` : minutes}:
+            {seconds < 10 ? `0${seconds}` : seconds}
+          </Time>
+        )}
     </>
   );
 };
