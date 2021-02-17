@@ -4,5 +4,5 @@ export const signin = (token) => ({
 });
 
 export const signout = () => ({
-    type: "SIGN_OUT",
-})
+  type: "SIGN_OUT",
+});

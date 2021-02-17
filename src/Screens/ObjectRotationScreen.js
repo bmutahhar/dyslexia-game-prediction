@@ -1,32 +1,38 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-// import { ObjectRotationScreen } from ".";
 import {
   ProfileAvatar,
   Timer,
   CustomStepper,
   NextButton,
-  SubmitButton,
+  UIButton,
   Character,
-  ObjectRotation
+  ObjectRotation,
 } from "../Components";
+import { useSelector } from "react-redux";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
-import tilebg from "../Images/backgrounds/tilebg.png";
 import larka from "../Images/characters/larka2.svg";
+import { motion } from "framer-motion";
 
 const ObjectRotationScreen = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const totalLevels = useSelector((state) => state.levels.totalLevels);
+
+  const nextStep = () => {
+    setActiveStep(activeStep + 1);
+  };
   return (
     <Container className="container-fluid" background={gamebg}>
       <Header className="row">
         <Badges className="col-2">
-        <h2 style={{color: "white"}}>BADGES</h2>
+          <h2 style={{ color: "white" }}>BADGES</h2>
         </Badges>
         <ProgressStepper className="col-8">
-          <CustomStepper />
+          <CustomStepper activeStep={activeStep} />
         </ProgressStepper>
         <Profile className="col-2">
-          <Timer>00:00</Timer>
+          <Timer initialSeconds={0} initialMinutes={0} />
           <ProfileAvatar />
         </Profile>
       </Header>
@@ -39,7 +45,18 @@ const ObjectRotationScreen = () => {
             style={styles.avatar}
           />
         </Avatarmsg>
-        <ObjectRotation/>
+        <ObjectRotation className="col-8" />
+        <AnswerSubmit className="col-2">
+          {activeStep === totalLevels - 1 ? (
+            <motion.div initial={{y:"20vh"}} animate={{y:0}} transition={{type:"tween",duration:1}}>
+            <UIButton variant="filled" type="submit" onClick={() => {}}>
+              Submit
+            </UIButton>
+            </motion.div>
+          ) : (
+            <NextButton onClick={nextStep} />
+          )}
+        </AnswerSubmit>
       </GameArea>
     </Container>
   );
@@ -59,10 +76,9 @@ const Header = styled.div`
   height: 10%;
 `;
 const GameArea = styled.div`
-  ${'' /* border: 2px solid black; */}
+  ${"" /* border: 2px solid black; */}
   height: 90%;
 `;
-
 
 const Badges = styled.div`
   border: 2px solid red;
@@ -71,7 +87,7 @@ const Badges = styled.div`
   justify-content: center;
 `;
 const Avatarmsg = styled.div`
-  ${'' /* border: 2px solid red; */}
+  ${"" /* border: 2px solid red; */}
   height: 100%;
   display: flex;
   align-items: center;
@@ -93,8 +109,15 @@ const Profile = styled.div`
   border: 2px solid white;
 `;
 
-
-
+const AnswerSubmit = styled.div`
+  border: 2px solid green;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 50px;
+`;
 
 const styles = {
   avatar: {

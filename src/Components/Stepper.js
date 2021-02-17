@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Stepper, Step, StepLabel, StepConnector } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { useSelector } from "react-redux";
 
-const CustomStepper = () => {
-  const steps = getSteps();
-  const [activeStep, setActiveStep] = useState(2);
+const CustomStepper = ({ activeStep }) => {
+  const steps = useSelector(state=>state.levels.steps)
   const classes = useStyles();
   return (
     <>
@@ -54,9 +54,9 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     color: "#28a745 !important",
-    '& $text': {
-        fill: '#fff',
-      },
+    "& $text": {
+      fill: "#fff",
+    },
   },
   completed: {
     color: "#28a745 !important",
