@@ -22,10 +22,10 @@ export default NextButton;
 
 const useStyles = makeStyles(({ theme }) => ({
   iconButton: {
-    backgroundColor: "#49AE18",
+    backgroundColor: "#25ce4a",
     padding: 5,
     "&:hover": {
-      backgroundColor: "#327511",
+      backgroundColor: "#027719",
     },
     "&:disabled": {
       backgroundColor: "#90ab95",

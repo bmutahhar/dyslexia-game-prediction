@@ -1,6 +1,6 @@
 export { default as Background } from "./Background";
 export { default as Navbar } from "./Navbar";
-export { default as Button } from "./Button";
+export { default as Button } from "./UIButton";
 export { default as Cards } from "./Cards";
 export { default as Avatarcard } from "./Avatarcard";
 export { default as Character } from "./Character";
@@ -12,6 +12,7 @@ export { default as ProfileAvatar } from "./ProfileAvatar";
 export { default as Timer } from "./Timer";
 export { default as CustomStepper } from "./Stepper";
 export { default as NextButton } from "./NextButton";
+<<<<<<< HEAD
 export { default as SubmitButton } from "./SubmitButton";
 export { default as Tile } from "./Tile";
 export { default as Tileplacer } from "./Tileplacer";
@@ -24,3 +25,7 @@ export { default as NameImage } from "./NameImage";
 
 
 
+=======
+export { default as UIButton } from "./UIButton";
+export { default as ObjectRotation} from "./PreSchooler/ObjectRotation"
+>>>>>>> 8aa09dc5eadc862c4d49b0d939beb19f43cfd37f
