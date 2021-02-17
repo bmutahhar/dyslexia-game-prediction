@@ -20,8 +20,7 @@ const Player = ({ color }) => {
     }
   };
   function calculateCurrentValue(currentTime) {
-    var current_hour = parseInt(currentTime / 3600) % 24,
-      current_minute = parseInt(currentTime / 60) % 60,
+    var current_minute = parseInt(currentTime / 60) % 60,
       current_seconds_long = currentTime % 60,
       current_seconds = current_seconds_long.toFixed(),
       current_time =
@@ -73,7 +72,7 @@ export default Player;
 
 const Container = styled.div`
   border-radius: 50px;
-  width: 40%;
+  width: 60%;
   background-color: rgba(255, 255, 255, 0.11);
   backdrop-filter: blur(10px);
   border: 3px solid #C9C4C4;

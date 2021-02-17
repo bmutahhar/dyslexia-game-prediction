@@ -2,15 +2,29 @@ import React, { Component, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import gamebg from "../Images/backgrounds/gamebg.png";
 import tilebg from "../Images/backgrounds/tilebg.png";
-import { Player } from "../Components";
+import larka from "../Images/characters/larka2.svg";
+
+import {
+    Player,
+    ProfileAvatar,
+    Timer,
+    CustomStepper,
+    NextButton,
+    SubmitButton,
+    Character,
+    Tile,
+    Tileplacer,
+    DisplayTile,
+    CompletePuzzle,
+    DragDrop,
+    NameImage,
+
+} from "../Components";
 import { motion } from "framer-motion";
 
 export default class PreSchooler extends Component {
     render() {
         return <PreSchoolerLevel />;
-        <script src="C:\Users\IDEAPAD\Desktop\fyp\dyslexia-game-prediction\public\plain-draggable.min.js"></script>
-
-        const draggable = new PlainDraggable(document.getElementById('draggable'));
     }
 }
 
@@ -18,7 +32,6 @@ export default class PreSchooler extends Component {
 
 
 const PreSchoolerLevel = () => {
-
 
     return (
 
@@ -31,9 +44,16 @@ const PreSchoolerLevel = () => {
                 <Profile className="col-2"><Name>profileimage</Name></Profile>
             </Header>
             <GameArea className="row">
-                <Avatarmsg className="col-2"><Name>avatarmsg</Name></Avatarmsg>
+                <Avatarmsg className="col-2">
+                    <Character
+                        className="avatar"
+                        src={larka}
+                        alt="Boy Avatar"
+                        style={styles.avatar}
+                    />
+                </Avatarmsg>
                 <Mainarea className="col-8">
-                    <DragArea>
+                    {/* <DragArea>
                         <Tileplacer></Tileplacer>
                         <Tileplacer></Tileplacer>
                         <Tileplacer></Tileplacer>
@@ -41,30 +61,29 @@ const PreSchoolerLevel = () => {
                     </DragArea>
 
                     <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
-                    <Player color="white"></Player>
+                    <Player color="white"></Player> */}
+
+                    {/* <DisplayTile></DisplayTile> */}
+
+                    {/* <CompletePuzzle></CompletePuzzle> */}
+
+                    {/* <DragDrop></DragDrop> */}
+
+                    <NameImage></NameImage>
+
 
 
 
                 </Mainarea>
                 <Emptyspace className="col-2"></Emptyspace>
             </GameArea>
-            <Gameoption className="row">
-                <Avatar className="col-2"><Name>avatar</Name></Avatar>
+            <Gameoption className="row justify-content-end">
                 <AnswerSelection className="col-8">
-                    <motion.div
-                        drag
+                    <Tile></Tile>
+                    <Tile></Tile>
+                    <Tile></Tile>
+                    <Tile></Tile>
 
-
-                    >
-                        <Tile background={tilebg}
-
-                        >E</Tile>
-                    </motion.div>
-
-                    <Tile background={tilebg}>F</Tile>
-                    <Tile background={tilebg}>C</Tile>
-                    <Tile background={tilebg}>D</Tile>
-                    <Tile background={tilebg}>C</Tile>
 
                 </AnswerSelection>
                 <AnswerSubmit className="col-2"><Name>submit/next buttons</Name></AnswerSubmit>
@@ -75,6 +94,18 @@ const PreSchoolerLevel = () => {
     );
 };
 
+const AgainButton = styled.button`
+width: 11vw;
+height: 4vw;
+
+border-radius: 50px;
+
+background-color: green;
+color: white;
+align-items: center;
+font-size: 1vw;
+
+`;
 const Qinfo = styled.p`
 margin-top: 30px;
 font-size: 1vw;
@@ -103,7 +134,6 @@ height: 70vh;
 
 `;
 const Gameoption = styled.div`
-border: 2px solid black;
 height: 22vh;
 
 
@@ -115,6 +145,11 @@ border: 2px solid red;
 `;
 const Avatarmsg = styled.div`
 border: 2px solid red;
+height: 91.5vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
 
 
 `;
@@ -129,13 +164,13 @@ border: 2px solid yellow;
 
 `;
 const Mainarea = styled.div`
+
 border: 2px solid yellow;
 display: flex;
 flex-direction: column;
 
 align-items: center;
-justify-content: center;
-
+padding-top: 15vh;
 
 `;
 
@@ -171,20 +206,18 @@ border: 2px solid green;
 
 
 `;
-const Tileplacer = styled.div`
-box-sizing: border-box;
-height: 8.5vw;
-width: 8.5vw;
-background-color: rgba(255, 255, 255, 0.11);
-backdrop-filter: blur(10px);
-border: 3px solid #C9C4C4;
-border-radius: 5px;
-margin-left: 5px;
-margin-right: 5px;
 
+
+const Tileholder = styled.div`
+box-sizing: border-box;
+height: 10vw;
+width: 10vw;
+background-color: rgba(197, 133, 47, 0.6);
+filter: brightness(65%);
+border: 2px solid #707070;
+border-radius: 5px;
 
 `;
-
 const Audioplayer = styled.div`
 box-sizing: border-box;
 height: 4vw;
@@ -199,43 +232,9 @@ margin-top: 20px;
 
 `;
 
-const Tileholder = styled.div`
-box-sizing: border-box;
-height: 10vw;
-width: 10vw;
-background-color: rgba(197, 133, 47, 0.6);
-filter: brightness(65%);
-border: 2px solid #707070;
-border-radius: 5px;
-
-`;
-
-const Tile = styled.div`
-font-size: 4vw;
-font-family: 'Russo One', sans-serif;
-color: #910D0A;
-box-sizing: border-box;
-height: 8vw;
-width: 8vw;
-border: 4px solid #5A110F;
-border-radius: 5px;
-margin-left: 5px;
-margin-right: 5px;
-display:flex;
-align-items: center;
-justify-content: center;
-background-image: url(${(props) => props.background});
-transition: 0.2s ease-in-out;
-
-transform : perspective(500px) translateZ(0px);
 
 
-&:hover {
- transform : perspective(500px) translateZ(50px);
-}
 
-
-`;
 
 const styles = {
     gameBackground: {
@@ -251,4 +250,10 @@ const styles = {
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
     },
+
+    avatar: {
+        // width: "100%",
+        height: "20vw",
+    },
 };
+

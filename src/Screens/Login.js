@@ -13,9 +13,11 @@ import TextField from "@material-ui/core/TextField";
 import { slideInDown } from "react-animations";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { FcGoogle } from "react-icons/fc";
 import { Home } from "../Screens";
 import { Character } from "../Components";
 import { signin } from "../actions";
+import { GoogleLogin } from "react-google-login";
 
 import monkeytree from "../Images/characters/monkeytree.png";
 import tree from "../Images/characters/tree.png";
@@ -48,10 +50,15 @@ const LoginComponent = () => {
     success: false,
     error: "",
   });
+  const [googleStatus, setGoogleStatus] = useState({
+    loading: false,
+    success: false,
+    error: "",
+  });
   const dispatch = useDispatch();
 
-  function postData(data) {
-    fetch("/api/v1/user/login", {
+  function postData(data, uri, googleLogin) {
+    fetch(uri, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -62,16 +69,39 @@ const LoginComponent = () => {
       .then((resp) => resp.json())
       .then((respJson) => {
         if (respJson.error.trim().length === 0) {
-          setStatus({ loading: false, success: true, error: "" });
+          !googleLogin
+            ? setStatus({ loading: false, success: true, error: "" })
+            : setGoogleStatus({ loading: false, success: true, error: "" });
           dispatch(signin(respJson.token));
-          setTimeout(() => history.push("/userform"), 1000);
+          
+          setTimeout(() => history.replace("/userform"), 1000);
         } else {
-          setStatus({ loading: false, success: false, error: respJson.error });
+          !googleLogin
+            ? setStatus({
+                loading: false,
+                success: false,
+                error: respJson.error,
+              })
+            : setGoogleStatus({
+                loading: false,
+                success: false,
+                error: respJson.error,
+              });
         }
       })
       .catch((error) => {
         alert(error);
-        setStatus({ loading: false, success: false, error: error });
+        !googleLogin
+          ? setStatus({
+              loading: false,
+              success: false,
+              error: error,
+            })
+          : setGoogleStatus({
+              loading: false,
+              success: false,
+              error: error,
+            });
       });
   }
 
@@ -93,7 +123,10 @@ const LoginComponent = () => {
         JSON.stringify({
           username: username,
           password: password,
-        })
+          googleLogin: false,
+        }),
+        "/api/v1/user/login",
+        false
       );
     }
   };
@@ -115,6 +148,29 @@ const LoginComponent = () => {
 
   const onClick = () =>
     setStatus({ loading: false, success: false, error: "" });
+
+  const googleSuccess = (response) => {
+    setGoogleStatus({ loading: true, success: false, error: "" });
+    postData(
+      JSON.stringify({
+        username: response.profileObj.email.split("@")[0],
+        password: "",
+        email: response.profileObj.email,
+        googleLogin: true,
+      }),
+      "/api/v1/user/login-google",
+      true
+    );
+  };
+
+  const googleFailure = (response) => {
+    console.log(response);
+    setStatus({
+      loading: false,
+      success: false,
+      error: response.details,
+    });
+  };
 
   return (
     <Background>
@@ -163,6 +219,9 @@ const LoginComponent = () => {
           }}
         />
         {status.error.trim().length > 0 && <Error>{status.error}</Error>}
+        {googleStatus.error.trim().length > 0 && (
+          <Error>{googleStatus.error}</Error>
+        )}
         <FormButtonGroup>
           <UserButton type="submit" variant="contained" fullWidth>
             {status.loading ? (
@@ -175,11 +234,47 @@ const LoginComponent = () => {
               "Sign In"
             )}
           </UserButton>
+
           <Link to="/userform">
             <UserButton variant="contained" fullWidth>
               Play As Guest
             </UserButton>
           </Link>
+          <GoogleLogin
+            clientId={process.env.REACT_APP_GOOGLE_ID}
+            render={(renderProps) => (
+              <UserButton
+                type="submit"
+                variant="contained"
+                fullWidth
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                startIcon={
+                  googleStatus.loading ? (
+                    ""
+                  ) : googleStatus.success ? (
+                    ""
+                  ) : (
+                    <FcGoogle />
+                  )
+                }
+              >
+                {googleStatus.loading ? (
+                  <CircularProgress style={{ color: "white" }} size={30} />
+                ) : googleStatus.success ? (
+                  <Zoom in={true} style={{ transitionDelay: "200ms" }}>
+                    <IoIosCheckmarkCircleOutline color="white" size={28} />
+                  </Zoom>
+                ) : (
+                  "Login with Google"
+                )}
+              </UserButton>
+            )}
+            buttonText="Login"
+            onSuccess={googleSuccess}
+            onFailure={googleFailure}
+            cookiePolicy={"single_host_origin"}
+          />
           <FormFooter>
             Don't have an account?
             <Link to="/signup">Sign up</Link>
