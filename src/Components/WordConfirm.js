@@ -1,0 +1,148 @@
+import React, { Component } from "react";
+import styled from "styled-components";
+import { Check, Close } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+
+
+
+
+    Tileplacer,
+    Tile,
+    UIButton,
+
+
+} from "../Components";
+
+const WordConfirm = () => {
+    const classes = useStyles();
+
+    return (
+        <MainContainer>
+            <QuestionContainer>
+
+
+                <WordArea>
+                    {/* <Tileplacer>
+                            <Tile></Tile>
+                        </Tileplacer>
+                        <Tileplacer>
+                            <Tile></Tile>
+
+                        </Tileplacer>
+                        <Tileplacer>
+                            <Tile></Tile>
+
+                        </Tileplacer>
+                        <Tileplacer>
+                            <Tile></Tile>
+
+                        </Tileplacer> */}
+                    <Tile></Tile>
+                    <Tile></Tile>
+
+                    <Tile></Tile>
+
+                    <Tile></Tile>
+
+                </WordArea>
+
+                <Qinfo>Confirm if it is a word or not</Qinfo>
+
+
+
+            </QuestionContainer>
+            <AnswerContainer>
+                <ConfirmButton hcolor="green" color="#3bb502">
+                    <Check className={classes.icon} />
+                </ConfirmButton>
+                <ConfirmButton hcolor="#bd0909" color="#f70000">
+                    <Close className={classes.icon} />
+                </ConfirmButton>
+            </AnswerContainer>
+        </MainContainer>
+
+    );
+}
+
+export default WordConfirm;
+
+const useStyles = makeStyles((theme) => ({
+    icon: {
+        fontSize: 40,
+        color: "white",
+    }
+}))
+
+const WordArea = styled.div`
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         `;
+
+const QuestionContainer = styled.div`
+        padding-top: 15%;
+        height: 70%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 2px solid green;
+        `;
+
+const AnswerContainer = styled.div`
+        
+        display: flex;
+        height: 30%;
+        align-items: center;
+        justify-content: space-around;
+        border: 2px solid yellow;
+
+        `;
+
+const MainContainer = styled.div`
+        height: 100%;
+        width: 66.66%;
+        display: flex;
+        flex-direction: column;
+
+        `;
+const Qinfo = styled.p`
+        margin-top: 30px;
+        font-size: 1vw;
+        color: white;
+        `;
+
+const ConfirmButton = styled.div`
+  display: flex;
+  bottom: 20%;
+  width: 25%;
+  height: 40%;
+  font-weight: 600;
+  font-size: 1.5vw;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+
+  background-color: ${(props) => props.color};
+  color: white;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 10px 6px 0 rgba(0, 0, 0, 0.4);
+  outline: none;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: ${(props) => props.hcolor};
+  }
+  &: focus {
+    outline: none;
+  }
+  &: active {
+    background-color: ${(props) => props.hcolor};
+    box-shadow: 0 7px 6px 0 rgba(0, 0, 0, 0.8);
+
+    transform: translateY(4px);
+    outline: none;
+  }
+    
+        `;

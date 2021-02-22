@@ -18,6 +18,8 @@ export { default as DisplayTile } from "./DisplayTile";
 export { default as CompletePuzzle } from "./CompletePuzzle";
 export { default as DragDrop } from "./DragDrop";
 export { default as NameImage } from "./NameImage";
+export { default as WordConfirm } from "./WordConfirm";
+
 
 export { default as ObjectRotation } from "./PreSchooler/ObjectRotation";
 
