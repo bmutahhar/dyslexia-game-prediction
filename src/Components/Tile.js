@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
@@ -18,29 +18,25 @@ export const Tile = ({ children, ...props }) => {
   );
 };
 
-export const DraggableTile = ({
-  onDragStart,
-  onDragEnd,
-  isDragging,
-  children,
-  ...props
-}) => {
-  return (
-    <TileComponent
-      background={tilebg}
-      variants={draggableVariant}
-      animate={isDragging ? "dragging" : "inactive"}
-      dragElastic={1}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      layoutId="drag"
-      drag
-      {...props}
-    >
-      {children}
-    </TileComponent>
-  );
-};
+export const DraggableTile = forwardRef(
+  ({ onDragStart, onDragEnd, isDragging, children, ...props }, ref) => {
+    return (
+      <TileComponent
+        ref={ref}
+        background={tilebg}
+        variants={draggableVariant}
+        animate={isDragging ? "dragging" : "inactive"}
+        dragElastic={1}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        drag
+        {...props}
+      >
+        {children}
+      </TileComponent>
+    );
+  }
+);
 
 const draggableVariant = {
   dragging: {
@@ -67,6 +63,7 @@ const TileComponent = styled(motion.div)`
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  cursor: grab;
   background-image: url(${(props) => props.background});
   ${
     "" /* transition: 0.2s ease-in-out;
