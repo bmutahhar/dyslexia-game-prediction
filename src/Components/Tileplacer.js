@@ -1,20 +1,14 @@
 import React, { forwardRef } from "react";
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
-const Tileplacer = forwardRef(
-  ({ index, activeIndex, isDragging, children, ...props }, ref) => {
-    return (
-      <TileplacerComponent
-        variants={tilesVariant}
-        animate={isDragging ? "dragging" : "inactive"}
-        {...props}
-      >
-        {children}
-      </TileplacerComponent>
-    );
-  }
-);
+const Tileplacer = ({ children, ...props }) => {
+  return (
+    <TileplacerComponent {...props}>
+      {children}
+    </TileplacerComponent>
+  );
+};
 
 export default Tileplacer;
 
@@ -27,7 +21,7 @@ const tilesVariant = {
   },
 };
 
-const TileplacerComponent = styled(motion.div)`
+const TileplacerComponent = styled.div`
   box-sizing: border-box;
   display: flex;
   align-items: center;

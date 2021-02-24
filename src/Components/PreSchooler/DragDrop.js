@@ -15,52 +15,30 @@ const DragDrop = () => {
   const tiles = ["A", "B", "C", "D"];
   const [loading, setLoading] = useState(true);
 
-  const onDragStart = (index) => {
-    let draggingValues = [...isDragging];
-    draggingValues[index] = true;
-    let placedValues = [...isPlaced];
-    placedValues[index] = false;
-    setIsPlaced(placedValues);
-    setIsDragging(draggingValues);
-
-    console.log(elRefs.current[index]);
-  };
-  const onDragEnd = (index) => {
-    let draggingValues = [...isDragging];
-    draggingValues[index] = false;
-    let placedValues = [...isPlaced];
-    placedValues[index] = true;
-    setIsDragging(draggingValues);
-    setIsPlaced(placedValues);
-  };
-
-  const clearDragValue = (index) => {
-    let draggingValues = [...isDragging];
-    draggingValues[index] = false;
-    let placedValues = [...isPlaced];
-    placedValues[index] = false;
-    setIsDragging(draggingValues);
-    setIsPlaced(placedValues);
-  };
-
   const handleClose = () => {
     setLoading(false);
   };
 
+  function allowDrop(ev) {
+    ev.preventDefault();
+  }
+
+  function drag(ev, index) {
+    ev.dataTransfer.setData("text", index);
+  }
+
+  function drop(ev) {
+    ev.preventDefault();
+    if (ev.target.childNodes.length >= 1) return;
+    var index = ev.dataTransfer.getData("text");
+    var data = elRefs.current[index];
+    ev.target.appendChild(data);
+  }
+
   useEffect(() => {
-    setIsDragging((isDragging) =>
-      Array(arrLength)
-        .fill()
-        .map((_, i) => isDragging[i] || false)
-    );
-    setIsPlaced((isPlaced) =>
-      Array(arrLength)
-        .fill()
-        .map((_, i) => isPlaced[i] || false)
-    );
+    setLoading(false);
     elRefs.current = elRefs.current.slice(0, arrLength);
-    setLoading(false)
-  }, [arrLength]);
+  }, []);
 
   if (loading) {
     return <Loading open={loading} onClick={handleClose} />;
@@ -71,17 +49,11 @@ const DragDrop = () => {
           <DragArea>
             {tiles.map((tile, index) => {
               return (
-                <Tileplacer key={index}>
-                  {isPlaced[index] && (
-                    <DraggableTile
-                      key={index}
-                      onDragStart={() => clearDragValue(index)}
-                      onDragEnd={() => clearDragValue(index)}
-                      isDragging={false}
-                    >
-                    </DraggableTile>
-                  )}
-                </Tileplacer>
+                <Tileplacer
+                  key={index}
+                  onDrop={drop}
+                  onDragOver={allowDrop}
+                ></Tileplacer>
               );
             })}
           </DragArea>
@@ -91,18 +63,14 @@ const DragDrop = () => {
         <AnswerContainer>
           {tiles.map((tile, index) => {
             return (
-              !isPlaced[index] && (
-                <DraggableTile
-                  key={index}
-                  ref={el=>elRefs.current[index]=el}
-                  onDragStart={() => onDragStart(index)}
-                  onDragEnd={() => onDragEnd(index)}
-                  isDragging={isDragging[index]}
-                  // dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }}
-                >
-                  {tile}
-                </DraggableTile>
-              )
+              <DraggableTile
+                key={index}
+                ref={(el) => (elRefs.current[index] = el)}
+                draggable
+                onDragStart={(e) => drag(e, index)}
+              >
+                {tile}
+              </DraggableTile>
             );
           })}
         </AnswerContainer>

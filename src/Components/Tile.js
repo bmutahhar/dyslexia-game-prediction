@@ -19,17 +19,13 @@ export const Tile = ({ children, ...props }) => {
 };
 
 export const DraggableTile = forwardRef(
-  ({ onDragStart, onDragEnd, isDragging, children, ...props }, ref) => {
+  ({ children, draggable, onDragStart, ...props }, ref) => {
     return (
       <TileComponent
         ref={ref}
-        background={tilebg}
-        variants={draggableVariant}
-        animate={isDragging ? "dragging" : "inactive"}
-        dragElastic={1}
+        draggable={draggable}
         onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-        drag
+        background={tilebg}
         {...props}
       >
         {children}
@@ -47,7 +43,7 @@ const draggableVariant = {
   },
 };
 
-const TileComponent = styled(motion.div)`
+const TileComponent = styled.div`
   font-size: 4vw;
   ${"" /* font-weight: bold; */}
   font-family: "Russo One", sans-serif;
