@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { IconButton, Typography, Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { RotateLeft, RotateRight, Info } from "@material-ui/icons";
+import { RotateLeft, RotateRight } from "@material-ui/icons";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { UIButton } from "../../Components";
 import { motion } from "framer-motion";
 
 import triangle from "../../Images/shapes/triangle.png";
 
-const ObjectRotation = ({ className }) => {
+const ObjectRotation = () => {
   const [open, setOpen] = useState(false);
   const [rotation, setRotation] = useState(0);
   const classes = useStyles();
@@ -25,61 +25,55 @@ const ObjectRotation = ({ className }) => {
   };
 
   const rotateRight = () => {
-    setRotation(rotation + 90);
+    setRotation(rotation + 60);
   };
 
   const rotateLeft = () => {
-    setRotation(rotation - 90);
+    setRotation(rotation - 60);
   };
   return (
-    <div className={className}>
-      <Container className="row">
-        <GameContainer className="col-12">
-          <QuestionContainer>
-            <IconContainer>
-              <IconButton onClick={rotateLeft}>
-                <RotateLeft className={classes.icons} />
-              </IconButton>
-              <Typography variant="subtitle1" className={classes.info}>
-                Left
-              </Typography>
-            </IconContainer>
-            <ImageContainer animate={{ rotate: rotation }}>
-              <Image src={triangle} alt="Polygon" />
-            </ImageContainer>
-            <IconContainer>
-              <IconButton onClick={rotateRight}>
-                <RotateRight className={classes.icons} />
-              </IconButton>
-              <Typography variant="subtitle1" className={classes.info}>
-                Right
-              </Typography>
-            </IconContainer>
-          </QuestionContainer>
-          <AnswerSelection>
-            <Typography variant="h4" className={classes.title} gutterBottom>
-              Rotate
+    <Container className="row">
+      <GameContainer className="col-12">
+        <QuestionContainer>
+          <IconContainer>
+            <IconButton onClick={rotateLeft}>
+              <RotateLeft className={classes.icons} />
+            </IconButton>
+            <Typography variant="subtitle1" className={classes.info}>
+              Left
             </Typography>
-            <InfoContainer>
-              <BsInfoCircleFill className={classes.info} />
-              <Typography variant="subtitle1" className={classes.info}>
-                Rotate the object as was shown
-              </Typography>
-            </InfoContainer>
-            <UIButton variant="filled" type="button" onClick={handleOpen}>
-              Show Image
-            </UIButton>
-          </AnswerSelection>
-        </GameContainer>
-        <Backdrop
-          className={classes.backdrop}
-          open={open}
-          onClick={handleClose}
-        >
-          <PopUp src={triangle} alt="Triangle" />
-        </Backdrop>
-      </Container>
-    </div>
+          </IconContainer>
+          <ImageContainer animate={{ rotate: rotation }}>
+            <Image src={triangle} alt="Polygon" />
+          </ImageContainer>
+          <IconContainer>
+            <IconButton onClick={rotateRight}>
+              <RotateRight className={classes.icons} />
+            </IconButton>
+            <Typography variant="subtitle1" className={classes.info}>
+              Right
+            </Typography>
+          </IconContainer>
+        </QuestionContainer>
+        <AnswerSelection>
+          <Typography variant="h4" className={classes.title} gutterBottom>
+            Rotate
+          </Typography>
+          <InfoContainer>
+            <BsInfoCircleFill className={classes.info} />
+            <Typography variant="subtitle1" className={classes.info}>
+              Rotate the object as was shown
+            </Typography>
+          </InfoContainer>
+          <UIButton variant="filled" type="button" onClick={handleOpen}>
+            Show Image
+          </UIButton>
+        </AnswerSelection>
+      </GameContainer>
+      <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
+        <PopUp src={triangle} alt="Triangle" />
+      </Backdrop>
+    </Container>
   );
 };
 
@@ -116,12 +110,10 @@ const useStyles = makeStyles(({ theme }) => ({
 
 const Container = styled.div`
   height: 100%;
-  border: 2px solid orange;
 `;
 
 const GameContainer = styled.div`
   height: 100%;
-  border: 2px solid blue;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -129,18 +121,8 @@ const GameContainer = styled.div`
   padding: 0px;
 `;
 
-const Gameoption = styled.div`
-  border: 2px solid black;
-  height: 30%;
-`;
-
-const MainArea = styled.div`
-  border: 2px solid black;
-  height: 100%;
-`;
 const AnswerSelection = styled.div`
   display: flex;
-  border: 2px solid yellow;
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
@@ -148,18 +130,10 @@ const AnswerSelection = styled.div`
   width: 100%;
 `;
 
-const Emptyspace = styled.div`
-  border: 2px solid green;
-  background-color: black;
-`;
-
-const ImageContainer = styled(motion.div)`
-  border: 2px solid red;
-`;
+const ImageContainer = styled(motion.div)``;
 
 const Image = styled.img`
-  ${"" /* border: 2px solid white; */}
-  height:22vw;
+  height: 22vw;
 `;
 
 const IconContainer = styled.div`
@@ -167,7 +141,6 @@ const IconContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
   margin: 5px 10px;
 `;
 
@@ -175,12 +148,10 @@ const InfoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid black;
   margin-bottom: 15px;
 `;
 
 const QuestionContainer = styled.div`
-  border: 2px solid cyan;
   height: 70%;
   display: flex;
   align-items: center;

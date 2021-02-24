@@ -12,18 +12,8 @@ export { default as ProfileAvatar } from "./ProfileAvatar";
 export { default as Timer } from "./Timer";
 export { default as CustomStepper } from "./Stepper";
 export { default as NextButton } from "./NextButton";
-export { default as Tile } from "./Tile";
+export { Tile } from "./Tile";
+export { DraggableTile } from "./Tile";
 export { default as Tileplacer } from "./Tileplacer";
-export { default as DisplayTile } from "./DisplayTile";
-export { default as CompletePuzzle } from "./CompletePuzzle";
-export { default as DragDrop } from "./DragDrop";
-export { default as NameImage } from "./NameImage";
-export { default as WordConfirm } from "./WordConfirm";
-
-
-export { default as ObjectRotation } from "./PreSchooler/ObjectRotation";
-
-
-
-
 export { default as UIButton } from "./UIButton";
+export { default as GameScreen } from "./GameScreen";
