@@ -12,6 +12,7 @@ const DragDrop = () => {
   const [isDragging, setIsDragging] = useState([]);
   const [isPlaced, setIsPlaced] = useState([]);
   const elRefs = useRef([]);
+  const ansRef = useRef(null);
   const tiles = ["A", "B", "C", "D"];
   const [loading, setLoading] = useState(true);
 
@@ -25,6 +26,14 @@ const DragDrop = () => {
 
   function drag(ev, index) {
     ev.dataTransfer.setData("text", index);
+  }
+
+  function dropToDefault(ev) {
+    ev.preventDefault();
+    if (ev.target.childNodes.length >= arrLength) return;
+    var index = ev.dataTransfer.getData("text");
+    var data = elRefs.current[index];
+    ev.target.appendChild(data);
   }
 
   function drop(ev) {
@@ -60,7 +69,11 @@ const DragDrop = () => {
           <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
           <Player color="white" />
         </QuestionContainer>
-        <AnswerContainer>
+        <AnswerContainer
+          ref={ansRef}
+          onDragOver={allowDrop}
+          onDrop={dropToDefault}
+        >
           {tiles.map((tile, index) => {
             return (
               <DraggableTile

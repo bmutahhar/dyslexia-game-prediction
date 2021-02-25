@@ -61,13 +61,18 @@ const TileComponent = styled.div`
   z-index: 1000;
   cursor: grab;
   background-image: url(${(props) => props.background});
-  ${
-    "" /* transition: 0.2s ease-in-out;
-
-  transform: perspective(500px) translateZ(0px);
+  
+  transition: 0.2s ease-in-out;
 
   &:hover {
-    transform: perspective(500px) translateZ(50px);
-  } */
+    transform: scale(1.1);
+  } 
+  &:focus {
+    transform: scale(0.5);
+  }
+  &:active {
+    transform: scale(0.5);
+    cursor:grab;
+  }
   }
 `;
