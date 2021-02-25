@@ -5,7 +5,7 @@ import {
   NameImage,
   DragDrop,
   DisplayTile,
-} from "../../Components/Preschooler";
+} from "../../Components/PreSchooler";
 import { CompletePuzzle } from "../../Components/Learners";
 
 const PreSchoolers = () => {
