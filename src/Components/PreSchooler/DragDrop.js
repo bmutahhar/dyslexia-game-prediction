@@ -3,15 +3,19 @@ import { Backdrop, CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import styled from "styled-components";
+import Dragula from "react-dragula";
 
 import { Tileplacer, Player, DraggableTile } from "../../Components";
 import { Tile } from "../Tile";
+
+import "react-dragula/dist/dragula.css";
 
 const DragDrop = () => {
   const arrLength = 4;
   const [isDragging, setIsDragging] = useState([]);
   const [isPlaced, setIsPlaced] = useState([]);
   const elRefs = useRef([]);
+  const qRef = useRef(null);
   const ansRef = useRef(null);
   const tiles = ["A", "B", "C", "D"];
   const [loading, setLoading] = useState(true);
@@ -45,51 +49,43 @@ const DragDrop = () => {
   }
 
   useEffect(() => {
-    setLoading(false);
-    elRefs.current = elRefs.current.slice(0, arrLength);
-  }, []);
+    if (elRefs.current && ansRef.current) {
+      console.log("123456789012345");
+      Dragula([...elRefs.current, ansRef.current], {
+        accepts: function (el, target, source, sibling) {
+          if (target.parentElement.classList.contains("drag-area")) {
+            return target.childNodes.length !== 1;
+          } else {
+            return true;
+          }
+        },
+      });
+    }
+  }, [elRefs, ansRef]);
 
-  if (loading) {
-    return <Loading open={loading} onClick={handleClose} />;
-  } else {
-    return (
-      <MainContainer>
-        <QuestionContainer>
-          <DragArea>
-            {tiles.map((tile, index) => {
-              return (
-                <Tileplacer
-                  key={index}
-                  onDrop={drop}
-                  onDragOver={allowDrop}
-                ></Tileplacer>
-              );
-            })}
-          </DragArea>
-          <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
-          <Player color="white" />
-        </QuestionContainer>
-        <AnswerContainer
-          ref={ansRef}
-          onDragOver={allowDrop}
-          onDrop={dropToDefault}
-        >
+  return (
+    <MainContainer>
+      <QuestionContainer>
+        <DragArea className="drag-area">
           {tiles.map((tile, index) => {
             return (
-              <DraggableTile
+              <Tileplacer
                 key={index}
                 ref={(el) => (elRefs.current[index] = el)}
-                draggable
-                onDragStart={(e) => drag(e, index)}
-              >
-                {tile}
-              </DraggableTile>
+              ></Tileplacer>
             );
           })}
-        </AnswerContainer>
-      </MainContainer>
-    );
-  }
+        </DragArea>
+        <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
+        <Player color="white" />
+      </QuestionContainer>
+      <AnswerContainer ref={ansRef}>
+        {tiles.map((tile, index) => {
+          return <DraggableTile key={index}>{tile}</DraggableTile>;
+        })}
+      </AnswerContainer>
+    </MainContainer>
+  );
 };
 
 export default DragDrop;

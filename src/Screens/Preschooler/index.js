@@ -12,7 +12,7 @@ const PreSchoolers = () => {
   return (
     <GameScreen>
       <DragDrop />
-      {/* <DisplayTile /> */}
+      {/* <NameImage /> */}
     </GameScreen>
   );
 };
