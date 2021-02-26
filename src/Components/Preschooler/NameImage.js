@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Tileplacer, Character, Tile } from "../../Components";
+import { Tileplacer, Character, Tile } from "..";
 
 import leapord from "../../Images/characters/leapord.png";
 

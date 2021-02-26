@@ -5,7 +5,7 @@ import { motion, AnimateSharedLayout } from "framer-motion";
 import styled from "styled-components";
 import Dragula from "react-dragula";
 
-import { Tileplacer, Player, DraggableTile } from "../../Components";
+import { Tileplacer, Player, DraggableTile } from "..";
 import { Tile } from "../Tile";
 
 import "react-dragula/dist/dragula.css";

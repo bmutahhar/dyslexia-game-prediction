@@ -4,7 +4,7 @@ import { IconButton, Typography, Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { RotateLeft, RotateRight } from "@material-ui/icons";
 import { BsInfoCircleFill } from "react-icons/bs";
-import { UIButton } from "../../Components";
+import { UIButton } from "..";
 import { motion } from "framer-motion";
 
 import triangle from "../../Images/shapes/triangle.png";

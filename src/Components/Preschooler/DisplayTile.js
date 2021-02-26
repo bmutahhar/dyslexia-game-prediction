@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { Tile, Timer, UIButton } from "../../Components";
+import { Tile, Timer, UIButton } from "..";
 
 const DisplayTile = () => {
   const [open, setOpen] = useState(true);
