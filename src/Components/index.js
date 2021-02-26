@@ -17,3 +17,4 @@ export { DraggableTile } from "./Tile";
 export { default as Tileplacer } from "./Tileplacer";
 export { default as UIButton } from "./UIButton";
 export { default as GameScreen } from "./GameScreen";
+export { default as AvatarMessage } from "./AvatarMessage";

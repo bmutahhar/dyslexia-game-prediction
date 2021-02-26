@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GameScreen } from "../../Components";
 import {
   ObjectRotation,
@@ -9,9 +9,14 @@ import {
 import { CompletePuzzle } from "../../Components/Learners";
 
 const PreSchoolers = () => {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const nextStep = () => {
+    setActiveStep(activeStep + 1);
+  };
   return (
-    <GameScreen>
-      <DragDrop />
+    <GameScreen activeStep={activeStep}>
+      <DragDrop activeStep={activeStep} nextStep={nextStep} />
       {/* <NameImage /> */}
     </GameScreen>
   );
