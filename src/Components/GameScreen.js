@@ -49,7 +49,7 @@ const GameScreen = ({ children }) => {
         <NextButtonContainer className="col-2">
           {activeStep === totalLevels - 1 ? (
             <motion.div
-              initial={{ y: "8vh" }}
+              initial={{ y: "5vh" }}
               animate={{ y: 0 }}
               transition={{ type: "tween", duration: 1 }}
             >

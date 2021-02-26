@@ -5,14 +5,14 @@ import {
   NameImage,
   DragDrop,
   DisplayTile,
-} from "../../Components/PreSchooler";
+} from "../../Components/Preschooler";
 import { CompletePuzzle } from "../../Components/Learners";
 
 const PreSchoolers = () => {
   return (
     <GameScreen>
       <DragDrop />
-      {/* <DisplayTile /> */}
+      {/* <NameImage /> */}
     </GameScreen>
   );
 };

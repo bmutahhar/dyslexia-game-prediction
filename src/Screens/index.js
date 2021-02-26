@@ -8,5 +8,5 @@ export { default as Levelselect } from "./Levelselect";
 export { default as Login } from "./Login";
 export { default as NotSupported } from "./NotSupported";
 export { default as Signup } from "./Signup";
-export { default as PreSchoolers } from "./PreSchooler";
+export { default as PreSchoolers } from "./Preschooler";
 

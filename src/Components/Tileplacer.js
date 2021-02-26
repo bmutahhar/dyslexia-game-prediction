@@ -2,13 +2,13 @@ import React, { forwardRef } from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-const Tileplacer = ({ children, ...props }) => {
+const Tileplacer = forwardRef(({ children, ...props }, ref) => {
   return (
-    <TileplacerComponent {...props}>
+    <TileplacerComponent ref={ref} {...props}>
       {children}
     </TileplacerComponent>
   );
-};
+});
 
 export default Tileplacer;
 
