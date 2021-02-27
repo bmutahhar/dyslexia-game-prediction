@@ -1,21 +1,24 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { IconButton } from "@material-ui/core";
 import { PlayArrowRounded, PauseRounded } from "@material-ui/icons";
+import { useSpeechSynthesis } from "react-speech-kit";
 
-import { stunners } from "../Sounds";
-
-const Player = ({ color }) => {
+const Player = ({ color, text }) => {
   const [iconName, setIconName] = useState("play");
   const [time, setTime] = useState("00:00");
-  const player = useRef(null);
   const progressbar = useRef(null);
+  const { speak, cancel, voices, speaking } = useSpeechSynthesis();
   const togglePlay = () => {
     if (iconName === "play") {
-      player.current.play();
+      speak({
+        text: text,
+        rate: 0.7,
+        voice: voices[1],
+      });
       setIconName("pause");
     } else {
-      player.current.pause();
+      cancel();
       setIconName("play");
     }
   };
@@ -31,23 +34,34 @@ const Player = ({ color }) => {
     return current_time;
   }
 
-  function initProgressBar() {
-    var current_time = player.current.currentTime;
-    var currentTime = calculateCurrentValue(current_time);
-    if (current_time === player.current.duration) {
+  useEffect(() => {
+    let seconds = 0;
+    let count = 1;
+    let timeInterval = "";
+    let progressInterval = "";
+    if (speaking) {
+      progressInterval = setInterval(() => {
+        progressbar.current.value = count / text.length;
+        count += 1;
+      }, 250);
+      timeInterval = setInterval(() => {
+        seconds += 1;
+        var currentTime = calculateCurrentValue(seconds);
+        setTime(currentTime);
+      }, 1000);
+    } else {
       setIconName("play");
       setTime("00:00");
       progressbar.current.value = 0;
-      return;
     }
-    setTime(currentTime);
-    progressbar.current.value =
-      player.current.currentTime / player.current.duration;
-  }
+    return () => {
+      clearInterval(timeInterval);
+      clearInterval(progressInterval);
+    };
+  }, [speaking]);
 
   return (
     <Container>
-      <audio ref={player} src={stunners} onTimeUpdate={initProgressBar} />
       <Controls>
         <IconButton
           onClick={togglePlay}
@@ -56,8 +70,8 @@ const Player = ({ color }) => {
           {iconName === "play" ? (
             <PlayArrowRounded fontSize="large" style={{ color: color }} />
           ) : (
-              <PauseRounded fontSize="large" style={{ color: color }} />
-            )}
+            <PauseRounded fontSize="large" style={{ color: color }} />
+          )}
         </IconButton>
         <ProgressBarAndTimer>
           <ProgressBar ref={progressbar} max="1" value="0" />
@@ -75,7 +89,7 @@ const Container = styled.div`
   width: 50%;
   background-color: rgba(255, 255, 255, 0.11);
   backdrop-filter: blur(10px);
-  border: 3px solid #C9C4C4;
+  border: 3px solid #c9c4c4;
 `;
 
 const Controls = styled.div`
@@ -103,7 +117,7 @@ const ProgressBar = styled.progress`
       border-radius: 50px;
     }
     ::-webkit-progress-value {
-      background-color: #00FF2B;
+      background-color: #00ff2b;
       height: 4px;
       border-radius: 50px;
     }

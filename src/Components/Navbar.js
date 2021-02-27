@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { HashLink as LinkHash } from "react-router-hash-link";
 import { FaTimes, FaBars } from "react-icons/fa";
 import { ProfileAvatar } from "../Components";
-import logo from "../Images/backgrounds/logo-cropped.png";
+import logo from "../Images/backgrounds/dyslexia.png";
+// import logo from "../Images/backgrounds/logo-cropped.png";
 import "./styles/Navbar.css";
 
 const Navbar = ({ isNotMobileDevice }) => {
@@ -38,7 +39,7 @@ const Navbar = ({ isNotMobileDevice }) => {
           src={logo}
           alt="Dyslexia"
           className="img-fluid"
-          width="100"
+          width="150"
           height="50"
         />
       </LinkHash>

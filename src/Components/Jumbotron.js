@@ -18,7 +18,7 @@ const Jumbotron = () => {
         <Typography variant="h3" gutterBottom>
           Welcome to DyxsisML
         </Typography>
-        <Typography variant="paragraph">
+        <Typography variant="h6" gutterBottom>
           DyxsisML, a fun and friendly gaming environment for the diagnosis of
           dyslexia.
           <br /> Click on <b>START</b>
