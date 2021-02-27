@@ -2,8 +2,23 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  outline: none;
+  font-family: "Open Sans", sans-serif; 
 }
 
 *:focus {
-  outline: none;
+  outline: none !important;
+}
+*:active {
+  outline: none !important;
+}
+
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  user-select: none !important;
+}
+
+html {
+  height: -webkit-fill-available;
 }

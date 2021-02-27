@@ -5,9 +5,10 @@
 /.pnp
 .pnp.js
 env
+.env
 .idea
 __pycache__
-
+package-lock.json
 # testing
 /coverage
 
@@ -21,6 +22,7 @@ __pycache__
 .env.test.local
 .env.production.local
 debug.log
+
 
 npm-debug.log*
 yarn-debug.log*

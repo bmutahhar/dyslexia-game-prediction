@@ -1,0 +1,33 @@
+.navbar-nav > a {
+  color: white !important;
+  text-shadow: 0px 0px 5px black;
+}
+
+.navbar-nav > a:hover {
+  text-shadow: 0px 0px 5px white;
+}
+
+.navbar-nav > a:active {
+  text-shadow: 0px 0px 5px black;
+  transform: scale(1.1);
+}
+
+
+@media screen and (max-width: 768px) {
+  .navbar-collapse {
+    height: 95vh;
+    /* background-color: black; */
+    backdrop-filter: blur(5px);
+  }
+  .navbar-nav {
+    height: 100%;
+  }
+
+  .navbar-nav > a {
+    height: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+}
