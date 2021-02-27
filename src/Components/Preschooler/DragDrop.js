@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import {
   Tileplacer,
   Player,
-  DraggableTile,
+  Tile,
   AvatarMessage,
   NextButton,
   UIButton,
@@ -16,12 +16,12 @@ import { addAnswer } from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import "react-dragula/dist/dragula.css";
 
-const DragDrop = ({ activeStep, nextStep }) => {
+const DragDrop = ({ activeStep, nextStep, word }) => {
   const arrLength = 4;
   const [disabled, setDisabled] = useState(true);
   const elRefs = useRef([]);
   const ansRef = useRef(null);
-  const tiles = ["A", "B", "C", "D"];
+  const tiles = word.split("");
   const totalLevels = useSelector((state) => state.levels.totalLevels);
   const dispatch = useDispatch();
 
@@ -35,7 +35,6 @@ const DragDrop = ({ activeStep, nextStep }) => {
 
   useEffect(() => {
     if (elRefs.current && ansRef.current) {
-      console.log("123456789012345");
       Dragula([...elRefs.current, ansRef.current], {
         accepts: function (el, target, source, sibling) {
           if (target.parentElement.classList.contains("drag-area")) {
@@ -67,11 +66,11 @@ const DragDrop = ({ activeStep, nextStep }) => {
             })}
           </DragArea>
           <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
-          <Player color="white" />
+          <Player color="white" text={word} />
         </QuestionContainer>
         <AnswerContainer ref={ansRef} className="row">
           {tiles.map((tile, index) => {
-            return <DraggableTile key={index}>{tile}</DraggableTile>;
+            return <Tile key={index}>{tile}</Tile>;
           })}
         </AnswerContainer>
       </GameArea>
