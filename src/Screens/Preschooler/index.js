@@ -16,7 +16,7 @@ const PreSchoolers = () => {
   };
   return (
     <GameScreen activeStep={activeStep}>
-      <DragDrop activeStep={activeStep} nextStep={nextStep} />
+      <DragDrop activeStep={activeStep} nextStep={nextStep} word="SHIFT" />
       {/* <NameImage /> */}
     </GameScreen>
   );

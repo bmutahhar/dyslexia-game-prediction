@@ -1,47 +1,16 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
 
 import tilebg from "../Images/backgrounds/tilebg.png";
 
-export const Tile = ({ children, ...props }) => {
+const Tile = ({ children, ...props }) => {
   return (
-    <TileComponent
-      background={tilebg}
-      whileHover={{
-        scale: 1.1,
-      }}
-      {...props}
-    >
+    <TileComponent background={tilebg} {...props}>
       {children}
     </TileComponent>
   );
 };
-
-export const DraggableTile = forwardRef(
-  ({ children, draggable, onDragStart, ...props }, ref) => {
-    return (
-      <TileComponent
-        ref={ref}
-        draggable={draggable}
-        onDragStart={onDragStart}
-        background={tilebg}
-        {...props}
-      >
-        {children}
-      </TileComponent>
-    );
-  }
-);
-
-const draggableVariant = {
-  dragging: {
-    scale: 0.5,
-  },
-  inactive: {
-    scale: 1,
-  },
-};
+export default Tile;
 
 const TileComponent = styled.div`
   font-size: 4vw;
