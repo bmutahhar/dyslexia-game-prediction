@@ -4,20 +4,25 @@ import { IconButton, Typography, Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { RotateLeft, RotateRight } from "@material-ui/icons";
 import { BsInfoCircleFill } from "react-icons/bs";
-import { UIButton } from "..";
 import { motion } from "framer-motion";
-
+import { AvatarMessage, UIButton, NextButton } from "../../Components";
+import { useSelector, useDispatch } from "react-redux";
 import triangle from "../../Images/shapes/triangle.png";
+import larka from "../../Images/characters/larka2.svg";
+import larki from "../../Images/characters/larki2.svg";
 
-const ObjectRotation = () => {
+const ObjectRotation = ({ activeStep, nextStep }) => {
   const [open, setOpen] = useState(false);
   const [rotation, setRotation] = useState(0);
+  const totalLevels = useSelector((state) => state.levels.totalLevels);
+  const gender = useSelector((state) => state.gender);
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const handleOpen = () => {
     console.log(open);
     setOpen(true);
-    setTimeout(handleClose, 3500);
+    setTimeout(handleClose, 4500);
   };
 
   const handleClose = () => {
@@ -32,9 +37,14 @@ const ObjectRotation = () => {
     setRotation(rotation - 60);
   };
   return (
-    <Container className="row">
-      <GameContainer className="col-12">
-        <QuestionContainer>
+    <MainContainer>
+      <AvatarMessage
+        className="col-2"
+        src={gender === "male" ? larka : larki}
+        alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
+      />
+      <GameArea className="col-8">
+        <QuestionContainer className="row">
           <IconContainer>
             <IconButton onClick={rotateLeft}>
               <RotateLeft className={classes.icons} />
@@ -55,7 +65,7 @@ const ObjectRotation = () => {
             </Typography>
           </IconContainer>
         </QuestionContainer>
-        <AnswerSelection>
+        <AnswerSelection className="row">
           <Typography variant="h4" className={classes.title} gutterBottom>
             Rotate
           </Typography>
@@ -69,11 +79,30 @@ const ObjectRotation = () => {
             Show Image
           </UIButton>
         </AnswerSelection>
-      </GameContainer>
+      </GameArea>
+      <NextButtonContainer className="col-2">
+        {activeStep === totalLevels - 1 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ type: "tween", duration: 1 }}
+          >
+            <UIButton variant="contained" type="submit" onClick={() => {}}>
+              Submit
+            </UIButton>
+          </motion.div>
+        ) : (
+          <NextButton
+            onClick={() => {
+              nextStep();
+            }}
+          />
+        )}
+      </NextButtonContainer>
       <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
         <PopUp src={triangle} alt="Triangle" />
       </Backdrop>
-    </Container>
+    </MainContainer>
   );
 };
 
@@ -108,26 +137,36 @@ const useStyles = makeStyles(({ theme }) => ({
   },
 }));
 
-const Container = styled.div`
+const MainContainer = styled.div`
   height: 100%;
+  width: 100%;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: row;
+`;
+const GameArea = styled.div`
+  height: 100%;
+  width: 100%;
+  border: 2px solid cyan;
 `;
 
-const GameContainer = styled.div`
-  height: 100%;
+const NextButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 0px;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 50px;
+  border: 2px solid brown;
 `;
 
 const AnswerSelection = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
   flex-direction: column;
   height: 30%;
-  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
 `;
 
 const ImageContainer = styled(motion.div)``;
@@ -155,8 +194,8 @@ const QuestionContainer = styled.div`
   height: 70%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  justify-content: space-around;
+  border: 2px solid yellow;
 `;
 
 const PopImageContainer = styled.div`

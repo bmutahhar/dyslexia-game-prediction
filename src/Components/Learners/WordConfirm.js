@@ -11,25 +11,9 @@ const WordConfirm = () => {
   return (
     <MainContainer>
       <AvatarMessage className="col-2" src={larka} alt="Boy avatar" />
-      <GameArea className="col-8" >
-
+      <GameArea className="col-8">
         <QuestionContainer className="row">
           <WordArea>
-            {/* <Tileplacer>
-                            <Tile></Tile>
-                        </Tileplacer>
-                        <Tileplacer>
-                            <Tile></Tile>
-
-                        </Tileplacer>
-                        <Tileplacer>
-                            <Tile></Tile>
-
-                        </Tileplacer>
-                        <Tileplacer>
-                            <Tile></Tile>
-
-                        </Tileplacer> */}
             <Tile></Tile>
             <Tile></Tile>
 
@@ -49,7 +33,6 @@ const WordConfirm = () => {
           </ConfirmButton>
         </AnswerContainer>
       </GameArea>
-
     </MainContainer>
   );
 };
@@ -122,7 +105,7 @@ const ConfirmButton = styled.div`
 
   &:hover {
     background-color: ${(props) => props.hcolor};
-    cursor:pointer;
+    cursor: pointer;
   }
   &: focus {
     outline: none;

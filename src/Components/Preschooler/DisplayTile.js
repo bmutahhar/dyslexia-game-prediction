@@ -1,10 +1,22 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { Tile, Timer, UIButton } from "..";
+import {
+  Tile,
+  Timer,
+  UIButton,
+  AvatarMessage,
+  NextButton,
+} from "../../Components";
+import { useSelector, useDispatch } from "react-redux";
+import larka from "../../Images/characters/larka2.svg";
+import larki from "../../Images/characters/larki2.svg";
 
-const DisplayTile = () => {
+const DisplayTile = ({ activeStep, nextStep }) => {
   const [open, setOpen] = useState(true);
+  const totalLevels = useSelector((state) => state.levels.totalLevels);
+  const gender = useSelector((state) => state.gender);
+  const dispatch = useDispatch();
   const showDisplay = () => {
     setOpen(true);
   };
@@ -13,31 +25,61 @@ const DisplayTile = () => {
   };
   return (
     <MainContainer>
-      <QuestionContainer>
-        {open && (
+      <AvatarMessage
+        className="col-2"
+        src={gender === "male" ? larka : larki}
+        alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
+      />
+      <GameArea className="col-8">
+        <QuestionContainer className="row">
           <AnimatePresence>
-            <TileContainer exit={{ opacity: 0 }}>
-              <Timer
-                initialSeconds={5}
-                initialMinutes={0}
-                reverse
-                callBack={closeDisplay}
-              />
-              <Tile>B</Tile>
-            </TileContainer>
+            {open && (
+              <TileContainer
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Timer
+                  initialSeconds={5}
+                  initialMinutes={0}
+                  reverse
+                  callBack={closeDisplay}
+                />
+                <Tile>B</Tile>
+              </TileContainer>
+            )}
           </AnimatePresence>
+          <Qinfo>Select the matching tile from below as was shown above</Qinfo>
+          <UIButton variant="contained" disabled={open} type="button" onClick={showDisplay}>
+            Show Again
+          </UIButton>
+        </QuestionContainer>
+        <AnswerContainer className="row">
+          <Tile>C</Tile>
+          <Tile>D</Tile>
+          <Tile>B</Tile>
+          <Tile>3</Tile>
+        </AnswerContainer>
+      </GameArea>
+      <NextButtonContainer className="col-2">
+        {activeStep === totalLevels - 1 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ type: "tween", duration: 1 }}
+          >
+            <UIButton variant="contained" type="submit" onClick={() => {}}>
+              Submit
+            </UIButton>
+          </motion.div>
+        ) : (
+          <NextButton
+            onClick={() => {
+              nextStep();
+            }}
+          />
         )}
-        <Qinfo>Select the matching tile from below as was shown above</Qinfo>
-        <UIButton variant="filled" type="button" onClick={showDisplay}>
-          Show Again
-        </UIButton>
-      </QuestionContainer>
-      <AnswerContainer>
-        <Tile>C</Tile>
-        <Tile>D</Tile>
-        <Tile>B</Tile>
-        <Tile>3</Tile>
-      </AnswerContainer>
+      </NextButtonContainer>
     </MainContainer>
   );
 };
@@ -49,12 +91,23 @@ const QuestionContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border: 2px solid yellow;
 `;
 const Qinfo = styled.p`
   margin-top: 30px;
   font-size: 1.5vw;
   color: white;
   font-family: "Open Sans", sans-serif;
+`;
+
+const NextButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 50px;
+  border: 2px solid brown;
 `;
 
 const TileContainer = styled(motion.div)`
@@ -76,9 +129,19 @@ const AnswerContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: center;
+  border: 2px solid white;
 `;
 
 const MainContainer = styled.div`
   height: 100%;
   width: 100%;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: row;
+`;
+
+const GameArea = styled.div`
+  height: 100%;
+  width: 100%;
+  border: 2px solid cyan;
 `;

@@ -16,3 +16,8 @@ export const removeAnswer = (payload) => ({
   type: "REMOVE_ANSWER",
   payload: payload.trim(),
 });
+
+export const setGender = (payload) => ({
+  type: "SET_GENDER",
+  payload: payload.trim(),
+})

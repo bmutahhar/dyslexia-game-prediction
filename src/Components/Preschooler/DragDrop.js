@@ -14,15 +14,17 @@ import {
 import { addAnswer } from "../../actions";
 
 import larka from "../../Images/characters/larka2.svg";
+import larki from "../../Images/characters/larki2.svg";
 import "react-dragula/dist/dragula.css";
 
 const DragDrop = ({ activeStep, nextStep, word }) => {
-  const arrLength = 4;
+  const arrLength = word.length;
   const [disabled, setDisabled] = useState(true);
   const elRefs = useRef([]);
   const ansRef = useRef(null);
   const tiles = word.split("");
   const totalLevels = useSelector((state) => state.levels.totalLevels);
+  const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
 
   const getAnswer = () => {
@@ -52,7 +54,11 @@ const DragDrop = ({ activeStep, nextStep, word }) => {
 
   return (
     <MainContainer>
-      <AvatarMessage className="col-2" src={larka} alt="Boy avatar" />
+      <AvatarMessage
+        className="col-2"
+        src={gender === "male" ? larka : larki}
+        alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
+      />
       <GameArea className="col-8">
         <QuestionContainer className="row">
           <DragArea className="drag-area">
@@ -81,19 +87,19 @@ const DragDrop = ({ activeStep, nextStep, word }) => {
             animate={{ opacity: 1 }}
             transition={{ type: "tween", duration: 1 }}
           >
-            <UIButton variant="contained" type="submit" onClick={() => { }}>
+            <UIButton variant="contained" type="submit" onClick={() => {}}>
               Submit
             </UIButton>
           </motion.div>
         ) : (
-            <NextButton
-              disabled={disabled}
-              onClick={() => {
-                getAnswer();
-                nextStep();
-              }}
-            />
-          )}
+          <NextButton
+            disabled={disabled}
+            onClick={() => {
+              getAnswer();
+              nextStep();
+            }}
+          />
+        )}
       </NextButtonContainer>
     </MainContainer>
   );
@@ -130,8 +136,6 @@ const MainContainer = styled.div`
   border: 2px solid black;
   display: flex;
   flex-direction: row;
-  ${"" /* align-items: center; */}
-  ${"" /* justify-content: center; */}
 `;
 const Qinfo = styled.p`
   margin-top: 30px;

@@ -10,8 +10,10 @@ import part3 from "../../Images/backgrounds/part3.jpg";
 import part4 from "../../Images/backgrounds/part4.jpg";
 
 import {
-  Tileplacer, AvatarMessage, NextButton,
-  UIButton
+  Tileplacer,
+  AvatarMessage,
+  NextButton,
+  UIButton,
 } from "../../Components";
 import { addAnswer } from "../../actions";
 
@@ -19,14 +21,11 @@ import larka from "../../Images/characters/larka2.svg";
 import "react-dragula/dist/dragula.css";
 
 const CompletePuzzle = () => {
-
   return (
     <MainContainer>
       <AvatarMessage className="col-2" src={larka} alt="Boy avatar" />
       <GameArea className="col-8">
-
         <QuestionContainer className="row">
-
           <Puzzlepicture background={original}></Puzzlepicture>
           <Qinfo>Complete the picture puzzle as shown</Qinfo>
           <PuzzleGrid>
@@ -34,7 +33,6 @@ const CompletePuzzle = () => {
             <Tileplacer></Tileplacer>
             <Tileplacer></Tileplacer>
             <Tileplacer></Tileplacer>
-
           </PuzzleGrid>
         </QuestionContainer>
         <AnswerContainer className="row">
@@ -42,19 +40,13 @@ const CompletePuzzle = () => {
           <PictureTile background={part2}></PictureTile>
           <PictureTile background={part3}></PictureTile>
           <PictureTile background={part4}></PictureTile>
-
         </AnswerContainer>
       </GameArea>
-
     </MainContainer>
   );
 };
 
 export default CompletePuzzle;
-
-
-
-
 
 const Puzzlepicture = styled.div`
   background-image: url(${(props) => props.background});
@@ -63,7 +55,7 @@ const Puzzlepicture = styled.div`
   background-position: center;
   width: 20vw;
   height: 20vw;
-  ${'' /* margin-right: 3vw; */}
+  ${"" /* margin-right: 3vw; */}
 `;
 const PuzzleGrid = styled.div`
   width: 20vw;
@@ -71,14 +63,13 @@ const PuzzleGrid = styled.div`
   display: grid;
   grid-template-columns: 10vw 10vw;
   grid-row: auto auto;
-  ${'' /* margin-left: 3vw; */}
+  ${"" /* margin-left: 3vw; */}
 `;
 // const Container = styled.div`
 // display: flex;
 // flex-direction: row;
 // align-items: center;
 // `;
-
 
 const PictureTile = styled.div`
   box-sizing: border-box;
@@ -149,4 +140,3 @@ const GameArea = styled.div`
   width: 100%;
   border: 2px solid cyan;
 `;
-
