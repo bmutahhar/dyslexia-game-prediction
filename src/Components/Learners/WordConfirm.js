@@ -2,16 +2,20 @@ import React from "react";
 import styled from "styled-components";
 import { Check, Close } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
-import { Tile } from "../../Components";
+import { Tile, AvatarMessage } from "../../Components";
+import larka from "../../Images/characters/larka2.svg";
 
 const WordConfirm = () => {
   const classes = useStyles();
 
   return (
     <MainContainer>
-      <QuestionContainer>
-        <WordArea>
-          {/* <Tileplacer>
+      <AvatarMessage className="col-2" src={larka} alt="Boy avatar" />
+      <GameArea className="col-8" >
+
+        <QuestionContainer className="row">
+          <WordArea>
+            {/* <Tileplacer>
                             <Tile></Tile>
                         </Tileplacer>
                         <Tileplacer>
@@ -26,24 +30,26 @@ const WordConfirm = () => {
                             <Tile></Tile>
 
                         </Tileplacer> */}
-          <Tile></Tile>
-          <Tile></Tile>
+            <Tile></Tile>
+            <Tile></Tile>
 
-          <Tile></Tile>
+            <Tile></Tile>
 
-          <Tile></Tile>
-        </WordArea>
+            <Tile></Tile>
+          </WordArea>
 
-        <Qinfo>Confirm if it is a word or not</Qinfo>
-      </QuestionContainer>
-      <AnswerContainer>
-        <ConfirmButton hcolor="green" color="#3bb502">
-          <Check className={classes.icon} />
-        </ConfirmButton>
-        <ConfirmButton hcolor="#bd0909" color="#f70000">
-          <Close className={classes.icon} />
-        </ConfirmButton>
-      </AnswerContainer>
+          <Qinfo>Confirm if it is a word or not</Qinfo>
+        </QuestionContainer>
+        <AnswerContainer className="row">
+          <ConfirmButton hcolor="green" color="#3bb502">
+            <Check className={classes.icon} />
+          </ConfirmButton>
+          <ConfirmButton hcolor="#bd0909" color="#f70000">
+            <Close className={classes.icon} />
+          </ConfirmButton>
+        </AnswerContainer>
+      </GameArea>
+
     </MainContainer>
   );
 };
@@ -69,6 +75,7 @@ const QuestionContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border: 2px solid yellow;
 `;
 
 const AnswerContainer = styled.div`
@@ -76,11 +83,17 @@ const AnswerContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: space-around;
+  border: 2px solid white;
 `;
 
 const MainContainer = styled.div`
   height: 100%;
-  width:100%;
+  width: 100%;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: row;
+  ${"" /* align-items: center; */}
+  ${"" /* justify-content: center; */}
 `;
 const Qinfo = styled.p`
   margin-top: 30px;
@@ -121,4 +134,9 @@ const ConfirmButton = styled.div`
     transform: translateY(4px);
     outline: none;
   }
+`;
+const GameArea = styled.div`
+  height: 100%;
+  width: 100%;
+  border: 2px solid cyan;
 `;

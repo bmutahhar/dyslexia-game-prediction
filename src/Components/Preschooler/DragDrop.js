@@ -1,56 +1,40 @@
-import React, { useState, useRef, useEffect, createRef } from "react";
-import { Backdrop, CircularProgress } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { motion, AnimateSharedLayout } from "framer-motion";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Dragula from "react-dragula";
+import { useSelector, useDispatch } from "react-redux";
+import { motion } from "framer-motion";
+import {
+  Tileplacer,
+  Player,
+  Tile,
+  AvatarMessage,
+  NextButton,
+  UIButton,
+} from "../../Components";
+import { addAnswer } from "../../actions";
 
-import { Tileplacer, Player, DraggableTile } from "..";
-import { Tile } from "../Tile";
-
+import larka from "../../Images/characters/larka2.svg";
 import "react-dragula/dist/dragula.css";
 
-const DragDrop = () => {
+const DragDrop = ({ activeStep, nextStep, word }) => {
   const arrLength = 4;
-  const [isDragging, setIsDragging] = useState([]);
-  const [isPlaced, setIsPlaced] = useState([]);
+  const [disabled, setDisabled] = useState(true);
   const elRefs = useRef([]);
-  const qRef = useRef(null);
   const ansRef = useRef(null);
-  const tiles = ["A", "B", "C", "D"];
-  const [loading, setLoading] = useState(true);
+  const tiles = word.split("");
+  const totalLevels = useSelector((state) => state.levels.totalLevels);
+  const dispatch = useDispatch();
 
-  const handleClose = () => {
-    setLoading(false);
+  const getAnswer = () => {
+    let answer = "";
+    elRefs.current.map((el, i) => {
+      answer += el.textContent;
+    });
+    dispatch(addAnswer(answer));
   };
-
-  function allowDrop(ev) {
-    ev.preventDefault();
-  }
-
-  function drag(ev, index) {
-    ev.dataTransfer.setData("text", index);
-  }
-
-  function dropToDefault(ev) {
-    ev.preventDefault();
-    if (ev.target.childNodes.length >= arrLength) return;
-    var index = ev.dataTransfer.getData("text");
-    var data = elRefs.current[index];
-    ev.target.appendChild(data);
-  }
-
-  function drop(ev) {
-    ev.preventDefault();
-    if (ev.target.childNodes.length >= 1) return;
-    var index = ev.dataTransfer.getData("text");
-    var data = elRefs.current[index];
-    ev.target.appendChild(data);
-  }
 
   useEffect(() => {
     if (elRefs.current && ansRef.current) {
-      console.log("123456789012345");
       Dragula([...elRefs.current, ansRef.current], {
         accepts: function (el, target, source, sibling) {
           if (target.parentElement.classList.contains("drag-area")) {
@@ -59,56 +43,63 @@ const DragDrop = () => {
             return true;
           }
         },
+      }).on("dragend", function (el) {
+        if (ansRef.current.childNodes.length < arrLength) setDisabled(false);
+        else setDisabled(true);
       });
     }
   }, [elRefs, ansRef]);
 
   return (
     <MainContainer>
-      <QuestionContainer>
-        <DragArea className="drag-area">
+      <AvatarMessage className="col-2" src={larka} alt="Boy avatar" />
+      <GameArea className="col-8">
+        <QuestionContainer className="row">
+          <DragArea className="drag-area">
+            {tiles.map((tile, index) => {
+              return (
+                <Tileplacer
+                  key={index}
+                  ref={(el) => (elRefs.current[index] = el)}
+                ></Tileplacer>
+              );
+            })}
+          </DragArea>
+          <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
+          <Player color="white" text={word} />
+        </QuestionContainer>
+        <AnswerContainer ref={ansRef} className="row">
           {tiles.map((tile, index) => {
-            return (
-              <Tileplacer
-                key={index}
-                ref={(el) => (elRefs.current[index] = el)}
-              ></Tileplacer>
-            );
+            return <Tile key={index}>{tile}</Tile>;
           })}
-        </DragArea>
-        <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
-        <Player color="white" />
-      </QuestionContainer>
-      <AnswerContainer ref={ansRef}>
-        {tiles.map((tile, index) => {
-          return <DraggableTile key={index}>{tile}</DraggableTile>;
-        })}
-      </AnswerContainer>
+        </AnswerContainer>
+      </GameArea>
+      <NextButtonContainer className="col-2">
+        {activeStep === totalLevels - 1 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ type: "tween", duration: 1 }}
+          >
+            <UIButton variant="contained" type="submit" onClick={() => { }}>
+              Submit
+            </UIButton>
+          </motion.div>
+        ) : (
+            <NextButton
+              disabled={disabled}
+              onClick={() => {
+                getAnswer();
+                nextStep();
+              }}
+            />
+          )}
+      </NextButtonContainer>
     </MainContainer>
   );
 };
 
 export default DragDrop;
-
-const useStyles = makeStyles((theme) => ({
-  backdrop: {
-    zIndex: 1000,
-    color: "#fff",
-  },
-  circularProgress: {
-    color: "#fff",
-    fontSize: 48,
-  },
-}));
-
-const Loading = ({ open, onClick }) => {
-  const classes = useStyles();
-  return (
-    <Backdrop className={classes.backdrop} open={open} onClick={onClick}>
-      <CircularProgress className={classes.circularProgress} />
-    </Backdrop>
-  );
-};
 
 const DragArea = styled.div`
   display: flex;
@@ -122,6 +113,7 @@ const QuestionContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border: 2px solid yellow;
 `;
 
 const AnswerContainer = styled.div`
@@ -129,14 +121,36 @@ const AnswerContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: center;
+  border: 2px solid white;
 `;
 
 const MainContainer = styled.div`
   height: 100%;
   width: 100%;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: row;
+  ${"" /* align-items: center; */}
+  ${"" /* justify-content: center; */}
 `;
 const Qinfo = styled.p`
   margin-top: 30px;
   font-size: 1vw;
   color: white;
+`;
+
+const NextButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 50px;
+  border: 2px solid brown;
+`;
+
+const GameArea = styled.div`
+  height: 100%;
+  width: 100%;
+  border: 2px solid cyan;
 `;

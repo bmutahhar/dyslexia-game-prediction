@@ -100,14 +100,14 @@ html {
 } */
 
 ::-webkit-scrollbar {
-  height: 10px;
-  width: 6px;
-  background: #ffffffff;
+  width: 0px;
+  background: black;
   /* width of the entire scrollbar */
 }
 
 ::-webkit-scrollbar-track {
   background: transparent;
+  border-radius: 10px;
   /* color of the tracking area */
 }
 
