@@ -7,7 +7,6 @@ import {
   DisplayTile,
 } from "../../Components/Preschooler";
 
-import { CompletePuzzle, WordConfirm } from "../../Components/Learners";
 
 const PreSchoolers = () => {
   const angles = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360];

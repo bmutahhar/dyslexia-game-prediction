@@ -14,6 +14,7 @@ import {
   Signup,
   NotSupported,
   PreSchoolers,
+  Learners
 } from "./Screens";
 
 import { useMediaQuery } from "react-responsive";
@@ -36,6 +37,7 @@ function App() {
               <Route path="/levelSelect" component={Levelselect} />
               <Route path="/selectAvatar" component={Avatar} />
               <Route path="/preschooler" component={PreSchoolers} />
+              <Route path="/learner" component={Learners} />
 
             </>
           ) : (

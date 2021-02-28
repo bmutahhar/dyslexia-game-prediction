@@ -22,15 +22,19 @@ const WordConfirm = () => {
             <Tile></Tile>
           </WordArea>
 
-          <Qinfo>Confirm if it is a word or not</Qinfo>
+          <Qinfo>Is the given word an actual word?</Qinfo>
         </QuestionContainer>
         <AnswerContainer className="row">
-          <ConfirmButton hcolor="green" color="#3bb502">
-            <Check className={classes.icon} />
-          </ConfirmButton>
-          <ConfirmButton hcolor="#bd0909" color="#f70000">
-            <Close className={classes.icon} />
-          </ConfirmButton>
+          <Label htmlFor="Correct" name="answerButtons">
+            <ConfirmButton id="Correct" hcolor="green" color="#3bb502">
+              <Check className={classes.icon} />
+            </ConfirmButton>
+          </Label>
+          <Label htmlFor="Wrong" name="answerButtons">
+            <ConfirmButton id="Wrong" hcolor="#bd0909" color="#f70000">
+              <Close className={classes.icon} />
+            </ConfirmButton>
+          </Label>
         </AnswerContainer>
       </GameArea>
     </MainContainer>
@@ -72,8 +76,6 @@ const MainContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  ${"" /* align-items: center; */}
-  ${"" /* justify-content: center; */}
 `;
 const Qinfo = styled.p`
   margin-top: 30px;
@@ -81,11 +83,18 @@ const Qinfo = styled.p`
   color: white;
 `;
 
+const Label = styled.label`
+  width: 25%;
+  height: 35%;
+  input[type="radio"] {
+    display: none;
+  }
+`;
+
 const ConfirmButton = styled.div`
   display: flex;
-  bottom: 20%;
-  width: 25%;
-  height: 40%;
+  width: 100%;
+  height: 100%;
   font-weight: 600;
   font-size: 1.5vw;
   align-items: center;
@@ -95,7 +104,7 @@ const ConfirmButton = styled.div`
   background-color: ${(props) => props.color};
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 5px;
   box-shadow: 0 10px 6px 0 rgba(0, 0, 0, 0.4);
   outline: none;
   transition: 0.2s;
