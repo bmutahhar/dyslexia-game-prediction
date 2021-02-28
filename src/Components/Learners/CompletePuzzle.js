@@ -55,7 +55,6 @@ const Puzzlepicture = styled.div`
   background-position: center;
   width: 20vw;
   height: 20vw;
-  ${"" /* margin-right: 3vw; */}
 `;
 const PuzzleGrid = styled.div`
   width: 20vw;
@@ -63,13 +62,7 @@ const PuzzleGrid = styled.div`
   display: grid;
   grid-template-columns: 10vw 10vw;
   grid-row: auto auto;
-  ${"" /* margin-left: 3vw; */}
 `;
-// const Container = styled.div`
-// display: flex;
-// flex-direction: row;
-// align-items: center;
-// `;
 
 const PictureTile = styled.div`
   box-sizing: border-box;
@@ -99,7 +92,6 @@ const QuestionContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  border: 2px solid yellow;
 `;
 
 const AnswerContainer = styled.div`
@@ -107,13 +99,11 @@ const AnswerContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
 `;
 
 const MainContainer = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid black;
   display: flex;
   flex-direction: row;
   ${"" /* align-items: center; */}
@@ -132,7 +122,6 @@ const NextButtonContainer = styled.div`
   justify-content: flex-end;
   height: 100%;
   padding: 50px;
-  border: 2px solid brown;
 `;
 
 const GameArea = styled.div`

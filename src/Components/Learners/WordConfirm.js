@@ -58,7 +58,6 @@ const QuestionContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid yellow;
 `;
 
 const AnswerContainer = styled.div`
@@ -66,13 +65,11 @@ const AnswerContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: space-around;
-  border: 2px solid white;
 `;
 
 const MainContainer = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid black;
   display: flex;
   flex-direction: row;
   ${"" /* align-items: center; */}
@@ -121,5 +118,4 @@ const ConfirmButton = styled.div`
 const GameArea = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid cyan;
 `;

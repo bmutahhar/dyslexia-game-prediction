@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -9,11 +9,13 @@ import {
   NextButton,
 } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
+import { addAnswer } from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
-const DisplayTile = ({ activeStep, nextStep }) => {
+const DisplayTile = ({ name, question, options, activeStep, nextStep }) => {
   const [open, setOpen] = useState(true);
+  const [answer, setAnswer] = useState("");
   const totalLevels = useSelector((state) => state.levels.totalLevels);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
@@ -23,6 +25,12 @@ const DisplayTile = ({ activeStep, nextStep }) => {
   const closeDisplay = () => {
     setOpen(false);
   };
+
+  const onClick = (answer) => {
+    setAnswer(answer);
+  };
+  const getAnswer = () => dispatch(addAnswer(answer));
+
   return (
     <MainContainer>
       <AvatarMessage
@@ -45,20 +53,28 @@ const DisplayTile = ({ activeStep, nextStep }) => {
                   reverse
                   callBack={closeDisplay}
                 />
-                <Tile>B</Tile>
+                <Tile question={true}>{question}</Tile>
               </TileContainer>
             )}
           </AnimatePresence>
           <Qinfo>Select the matching tile from below as was shown above</Qinfo>
-          <UIButton variant="contained" disabled={open} type="button" onClick={showDisplay}>
+          <UIButton
+            variant="contained"
+            disabled={open}
+            type="button"
+            onClick={showDisplay}
+          >
             Show Again
           </UIButton>
         </QuestionContainer>
         <AnswerContainer className="row">
-          <Tile>C</Tile>
-          <Tile>D</Tile>
-          <Tile>B</Tile>
-          <Tile>3</Tile>
+          {options.map((el) => {
+            return (
+              <Tile name={name} onClick={onClick}>
+                {el}
+              </Tile>
+            );
+          })}
         </AnswerContainer>
       </GameArea>
       <NextButtonContainer className="col-2">
@@ -75,6 +91,7 @@ const DisplayTile = ({ activeStep, nextStep }) => {
         ) : (
           <NextButton
             onClick={() => {
+              getAnswer();
               nextStep();
             }}
           />
@@ -91,7 +108,6 @@ const QuestionContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid yellow;
 `;
 const Qinfo = styled.p`
   margin-top: 30px;
@@ -107,7 +123,6 @@ const NextButtonContainer = styled.div`
   justify-content: flex-end;
   height: 100%;
   padding: 50px;
-  border: 2px solid brown;
 `;
 
 const TileContainer = styled(motion.div)`
@@ -129,13 +144,11 @@ const AnswerContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
 `;
 
 const MainContainer = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid black;
   display: flex;
   flex-direction: row;
 `;
@@ -143,5 +156,4 @@ const MainContainer = styled.div`
 const GameArea = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid cyan;
 `;

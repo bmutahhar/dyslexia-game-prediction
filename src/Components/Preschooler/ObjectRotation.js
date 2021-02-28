@@ -7,12 +7,14 @@ import { BsInfoCircleFill } from "react-icons/bs";
 import { motion } from "framer-motion";
 import { AvatarMessage, UIButton, NextButton } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
+import { addAnswer } from "../../actions";
 import triangle from "../../Images/shapes/triangle.png";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
-const ObjectRotation = ({ activeStep, nextStep }) => {
+const ObjectRotation = ({ activeStep, nextStep, angle }) => {
   const [open, setOpen] = useState(false);
+  const [shown, setShown] = useState(false)
   const [rotation, setRotation] = useState(0);
   const totalLevels = useSelector((state) => state.levels.totalLevels);
   const gender = useSelector((state) => state.gender);
@@ -20,8 +22,8 @@ const ObjectRotation = ({ activeStep, nextStep }) => {
   const classes = useStyles();
 
   const handleOpen = () => {
-    console.log(open);
     setOpen(true);
+    setShown(true)
     setTimeout(handleClose, 4500);
   };
 
@@ -30,12 +32,14 @@ const ObjectRotation = ({ activeStep, nextStep }) => {
   };
 
   const rotateRight = () => {
-    setRotation(rotation + 60);
+    setRotation(rotation + 30);
   };
 
   const rotateLeft = () => {
-    setRotation(rotation - 60);
+    setRotation(rotation - 30);
   };
+
+  const getAnswer = () =>dispatch(addAnswer(rotation))
   return (
     <MainContainer>
       <AvatarMessage
@@ -72,10 +76,10 @@ const ObjectRotation = ({ activeStep, nextStep }) => {
           <InfoContainer>
             <BsInfoCircleFill className={classes.info} />
             <Typography variant="subtitle1" className={classes.info}>
-              Rotate the object as was shown
+              {shown?"Rotate the object as was shown":"Click the below button to view question image"}
             </Typography>
           </InfoContainer>
-          <UIButton variant="filled" type="button" onClick={handleOpen}>
+          <UIButton variant="contained" type="button" onClick={handleOpen}>
             Show Image
           </UIButton>
         </AnswerSelection>
@@ -94,13 +98,14 @@ const ObjectRotation = ({ activeStep, nextStep }) => {
         ) : (
           <NextButton
             onClick={() => {
+              getAnswer();
               nextStep();
             }}
           />
         )}
       </NextButtonContainer>
       <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
-        <PopUp src={triangle} alt="Triangle" />
+        <PopUp src={triangle} alt="Triangle" rotation={angle} />
       </Backdrop>
     </MainContainer>
   );
@@ -108,10 +113,12 @@ const ObjectRotation = ({ activeStep, nextStep }) => {
 
 export default ObjectRotation;
 
-const PopUp = ({ src, alt }) => {
+const PopUp = ({ src, alt, rotation }) => {
   return (
     <PopImageContainer>
-      <Image src={src} alt={alt} />
+      <ImageContainer animate={{ rotate: rotation }}>
+        <Image src={src} alt={alt} />
+      </ImageContainer>
     </PopImageContainer>
   );
 };
@@ -140,14 +147,12 @@ const useStyles = makeStyles(({ theme }) => ({
 const MainContainer = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid black;
   display: flex;
   flex-direction: row;
 `;
 const GameArea = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid cyan;
 `;
 
 const NextButtonContainer = styled.div`
@@ -157,7 +162,6 @@ const NextButtonContainer = styled.div`
   justify-content: flex-end;
   height: 100%;
   padding: 50px;
-  border: 2px solid brown;
 `;
 
 const AnswerSelection = styled.div`
@@ -165,8 +169,7 @@ const AnswerSelection = styled.div`
   flex-direction: column;
   height: 30%;
   align-items: center;
-  justify-content: center;
-  border: 2px solid white;
+  justify-content: flex-start;
 `;
 
 const ImageContainer = styled(motion.div)``;
@@ -195,12 +198,13 @@ const QuestionContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  border: 2px solid yellow;
+  padding-bottom: 50px;
 `;
 
 const PopImageContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: transparent;
+  margin-bottom:50px;
 `;

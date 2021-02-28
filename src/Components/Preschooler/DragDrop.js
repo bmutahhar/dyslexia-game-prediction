@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import {
   Tileplacer,
   Player,
-  Tile,
+  DraggableTile,
   AvatarMessage,
   NextButton,
   UIButton,
@@ -17,12 +17,11 @@ import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 import "react-dragula/dist/dragula.css";
 
-const DragDrop = ({ activeStep, nextStep, word }) => {
-  const arrLength = word.length;
+const DragDrop = ({ activeStep, nextStep, word, options }) => {
+  const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
   const elRefs = useRef([]);
   const ansRef = useRef(null);
-  const tiles = word.split("");
   const totalLevels = useSelector((state) => state.levels.totalLevels);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
@@ -50,7 +49,7 @@ const DragDrop = ({ activeStep, nextStep, word }) => {
         else setDisabled(true);
       });
     }
-  }, [elRefs, ansRef]);
+  }, [elRefs, ansRef, arrLength]);
 
   return (
     <MainContainer>
@@ -62,7 +61,7 @@ const DragDrop = ({ activeStep, nextStep, word }) => {
       <GameArea className="col-8">
         <QuestionContainer className="row">
           <DragArea className="drag-area">
-            {tiles.map((tile, index) => {
+            {options.map((_, index) => {
               return (
                 <Tileplacer
                   key={index}
@@ -75,8 +74,8 @@ const DragDrop = ({ activeStep, nextStep, word }) => {
           <Player color="white" text={word} />
         </QuestionContainer>
         <AnswerContainer ref={ansRef} className="row">
-          {tiles.map((tile, index) => {
-            return <Tile key={index}>{tile}</Tile>;
+          {options.map((tile, index) => {
+            return <DraggableTile key={index}>{tile}</DraggableTile>;
           })}
         </AnswerContainer>
       </GameArea>
@@ -119,7 +118,6 @@ const QuestionContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid yellow;
 `;
 
 const AnswerContainer = styled.div`
@@ -127,13 +125,11 @@ const AnswerContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
 `;
 
 const MainContainer = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid black;
   display: flex;
   flex-direction: row;
 `;
@@ -150,11 +146,9 @@ const NextButtonContainer = styled.div`
   justify-content: flex-end;
   height: 100%;
   padding: 50px;
-  border: 2px solid brown;
 `;
 
 const GameArea = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid cyan;
 `;
