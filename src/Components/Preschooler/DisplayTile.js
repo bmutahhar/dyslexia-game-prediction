@@ -68,9 +68,9 @@ const DisplayTile = ({ name, question, options, activeStep, nextStep }) => {
           </UIButton>
         </QuestionContainer>
         <AnswerContainer className="row">
-          {options.map((el) => {
+          {options.map((el,i) => {
             return (
-              <Tile name={name} onClick={onClick}>
+              <Tile name={name} key={i} onClick={onClick}>
                 {el}
               </Tile>
             );

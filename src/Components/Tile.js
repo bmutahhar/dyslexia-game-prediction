@@ -24,7 +24,7 @@ export const Tile = ({
     );
   }
   return (
-    <Label for={children} onClick={()=>onClick(children)} question={question}>
+    <Label htmlFor={children} onClick={()=>onClick(children)} question={question}>
       <input type="radio" id={children} value={children} name={name} />
       <TileComponent background={background} {...props}>
         {children}
