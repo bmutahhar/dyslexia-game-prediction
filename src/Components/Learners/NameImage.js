@@ -3,21 +3,23 @@ import styled from "styled-components";
 import Dragula from "react-dragula";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
+import leapord from "../../Images/characters/leapord.png";
+
 import {
   Tileplacer,
-  Player,
+  Character,
   DraggableTile,
   AvatarMessage,
   NextButton,
   UIButton,
-} from "../../Components";
+} from "..";
 import { addAnswer } from "../../actions";
 
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 import "react-dragula/dist/dragula.css";
 
-const DragDrop = ({ activeStep, nextStep, word, options }) => {
+const NameImage = ({ activeStep, nextStep, word, options }) => {
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
   const elRefs = useRef([]);
@@ -28,9 +30,7 @@ const DragDrop = ({ activeStep, nextStep, word, options }) => {
 
   const getAnswer = () => {
     let answer = "";
-    elRefs.current.map((el, i) => {
-      answer += el.textContent;
-    });
+    elRefs.current.map((el, i) => (answer += el.textContent));
     dispatch(addAnswer(answer));
   };
 
@@ -61,7 +61,13 @@ const DragDrop = ({ activeStep, nextStep, word, options }) => {
       <GameArea className="col-8">
         <QuestionContainer className="row">
           <DragArea className="drag-area">
-            {options.map((_, index) => {
+            <Character
+              className="avatar"
+              src={leapord}
+              alt="Boy Avatar"
+              style={styles.avatar}
+            />
+            {options.map((tile, index) => {
               return (
                 <Tileplacer
                   key={index}
@@ -70,8 +76,7 @@ const DragDrop = ({ activeStep, nextStep, word, options }) => {
               );
             })}
           </DragArea>
-          <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
-          <Player color="white" text={word} />
+          <Qinfo>Name the character by dragging the tiles</Qinfo>
         </QuestionContainer>
         <AnswerContainer ref={ansRef} className="row">
           {options.map((tile, index) => {
@@ -104,7 +109,14 @@ const DragDrop = ({ activeStep, nextStep, word, options }) => {
   );
 };
 
-export default DragDrop;
+export default NameImage;
+
+const styles = {
+  avatar: {
+    height: "10vw",
+    marginRight: "1vw",
+  },
+};
 
 const DragArea = styled.div`
   display: flex;
@@ -132,6 +144,8 @@ const MainContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
+  ${"" /* align-items: center; */}
+  ${"" /* justify-content: center; */}
 `;
 const Qinfo = styled.p`
   margin-top: 30px;

@@ -51,8 +51,7 @@ const TileComponent = styled.div`
   width: 7vw;
   border: 4px solid #5a110f;
   border-radius: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin:3px 5px;
   display: flex;
   align-items: center;
   justify-content: center;

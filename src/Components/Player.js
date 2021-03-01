@@ -39,7 +39,6 @@ const Player = ({ color, text }) => {
     let count = 1;
     let timeInterval = "";
     let progressInterval = "";
-    console.log(voices)
     if (speaking) {
       progressInterval = setInterval(() => {
         progressbar.current.value = count / text.length;

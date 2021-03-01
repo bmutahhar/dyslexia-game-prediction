@@ -1,5 +1,4 @@
 import React, { forwardRef } from "react";
-import { motion } from "framer-motion";
 import styled from "styled-components";
 
 const Tileplacer = forwardRef(({ children, ...props }, ref) => {
@@ -11,15 +10,6 @@ const Tileplacer = forwardRef(({ children, ...props }, ref) => {
 });
 
 export default Tileplacer;
-
-const tilesVariant = {
-  dragging: {
-    border: "2px dashed #008E95",
-  },
-  inactive: {
-    border: "2px solid #fff",
-  },
-};
 
 const TileplacerComponent = styled.div`
   box-sizing: border-box;

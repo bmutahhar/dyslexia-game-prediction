@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { GameScreen } from "../../Components";
 import {
   ObjectRotation,
-  NameImage,
-  DragDrop,
   DisplayTile,
-  TileLayout
+  TileLayout,
 } from "../../Components/Preschooler";
-
+import { DragDrop, NameImage } from "../../Components/Learners";
 
 const PreSchoolers = () => {
   const angles = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360];
   const [activeStep, setActiveStep] = useState(0);
-  const [angle, setAngle] = useState(
-    angles[Math.floor(Math.random() * angles.length)]
-  );
+  const angle = angles[Math.floor(Math.random() * angles.length)];
 
   const nextStep = () => {
     setActiveStep(activeStep + 1);
@@ -30,17 +26,20 @@ const PreSchoolers = () => {
     return newArray;
   };
 
-  useEffect(() => { });
 
   if (activeStep === 0) {
     return (
       <GameScreen activeStep={activeStep}>
-        <TileLayout />
+        <TileLayout
+          question={["A", "B", "C", "D"]}
+          activeStep={activeStep}
+          nextStep={nextStep}
+          gridSize={2}
+          options={["A", "B", "C", "D"]}
+        />
       </GameScreen>
     );
-  }
-
-  else if (activeStep === 1) {
+  } else if (activeStep === 1) {
     return (
       <GameScreen activeStep={activeStep}>
         <ObjectRotation

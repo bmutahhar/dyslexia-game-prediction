@@ -1,20 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import {
-  ProfileAvatar,
-  Timer,
-  CustomStepper,
-  NextButton,
-  UIButton,
-  Character,
-} from "../Components";
+import { ProfileAvatar, Timer, CustomStepper } from "../Components";
 import { useSelector } from "react-redux";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
-import larka from "../Images/characters/larka2.svg";
-import { motion } from "framer-motion";
 
-const GameScreen = ({ children , activeStep}) => {
+const GameScreen = ({ children, activeStep }) => {
   const loggedIn = useSelector((state) => state.user.loggedIn);
 
   return (
