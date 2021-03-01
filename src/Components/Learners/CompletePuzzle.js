@@ -10,8 +10,10 @@ import part3 from "../../Images/backgrounds/part3.jpg";
 import part4 from "../../Images/backgrounds/part4.jpg";
 
 import {
-  Tileplacer, AvatarMessage, NextButton,
-  UIButton
+  Tileplacer,
+  AvatarMessage,
+  NextButton,
+  UIButton,
 } from "../../Components";
 import { addAnswer } from "../../actions";
 
@@ -19,14 +21,11 @@ import larka from "../../Images/characters/larka2.svg";
 import "react-dragula/dist/dragula.css";
 
 const CompletePuzzle = () => {
-
   return (
     <MainContainer>
       <AvatarMessage className="col-2" src={larka} alt="Boy avatar" />
       <GameArea className="col-8">
-
         <QuestionContainer className="row">
-
           <Puzzlepicture background={original}></Puzzlepicture>
           <Qinfo>Complete the picture puzzle as shown</Qinfo>
           <PuzzleGrid>
@@ -34,7 +33,6 @@ const CompletePuzzle = () => {
             <Tileplacer></Tileplacer>
             <Tileplacer></Tileplacer>
             <Tileplacer></Tileplacer>
-
           </PuzzleGrid>
         </QuestionContainer>
         <AnswerContainer className="row">
@@ -42,19 +40,13 @@ const CompletePuzzle = () => {
           <PictureTile background={part2}></PictureTile>
           <PictureTile background={part3}></PictureTile>
           <PictureTile background={part4}></PictureTile>
-
         </AnswerContainer>
       </GameArea>
-
     </MainContainer>
   );
 };
 
 export default CompletePuzzle;
-
-
-
-
 
 const Puzzlepicture = styled.div`
   background-image: url(${(props) => props.background});
@@ -63,7 +55,6 @@ const Puzzlepicture = styled.div`
   background-position: center;
   width: 20vw;
   height: 20vw;
-  ${'' /* margin-right: 3vw; */}
 `;
 const PuzzleGrid = styled.div`
   width: 20vw;
@@ -71,14 +62,7 @@ const PuzzleGrid = styled.div`
   display: grid;
   grid-template-columns: 10vw 10vw;
   grid-row: auto auto;
-  ${'' /* margin-left: 3vw; */}
 `;
-// const Container = styled.div`
-// display: flex;
-// flex-direction: row;
-// align-items: center;
-// `;
-
 
 const PictureTile = styled.div`
   box-sizing: border-box;
@@ -108,7 +92,6 @@ const QuestionContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  border: 2px solid yellow;
 `;
 
 const AnswerContainer = styled.div`
@@ -116,13 +99,11 @@ const AnswerContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
 `;
 
 const MainContainer = styled.div`
   height: 100%;
   width: 100%;
-  border: 2px solid black;
   display: flex;
   flex-direction: row;
   ${"" /* align-items: center; */}
@@ -141,7 +122,6 @@ const NextButtonContainer = styled.div`
   justify-content: flex-end;
   height: 100%;
   padding: 50px;
-  border: 2px solid brown;
 `;
 
 const GameArea = styled.div`
@@ -149,4 +129,3 @@ const GameArea = styled.div`
   width: 100%;
   border: 2px solid cyan;
 `;
-

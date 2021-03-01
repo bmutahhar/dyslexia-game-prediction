@@ -26,11 +26,11 @@ const TileplacerComponent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 10vw;
-  width: 10vw;
+  height: 8vw;
+  width: 8vw;
   background-color: rgba(255, 255, 255, 0.11);
   backdrop-filter: blur(10px);
-  border: 3px solid #c9c4c4;
+  border: 2px solid #c9c4c4;
   margin-left: 5px;
   margin-right: 5px;
   z-index: 1;
