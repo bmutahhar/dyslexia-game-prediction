@@ -14,7 +14,7 @@ const Player = ({ color, text }) => {
       speak({
         text: text,
         rate: 0.7,
-        voice: voices[1],
+        voice: voices[3],
       });
       setIconName("pause");
     } else {
@@ -39,6 +39,7 @@ const Player = ({ color, text }) => {
     let count = 1;
     let timeInterval = "";
     let progressInterval = "";
+    console.log(voices)
     if (speaking) {
       progressInterval = setInterval(() => {
         progressbar.current.value = count / text.length;
@@ -70,8 +71,8 @@ const Player = ({ color, text }) => {
           {iconName === "play" ? (
             <PlayArrowRounded fontSize="large" style={{ color: color }} />
           ) : (
-            <PauseRounded fontSize="large" style={{ color: color }} />
-          )}
+              <PauseRounded fontSize="large" style={{ color: color }} />
+            )}
         </IconButton>
         <ProgressBarAndTimer>
           <ProgressBar ref={progressbar} max="1" value="0" />

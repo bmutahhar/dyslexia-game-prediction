@@ -17,7 +17,7 @@ const PreSchoolers = () => {
   };
   return (
     <GameScreen activeStep={activeStep}>
-      <WordConfirm activeStep={activeStep} nextStep={nextStep} word="TIGER" />
+      <DragDrop activeStep={activeStep} nextStep={nextStep} word="TIGER" />
       {/* <NameImage /> */}
     </GameScreen>
   );
