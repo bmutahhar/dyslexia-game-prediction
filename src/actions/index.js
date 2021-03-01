@@ -21,3 +21,8 @@ export const setGender = (payload) => ({
   type: "SET_GENDER",
   payload: payload.trim(),
 })
+
+export const setLevel = (payload) => ({
+  type: "SET_LEVEL",
+  payload: payload.trim(),
+})

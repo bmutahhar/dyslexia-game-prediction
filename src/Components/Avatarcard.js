@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { useHistory } from "react-router-dom";
-import {useDispatch} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { zoomIn, fadeIn } from "react-animations";
-import {setGender} from "../actions"
+import { setGender } from "../actions";
 
 export default class Avatarcard extends Component {
   render() {
@@ -24,12 +24,13 @@ export default class Avatarcard extends Component {
   }
 }
 function AvatarCard(props) {
+  const currentLevel = useSelector((state) => state.currentLevel);
   const history = useHistory();
   const dispatch = useDispatch();
 
   const nextPage = () => {
-    dispatch(setGender(props.gender));  
-    history.push("/preschooler");
+    dispatch(setGender(props.gender));
+    history.push(currentLevel);
   };
 
   return (

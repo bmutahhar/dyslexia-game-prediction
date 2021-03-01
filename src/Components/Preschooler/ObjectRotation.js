@@ -16,7 +16,7 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
   const [open, setOpen] = useState(false);
   const [shown, setShown] = useState(false)
   const [rotation, setRotation] = useState(0);
-  const totalLevels = useSelector((state) => state.levels.totalLevels);
+  const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
   const classes = useStyles();

@@ -24,7 +24,7 @@ const NameImage = ({ activeStep, nextStep, word, options }) => {
   const [disabled, setDisabled] = useState(true);
   const elRefs = useRef([]);
   const ansRef = useRef(null);
-  const totalLevels = useSelector((state) => state.levels.totalLevels);
+  const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
 
