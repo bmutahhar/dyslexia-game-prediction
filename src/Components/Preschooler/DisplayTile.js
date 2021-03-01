@@ -16,7 +16,7 @@ import larki from "../../Images/characters/larki2.svg";
 const DisplayTile = ({ name, question, options, activeStep, nextStep }) => {
   const [open, setOpen] = useState(true);
   const [answer, setAnswer] = useState("");
-  const totalLevels = useSelector((state) => state.levels.totalLevels);
+  const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
   const showDisplay = () => {

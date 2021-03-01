@@ -1,8 +1,11 @@
-const totalLevels = 15;
-let steps = [];
-for (let i = 1; i <= totalLevels; i++) steps.push(i);
-const levelReducer = (state = { totalLevels, steps }, action) => {
-  return state;
+const levelReducer = (state = "", action) => {
+  switch (action.type) {
+    case "SET_LEVEL":
+      state = action.payload;
+      return state;
+    default:
+      return state;
+  }
 };
 
 export default levelReducer;

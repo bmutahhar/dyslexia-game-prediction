@@ -4,7 +4,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 
 const CustomStepper = ({ activeStep }) => {
-  const steps = useSelector((state) => state.levels.steps);
+  const steps = useSelector((state) => state.questions.steps);
   const classes = useStyles();
   return (
     <>

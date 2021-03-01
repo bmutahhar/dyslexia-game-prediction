@@ -1,14 +1,16 @@
 import loggedReducer from "./loggedReducer";
-import levelReducer from "./levelReducer";
+import questionsReducer from "./questionsReducer";
 import answerReducer from "./answerReducer";
 import genderReducer from "./genderReducer";
+import levelReducer from "./levelReducer";
 import { combineReducers } from "redux";
 
 const reducers = combineReducers({
   user: loggedReducer,
-  levels: levelReducer,
+  questions: questionsReducer,
   answers: answerReducer,
   gender: genderReducer,
+  currentLevel: levelReducer,
 });
 
 export default reducers;
