@@ -27,15 +27,15 @@ const PreSchoolers = () => {
     return newArray;
   };
 
+  // if (activeStep === 0) {
+  //   return (
+  //     <GameScreen activeStep={activeStep}>
+  //       <SelectOption
+  //       />
+  //     </GameScreen>
+  //   );
+  // }
   if (activeStep === 0) {
-    return (
-      <GameScreen activeStep={activeStep}>
-        <SelectOption
-        />
-      </GameScreen>
-    );
-  }
-  else if (activeStep === 1) {
     return (
       <GameScreen activeStep={activeStep}>
         <TileLayout
@@ -47,7 +47,7 @@ const PreSchoolers = () => {
         />
       </GameScreen>
     );
-  } else if (activeStep === 2) {
+  } else if (activeStep === 1) {
     return (
       <GameScreen activeStep={activeStep}>
         <ObjectRotation
@@ -57,7 +57,7 @@ const PreSchoolers = () => {
         />
       </GameScreen>
     );
-  } else if (activeStep === 3) {
+  } else if (activeStep === 2) {
     return (
       <GameScreen activeStep={activeStep}>
         <DisplayTile
@@ -69,7 +69,7 @@ const PreSchoolers = () => {
         />
       </GameScreen>
     );
-  } else if (activeStep === 4) {
+  } else if (activeStep === 3) {
     return (
       <GameScreen activeStep={activeStep}>
         <NameImage
@@ -80,7 +80,7 @@ const PreSchoolers = () => {
         />
       </GameScreen>
     );
-  } else if (activeStep === 5) {
+  } else if (activeStep === 4) {
     return (
       <GameScreen activeStep={activeStep}>
         <DragDrop
