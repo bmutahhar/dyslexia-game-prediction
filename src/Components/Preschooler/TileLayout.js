@@ -24,8 +24,25 @@ const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
 
   const optionsB = options.slice(
     Math.floor(options.length / 2),
-    options.length
-  );
+    options.length);
+  // var optionsA;
+  // var optionsB;
+
+  // if (options.length <= 5) {
+  //   optionsA = options;
+
+  //   optionsB = [];
+
+  // }
+
+  // else if (options.length > 5) {
+  //   optionsA = options.slice(0, Math.floor(options.length / 2));
+
+  //   optionsB = options.slice(
+  //     Math.floor(options.length / 2),
+  //     options.length);
+  // };
+
   const [show, setShow] = useState(true);
   const [disabled, setDisabled] = useState(true);
   const optionsRefA = useRef(null);
@@ -54,7 +71,7 @@ const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
         },
       }).on("dragend", function (el) {
         for (let i = 0; i < elRefs.current.length; i++) {
-          if (elRefs.current[i].childNodes.length !== 0){
+          if (elRefs.current[i].childNodes.length !== 0) {
             setDisabled(false);
             return
           };
@@ -83,7 +100,7 @@ const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
               exit={{ opacity: 0 }}
             >
               <Timer
-                initialSeconds={10}
+                initialSeconds={4}
                 initialMinutes={0}
                 reverse
                 callBack={closeQuestion}
@@ -100,44 +117,50 @@ const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
             </QuestionContainer>
           </AnimatePresence>
         ) : (
-          <QuestionContainer
-            className="row"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.25, duration: 0.25 }}
-          >
-            <TileGrid gridSize={gridSize} ref={optionsRefA}>
-              {optionsA.map((el, i) => {
-                return <DraggableTile key={i}>{el}</DraggableTile>;
-              })}
-            </TileGrid>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "space-around",
-              }}
+            <QuestionContainer
+              className="row"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.25, duration: 0.25 }}
             >
-              <GridPlacer gridSize={gridSize} className="drag-area">
-                {grid.map((_, i) => {
-                  return (
-                    <Tileplacer
-                      key={i}
-                      ref={(el) => (elRefs.current[i] = el)}
-                    />
-                  );
+
+              <TileGrid gridSize={gridSize} ref={optionsRefA}>
+                {optionsA.map((el, i) => {
+                  return <DraggableTile key={i}>{el}</DraggableTile>;
                 })}
-              </GridPlacer>
-              <Qinfo>Drag and place the tiles in the grid as was shown</Qinfo>
-            </div>
-            <TileGrid gridSize={gridSize} ref={optionsRefB}>
-              {optionsB.map((el, i) => {
-                return <DraggableTile key={i}>{el}</DraggableTile>;
-              })}
-            </TileGrid>
-          </QuestionContainer>
-        )}
+              </TileGrid>
+
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                }}
+              >
+                <GridPlacer gridSize={gridSize} className="drag-area">
+                  {grid.map((_, i) => {
+                    return (
+                      <Tileplacer
+                        key={i}
+                        ref={(el) => (elRefs.current[i] = el)}
+                      />
+                    );
+                  })}
+                </GridPlacer>
+                <Qinfo>Drag and place the tiles in the grid as was shown</Qinfo>
+              </div>
+
+              <TileGrid gridSize={gridSize} ref={optionsRefB}>
+                {optionsB.map((el, i) => {
+                  return <DraggableTile key={i}>{el}</DraggableTile>;
+                })}
+              </TileGrid>
+
+
+            </QuestionContainer>
+          )}
       </GameArea>
       <NextButtonContainer className="col-2">
         {activeStep === totalLevels - 1 ? (
@@ -146,19 +169,19 @@ const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
             animate={{ opacity: 1 }}
             transition={{ type: "tween", duration: 1 }}
           >
-            <UIButton variant="contained" type="submit" onClick={() => {}}>
+            <UIButton variant="contained" type="submit" onClick={() => { }}>
               Submit
             </UIButton>
           </motion.div>
         ) : (
-          <NextButton
-            disabled={disabled}
-            onClick={() => {
-              getAnswer();
-              nextStep();
-            }}
-          />
-        )}
+            <NextButton
+              disabled={disabled}
+              onClick={() => {
+                getAnswer();
+                nextStep();
+              }}
+            />
+          )}
       </NextButtonContainer>
     </MainContainer>
   );
@@ -179,16 +202,17 @@ const GridPlacer = styled.div`
 `;
 
 const TileGrid = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   grid-template-columns: ${({ gridSize }) =>
     gridSize === 4 ? "7vw 7vw" : "7vw"};
   grid-row: auto auto;
   align-items: center;
-  justify-content: center;
-  grid-column-gap: 5px;
+  justify-content: flex-start;
+  height: 95%;
+  width: 15vw;
   border: 2px solid red;
-  padding: 5px;
-  height: 90%;
 `;
 
 const QuestionContainer = styled(motion.div)`

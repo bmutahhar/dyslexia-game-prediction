@@ -4,6 +4,7 @@ import {
   ObjectRotation,
   DisplayTile,
   TileLayout,
+  SelectOption,
 } from "../../Components/Preschooler";
 import { DragDrop, NameImage } from "../../Components/Learners";
 
@@ -26,20 +27,27 @@ const PreSchoolers = () => {
     return newArray;
   };
 
-
   if (activeStep === 0) {
     return (
       <GameScreen activeStep={activeStep}>
-        <TileLayout
-          question={["A", "B", "C", "D"]}
-          activeStep={activeStep}
-          nextStep={nextStep}
-          gridSize={2}
-          options={["A", "B", "C", "D"]}
+        <SelectOption
         />
       </GameScreen>
     );
-  } else if (activeStep === 1) {
+  }
+  else if (activeStep === 1) {
+    return (
+      <GameScreen activeStep={activeStep}>
+        <TileLayout
+          question={["A", "B", "C", "D", "A", "B", "C", "D", "H"]}
+          activeStep={activeStep}
+          nextStep={nextStep}
+          gridSize={3}
+          options={["A", "B", "C", "D", "H", "A", "B", "C", "D"]}
+        />
+      </GameScreen>
+    );
+  } else if (activeStep === 2) {
     return (
       <GameScreen activeStep={activeStep}>
         <ObjectRotation
@@ -49,7 +57,7 @@ const PreSchoolers = () => {
         />
       </GameScreen>
     );
-  } else if (activeStep === 2) {
+  } else if (activeStep === 3) {
     return (
       <GameScreen activeStep={activeStep}>
         <DisplayTile
@@ -61,7 +69,7 @@ const PreSchoolers = () => {
         />
       </GameScreen>
     );
-  } else if (activeStep === 3) {
+  } else if (activeStep === 4) {
     return (
       <GameScreen activeStep={activeStep}>
         <NameImage
@@ -72,7 +80,7 @@ const PreSchoolers = () => {
         />
       </GameScreen>
     );
-  } else if (activeStep === 4) {
+  } else if (activeStep === 5) {
     return (
       <GameScreen activeStep={activeStep}>
         <DragDrop
