@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ProfileAvatar, Timer, CustomStepper } from "../Components";
 import { useSelector } from "react-redux";
@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import gamebg from "../Images/backgrounds/gamebg.png";
 import b1 from "../Images/badges/b10.svg";
 import b2 from "../Images/badges/b2.svg";
-
 import b3 from "../Images/badges/b3.svg";
 import b4 from "../Images/badges/b4.svg";
 import b5 from "../Images/badges/b5.svg";
@@ -14,114 +13,40 @@ import b6 from "../Images/badges/b6.svg";
 import b7 from "../Images/badges/b7.svg";
 import b8 from "../Images/badges/b8.svg";
 
-
-
+const badges = [b1, b2, b3, b4, b5, b6, b7, b8];
 const GameScreen = ({ children, activeStep }) => {
   const loggedIn = useSelector((state) => state.user.loggedIn);
+  const totalLevels = useSelector((state) => state.questions.totalQuestions);
 
-  const [showb1, setShowb1] = useState(true);
-  const [showb2, setShowb2] = useState(false);
-  const [showb3, setShowb3] = useState(false);
-  const [showb4, setShowb4] = useState(false);
-  const [showb5, setShowb5] = useState(false);
-  const [showb6, setShowb6] = useState(false);
-  const [showb7, setShowb7] = useState(false);
-  const [showb8, setShowb8] = useState(false);
+  const [showBadges, setShowBadges] = useState(
+    Array(badges.length).fill(false)
+  );
 
-  // if (activeStep == 2) {
-  //   console.log(activeStep)
-  //   setShowb1(true);
-  // }
-
-  // else if (activeStep == 4) {
-  //   setShowb2(true);
-  // }
-
-  // else if (activeStep == 6) {
-  //   setShowb3(true);
-  // }
-  // else if (activeStep == 8) {
-  //   setShowb4(true);
-  // }
-  // else if (activeStep == 10) {
-  //   setShowb5(true);
-  // }
-  // else if (activeStep == 12) {
-  //   setShowb6(true);
-  // }
-  // else if (activeStep == 14) {
-  //   setShowb7(true);
-  //   setShowb8(true);
-  // }
-
-
-
+  useEffect(() => {
+    if (activeStep % 2 === 0) {
+      if (activeStep === totalLevels - 1) {
+        let values = [...showBadges];
+        values[Math.floor(activeStep / 2) - 1] = true;
+        values[-1] = true;
+        setShowBadges(values);
+      } else {
+        let values = [...showBadges];
+        values[Math.floor(activeStep / 2) - 1] = true;
+        setShowBadges(values);
+      }
+    }
+  }, [activeStep]);
   return (
     <Container className="container-fluid" background={gamebg}>
       <Header className="row">
         <Badges className="col-2">
-
-          {showb1 ? (
-            <Badgeimg src={b1} alt="badge"></Badgeimg>
-
-          ) : (
-              <BadgeHolder />
-            )}
-
-          {showb2 ? (
-            <Badgeimg src={b2} alt="badge"></Badgeimg>
-
-
-          ) : (
-              <BadgeHolder />
-
-            )}
-          {showb3 ? (
-            <Badgeimg src={b3} alt="badge"></Badgeimg>
-
-          ) : (
-              <BadgeHolder />
-
-            )}
-          {showb4 ? (
-            <Badgeimg src={b4} alt="badge"></Badgeimg>
-
-          ) : (
-              <BadgeHolder />
-
-            )}
-          {showb5 ? (
-            <Badgeimg src={b5} alt="badge"></Badgeimg>
-
-          ) : (
-              <BadgeHolder />
-
-            )}
-          {showb6 ? (
-            <Badgeimg src={b6} alt="badge"></Badgeimg>
-
-          ) : (
-              <BadgeHolder />
-
-            )}
-          {showb7 ? (
-            <Badgeimg src={b7} alt="badge"></Badgeimg>
-
-          ) : (
-              <BadgeHolder />
-
-            )}
-          {showb8 ? (
-            <Badgeimg src={b8} alt="badge"></Badgeimg>
-
-          ) : (
-              <BadgeHolder />
-
-            )}
-
-
-
-
+          {showBadges.map((badge, index) => {
+            return badge ? (
+              <Badgeimg src={badges[index]} alt="badge" key={index} />
+            ) : (
+              <BadgeHolder key={index} />
+            );
+          })}
         </Badges>
         <ProgressStepper className="col-8">
           <CustomStepper activeStep={activeStep} />
@@ -139,9 +64,9 @@ const GameScreen = ({ children, activeStep }) => {
 export default GameScreen;
 
 const Badgeimg = styled.img`
-height: 1.5vw;
-width: 1.5vw; 
-borderRadius: 50%;
+  height: 1.5vw;
+  width: 1.5vw;
+  borderradius: 50%;
 `;
 const Container = styled.div`
   height: 100vh;
@@ -167,14 +92,14 @@ const Badges = styled.div`
 `;
 
 const BadgeHolder = styled.div`
-height: 1.5vw;
-width: 1.5vw;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-background-color: rgba(7, 94, 12, 0.4);
-border: 1px solid #08780e;
+  height: 1.5vw;
+  width: 1.5vw;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(7, 94, 12, 0.4);
+  border: 1px solid #08780e;
 `;
 
 const ProgressStepper = styled.div`

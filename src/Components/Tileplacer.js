@@ -16,8 +16,8 @@ const TileplacerComponent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 8vw;
-  width: 8vw;
+  height: ${({ height }) => (height ? height : "8vw")};
+  width:${({ width }) => (width ? width : "8vw")};
   background-color: rgba(255, 255, 255, 0.11);
   backdrop-filter: blur(10px);
   border: 2px solid #c9c4c4;

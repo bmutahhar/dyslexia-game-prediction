@@ -27,24 +27,10 @@ const PreSchoolers = () => {
     return newArray;
   };
 
-  // if (activeStep === 0) {
-  //   return (
-  //     <GameScreen activeStep={activeStep}>
-  //       <SelectOption
-  //       />
-  //     </GameScreen>
-  //   );
-  // }
   if (activeStep === 0) {
     return (
       <GameScreen activeStep={activeStep}>
-        <TileLayout
-          question={["A", "B", "C", "D", "A", "B", "C", "D", "H"]}
-          activeStep={activeStep}
-          nextStep={nextStep}
-          gridSize={3}
-          options={["A", "B", "C", "D", "H", "A", "B", "C", "D"]}
-        />
+        <SelectOption activeStep={activeStep} nextStep={nextStep} options={["A", "B", "C", "D"]} />
       </GameScreen>
     );
   } else if (activeStep === 1) {
@@ -88,6 +74,18 @@ const PreSchoolers = () => {
           nextStep={nextStep}
           word="FOUR"
           options={shuffleArray("FOUR".split(""))}
+        />
+      </GameScreen>
+    );
+  } else if (activeStep === 5) {
+    return (
+      <GameScreen activeStep={activeStep}>
+        <TileLayout
+          question={["A", "B", "C", "D", "A", "B", "C", "D", "H"]}
+          activeStep={activeStep}
+          nextStep={nextStep}
+          gridSize={3}
+          options={["A", "B", "C", "D", "H", "A", "B", "C", "D"]}
         />
       </GameScreen>
     );
