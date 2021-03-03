@@ -66,7 +66,7 @@ const Header = styled.h1`
   font-family: "Bebas Neue", cursive;
   letter-spacing: 3px;
   color: #faf6f3;
-  font-size: 3.2vw;
+  font-size: 3vw;
 `;
 const Backdisplay = styled.div`
   background: linear-gradient(to right, #03adfc, #fc03f4);
