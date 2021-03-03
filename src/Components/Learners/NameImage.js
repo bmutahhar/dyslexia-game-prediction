@@ -60,13 +60,14 @@ const NameImage = ({ activeStep, nextStep, word, options }) => {
       />
       <GameArea className="col-8">
         <QuestionContainer className="row">
+          <Character
+            className="avatar"
+            src={leapord}
+            alt="Boy Avatar"
+            style={styles.avatar}
+          />
           <DragArea className="drag-area">
-            <Character
-              className="avatar"
-              src={leapord}
-              alt="Boy Avatar"
-              style={styles.avatar}
-            />
+
             {options.map((tile, index) => {
               return (
                 <Tileplacer
@@ -91,19 +92,19 @@ const NameImage = ({ activeStep, nextStep, word, options }) => {
             animate={{ opacity: 1 }}
             transition={{ type: "tween", duration: 1 }}
           >
-            <UIButton variant="contained" type="submit" onClick={() => {}}>
+            <UIButton variant="contained" type="submit" onClick={() => { }}>
               Submit
             </UIButton>
           </motion.div>
         ) : (
-          <NextButton
-            disabled={disabled}
-            onClick={() => {
-              getAnswer();
-              nextStep();
-            }}
-          />
-        )}
+            <NextButton
+              disabled={disabled}
+              onClick={() => {
+                getAnswer();
+                nextStep();
+              }}
+            />
+          )}
       </NextButtonContainer>
     </MainContainer>
   );

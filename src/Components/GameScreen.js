@@ -44,8 +44,8 @@ const GameScreen = ({ children, activeStep }) => {
             return badge ? (
               <Badgeimg src={badges[index]} alt="badge" key={index} />
             ) : (
-              <BadgeHolder key={index} />
-            );
+                <BadgeHolder key={index} />
+              );
           })}
         </Badges>
         <ProgressStepper className="col-8">

@@ -11,10 +11,15 @@ import { addAnswer } from "../../actions";
 import triangle from "../../Images/shapes/triangle.png";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
+import b1 from "../../Images/badges/b10.svg";
+import Confetti from 'react-confetti';
+
 
 const ObjectRotation = ({ activeStep, nextStep, angle }) => {
   const [open, setOpen] = useState(false);
-  const [shown, setShown] = useState(false)
+  const [shown, setShown] = useState(false);
+  const [Bopen, setBopen] = useState(false);
+  const [Bshown, setBshown] = useState(false);
   const [rotation, setRotation] = useState(0);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
@@ -31,6 +36,16 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
     setOpen(false);
   };
 
+  const BadgeOpen = () => {
+    setBopen(true);
+    setBshown(true)
+    setTimeout(BadgeClose, 5500);
+  };
+
+  const BadgeClose = () => {
+    setBopen(false);
+  };
+
   const rotateRight = () => {
     setRotation(rotation + 30);
   };
@@ -39,7 +54,7 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
     setRotation(rotation - 30);
   };
 
-  const getAnswer = () =>dispatch(addAnswer(rotation))
+  const getAnswer = () => dispatch(addAnswer(rotation))
   return (
     <MainContainer>
       <AvatarMessage
@@ -76,7 +91,7 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
           <InfoContainer>
             <BsInfoCircleFill className={classes.info} />
             <Typography variant="subtitle1" className={classes.info}>
-              {shown?"Rotate the object as was shown":"Click the below button to view question image"}
+              {shown ? "Rotate the object as was shown" : "Click the below button to view question image"}
             </Typography>
           </InfoContainer>
           <UIButton variant="contained" type="button" onClick={handleOpen}>
@@ -91,21 +106,27 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
             animate={{ opacity: 1 }}
             transition={{ type: "tween", duration: 1 }}
           >
-            <UIButton variant="contained" type="submit" onClick={() => {}}>
+            <UIButton variant="contained" type="submit" onClick={() => { }}>
               Submit
             </UIButton>
           </motion.div>
         ) : (
-          <NextButton
-            onClick={() => {
-              getAnswer();
-              nextStep();
-            }}
-          />
-        )}
+            <NextButton
+              onClick={() => {
+                BadgeOpen();
+                getAnswer();
+                setTimeout(nextStep, 5500);
+              }}
+            />
+          )}
       </NextButtonContainer>
       <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
         <PopUp src={triangle} alt="Triangle" rotation={angle} />
+      </Backdrop>
+      <Backdrop className={classes.backdrop} open={Bopen}>
+
+        <BadgePopUp src={b1} alt="badge" />
+
       </Backdrop>
     </MainContainer>
   );
@@ -120,6 +141,44 @@ const PopUp = ({ src, alt, rotation }) => {
         <Image src={src} alt={alt} />
       </ImageContainer>
     </PopImageContainer>
+
+
+  );
+};
+
+const BadgePopUp = ({ src, alt }) => {
+  return (
+
+
+    <PopImageContainer>
+      <Confetti numberOfPieces="500" ></Confetti>
+
+      <ImageContainer>
+
+        <Image src={src} alt={alt} />
+
+      </ImageContainer>
+      <Typography variant="subtitle1" style={{
+        color: "white",
+
+        fontSize: "3.5vw",
+        marginTop: "20px",
+      }}>
+        Good Job!
+</Typography>
+      <Typography variant="subtitle1" style={{
+        color: "white",
+
+        fontSize: "2.5vw",
+        marginTop: "10px",
+      }}>
+        You've Earned A Teddy Bear Badge
+</Typography>
+
+    </PopImageContainer>
+
+
+
   );
 };
 
@@ -137,10 +196,15 @@ const useStyles = makeStyles(({ theme }) => ({
     margin: "2px 5px",
     fontSize: "1.5vw",
   },
+  Msg: {
+    color: "white",
+
+    fontSize: "2.5vw",
+  },
   backdrop: {
     zIndex: 10,
-    backgroundColor: "rgba(0,0,0,0.8)",
-    backdropFilter: "blur(5px)",
+    backgroundColor: "rgba(0,0,0,0.6)",
+    backdropFilter: "blur(18px)",
   },
 }));
 
@@ -172,10 +236,13 @@ const AnswerSelection = styled.div`
   justify-content: flex-start;
 `;
 
-const ImageContainer = styled(motion.div)``;
+const ImageContainer = styled(motion.div)`
+
+`;
 
 const Image = styled.img`
   height: 22vw;
+  
 `;
 
 const IconContainer = styled.div`
@@ -203,8 +270,11 @@ const QuestionContainer = styled.div`
 
 const PopImageContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: transparent;
   margin-bottom:50px;
+  
+  
 `;
