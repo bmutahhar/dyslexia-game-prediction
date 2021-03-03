@@ -22,6 +22,7 @@ const CustomButton = withStyles({
     fontSize: 18,
     fontWeight: 400,
     // width: "80%",
+    marginTop: "10px",
     padding: "6px 10px",
     border: "1px solid",
     // lineHeight: 1.5,
