@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Dragula from "react-dragula";
 import { motion, AnimatePresence } from "framer-motion";
+import { Backdrop } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Tileplacer,
   Tile,
@@ -11,12 +13,23 @@ import {
   NextButton,
   UIButton,
   Timer,
+  BadgePopUp,
 } from "../../Components";
 import { addAnswer } from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
-const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
+const TileLayout = ({
+  question,
+  gridSize,
+  options,
+  activeStep,
+  nextStep,
+  showBadge,
+  badge,
+  openBadge,
+  badgeName
+}) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const grid = Array(gridSize * gridSize).fill(true);
@@ -24,24 +37,8 @@ const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
 
   const optionsB = options.slice(
     Math.floor(options.length / 2),
-    options.length);
-  // var optionsA;
-  // var optionsB;
-
-  // if (options.length <= 5) {
-  //   optionsA = options;
-
-  //   optionsB = [];
-
-  // }
-
-  // else if (options.length > 5) {
-  //   optionsA = options.slice(0, Math.floor(options.length / 2));
-
-  //   optionsB = options.slice(
-  //     Math.floor(options.length / 2),
-  //     options.length);
-  // };
+    options.length
+  );
 
   const [show, setShow] = useState(true);
   const [disabled, setDisabled] = useState(true);
@@ -49,6 +46,7 @@ const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
   const optionsRefB = useRef(null);
   const elRefs = useRef([]);
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   const closeQuestion = () => {
     setShow(false);
@@ -73,63 +71,69 @@ const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
         for (let i = 0; i < elRefs.current.length; i++) {
           if (elRefs.current[i].childNodes.length !== 0) {
             setDisabled(false);
-            return
-          };
+            return;
+          }
         }
         setDisabled(true);
         return;
       });
     }
   }, [elRefs, optionsRefA, optionsRefB, show]);
-  return (
-    <MainContainer>
-      <AvatarMessage
-        className="col-2"
-        src={gender === "male" ? larka : larki}
-        alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
-      />
-      <GameArea className="col-8">
-        {show ? (
-          <AnimatePresence>
-            <QuestionContainer
-              className="row"
-              question
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.25, duration: 0.25 }}
-              exit={{ opacity: 0 }}
-            >
-              <Timer
-                initialSeconds={4}
-                initialMinutes={0}
-                reverse
-                callBack={closeQuestion}
-              />
-              <GridPlacer gridSize={gridSize}>
-                {question.map((el, i) => {
-                  return (
-                    <Tileplacer key={i}>
-                      <Tile question>{el}</Tile>
-                    </Tileplacer>
-                  );
-                })}
-              </GridPlacer>
-            </QuestionContainer>
-          </AnimatePresence>
-        ) : (
-            <QuestionContainer
-              className="row"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.25, duration: 0.25 }}
-            >
 
+  if (showBadge) {
+    return (
+      <Backdrop className={classes.backdrop} open={showBadge}>
+        <BadgePopUp src={badge} alt="Badge" badgeName={badgeName} />
+      </Backdrop>
+    );
+  } else {
+    return (
+      <MainContainer>
+        <AvatarMessage
+          className="col-2"
+          src={gender === "male" ? larka : larki}
+          alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
+        />
+        <GameArea className="col-8">
+          {show ? (
+            <AnimatePresence>
+              <QuestionContainer
+                className="row"
+                question
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.25, duration: 0.25 }}
+                exit={{ opacity: 0 }}
+              >
+                <Timer
+                  initialSeconds={4}
+                  initialMinutes={0}
+                  reverse
+                  callBack={closeQuestion}
+                />
+                <GridPlacer gridSize={gridSize}>
+                  {question.map((el, i) => {
+                    return (
+                      <Tileplacer key={i}>
+                        <Tile question>{el}</Tile>
+                      </Tileplacer>
+                    );
+                  })}
+                </GridPlacer>
+              </QuestionContainer>
+            </AnimatePresence>
+          ) : (
+            <QuestionContainer
+              className="row"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.25, duration: 0.25 }}
+            >
               <TileGrid gridSize={gridSize} ref={optionsRefA}>
                 {optionsA.map((el, i) => {
                   return <DraggableTile key={i}>{el}</DraggableTile>;
                 })}
               </TileGrid>
-
 
               <div
                 style={{
@@ -157,37 +161,62 @@ const TileLayout = ({ question, gridSize, options, activeStep, nextStep }) => {
                   return <DraggableTile key={i}>{el}</DraggableTile>;
                 })}
               </TileGrid>
-
-
             </QuestionContainer>
           )}
-      </GameArea>
-      <NextButtonContainer className="col-2">
-        {activeStep === totalLevels - 1 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "tween", duration: 1 }}
-          >
-            <UIButton variant="contained" type="submit" onClick={() => { }}>
-              Submit
-            </UIButton>
-          </motion.div>
-        ) : (
+        </GameArea>
+        <NextButtonContainer className="col-2">
+          {activeStep === totalLevels - 1 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ type: "tween", duration: 1 }}
+            >
+              <UIButton variant="contained" type="submit" onClick={() => {}}>
+                Submit
+              </UIButton>
+            </motion.div>
+          ) : (
             <NextButton
               disabled={disabled}
               onClick={() => {
                 getAnswer();
+                if ((activeStep+1)  % 2===0) openBadge();
                 nextStep();
               }}
             />
           )}
-      </NextButtonContainer>
-    </MainContainer>
-  );
+        </NextButtonContainer>
+      </MainContainer>
+    );
+  }
 };
 
 export default TileLayout;
+const useStyles = makeStyles(({ theme }) => ({
+  icons: {
+    fontSize: "5.5vw",
+    color: "white",
+  },
+  title: {
+    color: "white",
+    fontSize: "2.5vw",
+  },
+  info: {
+    color: "white",
+    margin: "2px 5px",
+    fontSize: "1.5vw",
+  },
+  Msg: {
+    color: "white",
+
+    fontSize: "2.5vw",
+  },
+  backdrop: {
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    backdropFilter: "blur(18px)",
+  },
+}));
 
 const GridPlacer = styled.div`
   display: grid;
@@ -212,7 +241,6 @@ const TileGrid = styled.div`
   justify-content: flex-start;
   height: 95%;
   width: 15vw;
-  border: 2px solid red;
 `;
 
 const QuestionContainer = styled(motion.div)`

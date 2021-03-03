@@ -1,24 +1,38 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import { Backdrop } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Tile,
   Timer,
   UIButton,
   AvatarMessage,
   NextButton,
+  BadgePopUp,
 } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
 import { addAnswer } from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
-const DisplayTile = ({ name, question, options, activeStep, nextStep }) => {
+const DisplayTile = ({
+  name,
+  question,
+  options,
+  activeStep,
+  nextStep,
+  showBadge,
+  badge,
+  openBadge,
+  badgeName
+}) => {
   const [open, setOpen] = useState(true);
   const [answer, setAnswer] = useState("");
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
+  const classes = useStyles();
   const showDisplay = () => {
     setOpen(true);
   };
@@ -30,77 +44,113 @@ const DisplayTile = ({ name, question, options, activeStep, nextStep }) => {
     setAnswer(answer);
   };
   const getAnswer = () => dispatch(addAnswer(answer));
-
-  return (
-    <MainContainer>
-      <AvatarMessage
-        className="col-2"
-        src={gender === "male" ? larka : larki}
-        alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
-      />
-      <GameArea className="col-8">
-        <QuestionContainer className="row">
-          <AnimatePresence>
-            {open && (
-              <TileContainer
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <Timer
-                  initialSeconds={5}
-                  initialMinutes={0}
-                  reverse
-                  callBack={closeDisplay}
-                />
-                <Tile question={true}>{question}</Tile>
-              </TileContainer>
-            )}
-          </AnimatePresence>
-          <Qinfo>Select the matching tile from below as was shown above</Qinfo>
-          <UIButton
-            variant="contained"
-            disabled={open}
-            type="button"
-            onClick={showDisplay}
-          >
-            Show Again
-          </UIButton>
-        </QuestionContainer>
-        <AnswerContainer className="row">
-          {options.map((el,i) => {
-            return (
-              <Tile name={name} key={i} onClick={onClick}>
-                {el}
-              </Tile>
-            );
-          })}
-        </AnswerContainer>
-      </GameArea>
-      <NextButtonContainer className="col-2">
-        {activeStep === totalLevels - 1 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "tween", duration: 1 }}
-          >
-            <UIButton variant="contained" type="submit" onClick={() => {}}>
-              Submit
+  if (showBadge) {
+    return (
+      <Backdrop className={classes.backdrop} open={showBadge}>
+        <BadgePopUp src={badge} alt="Badge" badgeName={badgeName} />
+      </Backdrop>
+    );
+  } else {
+    return (
+      <MainContainer>
+        <AvatarMessage
+          className="col-2"
+          src={gender === "male" ? larka : larki}
+          alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
+        />
+        <GameArea className="col-8">
+          <QuestionContainer className="row">
+            <AnimatePresence>
+              {open && (
+                <TileContainer
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Timer
+                    initialSeconds={5}
+                    initialMinutes={0}
+                    reverse
+                    callBack={closeDisplay}
+                  />
+                  <Tile question={true}>{question}</Tile>
+                </TileContainer>
+              )}
+            </AnimatePresence>
+            <Qinfo>
+              Select the matching tile from below as was shown above
+            </Qinfo>
+            <UIButton
+              variant="contained"
+              disabled={open}
+              type="button"
+              onClick={showDisplay}
+            >
+              Show Again
             </UIButton>
-          </motion.div>
-        ) : (
-          <NextButton
-            onClick={() => {
-              getAnswer();
-              nextStep();
-            }}
-          />
-        )}
-      </NextButtonContainer>
-    </MainContainer>
-  );
+          </QuestionContainer>
+          <AnswerContainer className="row">
+            {options.map((el, i) => {
+              return (
+                <Tile name={name} key={i} onClick={onClick}>
+                  {el}
+                </Tile>
+              );
+            })}
+          </AnswerContainer>
+        </GameArea>
+        <NextButtonContainer className="col-2">
+          {activeStep === totalLevels - 1 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ type: "tween", duration: 1 }}
+            >
+              <UIButton variant="contained" type="submit" onClick={() => {}}>
+                Submit
+              </UIButton>
+            </motion.div>
+          ) : (
+            <NextButton
+              onClick={() => {
+                getAnswer();
+                if ((activeStep+1)  % 2===0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
+        </NextButtonContainer>
+      </MainContainer>
+    );
+  }
 };
 export default DisplayTile;
+
+const useStyles = makeStyles(({ theme }) => ({
+  icons: {
+    fontSize: "5.5vw",
+    color: "white",
+  },
+  title: {
+    color: "white",
+    fontSize: "2.5vw",
+  },
+  info: {
+    color: "white",
+    margin: "2px 5px",
+    fontSize: "1.5vw",
+  },
+  Msg: {
+    color: "white",
+
+    fontSize: "2.5vw",
+  },
+  backdrop: {
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    backdropFilter: "blur(18px)",
+  },
+}));
 
 const QuestionContainer = styled.div`
   height: 70%;
