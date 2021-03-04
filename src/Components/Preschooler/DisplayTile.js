@@ -12,13 +12,43 @@ import { useSelector, useDispatch } from "react-redux";
 import { addAnswer } from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
+import { IconButton, Typography, Backdrop } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { RotateLeft, RotateRight } from "@material-ui/icons";
+import b1 from "../../Images/badges/b10.svg";
+import Confetti from 'react-confetti';
 
 const DisplayTile = ({ name, question, options, activeStep, nextStep }) => {
+  const [Bopen, setBopen] = useState(false);
+  const [AllBopen, setAllBopen] = useState(false);
+
   const [open, setOpen] = useState(true);
   const [answer, setAnswer] = useState("");
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
+  const classes = useStyles();
+
+
+  const BadgeOpen = () => {
+    setBopen(true);
+    setTimeout(BadgeClose, 3500);
+  };
+
+  const BadgeClose = () => {
+    setBopen(false);
+  };
+
+  const AllBadgeOpen = () => {
+    setAllBopen(true);
+    setTimeout(BadgeClose, 5500);
+  };
+
+  const AllBadgeClose = () => {
+    setAllBopen(false);
+  };
+
+
   const showDisplay = () => {
     setOpen(true);
   };
@@ -67,15 +97,15 @@ const DisplayTile = ({ name, question, options, activeStep, nextStep }) => {
             Show Again
           </UIButton>
         </QuestionContainer>
-        <AnswerContainer className="row">
-          {options.map((el,i) => {
+        {/* <AnswerContainer className="row">
+          {options.map((el, i) => {
             return (
               <Tile name={name} key={i} onClick={onClick}>
                 {el}
               </Tile>
             );
           })}
-        </AnswerContainer>
+        </AnswerContainer> */}
       </GameArea>
       <NextButtonContainer className="col-2">
         {activeStep === totalLevels - 1 ? (
@@ -84,23 +114,91 @@ const DisplayTile = ({ name, question, options, activeStep, nextStep }) => {
             animate={{ opacity: 1 }}
             transition={{ type: "tween", duration: 1 }}
           >
-            <UIButton variant="contained" type="submit" onClick={() => {}}>
+            <UIButton variant="contained" type="submit" onClick={() => {
+              BadgeOpen();
+
+            }}>
               Submit
             </UIButton>
           </motion.div>
         ) : (
-          <NextButton
-            onClick={() => {
-              getAnswer();
-              nextStep();
-            }}
-          />
-        )}
+            <NextButton
+              onClick={() => {
+                getAnswer();
+                nextStep();
+              }}
+            />
+          )}
       </NextButtonContainer>
+      <Backdrop className={classes.backdrop} open={Bopen}>
+
+        <BadgePopUp src={b1} alt="badge" />
+
+      </Backdrop>
+
     </MainContainer>
   );
 };
 export default DisplayTile;
+
+const BadgePopUp = ({ src, alt }) => {
+  return (
+
+
+    <PopImageContainer>
+      <Confetti numberOfPieces="500" ></Confetti>
+
+      <ImageContainer>
+
+        <Image src={src} alt={alt} />
+        <Image src={src} alt={alt} />
+        <Image src={src} alt={alt} />
+        <Image src={src} alt={alt} />
+
+
+      </ImageContainer>
+      <ImageContainer>
+
+        <Image src={src} alt={alt} />
+        <Image src={src} alt={alt} />
+        <Image src={src} alt={alt} />
+        <Image src={src} alt={alt} />
+
+
+
+      </ImageContainer>
+      <Typography variant="subtitle1" style={{
+        color: "white",
+
+        fontSize: "3.5vw",
+        marginTop: "20px",
+      }}>
+        Congratulations! You've Completed The Game.
+</Typography>
+      <Typography variant="subtitle1" style={{
+        color: "white",
+
+        fontSize: "2.5vw",
+        marginTop: "10px",
+      }}>
+        You've Earned All Of The Badges.
+</Typography>
+
+    </PopImageContainer>
+
+
+
+  );
+};
+
+const useStyles = makeStyles(({ theme }) => ({
+
+  backdrop: {
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    backdropFilter: "blur(18px)",
+  },
+}));
 
 const QuestionContainer = styled.div`
   height: 70%;
@@ -156,4 +254,36 @@ const MainContainer = styled.div`
 const GameArea = styled.div`
   height: 100%;
   width: 100%;
+`;
+
+const ImageContainer = styled(motion.div)`
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+align-items: center;
+justify-content: center;
+`;
+
+const Image = styled.img`
+  height: 12vw;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+  
+`;
+
+
+
+
+
+
+
+const PopImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  
+  
 `;
