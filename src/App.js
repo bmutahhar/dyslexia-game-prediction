@@ -14,6 +14,7 @@ import {
   NotSupported,
   PreSchoolers,
   Learners,
+  AllBadgeDisplay
 } from "./Screens";
 import { useMediaQuery } from "react-responsive";
 
@@ -39,10 +40,11 @@ function App() {
               <Route path="/selectAvatar" component={Avatar} />
               <Route path="/preschooler" component={PreSchoolers} />
               <Route path="/learner" component={Learners} />
+              <Route path="/completed" component={AllBadgeDisplay} />
             </>
           ) : (
-            <Route path="/notSupported" component={NotSupported} />
-          )}
+              <Route path="/notSupported" component={NotSupported} />
+            )}
         </Switch>
       </div>
     </Router>

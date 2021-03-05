@@ -9,5 +9,6 @@ export { default as Login } from "./Login";
 export { default as NotSupported } from "./NotSupported";
 export { default as Signup } from "./Signup";
 export { default as PreSchoolers } from "./Preschooler";
-export { default as Learners} from "./Learners";
+export { default as Learners } from "./Learners";
+export { default as AllBadgeDisplay } from "./AllBadgeDisplay";
 

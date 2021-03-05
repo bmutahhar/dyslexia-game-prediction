@@ -3,8 +3,8 @@ import styled from "styled-components";
 import Dragula from "react-dragula";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
-import leapord from "../../Images/characters/leapord.png";
-
+import {Backdrop} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
 import {
   Tileplacer,
   Character,
@@ -12,14 +12,24 @@ import {
   AvatarMessage,
   NextButton,
   UIButton,
+  BadgePopUp
 } from "..";
 import { addAnswer } from "../../actions";
 
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
+import leapord from "../../Images/characters/leapord.png";
 import "react-dragula/dist/dragula.css";
 
-const NameImage = ({ activeStep, nextStep, word, options }) => {
+const NameImage = ({
+  activeStep,
+  nextStep,
+  word,
+  options,
+  showBadge,
+  badge,
+  openBadge,
+}) => {
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
   const elRefs = useRef([]);
@@ -27,6 +37,7 @@ const NameImage = ({ activeStep, nextStep, word, options }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   const getAnswer = () => {
     let answer = "";
@@ -36,6 +47,7 @@ const NameImage = ({ activeStep, nextStep, word, options }) => {
 
   useEffect(() => {
     if (elRefs.current && ansRef.current) {
+      console.log("Mutahharrrrr")
       Dragula([...elRefs.current, ansRef.current], {
         accepts: function (el, target, source, sibling) {
           if (target.parentElement.classList.contains("drag-area")) {
@@ -49,68 +61,101 @@ const NameImage = ({ activeStep, nextStep, word, options }) => {
         else setDisabled(true);
       });
     }
-  }, [elRefs, ansRef, arrLength]);
-
-  return (
-    <MainContainer>
-      <AvatarMessage
-        className="col-2"
-        src={gender === "male" ? larka : larki}
-        alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
-      />
-      <GameArea className="col-8">
-        <QuestionContainer className="row">
-          <Character
-            className="avatar"
-            src={leapord}
-            alt="Boy Avatar"
-            style={styles.avatar}
-          />
-          <DragArea className="drag-area">
-
+  }, [elRefs, ansRef, arrLength,showBadge]);
+  if (showBadge) {
+    return (
+      <Backdrop className={classes.backdrop} open={showBadge}>
+        <BadgePopUp src={badge} alt="Badge" />
+      </Backdrop>
+    );
+  } else {
+    return (
+      <MainContainer>
+        <AvatarMessage
+          className="col-2"
+          src={gender === "male" ? larka : larki}
+          alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
+        />
+        <GameArea className="col-8">
+          <QuestionContainer className="row">
+            <Character
+              className="avatar"
+              src={leapord}
+              alt="Boy Avatar"
+              style={styles.avatar}
+            />
+            <DragArea className="drag-area">
+              {options.map((tile, index) => {
+                return (
+                  <Tileplacer
+                    key={index}
+                    ref={(el) => (elRefs.current[index] = el)}
+                  ></Tileplacer>
+                );
+              })}
+            </DragArea>
+            <Qinfo>Name the character by dragging the tiles</Qinfo>
+          </QuestionContainer>
+          <AnswerContainer ref={ansRef} className="row">
             {options.map((tile, index) => {
-              return (
-                <Tileplacer
-                  key={index}
-                  ref={(el) => (elRefs.current[index] = el)}
-                ></Tileplacer>
-              );
+              return <DraggableTile key={index}>{tile}</DraggableTile>;
             })}
-          </DragArea>
-          <Qinfo>Name the character by dragging the tiles</Qinfo>
-        </QuestionContainer>
-        <AnswerContainer ref={ansRef} className="row">
-          {options.map((tile, index) => {
-            return <DraggableTile key={index}>{tile}</DraggableTile>;
-          })}
-        </AnswerContainer>
-      </GameArea>
-      <NextButtonContainer className="col-2">
-        {activeStep === totalLevels - 1 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "tween", duration: 1 }}
-          >
-            <UIButton variant="contained" type="submit" onClick={() => { }}>
-              Submit
-            </UIButton>
-          </motion.div>
-        ) : (
+          </AnswerContainer>
+        </GameArea>
+        <NextButtonContainer className="col-2">
+          {activeStep === totalLevels - 1 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ type: "tween", duration: 1 }}
+            >
+              <UIButton variant="contained" type="submit" onClick={() => {}}>
+                Submit
+              </UIButton>
+            </motion.div>
+          ) : (
             <NextButton
               disabled={disabled}
               onClick={() => {
                 getAnswer();
+                if ((activeStep+1) % 2===0) openBadge();
                 nextStep();
               }}
             />
           )}
-      </NextButtonContainer>
-    </MainContainer>
-  );
+        </NextButtonContainer>
+      </MainContainer>
+    );
+  }
 };
 
 export default NameImage;
+
+const useStyles = makeStyles(({ theme }) => ({
+  icons: {
+    fontSize: "5.5vw",
+    color: "white",
+  },
+  title: {
+    color: "white",
+    fontSize: "2.5vw",
+  },
+  info: {
+    color: "white",
+    margin: "2px 5px",
+    fontSize: "1.5vw",
+  },
+  Msg: {
+    color: "white",
+
+    fontSize: "2.5vw",
+  },
+  backdrop: {
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    backdropFilter: "blur(18px)",
+  },
+}));
 
 const styles = {
   avatar: {

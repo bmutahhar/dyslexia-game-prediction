@@ -12,9 +12,11 @@ export { default as ProfileAvatar } from "./ProfileAvatar";
 export { default as Timer } from "./Timer";
 export { default as CustomStepper } from "./Stepper";
 export { default as NextButton } from "./NextButton";
-export {  Tile } from "./Tile";
-export {  DraggableTile } from "./Tile";
+export { Tile } from "./Tile";
+export { DraggableTile } from "./Tile";
 export { default as Tileplacer } from "./Tileplacer";
 export { default as UIButton } from "./UIButton";
 export { default as GameScreen } from "./GameScreen";
 export { default as AvatarMessage } from "./AvatarMessage";
+export { default as BadgePopUp } from "./BadgePopup";
+

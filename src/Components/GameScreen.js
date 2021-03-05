@@ -1,29 +1,22 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ProfileAvatar, Timer, CustomStepper } from "../Components";
+import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
-import b1 from "../Images/badges/b10.svg";
-import b2 from "../Images/badges/b2.svg";
-import b3 from "../Images/badges/b3.svg";
-import b4 from "../Images/badges/b4.svg";
-import b5 from "../Images/badges/b5.svg";
-import b6 from "../Images/badges/b6.svg";
-import b7 from "../Images/badges/b7.svg";
-import b8 from "../Images/badges/b8.svg";
 
-const badges = [b1, b2, b3, b4, b5, b6, b7, b8];
-const GameScreen = ({ children, activeStep }) => {
+const GameScreen = ({ children, activeStep, badges }) => {
   const loggedIn = useSelector((state) => state.user.loggedIn);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
-
   const [showBadges, setShowBadges] = useState(
     Array(badges.length).fill(false)
   );
 
   useEffect(() => {
-    if (activeStep % 2 === 0) {
+    if (activeStep === 0) return;
+    else if (activeStep % 2 === 0) {
+      console.log("12344567");
       if (activeStep === totalLevels - 1) {
         let values = [...showBadges];
         values[Math.floor(activeStep / 2) - 1] = true;
@@ -42,7 +35,7 @@ const GameScreen = ({ children, activeStep }) => {
         <Badges className="col-2">
           {showBadges.map((badge, index) => {
             return badge ? (
-              <Badgeimg src={badges[index]} alt="badge" key={index} />
+              <Badgeimg src={badges[index].image} alt="badge" key={index} />
             ) : (
                 <BadgeHolder key={index} />
               );
@@ -63,11 +56,29 @@ const GameScreen = ({ children, activeStep }) => {
 
 export default GameScreen;
 
+const useStyles = makeStyles(({ theme }) => ({
+  title: {
+    color: "white",
+    fontSize: "2.5vw",
+  },
+  info: {
+    color: "white",
+    margin: "2px 5px",
+    fontSize: "1.5vw",
+  },
+  backdrop: {
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    backdropFilter: "blur(20px)",
+  },
+}));
+
 const Badgeimg = styled.img`
-  height: 1.5vw;
-  width: 1.5vw;
+  height: 1.7vw;
+  width: 1.7vw;
   borderradius: 50%;
 `;
+
 const Container = styled.div`
   height: 100vh;
   background-image: url(${({ background }) => background});
@@ -88,18 +99,16 @@ const Badges = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  border: 2px solid red;
 `;
 
 const BadgeHolder = styled.div`
-  height: 1.5vw;
-  width: 1.5vw;
+  height: 1.7vw;
+  width: 1.7vw;
   border-radius: 50%;
   display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: rgba(7, 94, 12, 0.4);
   border: 1px solid #08780e;
+  
 `;
 
 const ProgressStepper = styled.div`

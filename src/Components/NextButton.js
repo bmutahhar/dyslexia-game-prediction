@@ -24,6 +24,8 @@ const useStyles = makeStyles(({ theme }) => ({
   iconButton: {
     backgroundColor: "#25ce4a",
     padding: 5,
+    width: "4.4vw",
+    height: "4.4vw",
     "&:hover": {
       backgroundColor: "#027719",
     },

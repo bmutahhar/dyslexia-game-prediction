@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import { Backdrop } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Tileplacer,
   Tile,
@@ -9,17 +11,27 @@ import {
   NextButton,
   UIButton,
   Timer,
+  BadgePopUp,
 } from "../../Components";
 import { addAnswer } from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
-const SelectOption = ({ activeStep, nextStep, options }) => {
+const SelectOption = ({
+  activeStep,
+  nextStep,
+  options,
+  showBadge,
+  badge,
+  openBadge,
+  badgeName
+}) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const [show, setShow] = useState(true);
   const [answer, setAnswer] = useState("");
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   const closeQuestion = () => {
     setShow(false);
@@ -30,86 +42,120 @@ const SelectOption = ({ activeStep, nextStep, options }) => {
   };
 
   const getAnswer = () => dispatch(addAnswer(answer));
-
-  return (
-    <MainContainer>
-      <AvatarMessage
-        className="col-2"
-        src={gender === "male" ? larka : larki}
-        alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
-      ></AvatarMessage>
-      <GameArea className="col-8">
-        {show ? (
-          <AnimatePresence>
-            <QuestionContainer className="row">
-              <TileContainer
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <Timer
-                  initialSeconds={7}
-                  initialMinutes={0}
-                  reverse
-                  callBack={closeQuestion}
-                />
-                <Tile
-                  question={true}
-                  height="15vw"
-                  width="15vw"
-                  fontSize="10vw"
+  if (showBadge) {
+    return (
+      <Backdrop className={classes.backdrop} open={showBadge}>
+        <BadgePopUp src={badge} alt="Badge" badgeName={badgeName}/>
+      </Backdrop>
+    );
+  } else {
+    return (
+      <MainContainer>
+        <AvatarMessage
+          className="col-2"
+          src={gender === "male" ? larka : larki}
+          alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
+        ></AvatarMessage>
+        <GameArea className="col-8">
+          {show ? (
+            <AnimatePresence>
+              <QuestionContainer className="row">
+                <TileContainer
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                 >
-                  D
-                </Tile>
-              </TileContainer>
+                  <Timer
+                    initialSeconds={7}
+                    initialMinutes={0}
+                    reverse
+                    callBack={closeQuestion}
+                  />
+                  <Tile
+                    question={true}
+                    height="15vw"
+                    width="15vw"
+                    fontSize="10vw"
+                  >
+                    B
+                  </Tile>
+                </TileContainer>
+              </QuestionContainer>
+            </AnimatePresence>
+          ) : (
+            <QuestionContainer className="row">
+              <GridPlacer>
+                {options.map((el, i) => {
+                  return (
+                    <Tileplacer key={i} height="12vw" width="12vw">
+                      <Tile
+                        height="10vw"
+                        width="10vw"
+                        name="selectOptions"
+                        onClick={onClick}
+                      >
+                        {el}
+                      </Tile>
+                    </Tileplacer>
+                  );
+                })}
+              </GridPlacer>
             </QuestionContainer>
-          </AnimatePresence>
-        ) : (
-          <QuestionContainer className="row">
-            <GridPlacer>
-              {options.map((el, i) => {
-                return (
-                  <Tileplacer key={i} height="12vw" width="12vw">
-                    <Tile
-                      height="10vw"
-                      width="10vw"
-                      name="selectOptions"
-                      onClick={onClick}
-                    >
-                      {el}
-                    </Tile>
-                  </Tileplacer>
-                );
-              })}
-            </GridPlacer>
-          </QuestionContainer>
-        )}
-      </GameArea>
-      <NextButtonContainer className="col-2">
-        {activeStep === totalLevels - 1 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "tween", duration: 1 }}
-          >
-            <UIButton variant="contained" type="submit" onClick={() => {}}>
-              Submit
-            </UIButton>
-          </motion.div>
-        ) : (
-          <NextButton
-            onClick={() => {
-              getAnswer();
-              nextStep();
-            }}
-          />
-        )}
-      </NextButtonContainer>
-    </MainContainer>
-  );
+          )}
+        </GameArea>
+        <NextButtonContainer className="col-2">
+          {activeStep === totalLevels - 1 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ type: "tween", duration: 1 }}
+            >
+              <UIButton variant="contained" type="submit" onClick={() => {}}>
+                Submit
+              </UIButton>
+            </motion.div>
+          ) : (
+            <NextButton
+              onClick={() => {
+                getAnswer();
+                if ((activeStep+1)  % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
+        </NextButtonContainer>
+      </MainContainer>
+    );
+  }
 };
 
 export default SelectOption;
+
+const useStyles = makeStyles(({ theme }) => ({
+  icons: {
+    fontSize: "5.5vw",
+    color: "white",
+  },
+  title: {
+    color: "white",
+    fontSize: "2.5vw",
+  },
+  info: {
+    color: "white",
+    margin: "2px 5px",
+    fontSize: "1.5vw",
+  },
+  Msg: {
+    color: "white",
+
+    fontSize: "2.5vw",
+  },
+  backdrop: {
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    backdropFilter: "blur(18px)",
+  },
+}));
 
 const GridPlacer = styled.div`
   display: grid;

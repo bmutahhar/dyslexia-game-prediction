@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { AvatarMessage, UIButton, NextButton } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
 import { addAnswer } from "../../actions";
+import { Link } from "react-router-dom"
 import triangle from "../../Images/shapes/triangle.png";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
@@ -106,18 +107,21 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
             animate={{ opacity: 1 }}
             transition={{ type: "tween", duration: 1 }}
           >
-            <UIButton variant="contained" type="submit" onClick={() => { }}>
+            <UIButton variant="contained" type="button" component={Link} to="/completed">
               Submit
             </UIButton>
           </motion.div>
         ) : (
-            <NextButton
-              onClick={() => {
-                BadgeOpen();
-                getAnswer();
-                setTimeout(nextStep, 5500);
-              }}
-            />
+            // <NextButton
+            //   onClick={() => {
+            //     BadgeOpen();
+            //     getAnswer();
+            //     setTimeout(nextStep, 5500);
+            //   }}
+            // />
+            <UIButton variant="contained" type="button" component={Link} to="/completed">
+              Submit
+            </UIButton>
           )}
       </NextButtonContainer>
       <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
@@ -226,6 +230,7 @@ const NextButtonContainer = styled.div`
   justify-content: flex-end;
   height: 100%;
   padding: 50px;
+
 `;
 
 const AnswerSelection = styled.div`
@@ -234,6 +239,7 @@ const AnswerSelection = styled.div`
   height: 30%;
   align-items: center;
   justify-content: flex-start;
+
 `;
 
 const ImageContainer = styled(motion.div)`
