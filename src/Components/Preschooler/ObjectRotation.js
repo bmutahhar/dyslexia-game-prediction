@@ -107,7 +107,7 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
             animate={{ opacity: 1 }}
             transition={{ type: "tween", duration: 1 }}
           >
-            <UIButton variant="contained" type="button" component={Link} to="/completed">
+            <UIButton variant="contained" type="button" component={Link} to="/instruction">
               Submit
             </UIButton>
           </motion.div>
@@ -119,7 +119,7 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
             //     setTimeout(nextStep, 5500);
             //   }}
             // />
-            <UIButton variant="contained" type="button" component={Link} to="/completed">
+            <UIButton variant="contained" type="button" component={Link} to="/instruction">
               Submit
             </UIButton>
           )}

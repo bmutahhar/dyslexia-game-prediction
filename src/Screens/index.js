@@ -11,4 +11,5 @@ export { default as Signup } from "./Signup";
 export { default as PreSchoolers } from "./Preschooler";
 export { default as Learners } from "./Learners";
 export { default as AllBadgeDisplay } from "./AllBadgeDisplay";
+export { default as InstructionScreen } from "./InstructionScreen";
 
