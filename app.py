@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime, timedelta
+from bson.json_util import dumps,loads
 
 import jwt
 import pymongo
@@ -214,6 +215,31 @@ def addData():
         return Response(
             response=json.dumps(
                 {'message': 'Data could not be inserted in database', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/questions/<difficulty>", methods=['GET'])
+def get_questions(difficulty):
+    try:
+        if request.method == 'GET':
+            data = db.questions.find_one({'level': difficulty.strip().lower()})
+            return Response(
+                response=json.dumps(data['data']),
+                status=200,
+                mimetype='application/json')
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Could not fetch data from the database',
+                     "error": "Only GET requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Could not fetch data from the database', "error": str(e)}),
             status=500,
             mimetype='application/json')
 
