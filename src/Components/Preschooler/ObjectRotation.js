@@ -5,22 +5,30 @@ import { makeStyles } from "@material-ui/core/styles";
 import { RotateLeft, RotateRight } from "@material-ui/icons";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { motion } from "framer-motion";
-import { AvatarMessage, UIButton, NextButton } from "../../Components";
+import {
+  AvatarMessage,
+  UIButton,
+  NextButton,
+  BadgePopUp,
+} from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
 import { addAnswer } from "../../actions";
-import { Link } from "react-router-dom"
 import triangle from "../../Images/shapes/triangle.png";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 import b1 from "../../Images/badges/b10.svg";
-import Confetti from 'react-confetti';
 
-
-const ObjectRotation = ({ activeStep, nextStep, angle }) => {
+const ObjectRotation = ({
+  showBadge,
+  badge,
+  activeStep,
+  nextStep,
+  angle,
+  openBadge,
+  badgeName,
+}) => {
   const [open, setOpen] = useState(false);
   const [shown, setShown] = useState(false);
-  const [Bopen, setBopen] = useState(false);
-  const [Bshown, setBshown] = useState(false);
   const [rotation, setRotation] = useState(0);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
@@ -29,22 +37,12 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
 
   const handleOpen = () => {
     setOpen(true);
-    setShown(true)
+    setShown(true);
     setTimeout(handleClose, 4500);
   };
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const BadgeOpen = () => {
-    setBopen(true);
-    setBshown(true)
-    setTimeout(BadgeClose, 5500);
-  };
-
-  const BadgeClose = () => {
-    setBopen(false);
   };
 
   const rotateRight = () => {
@@ -55,85 +53,91 @@ const ObjectRotation = ({ activeStep, nextStep, angle }) => {
     setRotation(rotation - 30);
   };
 
-  const getAnswer = () => dispatch(addAnswer(rotation))
-  return (
-    <MainContainer>
-      <AvatarMessage
-        className="col-2"
-        src={gender === "male" ? larka : larki}
-        alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
-      />
-      <GameArea className="col-8">
-        <QuestionContainer className="row">
-          <IconContainer>
-            <IconButton onClick={rotateLeft}>
-              <RotateLeft className={classes.icons} />
-            </IconButton>
-            <Typography variant="subtitle1" className={classes.info}>
-              Left
+  const getAnswer = () => dispatch(addAnswer(rotation));
+  if (showBadge) {
+    return (
+      <Backdrop className={classes.backdrop} open={showBadge}>
+        <BadgePopUp src={badge} alt="Badge" badgeName={badgeName} />
+      </Backdrop>
+    );
+  } else {
+    return (
+      <MainContainer>
+        <AvatarMessage
+          className="col-2"
+          src={gender === "male" ? larka : larki}
+          alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
+        />
+        <GameArea className="col-8">
+          <QuestionContainer className="row">
+            <IconContainer>
+              <IconButton onClick={rotateLeft}>
+                <RotateLeft className={classes.icons} />
+              </IconButton>
+              <Typography variant="subtitle1" className={classes.info}>
+                Left
+              </Typography>
+            </IconContainer>
+            <ImageContainer animate={{ rotate: rotation }}>
+              <Image src={triangle} alt="Polygon" />
+            </ImageContainer>
+            <IconContainer>
+              <IconButton onClick={rotateRight}>
+                <RotateRight className={classes.icons} />
+              </IconButton>
+              <Typography variant="subtitle1" className={classes.info}>
+                Right
+              </Typography>
+            </IconContainer>
+          </QuestionContainer>
+          <AnswerSelection className="row">
+            <Typography variant="h4" className={classes.title} gutterBottom>
+              Rotate
             </Typography>
-          </IconContainer>
-          <ImageContainer animate={{ rotate: rotation }}>
-            <Image src={triangle} alt="Polygon" />
-          </ImageContainer>
-          <IconContainer>
-            <IconButton onClick={rotateRight}>
-              <RotateRight className={classes.icons} />
-            </IconButton>
-            <Typography variant="subtitle1" className={classes.info}>
-              Right
-            </Typography>
-          </IconContainer>
-        </QuestionContainer>
-        <AnswerSelection className="row">
-          <Typography variant="h4" className={classes.title} gutterBottom>
-            Rotate
-          </Typography>
-          <InfoContainer>
-            <BsInfoCircleFill className={classes.info} />
-            <Typography variant="subtitle1" className={classes.info}>
-              {shown ? "Rotate the object as was shown" : "Click the below button to view question image"}
-            </Typography>
-          </InfoContainer>
-          <UIButton variant="contained" type="button" onClick={handleOpen}>
-            Show Image
-          </UIButton>
-        </AnswerSelection>
-      </GameArea>
-      <NextButtonContainer className="col-2">
-        {activeStep === totalLevels - 1 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "tween", duration: 1 }}
-          >
-            <UIButton variant="contained" type="button" component={Link} to="/instruction">
-              Submit
+            <InfoContainer>
+              <BsInfoCircleFill className={classes.info} />
+              <Typography variant="subtitle1" className={classes.info}>
+                {shown
+                  ? "Rotate the object as was shown"
+                  : "Click the below button to view question image"}
+              </Typography>
+            </InfoContainer>
+            <UIButton variant="contained" type="button" onClick={handleOpen}>
+              Show Image
             </UIButton>
-          </motion.div>
-        ) : (
-            // <NextButton
-            //   onClick={() => {
-            //     BadgeOpen();
-            //     getAnswer();
-            //     setTimeout(nextStep, 5500);
-            //   }}
-            // />
-            <UIButton variant="contained" type="button" component={Link} to="/instruction">
-              Submit
-            </UIButton>
+          </AnswerSelection>
+        </GameArea>
+        <NextButtonContainer className="col-2">
+          {activeStep === totalLevels - 1 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ type: "tween", duration: 1 }}
+            >
+              <UIButton variant="contained" type="submit" onClick={() => {}}>
+                Submit
+              </UIButton>
+            </motion.div>
+          ) : (
+            <NextButton
+              onClick={() => {
+                getAnswer();
+                if ((activeStep + 1) % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
           )}
-      </NextButtonContainer>
-      <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
-        <PopUp src={triangle} alt="Triangle" rotation={angle} />
-      </Backdrop>
-      <Backdrop className={classes.backdrop} open={Bopen}>
-
-        <BadgePopUp src={b1} alt="badge" />
-
-      </Backdrop>
-    </MainContainer>
-  );
+        </NextButtonContainer>
+        <Backdrop
+          className={classes.backdrop}
+          open={open}
+          onClick={handleClose}
+        >
+          <PopUp src={triangle} alt="Triangle" rotation={angle} />
+        </Backdrop>
+      </MainContainer>
+    );
+  }
 };
 
 export default ObjectRotation;
@@ -145,44 +149,6 @@ const PopUp = ({ src, alt, rotation }) => {
         <Image src={src} alt={alt} />
       </ImageContainer>
     </PopImageContainer>
-
-
-  );
-};
-
-const BadgePopUp = ({ src, alt }) => {
-  return (
-
-
-    <PopImageContainer>
-      <Confetti numberOfPieces="500" ></Confetti>
-
-      <ImageContainer>
-
-        <Image src={src} alt={alt} />
-
-      </ImageContainer>
-      <Typography variant="subtitle1" style={{
-        color: "white",
-
-        fontSize: "3.5vw",
-        marginTop: "20px",
-      }}>
-        Good Job!
-</Typography>
-      <Typography variant="subtitle1" style={{
-        color: "white",
-
-        fontSize: "2.5vw",
-        marginTop: "10px",
-      }}>
-        You've Earned A Teddy Bear Badge
-</Typography>
-
-    </PopImageContainer>
-
-
-
   );
 };
 
@@ -230,7 +196,6 @@ const NextButtonContainer = styled.div`
   justify-content: flex-end;
   height: 100%;
   padding: 50px;
-
 `;
 
 const AnswerSelection = styled.div`
@@ -239,16 +204,12 @@ const AnswerSelection = styled.div`
   height: 30%;
   align-items: center;
   justify-content: flex-start;
-
 `;
 
-const ImageContainer = styled(motion.div)`
-
-`;
+const ImageContainer = styled(motion.div)``;
 
 const Image = styled.img`
   height: 22vw;
-  
 `;
 
 const IconContainer = styled.div`
@@ -280,7 +241,5 @@ const PopImageContainer = styled.div`
   align-items: center;
   justify-content: center;
   background-color: transparent;
-  margin-bottom:50px;
-  
-  
+  margin-bottom: 50px;
 `;

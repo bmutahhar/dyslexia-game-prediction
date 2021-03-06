@@ -6,7 +6,7 @@ import {
   TileLayout,
   SelectOption,
 } from "../../Components/Preschooler";
-import { DragDrop, NameImage } from "../../Components/Learners";
+import { yay } from "../../Sounds";
 
 import b1 from "../../Images/badges/b10.svg";
 import b2 from "../../Images/badges/b2.svg";
@@ -32,6 +32,7 @@ const PreSchoolers = () => {
   const angles = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360];
   const [activeStep, setActiveStep] = useState(0);
   const [badgeOpen, setBadgeOpen] = useState(false);
+  const audio = new Audio(yay);
   const angle = angles[Math.floor(Math.random() * angles.length)];
 
   const nextStep = () => {
@@ -39,13 +40,14 @@ const PreSchoolers = () => {
   };
 
   const openBadge = () => {
-    console.log(badgeOpen);
+    console.log("Inside badge open")
     setBadgeOpen(true);
+    audio.play();
+    console.log(audio.src)
     setTimeout(() => {
-      console.log(badgeOpen);
+      audio.pause();
       setBadgeOpen(false);
     }, 5000);
-    console.log(badgeOpen);
   };
 
   const shuffleArray = (array) => {
@@ -87,22 +89,7 @@ const PreSchoolers = () => {
         />
       </GameScreen>
     );
-  } else if (activeStep === 2) {
-    return (
-      <GameScreen activeStep={activeStep} badges={badges}>
-        <NameImage
-          activeStep={activeStep}
-          nextStep={nextStep}
-          word="TIGER"
-          options={shuffleArray("TIGER".split(""))}
-          showBadge={badgeOpen}
-          badge={badges[Math.floor(activeStep/2)-1].image}
-          badgeName={badges[Math.floor(activeStep/2)-1].name}
-          openBadge={openBadge}
-        />
-      </GameScreen>
-    );
-  } else if (activeStep === 3) {
+  }  else if (activeStep === 2) {
     return (
       <GameScreen activeStep={activeStep} badges={badges}>
         <DisplayTile
@@ -112,28 +99,13 @@ const PreSchoolers = () => {
           activeStep={activeStep}
           nextStep={nextStep}
           showBadge={badgeOpen}
-          badge={badges[Math.floor(activeStep/2)-1].image}
-          badgeName={badges[Math.floor(activeStep/2)-1].name}
+          badge={badges[Math.floor(activeStep / 2) - 1].image}
+          badgeName={badges[Math.floor(activeStep / 2) - 1].name}
           openBadge={openBadge}
         />
       </GameScreen>
     );
-  } else if (activeStep === 4) {
-    return (
-      <GameScreen activeStep={activeStep} badges={badges}>
-        <DragDrop
-          activeStep={activeStep}
-          nextStep={nextStep}
-          word="FOUR"
-          options={shuffleArray("FOUR".split(""))}
-          showBadge={badgeOpen}
-          badge={badges[Math.floor(activeStep/2)-1].image}
-          badgeName={badges[Math.floor(activeStep/2)-1].name}
-          openBadge={openBadge}
-        />
-      </GameScreen>
-    );
-  } else if (activeStep === 5) {
+  } else if (activeStep === 3) {
     return (
       <GameScreen activeStep={activeStep} badges={badges}>
         <TileLayout
@@ -143,8 +115,8 @@ const PreSchoolers = () => {
           gridSize={3}
           options={["A", "B", "C", "D", "H", "A", "B", "C", "D"]}
           showBadge={badgeOpen}
-          badge={badges[Math.floor(activeStep/2)-1].image}
-          badgeName={badges[Math.floor(activeStep/2)-1].name}
+          badge={badges[Math.floor(activeStep / 2) - 1].image}
+          badgeName={badges[Math.floor(activeStep / 2) - 1].name}
           openBadge={openBadge}
         />
       </GameScreen>
@@ -159,8 +131,8 @@ const PreSchoolers = () => {
           activeStep={activeStep}
           nextStep={nextStep}
           showBadge={badgeOpen}
-          badge={badges[Math.floor(activeStep/2)-1].image}
-          badgeName={badges[Math.floor(activeStep/2)-1].name}
+          badge={badges[Math.floor(activeStep / 2) - 1].image}
+          badgeName={badges[Math.floor(activeStep / 2) - 1].name}
           openBadge={openBadge}
         />
       </GameScreen>

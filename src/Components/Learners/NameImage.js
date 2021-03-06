@@ -24,11 +24,11 @@ import "react-dragula/dist/dragula.css";
 const NameImage = ({
   activeStep,
   nextStep,
-  word,
   options,
   showBadge,
   badge,
   openBadge,
+  badgeName
 }) => {
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
@@ -47,7 +47,6 @@ const NameImage = ({
 
   useEffect(() => {
     if (elRefs.current && ansRef.current) {
-      console.log("Mutahharrrrr")
       Dragula([...elRefs.current, ansRef.current], {
         accepts: function (el, target, source, sibling) {
           if (target.parentElement.classList.contains("drag-area")) {
@@ -65,7 +64,7 @@ const NameImage = ({
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
-        <BadgePopUp src={badge} alt="Badge" />
+        <BadgePopUp src={badge} alt="Badge" badgeName={badgeName} />
       </Backdrop>
     );
   } else {

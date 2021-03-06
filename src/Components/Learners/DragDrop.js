@@ -27,6 +27,7 @@ const DragDrop = ({
   showBadge,
   badge,
   openBadge,
+  badgeName
 }) => {
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
@@ -63,7 +64,7 @@ const DragDrop = ({
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
-        <BadgePopUp src={badge} alt="Badge" />
+        <BadgePopUp src={badge} alt="Badge" badgeName={badgeName} />
       </Backdrop>
     );
   } else {
