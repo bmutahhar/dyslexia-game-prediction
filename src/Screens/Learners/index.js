@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GameScreen } from "../../Components";
+import { GameScreen, Loader, QuestionError } from "../../Components";
 import {
   CompletePuzzle,
   DragDrop,
@@ -7,6 +7,7 @@ import {
   NameImage,
   CVCwords,
 } from "../../Components/Learners";
+import { InstructionScreen } from "../../Screens";
 import { yay } from "../../Sounds";
 
 import b1 from "../../Images/badges/b10.svg";
@@ -32,6 +33,8 @@ const badges = [
 const Learners = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [badgeOpen, setBadgeOpen] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(true);
+  const [loading, setLoading] = useState(true);
   const audio = new Audio(yay);
 
   const openBadge = () => {
@@ -43,6 +46,10 @@ const Learners = () => {
       audio.pause();
       setBadgeOpen(false);
     }, 5000);
+  };
+
+  const hideInstructions = () => {
+    setShowInstructions(false);
   };
 
   const shuffleArray = (array) => {
@@ -59,55 +66,74 @@ const Learners = () => {
   const nextStep = () => {
     setActiveStep(activeStep + 1);
   };
-
-  if (activeStep === 0) {
-    return (
-      <GameScreen activeStep={activeStep} badges={badges}>
-        <CVCwords></CVCwords>
-      </GameScreen>
-    );
-  } else if (activeStep === 1) {
-    return (
-      <GameScreen activeStep={activeStep} badges={badges}>
-        <DragDrop
-          activeStep={activeStep}
-          nextStep={nextStep}
-          word="four"
-          options={["a", "b", "c", "d"]}
-          showBadge={badgeOpen}
-          badge={badges[1].image}
-          badgeName={badges[1].name}
-          openBadge={openBadge}
-        />
-      </GameScreen>
-    );
-  } else if (activeStep === 2) {
-    return (
-      <GameScreen activeStep={activeStep} badges={badges}>
-        <NameImage
-          activeStep={activeStep}
-          nextStep={nextStep}
-          showBadge={badgeOpen}
-          badge={badges[Math.floor(activeStep / 2) - 1].image}
-          badgeName={badges[Math.floor(activeStep / 2) - 1].name}
-          openBadge={openBadge}
-          options={["A", "B", "C", "D"]}
-        />
-      </GameScreen>
-    );
+  if (showInstructions) {
+    return <InstructionScreen onClick={hideInstructions} />;
   } else {
-    return (
-      <GameScreen activeStep={activeStep} badges={badges}>
-        <CompletePuzzle
-          activeStep={activeStep}
-          nextStep={nextStep}
-          showBadge={badgeOpen}
-          badge={badges[Math.floor(activeStep / 2) - 1].image}
-          badgeName={badges[Math.floor(activeStep / 2) - 1].name}
-          openBadge={openBadge}
-        />
-      </GameScreen>
-    );
+    if (loading) {
+      return (
+        <QuestionError open={loading} onClick={() => setLoading(false)} />
+
+      );
+    } else {
+      if (activeStep === 0) {
+        return (
+          <GameScreen activeStep={activeStep} badges={badges}>
+            {/* <WordConfirm
+              word="TIGER"
+              activeStep={activeStep}
+              nextStep={nextStep}
+              showBadge={badgeOpen}
+              badge={badges[0].image}
+              badgeName={badges[0].name}
+              openBadge={openBadge}
+            /> */}
+            <CVCwords></CVCwords>
+          </GameScreen>
+        );
+      } else if (activeStep === 1) {
+        return (
+          <GameScreen activeStep={activeStep} badges={badges}>
+            <DragDrop
+              activeStep={activeStep}
+              nextStep={nextStep}
+              word="four"
+              options={["a", "b", "c", "d"]}
+              showBadge={badgeOpen}
+              badge={badges[1].image}
+              badgeName={badges[1].name}
+              openBadge={openBadge}
+            />
+          </GameScreen>
+        );
+      } else if (activeStep === 2) {
+        return (
+          <GameScreen activeStep={activeStep} badges={badges}>
+            <NameImage
+              activeStep={activeStep}
+              nextStep={nextStep}
+              showBadge={badgeOpen}
+              badge={badges[Math.floor(activeStep / 2) - 1].image}
+              badgeName={badges[Math.floor(activeStep / 2) - 1].name}
+              openBadge={openBadge}
+              options={["A", "B", "C", "D"]}
+            />
+          </GameScreen>
+        );
+      } else {
+        return (
+          <GameScreen activeStep={activeStep} badges={badges}>
+            <CompletePuzzle
+              activeStep={activeStep}
+              nextStep={nextStep}
+              showBadge={badgeOpen}
+              badge={badges[Math.floor(activeStep / 2) - 1].image}
+              badgeName={badges[Math.floor(activeStep / 2) - 1].name}
+              openBadge={openBadge}
+            />
+          </GameScreen>
+        );
+      }
+    }
   }
 };
 

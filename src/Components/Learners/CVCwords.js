@@ -40,18 +40,18 @@ const CVCwords = ({
             <GameArea className="col-8">
                 <QuestionContainer className="row">
                     <Spellingoptions>
-                        <Spelling>AEL</Spelling>
+                        <Spelling>AELD</Spelling>
                     </Spellingoptions>
                     <Spellingoptions>
-                        <Spelling>AEL</Spelling>
+                        <Spelling>AELD</Spelling>
 
                     </Spellingoptions>
                     <Spellingoptions>
-                        <Spelling>AEL</Spelling>
+                        <Spelling>AELD</Spelling>
 
                     </Spellingoptions>
                     <Spellingoptions>
-                        <Spelling>AEL</Spelling>
+                        <Spelling>AELD</Spelling>
 
                     </Spellingoptions>
                     <Qinfo>
@@ -94,33 +94,32 @@ export default CVCwords;
 const Spelling = styled.h1`
 color: white; 
 font-size: 4.5vw;
-letter-spacing: 7vw;
-
-
+letter-spacing: 2rem;
+margin-left: 2rem;
 `;
 const Spellingoptions = styled.div`
 display: flex;
-
+flex-direction: column;
 width: 30vw;
 height: 12vh;
 background-color:#4EF249;
 border-radius: 15px;
 border: 3px solid #FFFFFF;
 align-items: center;
+justify-content: center;
 margin-bottom: 1vw;
-padding-left: 3.5vw;
-padding-right: 3.5vw;
+
 transition: 0.3s ease-in-out;
 
 &:hover {
     transform: scale(1.1);
-    transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in;
 
     
   } 
   &:active {
     transform: scale(0.9);
-    transition: 0.3s ease-in-out;
+    transition: 0.3s ease-out;
 
   }
 
@@ -135,7 +134,6 @@ const QuestionContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid red;
 `;
 
 const AnswerContainer = styled.div`
@@ -144,7 +142,6 @@ const AnswerContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid blue;
 `;
 
 const MainContainer = styled.div`
