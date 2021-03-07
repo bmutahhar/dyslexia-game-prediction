@@ -1,40 +1,45 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import Dragula from "react-dragula";
 import { motion, AnimatePresence } from "framer-motion";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
-  Tileplacer,
+  DraggableTile,
   Tile,
+  Timer,
+  UIButton,
   AvatarMessage,
   NextButton,
-  UIButton,
-  Timer,
   BadgePopUp,
-} from "../../Components";
+  Tileplacer,
+} from "..";
+import { useSelector, useDispatch } from "react-redux";
 import { addAnswer } from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
-const SelectOption = ({
+const SingleDrag = ({
+  name,
   image,
-  gridSize,
-  word,
   question,
+  word,
+  options,
   activeStep,
   nextStep,
-  options,
   showBadge,
   badge,
   openBadge,
   badgeName,
 }) => {
-  const totalLevels = useSelector((state) => state.questions.totalQuestions);
-  const gender = useSelector((state) => state.gender);
   const [show, setShow] = useState(true);
   const [answer, setAnswer] = useState("");
+  const [disabled, setDisabled] = useState(true);
+  const totalLevels = useSelector((state) => state.questions.totalQuestions);
+  const gender = useSelector((state) => state.gender);
+  const placer = useRef(null);
+  const ansRef = useRef(null);
   const dispatch = useDispatch();
   const classes = useStyles();
   const [shuffledOptions, setShuffledOptions] = useState([]);
@@ -46,13 +51,29 @@ const SelectOption = ({
   const onClick = (answer) => {
     setAnswer(answer);
   };
-
   const getAnswer = () => dispatch(addAnswer(answer));
+
+  useEffect(() => {
+    if (placer.current && ansRef.current) {
+      Dragula([placer.current, ansRef.current], {
+        accepts: function (el, target, source, sibling) {
+          if (target.parentElement.classList.contains("drag-area")) {
+            return target.childNodes.length !== 1;
+          } else {
+            return true;
+          }
+        },
+      }).on("dragend", function (el) {
+        if (placer.current.childNodes.length === 1) {
+          setDisabled(false);
+        } else setDisabled(true);
+      });
+    }
+  }, [placer, ansRef, show]);
 
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, []);
-  
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
@@ -66,23 +87,22 @@ const SelectOption = ({
           className="col-2"
           src={gender === "male" ? larka : larki}
           alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
-        ></AvatarMessage>
+        />
         <GameArea className="col-8">
           {show ? (
-            <AnimatePresence>
-              <QuestionContainer className="row">
-                <TileContainer
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <Timer
-                    initialSeconds={7}
-                    initialMinutes={0}
-                    reverse
-                    callBack={closeQuestion}
-                  />
-                 {image ? (
+            <QuestionContainer className="row">
+              <TileContainer
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Timer
+                  initialSeconds={7}
+                  initialMinutes={0}
+                  reverse
+                  callBack={closeQuestion}
+                />
+                {image ? (
                   <Tile
                     question
                     image
@@ -97,39 +117,37 @@ const SelectOption = ({
                     {word}
                   </Tile>
                 )}
-                </TileContainer>
-                <Qinfo>Remember this tile carefully</Qinfo>
-              </QuestionContainer>
-            </AnimatePresence>
+              </TileContainer>
+              <Qinfo>Remember this tile carefully</Qinfo>
+            </QuestionContainer>
           ) : (
-            <QuestionContainer className="row">
-              <GridPlacer gridSize={gridSize}>
-                {shuffledOptions.map((el, i) => {
-                  return (
-                    <Tileplacer key={i} height="12vw" width="12vw">
-                    {image?(<Tile
-                        height="10vw"
-                        width="10vw"
-                        name="selectOptions"
-                        onClick={onClick}
-                        image
-                        src={el.image}
-                        alt={el.alt}
-                      />):(<Tile
-                        height="10vw"
-                        width="10vw"
-                        name="selectOptions"
-                        onClick={onClick}
-                      >
-                        {el}
-                      </Tile>)}
-                      
-                    </Tileplacer>
+            <>
+              <QuestionContainer className="row">
+                <DragArea className="drag-area">
+                  <Tileplacer ref={placer} height="15vw" width="15vw" />
+                </DragArea>
+                <Qinfo>{question}</Qinfo>
+              </QuestionContainer>
+              <AnswerContainer ref={ansRef} className="row">
+                {shuffledOptions.map((el, index) => {
+                  return image ? (
+                    <DraggableTile
+                      name={name}
+                      image
+                      key={index}
+                      src={el.image}
+                      alt={el.alt}
+                      height="10vw"
+                      width="10vw"
+                    />
+                  ) : (
+                    <DraggableTile name={name} key={index}>
+                      {el}
+                    </DraggableTile>
                   );
                 })}
-              </GridPlacer>
-              <Qinfo>{question}</Qinfo>
-            </QuestionContainer>
+              </AnswerContainer>
+            </>
           )}
         </GameArea>
         <NextButtonContainer className="col-2">
@@ -139,15 +157,20 @@ const SelectOption = ({
               animate={{ opacity: 1 }}
               transition={{ type: "tween", duration: 1 }}
             >
-              <UIButton variant="contained" type="button" component={Link} to="/completed">
+              <UIButton
+                variant="contained"
+                type="button"
+                component={Link}
+                to="/completed"
+              >
                 Submit
               </UIButton>
             </motion.div>
           ) : (
             <NextButton
               onClick={() => {
-                getAnswer();
-                // if ((activeStep+1)  % 2 === 0) openBadge();
+                // getAnswer();
+                // if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />
@@ -157,8 +180,7 @@ const SelectOption = ({
     );
   }
 };
-
-export default SelectOption;
+export default SingleDrag;
 
 const useStyles = makeStyles(({ theme }) => ({
   icons: {
@@ -186,18 +208,33 @@ const useStyles = makeStyles(({ theme }) => ({
   },
 }));
 
-const GridPlacer = styled.div`
-  display: grid;
-  grid-template-columns: ${({ gridSize }) => {
-    let columns = "";
-    for (var i = 0; i < gridSize; i++) {
-      columns += "12vw ";
-    }
-    return columns;
-  }};
-  grid-row: auto auto;
+const DragArea = styled.div`
+  display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const QuestionContainer = styled.div`
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+const Qinfo = styled.p`
+  margin-top: 30px;
+  font-size: 1.5vw;
+  color: white;
+  font-family: "Open Sans", sans-serif;
+`;
+
+const NextButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 50px;
 `;
 
 const TileContainer = styled(motion.div)`
@@ -212,17 +249,13 @@ const TileContainer = styled(motion.div)`
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 5px 10px;
-  padding-top: 0px;
 `;
 
-const QuestionContainer = styled(motion.div)`
-  height: 100%;
+const AnswerContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  height: 30%;
   align-items: center;
-  justify-content: flex-start;
-  ${'' /* margin-top: 10%; */}
+  justify-content: center;
 `;
 
 const MainContainer = styled.div`
@@ -230,21 +263,6 @@ const MainContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-`;
-const Qinfo = styled.p`
-  margin-top: 30px;
-  font-size: 2vw;
-  text-align: center;
-  color: white;
-`;
-
-const NextButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  height: 100%;
-  padding: 50px;
 `;
 
 const GameArea = styled.div`

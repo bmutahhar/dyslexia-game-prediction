@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { GameScreen, Loader } from "../../Components";
+import React, { useState, useEffect } from "react";
+import { GameScreen, Loader, QuestionError } from "../../Components";
 import {
   ObjectRotation,
-  DisplayTile,
+  SingleDrag,
+  SingleMatch,
   TileLayout,
   SelectOption,
 } from "../../Components/Preschooler";
@@ -18,19 +19,7 @@ import b6 from "../../Images/badges/b6.svg";
 import b7 from "../../Images/badges/b7.svg";
 import b8 from "../../Images/badges/b8.svg";
 
-const badges = [
-  { image: b1, name: "Teddy" },
-  { image: b2, name: "Kitty" },
-  { image: b3, name: "Foxy" },
-  { image: b4, name: "Monkey" },
-  { image: b5, name: "Donkey" },
-  { image: b6, name: "Doggy" },
-  { image: b7, name: "Monkey" },
-  { image: b8, name: "Monkey" },
-];
-
 const PreSchoolers = () => {
-  const angles = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360];
   const [activeStep, setActiveStep] = useState(0);
   const [badgeOpen, setBadgeOpen] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);
@@ -39,10 +28,10 @@ const PreSchoolers = () => {
     success: false,
     error: "",
   });
-  const [questions, setQuestions] = useState({});
+  const [questionSet, setQuestionSet] = useState({});
+  const [currentQuestion, setCurrentQuestion] = useState({});
   const [difficulty, setDifficulty] = useState("easy");
   const audio = new Audio(yay);
-  const angle = angles[Math.floor(Math.random() * angles.length)];
   const url = process.env["REACT_APP_API_URL"];
 
   const nextStep = () => {
@@ -50,10 +39,8 @@ const PreSchoolers = () => {
   };
 
   const openBadge = () => {
-    console.log("Inside badge open");
     setBadgeOpen(true);
     audio.play();
-    console.log(audio.src);
     setTimeout(() => {
       audio.pause();
       setBadgeOpen(false);
@@ -63,15 +50,30 @@ const PreSchoolers = () => {
     setShowInstructions(false);
   };
 
-  const shuffleArray = (array) => {
-    let newArray = array.slice();
-    for (var i = newArray.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = newArray[i];
-      newArray[i] = newArray[j];
-      newArray[j] = temp;
+  const getBadgeIndex = () => {
+    if (activeStep === 0) return 0;
+    else if (activeStep === 1) return 1;
+    else return Math.floor(activeStep / 2) - 1;
+  };
+
+  const getRandomQuestion = () => {
+    const random = Math.floor(Math.random() * questionSet[difficulty].length);
+    const prevQuestion = { ...currentQuestion };
+    const questions = { ...questionSet };
+    const question = questions[difficulty][random];
+    if (question.displayed) {
+      getRandomQuestion();
+    } else if (
+      Object.keys(prevQuestion).length !== 0 &&
+      prevQuestion.type === question.type
+    ) {
+      getRandomQuestion();
+    } else {
+      questions[difficulty][random].displayed = true;
+      setQuestionSet(questions);
+      setCurrentQuestion(question);
+      return;
     }
-    return newArray;
   };
 
   const fetchQuestions = () => {
@@ -84,102 +86,334 @@ const PreSchoolers = () => {
     })
       .then((resp) => resp.json())
       .then((respJson) => {
-        setQuestions(respJson)
+        if (respJson.error === undefined) {
+          const easy = shuffleArray(respJson.easy);
+          const medium = shuffleArray(respJson.medium);
+          const hard = shuffleArray(respJson.hard);
+          setQuestionSet({
+            easy,
+            medium,
+            hard,
+          });
+          console.log("Fetched");
+          setStatus({ success: true, error: "", loading: true });
+        } else {
+          console.log("No wayyy");
+          setStatus({ success: false, error: respJson.error, loading: false });
+        }
       });
   };
+
+  useEffect(() => {
+    if (!showInstructions) {
+      fetchQuestions();
+    }
+  }, [showInstructions]);
+
+  useEffect(() => {
+    if (status.success && !showInstructions) {
+      console.log("Getting random question bruh!!!");
+      getRandomQuestion();
+      if (status.success && status.loading) {
+        setStatus({ ...status, loading: false });
+        console.log("Setting loading to false");
+      }
+    }
+  }, [activeStep, status.success, difficulty, showInstructions]);
+
+  useEffect(() => {
+    console.log("Current Question: ", currentQuestion);
+  }, [currentQuestion]);
 
   if (showInstructions) {
     return <InstructionScreen onClick={hideInstructions} />;
   } else {
     if (status.loading) {
-      return (
-        <GameScreen activeStep={activeStep} badges={badges}>
-          <Loader
-            open={status.loading}
-            onClick={() => setStatus({ ...status, loading: false })}
-          />
-        </GameScreen>
-      );
+      return <Loader open={status.loading} />;
     } else {
-      if (activeStep === 0) {
-        return (
-          <GameScreen activeStep={activeStep} badges={badges}>
-            <SelectOption
-              activeStep={activeStep}
-              nextStep={nextStep}
-              options={["A", "B", "C", "D"]}
-              showBadge={badgeOpen}
-              badge={badges[0].image}
-              badgeName={badges[0].name}
-              openBadge={openBadge}
-            />
-          </GameScreen>
-        );
-      } else if (activeStep === 1) {
-        return (
-          <GameScreen activeStep={activeStep} badges={badges}>
-            <ObjectRotation
-              angle={angle}
-              activeStep={activeStep}
-              nextStep={nextStep}
-              showBadge={badgeOpen}
-              badge={badges[1].image}
-              badgeName={badges[1].name}
-              openBadge={openBadge}
-            />
-          </GameScreen>
-        );
-      } else if (activeStep === 2) {
-        return (
-          <GameScreen activeStep={activeStep} badges={badges}>
-            <DisplayTile
-              name="displayTile"
-              question="x"
-              options={shuffleArray(["b", "c", "g", "x"])}
-              activeStep={activeStep}
-              nextStep={nextStep}
-              showBadge={badgeOpen}
-              badge={badges[Math.floor(activeStep / 2) - 1].image}
-              badgeName={badges[Math.floor(activeStep / 2) - 1].name}
-              openBadge={openBadge}
-            />
-          </GameScreen>
-        );
-      } else if (activeStep === 3) {
-        return (
-          <GameScreen activeStep={activeStep} badges={badges}>
-            <TileLayout
-              question={["A", "B", "C", "D", "A", "B", "C", "D", "H"]}
-              activeStep={activeStep}
-              nextStep={nextStep}
-              gridSize={3}
-              options={["A", "B", "C", "D", "H", "A", "B", "C", "D"]}
-              showBadge={badgeOpen}
-              badge={badges[Math.floor(activeStep / 2) - 1].image}
-              badgeName={badges[Math.floor(activeStep / 2) - 1].name}
-              openBadge={openBadge}
-            />
-          </GameScreen>
-        );
+      if (status.success) {
+        const badgeIndex = getBadgeIndex();
+        if (currentQuestion.type === "or") {
+          console.log("Object Rotation");
+          return (
+            <GameScreen activeStep={activeStep} badges={badges}>
+              <ObjectRotation
+                question={currentQuestion.question}
+                word={currentQuestion.word}
+                angle={currentQuestion.answer}
+                degree={currentQuestion.degree}
+                activeStep={activeStep}
+                nextStep={nextStep}
+                showBadge={badgeOpen}
+                badge={badges[badgeIndex].image}
+                badgeName={badges[badgeIndex].name}
+                openBadge={openBadge}
+              />
+            </GameScreen>
+          );
+        } else if (currentQuestion.type === "dnd") {
+          if (currentQuestion.subType === "text") {
+            if (difficulty === "easy") {
+              console.log("Single Drag");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <SingleDrag
+                    name="displayTile"
+                    question={currentQuestion.question}
+                    word={currentQuestion.word}
+                    options={currentQuestion.options}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            } else if (difficulty === "medium") {
+              console.log("Tile Layout Medium");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <TileLayout
+                    question={currentQuestion.question}
+                    word={currentQuestion.word}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    gridSize={2}
+                    options={currentQuestion.options}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            } else {
+              console.log("Tile Layout Hard");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <TileLayout
+                    question={currentQuestion.question}
+                    word={currentQuestion.word}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    gridSize={3}
+                    options={currentQuestion.options}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            }
+          } else {
+            //If type is dnd and subType is image
+            if (difficulty === "easy") {
+              console.log("Single Drag");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <SingleDrag
+                    name="displayTile"
+                    image
+                    question={currentQuestion.question}
+                    word={currentQuestion.word}
+                    options={currentQuestion.options}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            } else if (difficulty === "medium") {
+              console.log("Tile Layout Medium");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <TileLayout
+                    image
+                    question={currentQuestion.question}
+                    word={currentQuestion.word}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    gridSize={2}
+                    options={currentQuestion.options}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            } else {
+              console.log("Tile Layout Hard");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <TileLayout
+                    image
+                    question={currentQuestion.question}
+                    word={currentQuestion.word}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    gridSize={3}
+                    options={currentQuestion.options}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            }
+          }
+        } else if (currentQuestion.type === "mt") {
+          if (currentQuestion.subType === "text") {
+            if (difficulty === "easy") {
+              console.log("Single Match");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <SingleMatch
+                    name="displayTile"
+                    question={currentQuestion.question}
+                    word={currentQuestion.word}
+                    options={currentQuestion.options}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            } else if (difficulty === "medium") {
+              console.log("Select Option Medium");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <SelectOption
+                    gridSize={2}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    word={currentQuestion.word}
+                    question={currentQuestion.question}
+                    options={currentQuestion.options}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            } else {
+              console.log("Select Option Hard");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <SelectOption
+                    gridSize={3}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    word={currentQuestion.word}
+                    question={currentQuestion.question}
+                    options={currentQuestion.options}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            }
+          } else {
+            if (difficulty === "easy") {
+              console.log("Single Match");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <SingleMatch
+                    name="displayTile"
+                    image={true}
+                    question={currentQuestion.question}
+                    word={currentQuestion.word}
+                    options={currentQuestion.options}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            } else if (difficulty === "medium") {
+              console.log("Select Option Medium");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <SelectOption
+                    image
+                    gridSize={2}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    word={currentQuestion.word}
+                    question={currentQuestion.question}
+                    options={currentQuestion.options}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            } else {
+              console.log("Select Option");
+              return (
+                <GameScreen activeStep={activeStep} badges={badges}>
+                  <SelectOption
+                    image
+                    gridSize={3}
+                    activeStep={activeStep}
+                    nextStep={nextStep}
+                    word={currentQuestion.word}
+                    question={currentQuestion.question}
+                    options={currentQuestion.options}
+                    showBadge={badgeOpen}
+                    badge={badges[badgeIndex].image}
+                    badgeName={badges[badgeIndex].name}
+                    openBadge={openBadge}
+                  />
+                </GameScreen>
+              );
+            }
+          }
+        }
       } else {
-        return (
-          <GameScreen activeStep={activeStep} badges={badges}>
-            <DisplayTile
-              name="displayTile"
-              question="x"
-              options={shuffleArray(["b", "c", "g", "x"])}
-              activeStep={activeStep}
-              nextStep={nextStep}
-              showBadge={badgeOpen}
-              badge={badges[Math.floor(activeStep / 2) - 1].image}
-              badgeName={badges[Math.floor(activeStep / 2) - 1].name}
-              openBadge={openBadge}
-            />
-          </GameScreen>
-        );
+        return <QuestionError open={!status.sucess} />;
       }
     }
   }
 };
 
 export default PreSchoolers;
+
+const shuffleArray = (array) => {
+  let newArray = array.slice();
+  for (var i = newArray.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = newArray[i];
+    newArray[i] = newArray[j];
+    newArray[j] = temp;
+  }
+  return newArray;
+};
+
+const badges = [
+  { image: b1, name: "Teddy" },
+  { image: b2, name: "Kitty" },
+  { image: b3, name: "Foxy" },
+  { image: b4, name: "Monkey" },
+  { image: b5, name: "Donkey" },
+  { image: b6, name: "Doggy" },
+  { image: b7, name: "Monkey" },
+  { image: b8, name: "Monkey" },
+];

@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Dragula from "react-dragula";
 import { motion, AnimatePresence } from "framer-motion";
-import { Backdrop } from "@material-ui/core";
+import { Backdrop, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 import {
   Tileplacer,
   Tile,
@@ -20,7 +21,9 @@ import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
 const TileLayout = ({
+  image,
   question,
+  word,
   gridSize,
   options,
   activeStep,
@@ -28,7 +31,7 @@ const TileLayout = ({
   showBadge,
   badge,
   openBadge,
-  badgeName
+  badgeName,
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
@@ -41,7 +44,7 @@ const TileLayout = ({
   );
 
   const [show, setShow] = useState(true);
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const optionsRefA = useRef(null);
   const optionsRefB = useRef(null);
   const elRefs = useRef([]);
@@ -105,21 +108,34 @@ const TileLayout = ({
                 transition={{ delay: 0.25, duration: 0.25 }}
                 exit={{ opacity: 0 }}
               >
-                <Timer
-                  initialSeconds={4}
-                  initialMinutes={0}
-                  reverse
-                  callBack={closeQuestion}
-                />
-                <GridPlacer gridSize={gridSize}>
-                  {question.map((el, i) => {
-                    return (
-                      <Tileplacer key={i}>
-                        <Tile question>{el}</Tile>
-                      </Tileplacer>
-                    );
-                  })}
-                </GridPlacer>
+                <TileContainer
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Timer
+                    initialSeconds={7}
+                    initialMinutes={0}
+                    reverse
+                    callBack={closeQuestion}
+                  />
+                  {image ? (
+                    <Tile
+                      question
+                      image
+                      height="15vw"
+                      width="15vw"
+                      fontSize="10vw"
+                      src={word.image}
+                      alt={word.alt}
+                    />
+                  ) : (
+                    <Tile question height="15vw" width="15vw" fontSize="10vw">
+                      {word}
+                    </Tile>
+                  )}
+                </TileContainer>
+                <Qinfo>Remember this tile carefully</Qinfo>
               </QuestionContainer>
             </AnimatePresence>
           ) : (
@@ -131,16 +147,26 @@ const TileLayout = ({
             >
               <TileGrid gridSize={gridSize} ref={optionsRefA}>
                 {optionsA.map((el, i) => {
-                  return <DraggableTile key={i}>{el}</DraggableTile>;
+                  return image ? (
+                    <DraggableTile
+                      image
+                      key={i}
+                      src={el.image}
+                      alt={el.alt}
+                      // height="10vw"
+                      // width="10vw"
+                    />
+                  ) : (
+                    <DraggableTile key={i}>{el}</DraggableTile>
+                  );
                 })}
               </TileGrid>
-
               <div
                 style={{
                   display: "flex",
-                  flexDirection: "column",
                   alignItems: "center",
-                  justifyContent: "space-around",
+                  justifyContent: "center",
+                  flexDirection: "column",
                 }}
               >
                 <GridPlacer gridSize={gridSize} className="drag-area">
@@ -153,12 +179,23 @@ const TileLayout = ({
                     );
                   })}
                 </GridPlacer>
-                <Qinfo>Drag and place the tiles in the grid as was shown</Qinfo>
+                {/* <Typography variant="subtitle1" display="block" className={classes.question}>{question}</Typography> */}
+                {/* <Qinfo>{question}</Qinfo> */}
               </div>
-
               <TileGrid gridSize={gridSize} ref={optionsRefB}>
                 {optionsB.map((el, i) => {
-                  return <DraggableTile key={i}>{el}</DraggableTile>;
+                  return image ? (
+                    <DraggableTile
+                      image
+                      key={i}
+                      src={el.image}
+                      alt={el.alt}
+                      // height="10vw"
+                      // width="10vw"
+                    />
+                  ) : (
+                    <DraggableTile key={i}>{el}</DraggableTile>
+                  );
                 })}
               </TileGrid>
             </QuestionContainer>
@@ -171,7 +208,12 @@ const TileLayout = ({
               animate={{ opacity: 1 }}
               transition={{ type: "tween", duration: 1 }}
             >
-              <UIButton variant="contained" type="submit" onClick={() => {}}>
+              <UIButton
+                variant="contained"
+                type="button"
+                component={Link}
+                to="/completed"
+              >
                 Submit
               </UIButton>
             </motion.div>
@@ -180,7 +222,7 @@ const TileLayout = ({
               disabled={disabled}
               onClick={() => {
                 getAnswer();
-                if ((activeStep+1)  % 2===0) openBadge();
+                // if ((activeStep+1)  % 2===0) openBadge();
                 nextStep();
               }}
             />
@@ -216,6 +258,10 @@ const useStyles = makeStyles(({ theme }) => ({
     backgroundColor: "rgba(0,0,0,0.6)",
     backdropFilter: "blur(18px)",
   },
+  question: {
+    color: "#fff",
+    margin: "10px 2px",
+  },
 }));
 
 const GridPlacer = styled.div`
@@ -238,9 +284,26 @@ const TileGrid = styled.div`
     gridSize === 4 ? "7vw 7vw" : "7vw"};
   grid-row: auto auto;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   height: 95%;
-  width: 15vw;
+  width: 25%;
+  ${"" /* border: 2px solid yellow; */}
+`;
+
+const TileContainer = styled(motion.div)`
+  box-sizing: border-box;
+  height: 20vw;
+  width: 20vw;
+  background-color: rgba(255, 255, 255, 0.11);
+  backdrop-filter: blur(10px);
+  border: 3px solid #c9c4c4;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 5px 10px;
+  padding-top: 0px;
 `;
 
 const QuestionContainer = styled(motion.div)`
@@ -258,10 +321,12 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const Qinfo = styled.p`
+const Qinfo = styled.div`
   margin-top: 30px;
-  font-size: 1vw;
+  font-size: 1.5vw;
   color: white;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const NextButtonContainer = styled.div`

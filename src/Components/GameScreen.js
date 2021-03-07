@@ -16,7 +16,6 @@ const GameScreen = ({ children, activeStep, badges }) => {
   useEffect(() => {
     if (activeStep === 0) return;
     else if (activeStep % 2 === 0) {
-      console.log("12344567");
       if (activeStep === totalLevels - 1) {
         let values = [...showBadges];
         values[Math.floor(activeStep / 2) - 1] = true;

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { GameScreen, Loader, QuestionError } from "../../Components";
 import {
-  CompletePuzzle,
   DragDrop,
   WordConfirm,
   NameImage,
   CVCwords,
 } from "../../Components/Learners";
+import { SelectOption, TileLayout } from "../../Components/Preschooler";
 import { InstructionScreen } from "../../Screens";
 import { yay } from "../../Sounds";
 
@@ -70,10 +70,7 @@ const Learners = () => {
     return <InstructionScreen onClick={hideInstructions} />;
   } else {
     if (loading) {
-      return (
-        <QuestionError open={loading} onClick={() => setLoading(false)} />
-
-      );
+      return <QuestionError open={loading} onClick={() => setLoading(false)} />;
     } else {
       if (activeStep === 0) {
         return (
@@ -87,7 +84,18 @@ const Learners = () => {
               badgeName={badges[0].name}
               openBadge={openBadge}
             /> */}
-            <CVCwords></CVCwords>
+            <TileLayout
+              word="B"
+              question="Drag the matching shape into the given bucket"
+              activeStep={activeStep}
+              nextStep={nextStep}
+              gridSize={3}
+              options={["A", "B", "C", "D", "H", "A", "B", "C", "D"]}
+              showBadge={badgeOpen}
+              badge={badges[0].image}
+              badgeName={badges[0].name}
+              openBadge={openBadge}
+            />
           </GameScreen>
         );
       } else if (activeStep === 1) {
@@ -122,14 +130,7 @@ const Learners = () => {
       } else {
         return (
           <GameScreen activeStep={activeStep} badges={badges}>
-            <CompletePuzzle
-              activeStep={activeStep}
-              nextStep={nextStep}
-              showBadge={badgeOpen}
-              badge={badges[Math.floor(activeStep / 2) - 1].image}
-              badgeName={badges[Math.floor(activeStep / 2) - 1].name}
-              openBadge={openBadge}
-            />
+            <CVCwords></CVCwords>
           </GameScreen>
         );
       }

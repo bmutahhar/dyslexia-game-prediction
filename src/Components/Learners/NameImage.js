@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import {Backdrop} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import {Link} from "react-router-dom";
 import {
   Tileplacer,
   Character,
@@ -108,7 +109,7 @@ const NameImage = ({
               animate={{ opacity: 1 }}
               transition={{ type: "tween", duration: 1 }}
             >
-              <UIButton variant="contained" type="submit" onClick={() => {}}>
+              <UIButton variant="contained" type="button" component={Link} to="/completed">
                 Submit
               </UIButton>
             </motion.div>

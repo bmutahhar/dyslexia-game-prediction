@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { RotateLeft, RotateRight } from "@material-ui/icons";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   AvatarMessage,
   UIButton,
@@ -13,17 +14,18 @@ import {
 } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
 import { addAnswer } from "../../actions";
-import triangle from "../../Images/shapes/triangle.png";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
-import b1 from "../../Images/badges/b10.svg";
 
 const ObjectRotation = ({
+  word,
+  question,
   showBadge,
   badge,
   activeStep,
   nextStep,
   angle,
+  degree,
   openBadge,
   badgeName,
 }) => {
@@ -46,11 +48,11 @@ const ObjectRotation = ({
   };
 
   const rotateRight = () => {
-    setRotation(rotation + 30);
+    setRotation(rotation + degree);
   };
 
   const rotateLeft = () => {
-    setRotation(rotation - 30);
+    setRotation(rotation - degree);
   };
 
   const getAnswer = () => dispatch(addAnswer(rotation));
@@ -79,7 +81,7 @@ const ObjectRotation = ({
               </Typography>
             </IconContainer>
             <ImageContainer animate={{ rotate: rotation }}>
-              <Image src={triangle} alt="Polygon" />
+              <Image src={word.image} alt={word.alt} />
             </ImageContainer>
             <IconContainer>
               <IconButton onClick={rotateRight}>
@@ -91,14 +93,11 @@ const ObjectRotation = ({
             </IconContainer>
           </QuestionContainer>
           <AnswerSelection className="row">
-            <Typography variant="h4" className={classes.title} gutterBottom>
-              Rotate
-            </Typography>
             <InfoContainer>
               <BsInfoCircleFill className={classes.info} />
               <Typography variant="subtitle1" className={classes.info}>
                 {shown
-                  ? "Rotate the object as was shown"
+                  ? question
                   : "Click the below button to view question image"}
               </Typography>
             </InfoContainer>
@@ -114,7 +113,12 @@ const ObjectRotation = ({
               animate={{ opacity: 1 }}
               transition={{ type: "tween", duration: 1 }}
             >
-              <UIButton variant="contained" type="submit" onClick={() => {}}>
+              <UIButton
+                variant="contained"
+                type="button"
+                component={Link}
+                to="/completed"
+              >
                 Submit
               </UIButton>
             </motion.div>
@@ -122,7 +126,7 @@ const ObjectRotation = ({
             <NextButton
               onClick={() => {
                 getAnswer();
-                if ((activeStep + 1) % 2 === 0) openBadge();
+                // if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />
@@ -133,7 +137,7 @@ const ObjectRotation = ({
           open={open}
           onClick={handleClose}
         >
-          <PopUp src={triangle} alt="Triangle" rotation={angle} />
+          <PopUp src={word.image} alt={word.image} rotation={angle} />
         </Backdrop>
       </MainContainer>
     );

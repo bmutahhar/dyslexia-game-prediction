@@ -1,18 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Dragula from "react-dragula";
 import { motion, AnimatePresence } from "framer-motion";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 import {
-  DraggableTile,
   Tile,
   Timer,
   UIButton,
   AvatarMessage,
   NextButton,
   BadgePopUp,
-  Tileplacer,
 } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
 import { addAnswer } from "../../actions";
@@ -20,8 +18,10 @@ import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
 const DisplayTile = ({
+  image,
   name,
   question,
+  word,
   options,
   activeStep,
   nextStep,
@@ -30,18 +30,18 @@ const DisplayTile = ({
   openBadge,
   badgeName,
 }) => {
-  const [show, setShow] = useState(true);
+  const [open, setOpen] = useState(true);
   const [answer, setAnswer] = useState("");
-  const [disabled, setDisabled] = useState(true);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
-  const placer = useRef(null);
-  const ansRef = useRef(null);
   const dispatch = useDispatch();
   const classes = useStyles();
-
-  const closeQuestion = () => {
-    setShow(false);
+  const [shuffledOptions, setShuffledOptions] = useState([]);
+  const showDisplay = () => {
+    setOpen(true);
+  };
+  const closeDisplay = () => {
+    setOpen(false);
   };
 
   const onClick = (answer) => {
@@ -50,22 +50,9 @@ const DisplayTile = ({
   const getAnswer = () => dispatch(addAnswer(answer));
 
   useEffect(() => {
-    if (placer.current && ansRef.current) {
-      Dragula([placer.current, ansRef.current], {
-        accepts: function (el, target, source, sibling) {
-          if (target.parentElement.classList.contains("drag-area")) {
-            return target.childNodes.length !== 1;
-          } else {
-            return true;
-          }
-        },
-      }).on("dragend", function (el) {
-        if (placer.current.childNodes.length === 1) {
-          setDisabled(false);
-        } else setDisabled(true);
-      });
-    }
-  }, [placer, ansRef, show]);
+    setShuffledOptions(shuffleArray(options));
+  }, []);
+
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
@@ -81,8 +68,9 @@ const DisplayTile = ({
           alt={gender === "male" ? "Boy Avatar" : "Girl Avatar"}
         />
         <GameArea className="col-8">
-          {show ? (
-            <QuestionContainer className="row">
+          <QuestionContainer className="row">
+            <AnimatePresence>
+              {open && (
                 <TileContainer
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -92,38 +80,56 @@ const DisplayTile = ({
                     initialSeconds={7}
                     initialMinutes={0}
                     reverse
-                    callBack={closeQuestion}
+                    callBack={closeDisplay}
                   />
-                  <Tile
-                    question={true}
-                    height="15vw"
-                    width="15vw"
-                    fontSize="10vw"
-                  >
-                    B
-                  </Tile>
+                  {image ? (
+                    <Tile
+                      question
+                      image
+                      height="15vw"
+                      width="15vw"
+                      fontSize="10vw"
+                      src={word.image}
+                      alt={word.alt}
+                    />
+                  ) : (
+                    <Tile question height="15vw" width="15vw" fontSize="10vw">
+                      {word}
+                    </Tile>
+                  )}
                 </TileContainer>
-                <Qinfo>Remember this tile carefully</Qinfo>
-            </QuestionContainer>
-          ) : (
-            <>
-              <QuestionContainer className="row">
-                <DragArea className="drag-area">
-                  <Tileplacer ref={placer} height="15vw" width="15vw" />
-                </DragArea>
-                <Qinfo>Place the matching tile in the given area</Qinfo>
-              </QuestionContainer>
-              <AnswerContainer ref={ansRef} className="row">
-                {options.map((tile, index) => {
-                  return (
-                    <DraggableTile key={index} height="10vw" width="10vw">
-                      {tile}
-                    </DraggableTile>
-                  );
-                })}
-              </AnswerContainer>
-            </>
-          )}
+              )}
+            </AnimatePresence>
+            <Qinfo>{question}</Qinfo>
+            <UIButton
+              variant="contained"
+              disabled={open}
+              type="button"
+              onClick={showDisplay}
+            >
+              Show Again
+            </UIButton>
+          </QuestionContainer>
+          <AnswerContainer className="row">
+            {shuffledOptions.map((el, i) => {
+              return image ? (
+                <Tile
+                  name={name}
+                  image
+                  key={i}
+                  onClick={onClick}
+                  src={el.image}
+                  alt={el.alt}
+                  height="10vw"
+                  width="10vw"
+                />
+              ) : (
+                <Tile name={name} key={i} onClick={onClick}>
+                  {el}
+                </Tile>
+              );
+            })}
+          </AnswerContainer>
         </GameArea>
         <NextButtonContainer className="col-2">
           {activeStep === totalLevels - 1 ? (
@@ -132,15 +138,20 @@ const DisplayTile = ({
               animate={{ opacity: 1 }}
               transition={{ type: "tween", duration: 1 }}
             >
-              <UIButton variant="contained" type="submit" onClick={() => {}}>
+              <UIButton
+                variant="contained"
+                type="button"
+                component={Link}
+                to="/completed"
+              >
                 Submit
               </UIButton>
             </motion.div>
           ) : (
             <NextButton
               onClick={() => {
-                getAnswer();
-                if ((activeStep + 1) % 2 === 0) openBadge();
+                // getAnswer();
+                // if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />
@@ -151,38 +162,6 @@ const DisplayTile = ({
   }
 };
 export default DisplayTile;
-
-const useStyles = makeStyles(({ theme }) => ({
-  icons: {
-    fontSize: "5.5vw",
-    color: "white",
-  },
-  title: {
-    color: "white",
-    fontSize: "2.5vw",
-  },
-  info: {
-    color: "white",
-    margin: "2px 5px",
-    fontSize: "1.5vw",
-  },
-  Msg: {
-    color: "white",
-
-    fontSize: "2.5vw",
-  },
-  backdrop: {
-    zIndex: 10,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    backdropFilter: "blur(18px)",
-  },
-}));
-
-const DragArea = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 const QuestionContainer = styled.div`
   height: 70%;
@@ -239,3 +218,40 @@ const GameArea = styled.div`
   height: 100%;
   width: 100%;
 `;
+
+const useStyles = makeStyles(({ theme }) => ({
+  icons: {
+    fontSize: "5.5vw",
+    color: "white",
+  },
+  title: {
+    color: "white",
+    fontSize: "2.5vw",
+  },
+  info: {
+    color: "white",
+    margin: "2px 5px",
+    fontSize: "1.5vw",
+  },
+  Msg: {
+    color: "white",
+
+    fontSize: "2.5vw",
+  },
+  backdrop: {
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    backdropFilter: "blur(18px)",
+  },
+}));
+
+const shuffleArray = (array) => {
+  let newArray = array.slice();
+  for (var i = newArray.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = newArray[i];
+    newArray[i] = newArray[j];
+    newArray[j] = temp;
+  }
+  return newArray;
+};

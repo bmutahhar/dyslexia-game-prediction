@@ -44,6 +44,7 @@ const CustomButton = withStyles({
       backgroundColor: "#027719",
       borderColor: "#027719",
       boxShadow: "none",
+      color: "#fff",
     },
     "&:active": {
       outline: "none",

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Check, Close } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { Backdrop } from "@material-ui/core";
+import {Link} from "react-router-dom";
 import {
   Tile,
   AvatarMessage,
@@ -80,7 +81,7 @@ const WordConfirm = ({
               animate={{ opacity: 1 }}
               transition={{ type: "tween", duration: 1 }}
             >
-              <UIButton variant="contained" type="submit" onClick={() => {}}>
+              <UIButton variant="contained" type="button" component={Link} to="/completed">
                 Submit
               </UIButton>
             </motion.div>
