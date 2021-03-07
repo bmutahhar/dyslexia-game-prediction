@@ -5,6 +5,7 @@ import {
   DragDrop,
   WordConfirm,
   NameImage,
+  CVCwords,
 } from "../../Components/Learners";
 import { yay } from "../../Sounds";
 
@@ -62,15 +63,7 @@ const Learners = () => {
   if (activeStep === 0) {
     return (
       <GameScreen activeStep={activeStep} badges={badges}>
-        <WordConfirm
-          word="TIGER"
-          activeStep={activeStep}
-          nextStep={nextStep}
-          showBadge={badgeOpen}
-          badge={badges[0].image}
-          badgeName={badges[0].name}
-          openBadge={openBadge}
-        />
+        <CVCwords></CVCwords>
       </GameScreen>
     );
   } else if (activeStep === 1) {
