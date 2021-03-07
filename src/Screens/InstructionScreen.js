@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 import { NextButton } from "../Components";
 
-const InstructionScreen = () => {
+const InstructionScreen = ({onClick}) => {
     const alt = "Badge";
     const classes = useStyles();
 
@@ -43,7 +43,7 @@ const InstructionScreen = () => {
                 >
                     Proceed To The Game
                     </Typography>
-                <NextButton />
+                <NextButton onClick={onClick} />
             </Proceed>
         </MainContainer >
 
