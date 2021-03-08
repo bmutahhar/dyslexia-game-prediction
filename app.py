@@ -1,19 +1,20 @@
 import json
 import os
 from datetime import datetime, timedelta
-from bson.json_util import dumps,loads
 
 import jwt
 import pymongo
 from flask import Flask, Response, request
+from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)
 try:
 
     mongo = pymongo.MongoClient(
-        "mongodb+srv://root:root@dyxsisml.anbn7.mongodb.net/playground?retryWrites=true&w=majority",
+        "mongodb+srv://root:root@dyxsisml.anbn7.mongodb.net/dyxsis?retryWrites=true&w=majority",
         serverSelectionTimeoutMS=1000)
     db = mongo["dyxsis"]
 
@@ -224,6 +225,7 @@ def get_questions(difficulty):
     try:
         if request.method == 'GET':
             data = db.questions.find_one({'level': difficulty.strip().lower()})
+            # raise Exception
             return Response(
                 response=json.dumps(data['data']),
                 status=200,
