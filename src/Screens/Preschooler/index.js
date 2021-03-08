@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { GameScreen, Loader, QuestionError } from "../../Components";
 import {
   ObjectRotation,
@@ -30,9 +31,10 @@ const PreSchoolers = () => {
   });
   const [questionSet, setQuestionSet] = useState({});
   const [currentQuestion, setCurrentQuestion] = useState({});
-  const [difficulty, setDifficulty] = useState("easy");
+  const [difficulty, setDifficulty] = useState("hard");
   const audio = new Audio(yay);
   const url = process.env["REACT_APP_API_URL"];
+  const totalLevels = useSelector((state) => state.questions.totalQuestions);
 
   const nextStep = () => {
     setActiveStep(activeStep + 1);
@@ -57,22 +59,44 @@ const PreSchoolers = () => {
   };
 
   const getRandomQuestion = () => {
-    const random = Math.floor(Math.random() * questionSet[difficulty].length);
+    const random = Math.floor(
+      Math.random() * (questionSet[difficulty].length - 1)
+    );
+    console.log("Random Number: ", random);
     const prevQuestion = { ...currentQuestion };
     const questions = { ...questionSet };
+    
     const question = questions[difficulty][random];
-    if (question.displayed) {
-      getRandomQuestion();
-    } else if (
-      Object.keys(prevQuestion).length !== 0 &&
-      prevQuestion.type === question.type
-    ) {
-      getRandomQuestion();
-    } else {
+    console.log("Random Question Currently Picked: ", question);
+    console.log("Prev Question", prevQuestion);
+    if (!question.displayed && prevQuestion.type !== question.type) {
+      console.log("First question")
       questions[difficulty][random].displayed = true;
-      setQuestionSet(questions);
       setCurrentQuestion(question);
-      return;
+      setQuestionSet(questions);
+    } else {
+      console.log("NOOBS")
+      let index = random + 1;
+      for (let i = 0; i < questions[difficulty].length; i++) {
+        if (
+          !questions[difficulty][index % (questions[difficulty].length )].displayed &&
+          prevQuestion.type !==
+            questions[difficulty][index % (questions[difficulty].length )].type
+        ) {
+          console.log("Index: ",index);
+          questions[difficulty][
+            index % (questions[difficulty].length)
+          ].displayed = true;
+          setCurrentQuestion(
+            questions[difficulty][index % (questions[difficulty].length)]
+          );
+          setQuestionSet(questions);
+          console.log("Setting question successfully!!!!!!!!");
+          break;
+        }
+        console.log("Gandalf: ",index % (questions[difficulty].length ))
+        index++;
+      }
     }
   };
 
@@ -87,6 +111,8 @@ const PreSchoolers = () => {
       .then((resp) => resp.json())
       .then((respJson) => {
         if (respJson.error === undefined) {
+          console.log("Fetching 2.... ");
+          console.log(respJson);
           const easy = shuffleArray(respJson.easy);
           const medium = shuffleArray(respJson.medium);
           const hard = shuffleArray(respJson.hard);
@@ -101,12 +127,21 @@ const PreSchoolers = () => {
           console.log("No wayyy");
           setStatus({ success: false, error: respJson.error, loading: false });
         }
+      })
+      .catch((err) => {
+        setStatus({ success: false, error: err, loading: false });
       });
   };
 
   useEffect(() => {
     if (!showInstructions) {
-      fetchQuestions();
+      try {
+        console.log("Fetching....");
+        fetchQuestions();
+      } catch (e) {
+        console.log(e);
+        setStatus({ success: false, error: e, loading: false });
+      }
     }
   }, [showInstructions]);
 

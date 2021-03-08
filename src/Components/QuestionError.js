@@ -34,7 +34,7 @@ const QuestionError = ({ open, onClick }) => {
       <LoadingScreen className="row">
         <Backdrop className={classes.backdrop} open={open} onClick={onClick}>
           <Errorgif src={errorguy} alt="error guy GIF" />
-          <Errormsg>Sorry! There Was A Trouble Loading The Game</Errormsg>
+          <Errormsg>Oops! There Was A Trouble Loading The Game</Errormsg>
           <Errormsg2>Please Refresh The Page And Try Again</Errormsg2>
         </Backdrop>
       </LoadingScreen>

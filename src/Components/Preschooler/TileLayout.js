@@ -36,13 +36,8 @@ const TileLayout = ({
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const grid = Array(gridSize * gridSize).fill(true);
-  const optionsA = options.slice(0, Math.floor(options.length / 2));
-
-  const optionsB = options.slice(
-    Math.floor(options.length / 2),
-    options.length
-  );
-
+  const [optionsA, setOptionsA] = useState([]);
+  const [optionsB, setOptionsB] = useState([]);
   const [show, setShow] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const optionsRefA = useRef(null);
@@ -82,6 +77,14 @@ const TileLayout = ({
       });
     }
   }, [elRefs, optionsRefA, optionsRefB, show]);
+
+  useEffect(() => {
+    const tempOptions = shuffleArray(options);
+    setOptionsA(tempOptions.slice(0, Math.floor(options.length / 2)));
+    setOptionsB(
+      tempOptions.slice(Math.floor(options.length / 2), options.length)
+    );
+  }, [options]);
 
   if (showBadge) {
     return (
@@ -342,3 +345,14 @@ const GameArea = styled.div`
   height: 100%;
   width: 100%;
 `;
+
+const shuffleArray = (array) => {
+  let newArray = array.slice();
+  for (var i = newArray.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = newArray[i];
+    newArray[i] = newArray[j];
+    newArray[j] = temp;
+  }
+  return newArray;
+};
