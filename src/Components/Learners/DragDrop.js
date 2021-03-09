@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { motion } from "framer-motion";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Tileplacer,
   Player,
@@ -81,19 +81,56 @@ const DragDrop = ({
             <DragArea className="drag-area">
               {options.map((_, index) => {
                 return (
-                  <Tileplacer
-                    key={index}
-                    ref={(el) => (elRefs.current[index] = el)}
-                  ></Tileplacer>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.2 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 + (index + 1) / 10, duration: 0.7, type: "spring", stiffness: 90, ease: "easeIn" }}
+                  >
+                    <Tileplacer
+                      key={index}
+                      ref={(el) => (elRefs.current[index] = el)}
+                    ></Tileplacer>
+                  </motion.div>
+
                 );
               })}
             </DragArea>
-            <Qinfo>Listen and complete the word by dragging the tiles</Qinfo>
+            <Qinfo
+              initial={{
+                opacity: 0,
+                fontSize: "0vw",
+                x: "5vh"
+
+              }}
+              animate={{
+                opacity: 1,
+                fontSize: "1.4vw",
+                x: 0
+              }}
+              transition={{
+
+                delay: 0.9,
+                duration: 0.4,
+                type: "spring",
+                stiffness: 90,
+                ease: "easeIn"
+
+              }}
+            >Listen and complete the word by dragging the tiles</Qinfo>
             <Player color="white" text={word} />
           </QuestionContainer>
           <AnswerContainer ref={ansRef} className="row">
             {options.map((tile, index) => {
-              return <DraggableTile key={index}>{tile}</DraggableTile>;
+              return (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.2 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1 + (index + 1) / 10, duration: 0.7, type: "spring", stiffness: 90, ease: "easeIn" }}
+                >
+                  <DraggableTile key={index}>{tile}</DraggableTile>
+
+                </motion.div>
+              );
             })}
           </AnswerContainer>
         </GameArea>
@@ -109,15 +146,15 @@ const DragDrop = ({
               </UIButton>
             </motion.div>
           ) : (
-            <NextButton
-              disabled={disabled}
-              onClick={() => {
-                getAnswer();
-                if ((activeStep+1)  % 2===0) openBadge();
-                nextStep();
-              }}
-            />
-          )}
+              <NextButton
+                disabled={disabled}
+                onClick={() => {
+                  getAnswer();
+                  if ((activeStep + 1) % 2 === 0) openBadge();
+                  nextStep();
+                }}
+              />
+            )}
         </NextButtonContainer>
       </MainContainer>
     );
@@ -178,9 +215,8 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const Qinfo = styled.p`
+const Qinfo = styled(motion.p)`
   margin-top: 30px;
-  font-size: 1vw;
   color: white;
 `;
 

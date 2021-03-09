@@ -84,7 +84,20 @@ const Learners = () => {
               badgeName={badges[0].name}
               openBadge={openBadge}
             /> */}
-            <NameImage
+
+            <DragDrop
+              activeStep={activeStep}
+              nextStep={nextStep}
+              word="four"
+              options={["a", "b", "c", "d"]}
+              showBadge={badgeOpen}
+              badge={badges[1].image}
+              badgeName={badges[1].name}
+              openBadge={openBadge}
+            />
+
+
+            {/* <NameImage
               activeStep={activeStep}
               nextStep={nextStep}
               showBadge={badgeOpen}
@@ -92,7 +105,8 @@ const Learners = () => {
               badgeName={badges[0].name}
               openBadge={openBadge}
               options={["A", "B", "C", "D"]}
-            />
+            /> */}
+
             {/* <ObjectRotation
               question="Rotate the object"
               word={{ image: b1, alt: "b1" }}
