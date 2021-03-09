@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Tileplacer,
   Tile,
@@ -52,7 +52,7 @@ const SelectOption = ({
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, []);
-  
+
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
@@ -82,55 +82,55 @@ const SelectOption = ({
                     reverse
                     callBack={closeQuestion}
                   />
-                 {image ? (
-                  <Tile
-                    question
-                    image
-                    height="15vw"
-                    width="15vw"
-                    fontSize="10vw"
-                    src={word.image}
-                    alt={word.alt}
-                  />
-                ) : (
-                  <Tile question height="15vw" width="15vw" fontSize="10vw">
-                    {word}
-                  </Tile>
-                )}
+                  {image ? (
+                    <Tile
+                      question
+                      image
+                      height="15vw"
+                      width="15vw"
+                      fontSize="10vw"
+                      src={word.image}
+                      alt={word.alt}
+                    />
+                  ) : (
+                      <Tile question height="15vw" width="15vw" fontSize="10vw">
+                        {word}
+                      </Tile>
+                    )}
                 </TileContainer>
                 <Qinfo>Remember this tile carefully</Qinfo>
               </QuestionContainer>
             </AnimatePresence>
           ) : (
-            <QuestionContainer className="row">
-              <GridPlacer gridSize={gridSize}>
-                {shuffledOptions.map((el, i) => {
-                  return (
-                    <Tileplacer key={i} height="12vw" width="12vw">
-                    {image?(<Tile
-                        height="10vw"
-                        width="10vw"
-                        name="selectOptions"
-                        onClick={onClick}
-                        image
-                        src={el.image}
-                        alt={el.alt}
-                      />):(<Tile
-                        height="10vw"
-                        width="10vw"
-                        name="selectOptions"
-                        onClick={onClick}
-                      >
-                        {el}
-                      </Tile>)}
-                      
-                    </Tileplacer>
-                  );
-                })}
-              </GridPlacer>
-              <Qinfo>{question}</Qinfo>
-            </QuestionContainer>
-          )}
+              <QuestionContainer className="row">
+                <GridPlacer gridSize={gridSize}>
+                  {shuffledOptions.map((el, i) => {
+                    return (
+                      <Tileplacer key={i} height="12vw" width="12vw">
+                        {image ? (<Tile
+                          height="10vw"
+                          width="10vw"
+                          name="selectOptions"
+                          onClick={onClick}
+                          image
+                          src={el.image}
+                          alt={el.alt}
+                        />) : (<Tile
+                          height="10vw"
+                          width="10vw"
+                          name="selectOptions"
+                          onClick={onClick}
+                        >
+                          {el}
+                        </Tile>)}
+
+                      </Tileplacer>
+                    );
+                  })}
+                </GridPlacer>
+                <Qinfo>{question}</Qinfo>
+              </QuestionContainer>
+            )}
         </GameArea>
         <NextButtonContainer className="col-2">
           {activeStep === totalLevels - 1 ? (
@@ -144,14 +144,14 @@ const SelectOption = ({
               </UIButton>
             </motion.div>
           ) : (
-            <NextButton
-              onClick={() => {
-                getAnswer();
-                // if ((activeStep+1)  % 2 === 0) openBadge();
-                nextStep();
-              }}
-            />
-          )}
+              <NextButton
+                onClick={() => {
+                  getAnswer();
+                  // if ((activeStep+1)  % 2 === 0) openBadge();
+                  nextStep();
+                }}
+              />
+            )}
         </NextButtonContainer>
       </MainContainer>
     );
@@ -221,7 +221,7 @@ const QuestionContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   ${'' /* margin-top: 10%; */}
 `;
 

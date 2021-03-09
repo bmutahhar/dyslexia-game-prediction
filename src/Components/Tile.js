@@ -157,6 +157,7 @@ const Label = styled.label`
 
 const Image = styled.img`
   width: 50%;
+  height: 50%;
   object-fit: contain;
   overflow: hidden;
 `;

@@ -123,14 +123,14 @@ const ObjectRotation = ({
               </UIButton>
             </motion.div>
           ) : (
-            <NextButton
-              onClick={() => {
-                getAnswer();
-                // if ((activeStep + 1) % 2 === 0) openBadge();
-                nextStep();
-              }}
-            />
-          )}
+              <NextButton
+                onClick={() => {
+                  getAnswer();
+                  // if ((activeStep + 1) % 2 === 0) openBadge();
+                  nextStep();
+                }}
+              />
+            )}
         </NextButtonContainer>
         <Backdrop
           className={classes.backdrop}
@@ -213,7 +213,7 @@ const AnswerSelection = styled.div`
 const ImageContainer = styled(motion.div)``;
 
 const Image = styled.img`
-  height: 22vw;
+  height: 15vw;
 `;
 
 const IconContainer = styled.div`

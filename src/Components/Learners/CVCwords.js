@@ -8,6 +8,51 @@ import { motion } from "framer-motion";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
+const optionVarient = {
+  start: {
+    opacity: 0,
+    width: "0vw",
+    height: "0vh"
+  },
+  end: {
+    opacity: 1,
+    width: "30vw",
+    height: "12vh",
+
+  },
+
+  hover: {
+    scale: 1.1,
+    transition: {
+      duration: 0.2,
+      type: "spring",
+      stiffness: 100
+    }
+  },
+
+  click: {
+    scale: 0.7,
+    transition: {
+      duration: 0.3,
+      type: "spring",
+      stiffness: 100
+    }
+  }
+};
+
+const SpellingVariant = {
+  start: {
+    opacity: 0,
+    x: "-2vw",
+    fontSize: "2vw"
+  },
+
+  end: {
+    opacity: 1,
+    x: 0,
+    fontSize: "4.5vw"
+  }
+}
 const CVCwords = ({
   activeStep,
   nextStep,
@@ -31,19 +76,161 @@ const CVCwords = ({
       />
       <GameArea className="col-8">
         <QuestionContainer className="row">
-          <Spellingoptions>
-            <Spelling>AELD</Spelling>
-          </Spellingoptions>
-          <Spellingoptions>
-            <Spelling>AELD</Spelling>
-          </Spellingoptions>
-          <Spellingoptions>
-            <Spelling>AELD</Spelling>
-          </Spellingoptions>
-          <Spellingoptions>
-            <Spelling>AELD</Spelling>
-          </Spellingoptions>
-          <Qinfo>Listen To The Word And Choose The Correct Spelling</Qinfo>
+          <Optionsbox
+
+            variants={optionVarient}
+            initial="start"
+            animate="end"
+            transition={{
+
+              delay: 0.2,
+              duration: 0.5,
+              type: "spring",
+              stiffness: 120
+
+            }}
+          >
+            <Spellingoptions
+              variants={optionVarient}
+              whileHover="hover"
+              whileTap="click"
+
+
+            >
+              <Spelling
+                variants={SpellingVariant}
+                initial="start"
+                animate="end"
+                transition={{
+                  delay: 0.6,
+                  duration: 0.4,
+                  type: "spring",
+                  stiffness: 90
+                }}
+              >AELD</Spelling>
+            </Spellingoptions>
+          </Optionsbox>
+
+          <Optionsbox
+
+            variants={optionVarient}
+            initial="start"
+            animate="end"
+            transition={{
+
+              delay: 0.3,
+              duration: 0.5,
+              type: "spring",
+              stiffness: 120
+
+            }}
+          >
+            <Spellingoptions
+              variants={optionVarient}
+              whileHover="hover"
+              whileTap="click"
+
+            >
+              <Spelling
+                variants={SpellingVariant}
+                initial="start"
+                animate="end"
+                transition={{
+                  delay: 0.7,
+                  duration: 0.4,
+                  type: "spring",
+                  stiffness: 90
+                }}
+              >AELD</Spelling>
+            </Spellingoptions>
+          </Optionsbox>
+          <Optionsbox
+
+            variants={optionVarient}
+            initial="start"
+            animate="end"
+            transition={{
+
+              delay: 0.4,
+              duration: 0.5,
+              type: "spring",
+              stiffness: 120
+
+            }}
+          >
+            <Spellingoptions
+              variants={optionVarient}
+              whileHover="hover"
+              whileTap="click"
+
+            >
+              <Spelling
+                variants={SpellingVariant}
+                initial="start"
+                animate="end"
+                transition={{
+                  delay: 0.8,
+                  duration: 0.4,
+                  type: "spring",
+                  stiffness: 90
+                }}
+              >AELD</Spelling>
+            </Spellingoptions>
+          </Optionsbox>
+          <Optionsbox
+
+            variants={optionVarient}
+            initial="start"
+            animate="end"
+            transition={{
+
+              delay: 0.5,
+              duration: 0.5,
+              type: "spring",
+              stiffness: 120
+
+            }}
+          >
+            <Spellingoptions
+              variants={optionVarient}
+              whileHover="hover"
+              whileTap="click"
+
+            >
+              <Spelling
+                variants={SpellingVariant}
+                initial="start"
+                animate="end"
+                transition={{
+                  delay: 0.9,
+                  duration: 0.4,
+                  type: "spring",
+                  stiffness: 90
+                }}
+              >AELD</Spelling>
+            </Spellingoptions>
+          </Optionsbox>
+          <Qinfo
+            initial={{
+              opacity: 0,
+              fontSize: "0vw",
+              x: "5vh"
+
+            }}
+            animate={{
+              opacity: 1,
+              fontSize: "1.4vw",
+              x: 0
+            }}
+            transition={{
+
+              delay: 0.6,
+              duration: 0.4,
+              type: "spring",
+              stiffness: 80
+
+            }}
+          >Listen To The Word And Choose The Correct Spelling</Qinfo>
         </QuestionContainer>
         <AnswerContainer className="row">
           <Player color="white" />
@@ -66,27 +253,33 @@ const CVCwords = ({
             </UIButton>
           </motion.div>
         ) : (
-          <NextButton
-            onClick={() => {
-              // if ((activeStep + 1) % 2 === 0) openBadge();
-              nextStep();
-            }}
-          />
-        )}
+            <NextButton
+              onClick={() => {
+                // if ((activeStep + 1) % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
       </NextButtonContainer>
-    </MainContainer>
+    </MainContainer >
   );
 };
 
 export default CVCwords;
 
-const Spelling = styled.h1`
+const Spelling = styled(motion.h1)`
   color: white;
   font-size: 4.5vw;
   letter-spacing: 2rem;
   margin-left: 2rem;
 `;
-const Spellingoptions = styled.div`
+const Optionsbox = styled(motion.div)`
+margin-bottom: 1vw;
+ align-items: center;
+ justify-content: center;
+ 
+`;
+const Spellingoptions = styled(motion.div)`
   display: flex;
   flex-direction: column;
   width: 30vw;
@@ -98,16 +291,9 @@ const Spellingoptions = styled.div`
   justify-content: center;
   margin-bottom: 1vw;
 
-  transition: 0.3s ease-in-out;
 
-  &:hover {
-    transform: scale(1.1);
-    transition: 0.3s ease-in;
-  }
-  &:active {
-    transform: scale(0.9);
-    transition: 0.3s ease-out;
-  }
+  
+  
 `;
 
 const QuestionContainer = styled.div`
@@ -132,9 +318,8 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const Qinfo = styled.p`
+const Qinfo = styled(motion.p)`
   margin-top: 30px;
-  font-size: 1.1vw;
   color: white;
 `;
 

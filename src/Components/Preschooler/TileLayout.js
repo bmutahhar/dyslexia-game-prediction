@@ -133,76 +133,89 @@ const TileLayout = ({
                       alt={word.alt}
                     />
                   ) : (
-                    <Tile question height="15vw" width="15vw" fontSize="10vw">
-                      {word}
-                    </Tile>
-                  )}
+                      <Tile question height="15vw" width="15vw" fontSize="10vw">
+                        {word}
+                      </Tile>
+                    )}
                 </TileContainer>
                 <Qinfo>Remember this tile carefully</Qinfo>
               </QuestionContainer>
             </AnimatePresence>
           ) : (
-            <QuestionContainer
-              className="row"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.25, duration: 0.25 }}
-            >
-              <TileGrid gridSize={gridSize} ref={optionsRefA}>
-                {optionsA.map((el, i) => {
-                  return image ? (
-                    <DraggableTile
-                      image
-                      key={i}
-                      src={el.image}
-                      alt={el.alt}
-                      // height="10vw"
-                      // width="10vw"
-                    />
-                  ) : (
-                    <DraggableTile key={i}>{el}</DraggableTile>
-                  );
-                })}
-              </TileGrid>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                }}
+              <QuestionContainer
+                className="row"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.25, duration: 0.25 }}
               >
-                <GridPlacer gridSize={gridSize} className="drag-area">
-                  {grid.map((_, i) => {
-                    return (
-                      <Tileplacer
+                <TileGrid gridSize={gridSize} ref={optionsRefA}>
+                  {optionsA.map((el, i) => {
+                    return image ? (
+                      <DraggableTile
+                        image
                         key={i}
-                        ref={(el) => (elRefs.current[i] = el)}
-                      />
-                    );
-                  })}
-                </GridPlacer>
-                {/* <Typography variant="subtitle1" display="block" className={classes.question}>{question}</Typography> */}
-                {/* <Qinfo>{question}</Qinfo> */}
-              </div>
-              <TileGrid gridSize={gridSize} ref={optionsRefB}>
-                {optionsB.map((el, i) => {
-                  return image ? (
-                    <DraggableTile
-                      image
-                      key={i}
-                      src={el.image}
-                      alt={el.alt}
+                        src={el.image}
+                        alt={el.alt}
                       // height="10vw"
                       // width="10vw"
-                    />
-                  ) : (
-                    <DraggableTile key={i}>{el}</DraggableTile>
-                  );
-                })}
-              </TileGrid>
-            </QuestionContainer>
-          )}
+                      />
+                    ) : (
+                        <DraggableTile key={i}>{el}</DraggableTile>
+                      );
+                  })}
+                </TileGrid>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    border: "1px solid red"
+
+                  }}
+                >
+                  <GridPlacer gridSize={gridSize} className="drag-area">
+                    {grid.map((_, i) => {
+                      return (
+                        <Tileplacer
+                          key={i}
+                          ref={(el) => (elRefs.current[i] = el)}
+                        />
+                      );
+                    })}
+                  </GridPlacer>
+                  {/* <Typography variant="subtitle1" display="block" className={classes.question}>{question}</Typography> */}
+                  <div style={{
+                    width: "25vw",
+                    height: "8vw",
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: "wrap",
+                    border: '1px solid blue'
+
+                  }}>
+                    <Qinfo>{question}</Qinfo>
+
+                  </div>
+                </div>
+                <TileGrid gridSize={gridSize} ref={optionsRefB}>
+                  {optionsB.map((el, i) => {
+                    return image ? (
+                      <DraggableTile
+                        image
+                        key={i}
+                        src={el.image}
+                        alt={el.alt}
+                      // height="10vw"
+                      // width="10vw"
+                      />
+                    ) : (
+                        <DraggableTile key={i}>{el}</DraggableTile>
+                      );
+                  })}
+                </TileGrid>
+              </QuestionContainer>
+            )}
         </GameArea>
         <NextButtonContainer className="col-2">
           {activeStep === totalLevels - 1 ? (
@@ -221,15 +234,15 @@ const TileLayout = ({
               </UIButton>
             </motion.div>
           ) : (
-            <NextButton
-              disabled={disabled}
-              onClick={() => {
-                getAnswer();
-                // if ((activeStep+1)  % 2===0) openBadge();
-                nextStep();
-              }}
-            />
-          )}
+              <NextButton
+                disabled={disabled}
+                onClick={() => {
+                  getAnswer();
+                  // if ((activeStep+1)  % 2===0) openBadge();
+                  nextStep();
+                }}
+              />
+            )}
         </NextButtonContainer>
       </MainContainer>
     );
@@ -324,12 +337,11 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const Qinfo = styled.div`
+const Qinfo = styled.p`
   margin-top: 30px;
-  font-size: 1.5vw;
+  font-size: 2vw;
   color: white;
-  display: flex;
-  flex-wrap: wrap;
+
 `;
 
 const NextButtonContainer = styled.div`

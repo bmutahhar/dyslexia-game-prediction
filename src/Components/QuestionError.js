@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { ProfileAvatar, CustomStepper } from "../Components";
 import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
 import errorguy from "../Images/characters/errorguy.gif";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
@@ -33,9 +34,34 @@ const QuestionError = ({ open, onClick }) => {
       </Header>
       <LoadingScreen className="row">
         <Backdrop className={classes.backdrop} open={open} onClick={onClick}>
-          <Errorgif src={errorguy} alt="error guy GIF" />
-          <Errormsg>Oops! There Was A Trouble Loading The Game</Errormsg>
-          <Errormsg2>Please Refresh The Page And Try Again</Errormsg2>
+          <Errorgif
+            initial={{ opacity: 0, height: "0%" }}
+            animate={{ opacity: 1, height: "40%" }}
+            transition={{
+              duration: 0.8,
+              type: "tween",
+
+            }}
+
+
+            src={errorguy}
+            alt="error guy GIF" />
+          <Errormsg
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              delay: 1.3,
+              duration: 0.3,
+            }}
+          >Oops! There Was A Trouble Loading The Game</Errormsg>
+          <Errormsg2
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              delay: 1.6,
+              duration: 0.3,
+            }}
+          >Please Refresh The Page And Try Again</Errormsg2>
         </Backdrop>
       </LoadingScreen>
     </Container>
@@ -43,12 +69,12 @@ const QuestionError = ({ open, onClick }) => {
 };
 
 export default QuestionError;
-const Errormsg = styled.h1`
+const Errormsg = styled(motion.h1)`
   color: white;
   font-size: 2.5vw;
 `;
 
-const Errormsg2 = styled.h2`
+const Errormsg2 = styled(motion.h2)`
   color: white;
   font-size: 1.5vw;
 `;
@@ -119,7 +145,6 @@ const Profile = styled.div`
   align-items: center;
   justify-content: space-evenly;
 `;
-const Errorgif = styled.img`
-  height: 40%;
+const Errorgif = styled(motion.img)`
   transform: scaleX(-1);
 `;

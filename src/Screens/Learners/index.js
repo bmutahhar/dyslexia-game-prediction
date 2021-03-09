@@ -6,7 +6,7 @@ import {
   NameImage,
   CVCwords,
 } from "../../Components/Learners";
-import { SelectOption, TileLayout } from "../../Components/Preschooler";
+import { SelectOption, TileLayout, ObjectRotation } from "../../Components/Preschooler";
 import { InstructionScreen } from "../../Screens";
 import { yay } from "../../Sounds";
 
@@ -84,18 +84,20 @@ const Learners = () => {
               badgeName={badges[0].name}
               openBadge={openBadge}
             /> */}
-            <TileLayout
-              word="B"
-              question="Drag the matching shape into the given bucket"
+            {/* <ObjectRotation
+              question="Rotate the object"
+              word={{ image: b1, alt: "b1" }}
+              angle={60}
+              degree={90}
               activeStep={activeStep}
               nextStep={nextStep}
-              gridSize={3}
-              options={["A", "B", "C", "D", "H", "A", "B", "C", "D"]}
               showBadge={badgeOpen}
               badge={badges[0].image}
               badgeName={badges[0].name}
               openBadge={openBadge}
-            />
+            /> */}
+            <CVCwords></CVCwords>
+
           </GameScreen>
         );
       } else if (activeStep === 1) {

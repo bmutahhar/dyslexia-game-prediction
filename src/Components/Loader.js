@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { ProfileAvatar, CustomStepper } from "../Components";
 import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
 import doggy from "../Images/characters/dog4.gif";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
@@ -33,8 +34,24 @@ const Loader = ({ open, onClick }) => {
       </Header>
       <LoadingScreen className="row">
         <Backdrop className={classes.backdrop} open={open} onClick={onClick}>
-          <Doggy src={doggy} alt="dog Waiting GIF" />
-          <Loadingmsg>Loading......Please Wait!</Loadingmsg>
+          <Doggy
+            initial={{ opacity: 0, height: "0%" }}
+            animate={{ opacity: 1, height: "40%" }}
+            transition={{
+              duration: 0.8,
+              type: "tween",
+
+            }}
+            src={doggy}
+            alt="dog Waiting GIF" />
+          <Loadingmsg
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              delay: 0.4,
+              duration: 0.2,
+            }}
+          >Loading......Please Wait!</Loadingmsg>
         </Backdrop>
       </LoadingScreen>
     </Container>
@@ -42,7 +59,7 @@ const Loader = ({ open, onClick }) => {
 };
 
 export default Loader;
-const Loadingmsg = styled.h1`
+const Loadingmsg = styled(motion.h1)`
   color: white;
   height: 7vh;
   font-size: 2.5vw;
@@ -51,10 +68,10 @@ const Loadingmsg = styled.h1`
   border-right: 0.2em solid green;
   white-space: nowrap;
   letter-spacing: 0.15em;
-  animation: typing 2.5s steps(35, end), blink-caret 0.4s step-end infinite;
-
+  animation: typing 3.5s steps(35, end), blink-caret 0.4s step-end infinite;
   @keyframes typing {
     from {
+
       width: 0;
     }
     to {
@@ -139,7 +156,6 @@ const Profile = styled.div`
   align-items: center;
   justify-content: space-evenly;
 `;
-const Doggy = styled.img`
-  height: 40%;
+const Doggy = styled(motion.img)`
   transform: scaleX(-1);
 `;

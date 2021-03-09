@@ -65,7 +65,7 @@ const PreSchoolers = () => {
     console.log("Random Number: ", random);
     const prevQuestion = { ...currentQuestion };
     const questions = { ...questionSet };
-    
+
     const question = questions[difficulty][random];
     console.log("Random Question Currently Picked: ", question);
     console.log("Prev Question", prevQuestion);
@@ -79,11 +79,11 @@ const PreSchoolers = () => {
       let index = random + 1;
       for (let i = 0; i < questions[difficulty].length; i++) {
         if (
-          !questions[difficulty][index % (questions[difficulty].length )].displayed &&
+          !questions[difficulty][index % (questions[difficulty].length)].displayed &&
           prevQuestion.type !==
-            questions[difficulty][index % (questions[difficulty].length )].type
+          questions[difficulty][index % (questions[difficulty].length)].type
         ) {
-          console.log("Index: ",index);
+          console.log("Index: ", index);
           questions[difficulty][
             index % (questions[difficulty].length)
           ].displayed = true;
@@ -94,7 +94,7 @@ const PreSchoolers = () => {
           console.log("Setting question successfully!!!!!!!!");
           break;
         }
-        console.log("Gandalf: ",index % (questions[difficulty].length ))
+        console.log("Gandalf: ", index % (questions[difficulty].length))
         index++;
       }
     }
@@ -137,7 +137,7 @@ const PreSchoolers = () => {
     if (!showInstructions) {
       try {
         console.log("Fetching....");
-        fetchQuestions();
+        setTimeout(fetchQuestions, 4000);
       } catch (e) {
         console.log(e);
         setStatus({ success: false, error: e, loading: false });
