@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { IconButton } from "@material-ui/core";
 import { PlayArrowRounded, PauseRounded } from "@material-ui/icons";
 import { useSpeechSynthesis } from "react-speech-kit";
-
+import { motion } from "framer-motion";
 const Player = ({ color, text }) => {
   const [iconName, setIconName] = useState("play");
   const [time, setTime] = useState("00:00");
@@ -13,8 +13,8 @@ const Player = ({ color, text }) => {
     if (iconName === "play") {
       speak({
         text: text,
-        rate: 0.7,
-        voice: voices[1],
+        rate: 0.6,
+        voice: voices[3],
       });
       setIconName("pause");
     } else {
@@ -43,7 +43,7 @@ const Player = ({ color, text }) => {
       progressInterval = setInterval(() => {
         progressbar.current.value = count / text.length;
         count += 1;
-      }, 250);
+      }, 500);
       timeInterval = setInterval(() => {
         seconds += 1;
         var currentTime = calculateCurrentValue(seconds);
@@ -58,11 +58,40 @@ const Player = ({ color, text }) => {
       clearInterval(timeInterval);
       clearInterval(progressInterval);
     };
-  }, [speaking]);
+  }, [speaking, text]);
 
   return (
-    <Container>
-      <Controls>
+    <Container
+      initial={{
+        opacity: 0,
+        width: "2%"
+      }}
+      animate={{
+        opacity: 1,
+        width: "50%"
+      }}
+      transition={{
+        delay: 0.7,
+        duration: 0.8,
+        type: "spring",
+      }}
+    >
+      <Controls
+        initial={{
+          opacity: 0,
+          width: "0%"
+        }}
+        animate={{
+          opacity: 1,
+          width: "100%"
+        }}
+        transition={{
+          delay: 1.1,
+          duration: 0.6,
+          type: "spring",
+        }}
+
+      >
         <IconButton
           onClick={togglePlay}
           style={{ margin: 5, padding: 5, display: "inline" }}
@@ -70,8 +99,8 @@ const Player = ({ color, text }) => {
           {iconName === "play" ? (
             <PlayArrowRounded fontSize="large" style={{ color: color }} />
           ) : (
-            <PauseRounded fontSize="large" style={{ color: color }} />
-          )}
+              <PauseRounded fontSize="large" style={{ color: color }} />
+            )}
         </IconButton>
         <ProgressBarAndTimer>
           <ProgressBar ref={progressbar} max="1" value="0" />
@@ -84,7 +113,7 @@ const Player = ({ color, text }) => {
 
 export default Player;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   border-radius: 50px;
   width: 50%;
   background-color: rgba(255, 255, 255, 0.11);
@@ -92,12 +121,12 @@ const Container = styled.div`
   border: 3px solid #c9c4c4;
 `;
 
-const Controls = styled.div`
+const Controls = styled(motion.div)`
   display: flex;
   align-items: center;
 `;
 
-const ProgressBarAndTimer = styled.div`
+const ProgressBarAndTimer = styled(motion.div)`
   width: 100%;
   display: flex;
   align-items: center;

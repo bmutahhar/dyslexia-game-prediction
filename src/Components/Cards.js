@@ -1,8 +1,9 @@
 import React, { Component, useState } from "react";
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
+import {useDispatch} from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { zoomIn, fadeIn } from "react-animations";
-// import "./Cardstyle.css";
+import {setLevel} from "../actions";
 
 export default class Cards extends Component {
   render() {
@@ -17,6 +18,7 @@ export default class Cards extends Component {
         cardcolor={this.props.cardcolor}
         circles={this.props.circles}
         level={this.props.level}
+        currentLevel={this.props.currentLevel}
         description={this.props.description}
         descriptioninfo={this.props.descriptioninfo}
         moreinfoq1={this.props.moreinfoq1}
@@ -29,10 +31,9 @@ export default class Cards extends Component {
 }
 function Card(props) {
   const [displaycard, setDisplaycard] = useState(props.cardstate);
-
   const [displayinfo, setDisplayinfo] = useState(props.moreinfostate);
-
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const displaymoreinfo = () => {
     setDisplayinfo(!displayinfo);
@@ -40,8 +41,9 @@ function Card(props) {
   };
 
   const nextPage = () => {
-    history.push("/selectAvatar")
-  }
+    dispatch(setLevel(props.currentLevel))
+    history.push("/selectAvatar");
+  };
   const Animate = () => {
     const card = document.querySelectorAll(".card");
 
@@ -130,8 +132,8 @@ function Card(props) {
             {props.moreinfoq3 !== undefined ? (
               <Moreinfo>{props.moreinfoq3}</Moreinfo>
             ) : (
-                <></>
-              )}
+              <></>
+            )}
           </ul>
           <Buttonclose onClick={displaymoreinfo}>Close</Buttonclose>
         </Levelinfo>
@@ -271,22 +273,22 @@ border: none;
   
   &:hover {
       border : ${(props) => {
-    return `${props.buttonborder}`;
-  }};
+        return `${props.buttonborder}`;
+      }};
       outline: none;
       
     cursor: pointer;
     background-color: ${(props) => {
-    return `${props.buttoncolorh}`;
-  }};
+      return `${props.buttoncolorh}`;
+    }};
 
 
   }
 
   &: active {
     box-shadow: ${(props) => {
-    return `${props.buttonshadow}`;
-  }};
+      return `${props.buttonshadow}`;
+    }};
 
     
     outline: none;

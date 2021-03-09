@@ -35,11 +35,17 @@ export default class Form extends Component {
 const Formpage = () => {
   const active = "33px";
   const nonactive = "20px";
+  const [savecheck, setSavecheck] = useState(false);
+  const [save, setSave] = useState(false);
   const [verify, setVerify] = useState(false);
   const history = useHistory();
 
   const verifications = () => {
     setVerify(!verify);
+  };
+
+  const saveAnswers = () => {
+    setSave(!save);
   };
 
   const [answer1, setAnswer1] = useState("");
@@ -427,7 +433,7 @@ const Formpage = () => {
           q4sf: false,
           q4if: false,
         });
-
+        setSavecheck(true);
         break;
       }
     }
@@ -603,6 +609,16 @@ const Formpage = () => {
                       }}
                     />
                   )}
+                  {savecheck && (
+                    <FormControlLabel
+                      style={styles.check1}
+                      onClick={saveAnswers}
+                      checked={save}
+                      control={<Checkbox color="primary" />}
+                      label="Save my answers for next time"
+                    />
+                  )}
+
                 </FormControl>
               )}
               {consentf && (
@@ -679,8 +695,8 @@ const Formpage = () => {
                   {status.loading ? (
                     <CircularProgress style={{ color: "white" }} size={30} />
                   ) : (
-                    "Done"
-                  )}
+                      "Done"
+                    )}
                 </Submitbutton>
               )}
 
@@ -954,6 +970,12 @@ const styles = {
     position: "absolute",
     bottom: "20%",
     left: "7%",
+  },
+
+  check1: {
+    position: "absolute",
+    bottom: "20%",
+    left: "1%",
   },
 
   circle: {
