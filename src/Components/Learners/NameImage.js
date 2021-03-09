@@ -3,9 +3,9 @@ import styled from "styled-components";
 import Dragula from "react-dragula";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
-import {Backdrop} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
-import {Link} from "react-router-dom";
+import { Backdrop } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 import {
   Tileplacer,
   Character,
@@ -61,7 +61,7 @@ const NameImage = ({
         else setDisabled(true);
       });
     }
-  }, [elRefs, ansRef, arrLength,showBadge]);
+  }, [elRefs, ansRef, arrLength, showBadge]);
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
@@ -78,27 +78,87 @@ const NameImage = ({
         />
         <GameArea className="col-8">
           <QuestionContainer className="row">
-            <Character
-              className="avatar"
-              src={leapord}
-              alt="Boy Avatar"
-              style={styles.avatar}
-            />
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: "-30vh",
+                scale: 0.2
+
+              }}
+
+              animate={{
+                opacity: 1,
+                y: 0,
+                scale: 1
+              }}
+
+              transition={{
+                delay: 0.2,
+                duration: 0.4,
+                type: "spring",
+                stiffness: 70
+              }}
+            >
+              <Character
+                className="avatar"
+                src={leapord}
+                alt="Boy Avatar"
+                style={styles.avatar}
+              />
+            </motion.div>
+
             <DragArea className="drag-area">
               {options.map((tile, index) => {
                 return (
-                  <Tileplacer
-                    key={index}
-                    ref={(el) => (elRefs.current[index] = el)}
-                  ></Tileplacer>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.2 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7 + (index + 1) / 10, duration: 0.7, type: "spring", stiffness: 90, ease: "easeIn" }}
+                  >
+                    <Tileplacer
+                      key={index}
+                      ref={(el) => (elRefs.current[index] = el)}
+                    ></Tileplacer>
+                  </motion.div>
+
                 );
               })}
             </DragArea>
-            <Qinfo>Name the character by dragging the tiles</Qinfo>
+            <Qinfo
+              initial={{
+                opacity: 0,
+                fontSize: "0vw",
+                x: "5vh"
+
+              }}
+              animate={{
+                opacity: 1,
+                fontSize: "1.4vw",
+                x: 0
+              }}
+              transition={{
+
+                delay: 0.9,
+                duration: 0.4,
+                type: "spring",
+                stiffness: 90,
+                ease: "easeIn"
+
+              }}
+            >Name the character by dragging the tiles</Qinfo>
           </QuestionContainer>
           <AnswerContainer ref={ansRef} className="row">
             {options.map((tile, index) => {
-              return <DraggableTile key={index}>{tile}</DraggableTile>;
+              return (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.2 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1 + (index + 1) / 10, duration: 0.7, type: "spring", stiffness: 90, ease: "easeIn" }}
+                >
+                  <DraggableTile key={index}>{tile}</DraggableTile>
+
+                </motion.div>
+              );
             })}
           </AnswerContainer>
         </GameArea>
@@ -114,15 +174,15 @@ const NameImage = ({
               </UIButton>
             </motion.div>
           ) : (
-            <NextButton
-              disabled={disabled}
-              onClick={() => {
-                getAnswer();
-                if ((activeStep+1) % 2===0) openBadge();
-                nextStep();
-              }}
-            />
-          )}
+              <NextButton
+                disabled={disabled}
+                onClick={() => {
+                  getAnswer();
+                  if ((activeStep + 1) % 2 === 0) openBadge();
+                  nextStep();
+                }}
+              />
+            )}
         </NextButtonContainer>
       </MainContainer>
     );
@@ -193,9 +253,8 @@ const MainContainer = styled.div`
   ${"" /* align-items: center; */}
   ${"" /* justify-content: center; */}
 `;
-const Qinfo = styled.p`
+const Qinfo = styled(motion.p)`
   margin-top: 30px;
-  font-size: 1vw;
   color: white;
 `;
 
