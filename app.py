@@ -6,16 +6,17 @@ import jwt
 import pymongo
 from flask import Flask, Response, request
 from flask_cors import CORS
+from pymongo import ReadPreference
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)
+app.config['DB_URL'] = os.environ.get("DB_URL") or "mongodb://localhost:27017"
 try:
 
-    mongo = pymongo.MongoClient(
-        "mongodb+srv://root:root@dyxsisml.anbn7.mongodb.net/dyxsis?retryWrites=true&w=majority",
-        serverSelectionTimeoutMS=1000)
+    mongo = pymongo.MongoClient(app.config['DB_URL'], serverSelectionTimeoutMS=15000,
+                                read_preference=ReadPreference.PRIMARY,connect=False)
     db = mongo["dyxsis"]
 
     mongo.server_info()  # trigger exception if cannot connect to database
@@ -247,4 +248,4 @@ def get_questions(difficulty):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,threaded=True)
