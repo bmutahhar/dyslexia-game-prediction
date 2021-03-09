@@ -151,7 +151,7 @@ const DisplayTile = ({
             <NextButton
               onClick={() => {
                 // getAnswer();
-                // if ((activeStep + 1) % 2 === 0) openBadge();
+                if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />

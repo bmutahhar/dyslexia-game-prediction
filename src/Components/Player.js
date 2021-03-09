@@ -13,7 +13,7 @@ const Player = ({ color, text }) => {
     if (iconName === "play") {
       speak({
         text: text,
-        rate: 0.8,
+        rate: 0.6,
         voice: voices[3],
       });
       setIconName("pause");
@@ -43,7 +43,7 @@ const Player = ({ color, text }) => {
       progressInterval = setInterval(() => {
         progressbar.current.value = count / text.length;
         count += 1;
-      }, 250);
+      }, 500);
       timeInterval = setInterval(() => {
         seconds += 1;
         var currentTime = calculateCurrentValue(seconds);

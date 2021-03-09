@@ -5,14 +5,14 @@ import { IconButton, Typography, Backdrop } from "@material-ui/core";
 import gamebg from "../Images/backgrounds/gamebg.png";
 import { makeStyles } from "@material-ui/core/styles";
 
-import b1 from "../Images/badges/b10.svg";
-import b2 from "../Images/badges/b2.svg";
-import b3 from "../Images/badges/b3.svg";
-import b4 from "../Images/badges/b4.svg";
-import b5 from "../Images/badges/b5.svg";
-import b6 from "../Images/badges/b6.svg";
-import b7 from "../Images/badges/b7.svg";
-import b8 from "../Images/badges/b8.svg";
+import b1 from "../Images/badges/Dear.svg";
+import b2 from "../Images/badges/Dog.svg";
+import b3 from "../Images/badges/Elephant.svg";
+import b4 from "../Images/badges/Foxy.svg";
+import b5 from "../Images/badges/Monkey.svg";
+import b6 from "../Images/badges/Panda.svg";
+import b7 from "../Images/badges/Teddy.svg";
+import b8 from "../Images/badges/Zebra.svg";
 import { NextButton } from "../Components";
 import { yay } from "../Sounds";
 

@@ -11,14 +11,14 @@ import {
 import { InstructionScreen } from "../../Screens";
 import { yay } from "../../Sounds";
 
-import b1 from "../../Images/badges/b10.svg";
-import b2 from "../../Images/badges/b2.svg";
-import b3 from "../../Images/badges/b3.svg";
-import b4 from "../../Images/badges/b4.svg";
-import b5 from "../../Images/badges/b5.svg";
-import b6 from "../../Images/badges/b6.svg";
-import b7 from "../../Images/badges/b7.svg";
-import b8 from "../../Images/badges/b8.svg";
+import b1 from "../../Images/badges/Dear.svg";
+import b2 from "../../Images/badges/Dog.svg";
+import b3 from "../../Images/badges/Elephant.svg";
+import b4 from "../../Images/badges/Foxy.svg";
+import b5 from "../../Images/badges/Monkey.svg";
+import b6 from "../../Images/badges/Panda.svg";
+import b7 from "../../Images/badges/Teddy.svg";
+import b8 from "../../Images/badges/Zebra.svg";
 
 const PreSchoolers = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -70,31 +70,32 @@ const PreSchoolers = () => {
     console.log("Random Question Currently Picked: ", question);
     console.log("Prev Question", prevQuestion);
     if (!question.displayed && prevQuestion.type !== question.type) {
-      console.log("First question")
+      console.log("First question");
       questions[difficulty][random].displayed = true;
       setCurrentQuestion(question);
       setQuestionSet(questions);
     } else {
-      console.log("NOOBS")
+      console.log("NOOBS");
       let index = random + 1;
       for (let i = 0; i < questions[difficulty].length; i++) {
         if (
-          !questions[difficulty][index % (questions[difficulty].length)].displayed &&
+          !questions[difficulty][index % questions[difficulty].length]
+            .displayed &&
           prevQuestion.type !==
-          questions[difficulty][index % (questions[difficulty].length)].type
+            questions[difficulty][index % questions[difficulty].length].type
         ) {
           console.log("Index: ", index);
           questions[difficulty][
-            index % (questions[difficulty].length)
+            index % questions[difficulty].length
           ].displayed = true;
           setCurrentQuestion(
-            questions[difficulty][index % (questions[difficulty].length)]
+            questions[difficulty][index % questions[difficulty].length]
           );
           setQuestionSet(questions);
           console.log("Setting question successfully!!!!!!!!");
           break;
         }
-        console.log("Gandalf: ", index % (questions[difficulty].length))
+        console.log("Gandalf: ", index % questions[difficulty].length);
         index++;
       }
     }

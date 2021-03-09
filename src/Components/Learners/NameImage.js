@@ -8,31 +8,35 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import {
   Tileplacer,
+  Tile,
   Character,
   DraggableTile,
   AvatarMessage,
   NextButton,
   UIButton,
-  BadgePopUp
+  BadgePopUp,
 } from "..";
 import { addAnswer } from "../../actions";
 
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
-import leapord from "../../Images/characters/leapord.png";
 import "react-dragula/dist/dragula.css";
 
 const NameImage = ({
+  easy,
   activeStep,
   nextStep,
+  question,
+  word,
   options,
   showBadge,
   badge,
   openBadge,
-  badgeName
+  badgeName,
 }) => {
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
+  const [shuffledOptions, setShuffledOptions] = useState([]);
   const elRefs = useRef([]);
   const ansRef = useRef(null);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
@@ -62,6 +66,11 @@ const NameImage = ({
       });
     }
   }, [elRefs, ansRef, arrLength, showBadge]);
+
+  useEffect(() => {
+    setShuffledOptions(shuffleArray(options));
+  }, [options]);
+
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
@@ -82,83 +91,73 @@ const NameImage = ({
               initial={{
                 opacity: 0,
                 y: "-30vh",
-                scale: 0.2
-
+                scale: 0.2,
               }}
-
               animate={{
                 opacity: 1,
                 y: 0,
-                scale: 1
+                scale: 1,
               }}
-
               transition={{
                 delay: 0.2,
                 duration: 0.4,
                 type: "spring",
-                stiffness: 70
+                stiffness: 70,
               }}
             >
               <Character
                 className="avatar"
-                src={leapord}
-                alt="Boy Avatar"
+                src={word.image}
+                alt={word.alt}
                 style={styles.avatar}
               />
             </motion.div>
 
             <DragArea className="drag-area">
-              {options.map((tile, index) => {
-                return (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.2 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.7 + (index + 1) / 10, duration: 0.7, type: "spring", stiffness: 90, ease: "easeIn" }}
-                  >
+              {options.map((_, index) => {
+                if (easy === true && index === 0) {
+                  return (
+                    <Tileplacer key={index} height="10vw" width="10vw">
+                      <Tile question>{word.alt[0]}</Tile>
+                    </Tileplacer>
+                  );
+                } else {
+                  return (
                     <Tileplacer
                       key={index}
                       ref={(el) => (elRefs.current[index] = el)}
-                    ></Tileplacer>
-                  </motion.div>
-
-                );
+                      height="10vw"
+                      width="10vw"
+                    />
+                  );
+                }
               })}
             </DragArea>
             <Qinfo
               initial={{
                 opacity: 0,
                 fontSize: "0vw",
-                x: "5vh"
-
+                x: "5vh",
               }}
               animate={{
                 opacity: 1,
                 fontSize: "1.4vw",
-                x: 0
+                x: 0,
               }}
               transition={{
-
                 delay: 0.9,
                 duration: 0.4,
                 type: "spring",
                 stiffness: 90,
-                ease: "easeIn"
-
+                ease: "easeIn",
               }}
-            >Name the character by dragging the tiles</Qinfo>
+            >
+             {question}
+            </Qinfo>
           </QuestionContainer>
           <AnswerContainer ref={ansRef} className="row">
-            {options.map((tile, index) => {
-              return (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.2 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1 + (index + 1) / 10, duration: 0.7, type: "spring", stiffness: 90, ease: "easeIn" }}
-                >
-                  <DraggableTile key={index}>{tile}</DraggableTile>
-
-                </motion.div>
-              );
+            {shuffledOptions.map((tile, index) => {
+              return <DraggableTile key={index}>{tile}</DraggableTile>;
             })}
           </AnswerContainer>
         </GameArea>
@@ -169,20 +168,25 @@ const NameImage = ({
               animate={{ opacity: 1 }}
               transition={{ type: "tween", duration: 1 }}
             >
-              <UIButton variant="contained" type="button" component={Link} to="/completed">
+              <UIButton
+                variant="contained"
+                type="button"
+                component={Link}
+                to="/completed"
+              >
                 Submit
               </UIButton>
             </motion.div>
           ) : (
-              <NextButton
-                disabled={disabled}
-                onClick={() => {
-                  getAnswer();
-                  if ((activeStep + 1) % 2 === 0) openBadge();
-                  nextStep();
-                }}
-              />
-            )}
+            <NextButton
+              disabled={disabled}
+              onClick={() => {
+                getAnswer();
+                if ((activeStep + 1) % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
         </NextButtonContainer>
       </MainContainer>
     );
@@ -271,3 +275,14 @@ const GameArea = styled.div`
   height: 100%;
   width: 100%;
 `;
+
+const shuffleArray = (array) => {
+  let newArray = array.slice();
+  for (var i = newArray.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = newArray[i];
+    newArray[i] = newArray[j];
+    newArray[j] = temp;
+  }
+  return newArray;
+};

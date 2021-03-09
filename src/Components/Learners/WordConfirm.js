@@ -18,7 +18,6 @@ import { addAnswer } from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
-
 const ButtonVarient = {
   start: {
     opacity: 0,
@@ -37,10 +36,9 @@ const ButtonVarient = {
       delay: 1.2,
       duration: 0.8,
       type: "spring",
-      stiffness: 120
-    }
+      stiffness: 120,
+    },
   },
-
 
   click: {
     translateY: 4,
@@ -49,28 +47,24 @@ const ButtonVarient = {
     transition: {
       duration: 0.2,
       ease: "easeInOut",
-    }
-
-
-
-
+    },
   },
 
   hover: {
     backgroundColor: "green",
-    cursor: "pointer"
+    cursor: "pointer",
   },
 
   hover1: {
     backgroundColor: "#bd0909",
-    cursor: "pointer"
+    cursor: "pointer",
   },
-}
+};
 const WordConfirm = ({
   activeStep,
   nextStep,
   word,
-  options,
+  question,
   showBadge,
   badge,
   openBadge,
@@ -101,12 +95,13 @@ const WordConfirm = ({
               {word.split("").map((el, i) => {
                 return (
                   <TileBox
+                    key={i}
                     initial={{
                       opacity: 0,
                       // x: "25vw",
                       y: "-35vh",
                       translateY: 60,
-                      scale: 0.6
+                      scale: 0.6,
                     }}
                     animate={{
                       opacity: 1,
@@ -114,21 +109,18 @@ const WordConfirm = ({
                       y: 0,
                       scale: 1,
                       translateY: 0,
-
-
                     }}
                     transition={{
                       delay: 0.5,
                       duration: 8.5,
                       type: "spring",
-                      stiffness: 80
+                      stiffness: 80,
                     }}
                   >
-                    <Tile question height="10vw" width="10vw" key={i}>
+                    <Tile question height="10vw" width="10vw">
                       {el}
                     </Tile>
                   </TileBox>
-
                 );
               })}
             </WordArea>
@@ -137,43 +129,46 @@ const WordConfirm = ({
               initial={{
                 opacity: 0,
                 fontSize: "0vw",
-                x: "10vh"
-
+                x: "10vh",
               }}
               animate={{
                 opacity: 1,
-                fontSize: "1.4vw",
-                x: 0
+                fontSize: "1.5vw",
+                x: 0,
               }}
               transition={{
-
                 delay: 1,
                 duration: 0.4,
                 type: "spring",
-                stiffness: 80
-
-              }}>Is the given word an actual word?</Qinfo>
+                stiffness: 80,
+              }}
+            >
+              {question}
+            </Qinfo>
           </QuestionContainer>
           <AnswerContainer className="row">
             <Label htmlFor="Correct" name="answerButtons">
-              <ConfirmButton id="Correct" hcolor="green" color="#3bb502"
+              <ConfirmButton
+                id="Correct"
+                hcolor="green"
+                color="#3bb502"
                 variants={ButtonVarient}
                 initial="start"
                 animate="end"
                 whileHover="hover"
-
-
                 whileTap="click"
               >
                 <Check className={classes.icon} />
               </ConfirmButton>
             </Label>
             <Label htmlFor="Wrong" name="answerButtons">
-              <ConfirmButton id="Wrong" hcolor="#bd0909" color="#f70000"
+              <ConfirmButton
+                id="Wrong"
+                hcolor="#bd0909"
+                color="#f70000"
                 variants={ButtonVarient}
                 initial="start"
                 animate="end"
-
                 whileHover="hover1"
                 whileTap="click"
               >
@@ -189,18 +184,23 @@ const WordConfirm = ({
               animate={{ opacity: 1 }}
               transition={{ type: "tween", duration: 1 }}
             >
-              <UIButton variant="contained" type="button" component={Link} to="/completed">
+              <UIButton
+                variant="contained"
+                type="button"
+                component={Link}
+                to="/completed"
+              >
                 Submit
               </UIButton>
             </motion.div>
           ) : (
-              <NextButton
-                onClick={() => {
-                  if ((activeStep + 1) % 2 === 0) openBadge();
-                  nextStep();
-                }}
-              />
-            )}
+            <NextButton
+              onClick={() => {
+                if ((activeStep + 1) % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
         </NextButtonContainer>
       </MainContainer>
     );
@@ -235,9 +235,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TileBox = styled(motion.div)`
-
-`;
+const TileBox = styled(motion.div)``;
 const WordArea = styled.div`
   display: flex;
   align-items: center;
@@ -273,7 +271,7 @@ const Qinfo = styled(motion.p)`
 const Label = styled.label`
   width: 25%;
   height: 35%;
-  
+
   input[type="radio"] {
     display: none;
   }
@@ -294,10 +292,6 @@ const ConfirmButton = styled(motion.div)`
   border-radius: 5px;
   box-shadow: 0 10px 6px 0 rgba(0, 0, 0, 0.4);
   outline: none;
-
- 
-  
-  
 `;
 const GameArea = styled.div`
   height: 100%;

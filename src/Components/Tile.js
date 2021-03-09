@@ -96,8 +96,8 @@ export const DraggableTile = ({
 
 const TileComponent = styled.div`
   font-size:${({ fontSize }) => (fontSize ? fontSize : "4vw")};
-  ${"" /* font-weight: bold; */}
-  font-family: "Russo One", sans-serif;
+  font-weight: bold;
+  font-family: "Open Sans", sans-serif;
   color: #910d0a;
   box-sizing: border-box;
   height: ${({ height }) => (height ? height : "7vw")};

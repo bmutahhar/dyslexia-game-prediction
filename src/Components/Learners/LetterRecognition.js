@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import Dragula from "react-dragula";
 import { useSelector, useDispatch } from "react-redux";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  Tileplacer,
   Player,
-  DraggableTile,
+  Tile,
   AvatarMessage,
   NextButton,
   UIButton,
@@ -20,8 +18,9 @@ import { addAnswer } from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
-const DragDrop = ({
+const LetterRecognition = ({
   activeStep,
+  question,
   nextStep,
   word,
   options,
@@ -30,43 +29,20 @@ const DragDrop = ({
   openBadge,
   badgeName,
 }) => {
-  const arrLength = options.length;
-  const [disabled, setDisabled] = useState(true);
-  const [shuffledOptions, setShuffledOptions] = useState([]);
-  const elRefs = useRef([]);
-  const ansRef = useRef(null);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [shuffledOptions, setShuffledOptions] = useState([]);
+  const [answer, setAnswer] = useState("");
 
-  const getAnswer = () => {
-    let answer = "";
-    elRefs.current.map((el, i) => (answer += el.textContent));
-    dispatch(addAnswer(answer));
+  const onClick = (answer) => {
+    setAnswer(answer);
   };
-
-  useEffect(() => {
-    if (elRefs.current && ansRef.current) {
-      Dragula([...elRefs.current, ansRef.current], {
-        accepts: function (el, target, source, sibling) {
-          if (target.parentElement.classList.contains("drag-area")) {
-            return target.childNodes.length !== 1;
-          } else {
-            return true;
-          }
-        },
-      }).on("dragend", function (el) {
-        if (ansRef.current.childNodes.length < arrLength) setDisabled(false);
-        else setDisabled(true);
-      });
-    }
-  }, [elRefs, ansRef, arrLength, showBadge]);
 
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, [options]);
-
 
   if (showBadge) {
     return (
@@ -84,44 +60,16 @@ const DragDrop = ({
         />
         <GameArea className="col-8">
           <QuestionContainer className="row">
-            <DragArea className="drag-area">
-              {options.map((_, index) => {
-                return (
-                  <Tileplacer
-                    key={index}
-                    ref={(el) => (elRefs.current[index] = el)}
-                    height="10vw"
-                    width="10vw"
-                  />
-                );
-              })}
-            </DragArea>
-            <Qinfo
-              initial={{
-                opacity: 0,
-                fontSize: "0vw",
-                x: "5vh",
-              }}
-              animate={{
-                opacity: 1,
-                fontSize: "1.4vw",
-                x: 0,
-              }}
-              transition={{
-                delay: 0.9,
-                duration: 0.4,
-                type: "spring",
-                stiffness: 90,
-                ease: "easeIn",
-              }}
-            >
-              Listen and complete the word by dragging the tiles
-            </Qinfo>
             <Player color="white" text={word} />
+            <Qinfo>{question}</Qinfo>
           </QuestionContainer>
-          <AnswerContainer ref={ansRef} className="row">
+          <AnswerContainer className="row">
             {shuffledOptions.map((tile, index) => {
-              return <DraggableTile key={index}>{tile}</DraggableTile>;
+              return (
+                <Tile key={index} onClick={onClick} name="lr">
+                  {tile}
+                </Tile>
+              );
             })}
           </AnswerContainer>
         </GameArea>
@@ -143,9 +91,7 @@ const DragDrop = ({
             </motion.div>
           ) : (
             <NextButton
-              disabled={disabled}
               onClick={() => {
-                getAnswer();
                 if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
@@ -156,27 +102,10 @@ const DragDrop = ({
     );
   }
 };
-export default DragDrop;
+export default LetterRecognition;
 
 const useStyles = makeStyles(({ theme }) => ({
-  icons: {
-    fontSize: "5.5vw",
-    color: "white",
-  },
-  title: {
-    color: "white",
-    fontSize: "2.5vw",
-  },
-  info: {
-    color: "white",
-    margin: "2px 5px",
-    fontSize: "1.5vw",
-  },
-  Msg: {
-    color: "white",
 
-    fontSize: "2.5vw",
-  },
   backdrop: {
     zIndex: 10,
     backgroundColor: "rgba(0,0,0,0.6)",
@@ -184,18 +113,13 @@ const useStyles = makeStyles(({ theme }) => ({
   },
 }));
 
-const DragArea = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const QuestionContainer = styled.div`
   height: 70%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-bottom: 10%;
 `;
 
 const AnswerContainer = styled.div`
@@ -211,8 +135,9 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const Qinfo = styled(motion.p)`
+const Qinfo = styled.p`
   margin-top: 30px;
+  font-size: 1.8vw;
   color: white;
 `;
 
@@ -229,7 +154,6 @@ const GameArea = styled.div`
   height: 100%;
   width: 100%;
 `;
-
 const shuffleArray = (array) => {
   let newArray = array.slice();
   for (var i = newArray.length - 1; i > 0; i--) {
