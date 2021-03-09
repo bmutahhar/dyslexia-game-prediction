@@ -75,7 +75,7 @@ const Learners = () => {
       if (activeStep === 0) {
         return (
           <GameScreen activeStep={activeStep} badges={badges}>
-            {/* <WordConfirm
+            <WordConfirm
               word="TIGER"
               activeStep={activeStep}
               nextStep={nextStep}
@@ -83,7 +83,7 @@ const Learners = () => {
               badge={badges[0].image}
               badgeName={badges[0].name}
               openBadge={openBadge}
-            /> */}
+            />
             {/* <ObjectRotation
               question="Rotate the object"
               word={{ image: b1, alt: "b1" }}
@@ -96,7 +96,7 @@ const Learners = () => {
               badgeName={badges[0].name}
               openBadge={openBadge}
             /> */}
-            <CVCwords></CVCwords>
+            {/* <CVCwords></CVCwords> */}
 
           </GameScreen>
         );
