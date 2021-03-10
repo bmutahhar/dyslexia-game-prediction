@@ -93,10 +93,10 @@ const DisplayTile = ({
                       alt={word.alt}
                     />
                   ) : (
-                    <Tile question height="15vw" width="15vw" fontSize="10vw">
-                      {word}
-                    </Tile>
-                  )}
+                      <Tile question height="15vw" width="15vw" fontSize="10vw">
+                        {word}
+                      </Tile>
+                    )}
                 </TileContainer>
               )}
             </AnimatePresence>
@@ -113,21 +113,36 @@ const DisplayTile = ({
           <AnswerContainer className="row">
             {shuffledOptions.map((el, i) => {
               return image ? (
-                <Tile
-                  name={name}
-                  image
-                  key={i}
-                  onClick={onClick}
-                  src={el.image}
-                  alt={el.alt}
-                  height="10vw"
-                  width="10vw"
-                />
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.2 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 8 + (i + 1) / 10, duration: 0.4, type: "spring", stiffness: 90, ease: "easeIn" }}
+                >
+                  <Tile
+                    name={name}
+                    image
+                    key={i}
+                    onClick={onClick}
+                    src={el.image}
+                    alt={el.alt}
+                    height="10vw"
+                    width="10vw"
+                  />
+                </motion.div>
+
+
               ) : (
-                <Tile name={name} key={i} onClick={onClick}>
-                  {el}
-                </Tile>
-              );
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.2 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 8 + (i + 1) / 10, duration: 0.4, type: "spring", stiffness: 90, ease: "easeIn" }}
+                  >
+                    <Tile name={name} key={i} onClick={onClick}>
+                      {el}
+                    </Tile>
+                  </motion.div>
+
+                );
             })}
           </AnswerContainer>
         </GameArea>
@@ -148,14 +163,14 @@ const DisplayTile = ({
               </UIButton>
             </motion.div>
           ) : (
-            <NextButton
-              onClick={() => {
-                // getAnswer();
-                if ((activeStep + 1) % 2 === 0) openBadge();
-                nextStep();
-              }}
-            />
-          )}
+              <NextButton
+                onClick={() => {
+                  // getAnswer();
+                  if ((activeStep + 1) % 2 === 0) openBadge();
+                  nextStep();
+                }}
+              />
+            )}
         </NextButtonContainer>
       </MainContainer>
     );

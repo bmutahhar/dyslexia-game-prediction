@@ -72,22 +72,123 @@ const ObjectRotation = ({
         />
         <GameArea className="col-8">
           <QuestionContainer className="row">
-            <IconContainer>
-              <IconButton onClick={rotateLeft}>
+            <IconContainer
+
+            >
+              <IconButton
+                component={motion.button}
+                initial={{
+                  opacity: 0,
+                  scale: 0.5,
+                  rotate: "0deg"
+                }}
+
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  rotate: "360deg"
+                }}
+
+                transition={{
+                  delay: 0.2,
+                  duration: 0.8,
+                  type: "spring",
+                  stiffness: 90
+
+                }}
+                onClick={rotateLeft}>
                 <RotateLeft className={classes.icons} />
               </IconButton>
-              <Typography variant="subtitle1" className={classes.info}>
+              <Typography
+                component={motion.p}
+
+                variant="subtitle1" className={classes.info}
+                initial={{
+                  opacity: 0,
+                  scale: 0.2
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                transition={{
+                  delay: 0.8,
+                  duration: 0.3,
+                  type: "spring",
+                  stiffeness: 100
+                }}
+              >
                 Left
               </Typography>
             </IconContainer>
-            <ImageContainer animate={{ rotate: rotation }}>
+            <ImageContainer
+              initial={{
+                opacity: 0,
+                scale: 0,
+
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                rotate: rotation,
+              }}
+
+              transition={{
+                delay: 0.8,
+                duration: 0.6,
+                type: "spring",
+                stiffness: 110
+
+              }}
+            >
               <Image src={word.image} alt={word.alt} />
             </ImageContainer>
-            <IconContainer>
-              <IconButton onClick={rotateRight}>
+            <IconContainer
+
+            >
+              <IconButton
+                component={motion.button}
+
+                initial={{
+                  opacity: 0,
+                  scale: 0.5,
+                  rotate: "0deg"
+                }}
+
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  rotate: "360deg"
+                }}
+
+                transition={{
+                  delay: 0.2,
+                  duration: 0.8,
+                  type: "spring",
+                  stiffness: 90
+
+                }}
+                onClick={rotateRight}>
                 <RotateRight className={classes.icons} />
               </IconButton>
-              <Typography variant="subtitle1" className={classes.info}>
+              <Typography
+                component={motion.p}
+                variant="subtitle1" className={classes.info}
+                initial={{
+                  opacity: 0,
+                  scale: 0.2
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                transition={{
+                  delay: 0.8,
+                  duration: 0.3,
+                  type: "spring",
+                  stiffeness: 100
+                }}
+              >
                 Right
               </Typography>
             </IconContainer>
@@ -212,11 +313,11 @@ const AnswerSelection = styled.div`
 
 const ImageContainer = styled(motion.div)``;
 
-const Image = styled.img`
-  height: 15vw;
+const Image = styled(motion.img)`
+height: 15vw;
 `;
 
-const IconContainer = styled.div`
+const IconContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;

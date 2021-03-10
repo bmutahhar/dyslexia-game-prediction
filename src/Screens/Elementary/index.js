@@ -5,11 +5,15 @@ import {
   WordConfirm,
   NameImage,
   CVCwords,
+  LetterRecognition,
 } from "../../Components/Learners";
 import {
   SelectOption,
   TileLayout,
   ObjectRotation,
+  SingleDrag,
+  SingleMatch,
+
 } from "../../Components/Preschooler";
 import { InstructionScreen } from "../../Screens";
 import { yay } from "../../Sounds";
@@ -79,7 +83,7 @@ const Elementary = () => {
       if (activeStep === 0) {
         return (
           <GameScreen activeStep={activeStep} badges={badges}>
-            <NameImage
+            {/* <NameImage
               word={{ alt: "BAT", image: b1 }}
               easy={true}
               activeStep={activeStep}
@@ -89,6 +93,32 @@ const Elementary = () => {
               badgeName={badges[1].name}
               openBadge={openBadge}
               options={['B','A','T']}
+            /> */}
+
+
+
+            {/* <ObjectRotation
+              question="rotate the shape as shown"
+              word={{ image: b1, alt: "abc" }}
+              angle={30}
+              degree={60}
+              activeStep={activeStep}
+              nextStep={nextStep}
+              showBadge={badgeOpen}
+              badge={badges[0].image}
+              badgeName={badges[0].name}
+              openBadge={openBadge}
+            /> */}
+            <SingleMatch
+              question="place the tile as shown"
+              word="A"
+              activeStep={activeStep}
+              nextStep={nextStep}
+              options={['a', 'b', 'c', 'd']}
+              showBadge={badgeOpen}
+              badge={badges[0].image}
+              badgeName={badges[0].name}
+              openBadge={openBadge}
             />
           </GameScreen>
         );

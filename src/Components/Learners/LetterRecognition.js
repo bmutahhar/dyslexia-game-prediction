@@ -66,9 +66,16 @@ const LetterRecognition = ({
           <AnswerContainer className="row">
             {shuffledOptions.map((tile, index) => {
               return (
-                <Tile key={index} onClick={onClick} name="lr">
-                  {tile}
-                </Tile>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.2 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.7 + (index + 1) / 10, duration: 0.7, type: "spring", stiffness: 100, ease: "easeIn" }}
+                >
+                  <Tile key={index} onClick={onClick} name="lr">
+                    {tile}
+                  </Tile>
+                </motion.div>
+
               );
             })}
           </AnswerContainer>
@@ -90,13 +97,13 @@ const LetterRecognition = ({
               </UIButton>
             </motion.div>
           ) : (
-            <NextButton
-              onClick={() => {
-                if ((activeStep + 1) % 2 === 0) openBadge();
-                nextStep();
-              }}
-            />
-          )}
+              <NextButton
+                onClick={() => {
+                  if ((activeStep + 1) % 2 === 0) openBadge();
+                  nextStep();
+                }}
+              />
+            )}
         </NextButtonContainer>
       </MainContainer>
     );

@@ -142,15 +142,15 @@ const DragDrop = ({
               </UIButton>
             </motion.div>
           ) : (
-            <NextButton
-              disabled={disabled}
-              onClick={() => {
-                getAnswer();
-                if ((activeStep + 1) % 2 === 0) openBadge();
-                nextStep();
-              }}
-            />
-          )}
+              <NextButton
+                disabled={disabled}
+                onClick={() => {
+                  getAnswer();
+                  if ((activeStep + 1) % 2 === 0) openBadge();
+                  nextStep();
+                }}
+              />
+            )}
         </NextButtonContainer>
       </MainContainer>
     );

@@ -72,30 +72,77 @@ const SelectOption = ({
             <AnimatePresence>
               <QuestionContainer className="row">
                 <TileContainer
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.1
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1
+                  }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
                   exit={{ opacity: 0 }}
                 >
-                  <Timer
-                    initialSeconds={7}
-                    initialMinutes={0}
-                    reverse
-                    callBack={closeQuestion}
-                  />
-                  {image ? (
-                    <Tile
-                      question
-                      image
-                      height="15vw"
-                      width="15vw"
-                      fontSize="10vw"
-                      src={word.image}
-                      alt={word.alt}
+                  <motion.div
+                    initial={{
+                      scale: 0
+                    }}
+                    animate={{
+                      scale: 1
+                    }}
+                    transition={{
+                      delay: 0.6,
+                      duration: 0.2
+                    }}
+                  >
+                    <Timer
+                      initialSeconds={7}
+                      initialMinutes={0}
+                      reverse
+                      callBack={closeQuestion}
                     />
+                  </motion.div>
+                  {image ? (
+                    <motion.div
+                      initial={{
+                        scale: 0
+                      }}
+                      animate={{
+                        scale: 1
+                      }}
+                      transition={{
+                        delay: 0.9,
+                        duration: 0.5
+                      }}
+                    >
+                      <Tile
+
+                        question
+                        image
+                        height="15vw"
+                        width="15vw"
+                        fontSize="10vw"
+                        src={word.image}
+                        alt={word.alt}
+                      />
+                    </motion.div>
                   ) : (
-                      <Tile question height="15vw" width="15vw" fontSize="10vw">
-                        {word}
-                      </Tile>
+                      <motion.div
+                        initial={{
+                          scale: 0
+                        }}
+                        animate={{
+                          scale: 1
+                        }}
+                        transition={{
+                          delay: 0.9,
+                          duration: 0.5
+                        }}
+                      >
+                        <Tile question height="15vw" width="15vw" fontSize="10vw">
+                          {word}
+                        </Tile>
+                      </motion.div>
                     )}
                 </TileContainer>
                 <Qinfo>Remember this tile carefully</Qinfo>
@@ -103,7 +150,11 @@ const SelectOption = ({
             </AnimatePresence>
           ) : (
               <QuestionContainer className="row">
-                <GridPlacer gridSize={gridSize}>
+                <GridPlacer
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3, duration: 0.5, type: "spring", stiffness: 80 }}
+                  gridSize={gridSize}>
                   {shuffledOptions.map((el, i) => {
                     return (
                       <Tileplacer key={i} height="12vw" width="12vw">
@@ -147,7 +198,7 @@ const SelectOption = ({
               <NextButton
                 onClick={() => {
                   getAnswer();
-                  if ((activeStep+1)  % 2 === 0) openBadge();
+                  if ((activeStep + 1) % 2 === 0) openBadge();
                   nextStep();
                 }}
               />
@@ -186,7 +237,7 @@ const useStyles = makeStyles(({ theme }) => ({
   },
 }));
 
-const GridPlacer = styled.div`
+const GridPlacer = styled(motion.div)`
   display: grid;
   grid-template-columns: ${({ gridSize }) => {
     let columns = "";

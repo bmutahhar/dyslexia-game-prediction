@@ -4,7 +4,8 @@ import Confetti from "react-confetti";
 import { IconButton, Typography, Backdrop } from "@material-ui/core";
 import gamebg from "../Images/backgrounds/gamebg.png";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { motion } from "framer-motion";
+import { NavigateNext } from "@material-ui/icons";
 import b1 from "../Images/badges/Dear.svg";
 import b2 from "../Images/badges/Dog.svg";
 import b3 from "../Images/badges/Elephant.svg";
@@ -15,6 +16,22 @@ import b7 from "../Images/badges/Teddy.svg";
 import b8 from "../Images/badges/Zebra.svg";
 import { NextButton } from "../Components";
 import { yay } from "../Sounds";
+
+
+const BadgeVarient = {
+  start: {
+    opacity: 0,
+    scale: 0.3,
+    rotate: "0deg"
+  },
+
+  end: {
+    opacity: 0,
+    scale: 1,
+    rotate: "360deg"
+  }
+}
+
 
 const AllBadgeDisplay = () => {
   const alt = "Badge";
@@ -74,23 +91,76 @@ const AllBadgeDisplay = () => {
           {/* <UIButton variant="contained" type="button">
                         Proceed
                    </UIButton> */}
-          <Proceed>
+          <Proceed
+          // initial={{
+          //   opacity: 0.3,
+          //   width: "0vw",
+          //   x: "-15vw"
+          // }}
+          // animate={{
+          //   opacity: 1,
+          //   width: "30vw",
+          //   x: 0
+          // }}
+
+          // transition={{
+          //   delay: 2.2,
+          //   duration: 0.8
+          // }}
+          >
             <Typography
               variant="subtitle1"
+              component={motion.p}
               style={{
                 color: "white",
 
                 fontSize: "1.5vw",
                 marginLeft: "6vw",
               }}
+            // initial={{
+            //   opacity: 0,
+            // }}
+            // animate={{
+            //   opacity: 1,
+            // }}
+
+            // transition={{
+            //   delay: 3.16,
+            //   duration: 0.9,
+            //   type: "spring",
+            //   stiffness: 40
+
+            // }}
             >
               Proceed To The Result
             </Typography>
             <NextButton onClick={close} />
+            {/* <IconButton component={motion.button} onClick={close}
+              initial={{
+                opacity: 0,
+                x: "-26vw"
+
+
+              }}
+              animate={{
+                opacity: 1,
+                x: 0
+              }}
+              transition={{
+                delay: 3.1,
+                duration: 0.8,
+                type: "spring",
+
+              }}
+              className={classes.iconButton}
+
+            >
+            <NavigateNext className={classes.icon} />
+            </IconButton> */}
           </Proceed>
         </PopImageContainer>
       </Backdrop>
-    </MainContainer>
+    </MainContainer >
   );
 };
 
@@ -114,7 +184,7 @@ const MainContainer = styled.div`
   background-repeat: no-repeat;
   background-position: top center;
 `;
-const Image = styled.img`
+const Image = styled(motion.img)`
   height: 11vw;
   margin-left: 3px;
   margin-right: 3px;

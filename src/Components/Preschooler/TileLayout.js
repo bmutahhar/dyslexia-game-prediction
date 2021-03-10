@@ -79,7 +79,9 @@ const TileLayout = ({
   }, [elRefs, optionsRefA, optionsRefB, show]);
 
   useEffect(() => {
-    const tempOptions = shuffleArray(options);
+    let tempOptions = shuffleArray(options);
+    tempOptions = shuffleArray(tempOptions);
+
     setOptionsA(tempOptions.slice(0, Math.floor(options.length / 2)));
     setOptionsB(
       tempOptions.slice(Math.floor(options.length / 2), options.length)
@@ -103,119 +105,176 @@ const TileLayout = ({
         <GameArea className="col-8">
           {show ? (
             <AnimatePresence>
+
+
               <QuestionContainer
                 className="row"
                 question
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.25, duration: 0.25 }}
-                exit={{ opacity: 0 }}
+              // initial={{ opacity: 0 }}
+              // animate={{ opacity: 1 }}
+              // transition={{ delay: 0.25, duration: 0.25 }}
+              // exit={{ opacity: 0 }}
               >
+
                 <TileContainer
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.1
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1
+                  }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
                   exit={{ opacity: 0 }}
                 >
-                  <Timer
-                    initialSeconds={7}
-                    initialMinutes={0}
-                    reverse
-                    callBack={closeQuestion}
-                  />
-                  {image ? (
-                    <Tile
-                      question
-                      image
-                      height="15vw"
-                      width="15vw"
-                      fontSize="10vw"
-                      src={word.image}
-                      alt={word.alt}
+                  <motion.div
+                    initial={{
+                      scale: 0
+                    }}
+                    animate={{
+                      scale: 1
+                    }}
+                    transition={{
+                      delay: 0.6,
+                      duration: 0.2
+                    }}
+                  >
+                    <Timer
+                      initialSeconds={7}
+                      initialMinutes={0}
+                      reverse
+                      callBack={closeQuestion}
                     />
+                  </motion.div>
+
+                  {image ? (
+                    <motion.div
+                      initial={{
+                        scale: 0
+                      }}
+                      animate={{
+                        scale: 1
+                      }}
+                      transition={{
+                        delay: 0.9,
+                        duration: 0.5
+                      }}
+                    >
+                      <Tile
+
+                        question
+                        image
+                        height="15vw"
+                        width="15vw"
+                        fontSize="10vw"
+                        src={word.image}
+                        alt={word.alt}
+                      />
+                    </motion.div>
+
                   ) : (
-                    <Tile question height="15vw" width="15vw" fontSize="10vw">
-                      {word}
-                    </Tile>
-                  )}
+                      <motion.div
+                        initial={{
+                          scale: 0
+                        }}
+                        animate={{
+                          scale: 1
+                        }}
+                        transition={{
+                          delay: 0.9,
+                          duration: 0.5
+                        }}
+                      >
+                        <Tile question height="15vw" width="15vw" fontSize="10vw">
+                          {word}
+                        </Tile>
+                      </motion.div>
+
+                    )}
                 </TileContainer>
                 <Qinfo>Remember this tile carefully</Qinfo>
               </QuestionContainer>
             </AnimatePresence>
           ) : (
-            <QuestionContainer
-              className="row"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.25, duration: 0.25 }}
-            >
-              <TileGrid gridSize={gridSize} ref={optionsRefA}>
-                {optionsA.map((el, i) => {
-                  return image ? (
-                    <DraggableTile
-                      image
-                      key={i}
-                      src={el.image}
-                      alt={el.alt}
+              <QuestionContainer
+                className="row"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.25, duration: 0.25 }}
+              >
+                <TileGrid gridSize={gridSize} ref={optionsRefA}>
+                  {optionsA.map((el, i) => {
+                    return image ? (
+                      <DraggableTile
+                        image
+                        key={i}
+                        src={el.image}
+                        alt={el.alt}
                       // height="10vw"
                       // width="10vw"
-                    />
-                  ) : (
-                    <DraggableTile key={i}>{el}</DraggableTile>
-                  );
-                })}
-              </TileGrid>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                }}
-              >
-                <GridPlacer gridSize={gridSize} className="drag-area">
-                  {grid.map((_, i) => {
-                    return (
-                      <Tileplacer
-                        key={i}
-                        ref={(el) => (elRefs.current[i] = el)}
                       />
-                    );
+                    ) : (
+                        <DraggableTile key={i}>{el}</DraggableTile>
+                      );
                   })}
-                </GridPlacer>
-                {/* <Typography variant="subtitle1" display="block" className={classes.question}>{question}</Typography> */}
+                </TileGrid>
                 <div
                   style={{
-                    width: "25vw",
-                    height: "8vw",
                     display: "flex",
-                    flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
-                    flexWrap: "wrap",
-                    textAlign: "center"
+                    flexDirection: "column",
                   }}
                 >
-                  <Qinfo>{question}</Qinfo>
+                  <GridPlacer
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3, duration: 0.5, type: "spring", stiffness: 80 }}
+                    gridSize={gridSize} className="drag-area">
+                    {grid.map((_, i) => {
+                      return (
+                        <Tileplacer
+                          key={i}
+                          ref={(el) => (elRefs.current[i] = el)}
+                        />
+                      );
+                    })}
+                  </GridPlacer>
+                  {/* <Typography variant="subtitle1" display="block" className={classes.question}>{question}</Typography> */}
+                  <div
+                    style={{
+                      width: "25vw",
+                      height: "8vw",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexWrap: "wrap",
+                      textAlign: "center"
+                    }}
+                  >
+                    <Qinfo>{question}</Qinfo>
+                  </div>
                 </div>
-              </div>
-              <TileGrid gridSize={gridSize} ref={optionsRefB}>
-                {optionsB.map((el, i) => {
-                  return image ? (
-                    <DraggableTile
-                      image
-                      key={i}
-                      src={el.image}
-                      alt={el.alt}
+                <TileGrid gridSize={gridSize} ref={optionsRefB}>
+                  {optionsB.map((el, i) => {
+                    return image ? (
+                      <DraggableTile
+                        image
+                        key={i}
+                        src={el.image}
+                        alt={el.alt}
                       // height="10vw"
                       // width="10vw"
-                    />
-                  ) : (
-                    <DraggableTile key={i}>{el}</DraggableTile>
-                  );
-                })}
-              </TileGrid>
-            </QuestionContainer>
-          )}
+                      />
+                    ) : (
+                        <DraggableTile key={i}>{el}</DraggableTile>
+                      );
+                  })}
+                </TileGrid>
+              </QuestionContainer>
+            )}
         </GameArea>
         <NextButtonContainer className="col-2">
           {activeStep === totalLevels - 1 ? (
@@ -234,15 +293,15 @@ const TileLayout = ({
               </UIButton>
             </motion.div>
           ) : (
-            <NextButton
-              disabled={disabled}
-              onClick={() => {
-                getAnswer();
-                if ((activeStep+1)  % 2===0) openBadge();
-                nextStep();
-              }}
-            />
-          )}
+              <NextButton
+                disabled={disabled}
+                onClick={() => {
+                  getAnswer();
+                  if ((activeStep + 1) % 2 === 0) openBadge();
+                  nextStep();
+                }}
+              />
+            )}
         </NextButtonContainer>
       </MainContainer>
     );
@@ -280,7 +339,7 @@ const useStyles = makeStyles(({ theme }) => ({
   },
 }));
 
-const GridPlacer = styled.div`
+const GridPlacer = styled(motion.div)`
   display: grid;
   grid-template-columns: ${({ gridSize }) => {
     let columns = "";
