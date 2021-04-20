@@ -1,13 +1,13 @@
-const answerReducer = (state = [], action) => {
+const scoreReducer = (state = [], action) => {
   switch (action.type) {
-    case "ADD_ANSWER":
+    case "ADD_SCORE":
       state.push(action.payload);
       return state;
-    case "REMOVE_ANSWER":
+    case "REMOVE_SCORE":
       return state.filter((item) => item !== action.payload);
     default:
       return state;
   }
 };
 
-export default answerReducer;
+export default scoreReducer;

@@ -31,7 +31,7 @@ const Learners = () => {
   });
   const [questionSet, setQuestionSet] = useState({});
   const [currentQuestion, setCurrentQuestion] = useState({});
-  const [difficulty, setDifficulty] = useState("hard");
+  const [difficulty, setDifficulty] = useState("easy");
   const audio = new Audio(yay);
   const url = process.env["REACT_APP_API_URL"];
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
@@ -155,6 +155,14 @@ const Learners = () => {
   useEffect(() => {
     console.log("Current Question: ", currentQuestion);
   }, [currentQuestion]);
+
+  useEffect(() => {
+    if (activeStep === 5) {
+      setDifficulty("medium");
+    } else if (activeStep === 10) {
+      setDifficulty("hard");
+    }
+  }, [activeStep]);
 
   if (showInstructions) {
     return <InstructionScreen onClick={hideInstructions} />;

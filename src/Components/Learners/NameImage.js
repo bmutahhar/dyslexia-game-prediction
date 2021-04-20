@@ -16,7 +16,7 @@ import {
   UIButton,
   BadgePopUp,
 } from "..";
-import { addAnswer } from "../../actions";
+import { addScore } from "../../actions";
 
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
@@ -47,7 +47,6 @@ const NameImage = ({
   const getAnswer = () => {
     let answer = "";
     elRefs.current.map((el, i) => (answer += el.textContent));
-    dispatch(addAnswer(answer));
   };
 
   useEffect(() => {

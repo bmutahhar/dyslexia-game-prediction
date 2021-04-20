@@ -13,7 +13,11 @@ import {
   BadgePopUp,
 } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
-import { addAnswer } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
@@ -31,7 +35,9 @@ const DisplayTile = ({
   badgeName,
 }) => {
   const [open, setOpen] = useState(true);
-  const [answer, setAnswer] = useState("");
+  const [score, setScore] = useState(0);
+  const [miss, setMiss] = useState(0);
+  const [clickCount, setClickCount] = useState(0);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
@@ -44,10 +50,49 @@ const DisplayTile = ({
     setOpen(false);
   };
 
-  const onClick = (answer) => {
-    setAnswer(answer);
+  const onClick = (myRef) => {
+    setClickCount((prev) => prev + 1);
+    if (!myRef.current.checked) {
+      console.log("Now Checked!!!");
+      if (image) {
+        const value = myRef.current.value;
+        if (word.alt.trim() === value.trim()) {
+          setScore(1);
+          setMiss(0);
+        } else {
+          setScore(0);
+          setMiss(1);
+        }
+      } else {
+        const value = myRef.current.value;
+        if (word.trim() === value.trim()) {
+          setScore(1);
+          setMiss(0);
+        } else {
+          setScore(0);
+          setMiss(1);
+        }
+      }
+    }
   };
-  const getAnswer = () => dispatch(addAnswer(answer));
+  const getAnswer = () => {
+    const scoreObj = {
+      difficulty: "easy",
+      clicks: clickCount,
+      hits: score,
+      miss: miss,
+      score: score,
+      accuracy: score / clickCount,
+      missrate: miss / clickCount,
+    };
+    if (score > 0) {
+      dispatch(addScore(scoreObj));
+      dispatch(incrementConsecutiveScore());
+    } else {
+      dispatch(addScore(scoreObj));
+      dispatch(decrementConsecutiveScore());
+    }
+  };
 
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
@@ -93,10 +138,10 @@ const DisplayTile = ({
                       alt={word.alt}
                     />
                   ) : (
-                      <Tile question height="15vw" width="15vw" fontSize="10vw">
-                        {word}
-                      </Tile>
-                    )}
+                    <Tile question height="15vw" width="15vw" fontSize="10vw">
+                      {word}
+                    </Tile>
+                  )}
                 </TileContainer>
               )}
             </AnimatePresence>
@@ -116,12 +161,19 @@ const DisplayTile = ({
                 <motion.div
                   initial={{ opacity: 0, scale: 0.2 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 8 + (i + 1) / 10, duration: 0.4, type: "spring", stiffness: 90, ease: "easeIn" }}
+                  transition={{
+                    delay: 8 + (i + 1) / 10,
+                    duration: 0.4,
+                    type: "spring",
+                    stiffness: 90,
+                    ease: "easeIn",
+                  }}
+                  key={i}
                 >
                   <Tile
                     name={name}
+                    id={i}
                     image
-                    key={i}
                     onClick={onClick}
                     src={el.image}
                     alt={el.alt}
@@ -129,20 +181,24 @@ const DisplayTile = ({
                     width="10vw"
                   />
                 </motion.div>
-
-
               ) : (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.2 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 8 + (i + 1) / 10, duration: 0.4, type: "spring", stiffness: 90, ease: "easeIn" }}
-                  >
-                    <Tile name={name} key={i} onClick={onClick}>
-                      {el}
-                    </Tile>
-                  </motion.div>
-
-                );
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.2 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: 8 + (i + 1) / 10,
+                    duration: 0.4,
+                    type: "spring",
+                    stiffness: 90,
+                    ease: "easeIn",
+                  }}
+                  key={i}
+                >
+                  <Tile id={i} name={name} onClick={onClick}>
+                    {el}
+                  </Tile>
+                </motion.div>
+              );
             })}
           </AnswerContainer>
         </GameArea>
@@ -163,14 +219,14 @@ const DisplayTile = ({
               </UIButton>
             </motion.div>
           ) : (
-              <NextButton
-                onClick={() => {
-                  // getAnswer();
-                  if ((activeStep + 1) % 2 === 0) openBadge();
-                  nextStep();
-                }}
-              />
-            )}
+            <NextButton
+              onClick={() => {
+                getAnswer();
+                if ((activeStep + 1) % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
         </NextButtonContainer>
       </MainContainer>
     );

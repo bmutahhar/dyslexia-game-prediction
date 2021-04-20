@@ -16,7 +16,11 @@ import {
   Tileplacer,
 } from "..";
 import { useSelector, useDispatch } from "react-redux";
-import { addAnswer } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
@@ -34,7 +38,7 @@ const SingleDrag = ({
   badgeName,
 }) => {
   const [show, setShow] = useState(true);
-  const [answer, setAnswer] = useState("");
+  const [clickCount, setClickCount] = useState(0);
   const [disabled, setDisabled] = useState(true);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
@@ -48,10 +52,80 @@ const SingleDrag = ({
     setShow(false);
   };
 
-  const onClick = (answer) => {
-    setAnswer(answer);
+  const onClick = () => {
+    setClickCount((prev) => prev + 1);
   };
-  const getAnswer = () => dispatch(addAnswer(answer));
+
+  const getAnswer = (placer) => {
+    if (placer.current && placer.current.childNodes.length > 0) {
+      if (image) {
+        const node = placer.current.firstChild;
+        const img = node.getElementsByTagName("img")[0];
+        const alt = img.getAttribute("alt");
+        if (alt.trim() === word.alt.trim()) {
+          const hit = 1;
+          const miss = 0;
+          const scoreObj = {
+            difficulty: "easy",
+            clicks: clickCount,
+            hits: hit,
+            miss: miss,
+            score: hit,
+            accuracy: hit / clickCount,
+            missrate: miss / clickCount,
+          };
+          dispatch(addScore(scoreObj));
+          dispatch(incrementConsecutiveScore())
+        } else {
+          const hit = 0;
+          const miss = 1;
+          const scoreObj = {
+            difficulty: "easy",
+            clicks: clickCount,
+            hits: hit,
+            miss: miss,
+            score: hit,
+            accuracy: hit / clickCount,
+            missrate: miss / clickCount,
+          };
+          dispatch(addScore(scoreObj));
+          dispatch(decrementConsecutiveScore());
+        }
+      } else {
+        const node = placer.current.firstChild;
+        const text = node.innerText;
+        if (text.trim() === word.trim()) {
+          const hit = 1;
+          const miss = 0;
+          const scoreObj = {
+            difficulty: "easy",
+            clicks: clickCount,
+            hits: hit,
+            miss: miss,
+            score: hit,
+            accuracy: hit / clickCount,
+            missrate: miss / clickCount,
+          };
+          dispatch(addScore(scoreObj));
+          dispatch(incrementConsecutiveScore())
+        } else {
+          const hit = 0;
+          const miss = 1;
+          const scoreObj = {
+            difficulty: "easy",
+            clicks: clickCount,
+            hits: hit,
+            miss: miss,
+            score: hit,
+            accuracy: hit / clickCount,
+            missrate: miss / clickCount,
+          };
+          dispatch(addScore(scoreObj));
+          dispatch(decrementConsecutiveScore())
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     if (placer.current && ansRef.current) {
@@ -74,6 +148,7 @@ const SingleDrag = ({
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, []);
+
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
@@ -139,9 +214,16 @@ const SingleDrag = ({
                       alt={el.alt}
                       height="10vw"
                       width="10vw"
+                      onMouseDown={onClick}
                     />
                   ) : (
-                    <DraggableTile name={name} key={index}>
+                    <DraggableTile
+                      name={name}
+                      key={index}
+                      height="10vw"
+                      width="10vw"
+                      onMouseDown={onClick}
+                    >
                       {el}
                     </DraggableTile>
                   );
@@ -169,7 +251,7 @@ const SingleDrag = ({
           ) : (
             <NextButton
               onClick={() => {
-                // getAnswer();
+                getAnswer(placer);
                 if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}

@@ -13,7 +13,11 @@ import {
   BadgePopUp,
 } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
-import { addAnswer } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
@@ -32,7 +36,9 @@ const ObjectRotation = ({
   const [open, setOpen] = useState(false);
   const [shown, setShown] = useState(false);
   const [rotation, setRotation] = useState(0);
+  const [clickCount, setClickCount] = useState(0);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
+  const difficulty = useSelector((state) => state.difficulty);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -55,7 +61,40 @@ const ObjectRotation = ({
     setRotation(rotation - degree);
   };
 
-  const getAnswer = () => dispatch(addAnswer(rotation));
+  const getAnswer = () => {
+    const clicks = 1;
+    let newAngle;
+    if (rotation < 0) {
+      newAngle = 360 - (Math.abs(rotation) % 360);
+    } else {
+      newAngle = rotation % 360;
+    }
+    if (newAngle === angle) {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clicks,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1 / clicks,
+        missrate: 0 / clicks,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(incrementConsecutiveScore())
+    } else {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clicks,
+        hits: 0,
+        miss: 1,
+        score: 0,
+        accuracy: 0 / clicks,
+        missrate: 1 / clicks,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(decrementConsecutiveScore())
+    }
+  };
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
@@ -72,40 +111,36 @@ const ObjectRotation = ({
         />
         <GameArea className="col-8">
           <QuestionContainer className="row">
-            <IconContainer
-
-            >
+            <IconContainer>
               <IconButton
                 component={motion.button}
                 initial={{
                   opacity: 0,
                   scale: 0.5,
-                  rotate: "0deg"
+                  rotate: "0deg",
                 }}
-
                 animate={{
                   opacity: 1,
                   scale: 1,
-                  rotate: "360deg"
+                  rotate: "360deg",
                 }}
-
                 transition={{
                   delay: 0.2,
                   duration: 0.8,
                   type: "spring",
-                  stiffness: 90
-
+                  stiffness: 90,
                 }}
-                onClick={rotateLeft}>
+                onClick={rotateLeft}
+              >
                 <RotateLeft className={classes.icons} />
               </IconButton>
               <Typography
                 component={motion.p}
-
-                variant="subtitle1" className={classes.info}
+                variant="subtitle1"
+                className={classes.info}
                 initial={{
                   opacity: 0,
-                  scale: 0.2
+                  scale: 0.2,
                 }}
                 animate={{
                   opacity: 1,
@@ -115,7 +150,7 @@ const ObjectRotation = ({
                   delay: 0.8,
                   duration: 0.3,
                   type: "spring",
-                  stiffeness: 100
+                  stiffeness: 100,
                 }}
               >
                 Left
@@ -125,58 +160,50 @@ const ObjectRotation = ({
               initial={{
                 opacity: 0,
                 scale: 0,
-
               }}
               animate={{
                 opacity: 1,
                 scale: 1,
                 rotate: rotation,
               }}
-
               transition={{
-                delay: 0.8,
-                duration: 0.6,
+                duration: 0.2,
                 type: "spring",
-                stiffness: 110
-
+                stiffness: 110,
               }}
             >
               <Image src={word.image} alt={word.alt} />
             </ImageContainer>
-            <IconContainer
-
-            >
+            <IconContainer>
               <IconButton
                 component={motion.button}
-
                 initial={{
                   opacity: 0,
                   scale: 0.5,
-                  rotate: "0deg"
+                  rotate: "0deg",
                 }}
-
                 animate={{
                   opacity: 1,
                   scale: 1,
-                  rotate: "360deg"
+                  rotate: "360deg",
                 }}
-
                 transition={{
                   delay: 0.2,
                   duration: 0.8,
                   type: "spring",
-                  stiffness: 90
-
+                  stiffness: 90,
                 }}
-                onClick={rotateRight}>
+                onClick={rotateRight}
+              >
                 <RotateRight className={classes.icons} />
               </IconButton>
               <Typography
                 component={motion.p}
-                variant="subtitle1" className={classes.info}
+                variant="subtitle1"
+                className={classes.info}
                 initial={{
                   opacity: 0,
-                  scale: 0.2
+                  scale: 0.2,
                 }}
                 animate={{
                   opacity: 1,
@@ -186,7 +213,7 @@ const ObjectRotation = ({
                   delay: 0.8,
                   duration: 0.3,
                   type: "spring",
-                  stiffeness: 100
+                  stiffeness: 100,
                 }}
               >
                 Right
@@ -224,14 +251,14 @@ const ObjectRotation = ({
               </UIButton>
             </motion.div>
           ) : (
-              <NextButton
-                onClick={() => {
-                  getAnswer();
-                  if ((activeStep + 1) % 2 === 0) openBadge();
-                  nextStep();
-                }}
-              />
-            )}
+            <NextButton
+              onClick={() => {
+                getAnswer();
+                if ((activeStep + 1) % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
         </NextButtonContainer>
         <Backdrop
           className={classes.backdrop}
@@ -314,7 +341,7 @@ const AnswerSelection = styled.div`
 const ImageContainer = styled(motion.div)``;
 
 const Image = styled(motion.img)`
-height: 15vw;
+  height: 15vw;
 `;
 
 const IconContainer = styled(motion.div)`
@@ -348,3 +375,13 @@ const PopImageContainer = styled.div`
   background-color: transparent;
   margin-bottom: 50px;
 `;
+
+const getDifficulty = (angle) => {
+  if (angle === 90) {
+    return "easy";
+  } else if (angle === 45) {
+    return "medium";
+  } else if (angle === 30) {
+    return "hard";
+  }
+};
