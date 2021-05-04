@@ -132,7 +132,7 @@ const PreSchoolers = () => {
   };
 
   const monitorDifficulty = () => {
-    if (consecutiveScore === "11") {
+    if (consecutiveScore === "111") {
       if (difficulty === "easy") {
         dispatch(mediumDifficulty());
         dispatch(resetConsecutiveScore());
@@ -145,7 +145,7 @@ const PreSchoolers = () => {
         dispatch(resetConsecutiveScore());
         return "hard";
       }
-    } else if (consecutiveScore === "00") {
+    } else if (consecutiveScore === "000") {
       if (difficulty === "hard") {
         dispatch(mediumDifficulty());
         dispatch(resetConsecutiveScore());
@@ -212,7 +212,7 @@ const PreSchoolers = () => {
       if (status.success) {
         const badgeIndex = getBadgeIndex();
         if (currentQuestion.type === "or") {
-          console.log("Object Rotation");
+          // easy/medium/hard for object rotation
           return (
             <GameScreen activeStep={activeStep} badges={badges}>
               <ObjectRotation
@@ -230,8 +230,11 @@ const PreSchoolers = () => {
             </GameScreen>
           );
         } else if (currentQuestion.type === "dnd") {
+          // Main type DRAG AND DROP
           if (currentQuestion.subType === "text") {
+            // Sub-type: text
             if (difficulty === "easy") {
+              // Single Drag component for easy difficulty
               console.log("Single Drag");
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
@@ -250,6 +253,7 @@ const PreSchoolers = () => {
                 </GameScreen>
               );
             } else if (difficulty === "medium") {
+              // Tile layout component for medium difficulty
               console.log("Tile Layout Medium");
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
@@ -268,6 +272,7 @@ const PreSchoolers = () => {
                 </GameScreen>
               );
             } else {
+              // Tile layout for hard difficulty
               console.log("Tile Layout Hard");
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
@@ -289,6 +294,7 @@ const PreSchoolers = () => {
           } else {
             //If type is dnd and subType is image
             if (difficulty === "easy") {
+              // Single drag component for easy difficulty
               console.log("Single Drag");
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
@@ -308,6 +314,7 @@ const PreSchoolers = () => {
                 </GameScreen>
               );
             } else if (difficulty === "medium") {
+              // Tile layout component for medium difficulty
               console.log("Tile Layout Medium");
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
@@ -327,6 +334,7 @@ const PreSchoolers = () => {
                 </GameScreen>
               );
             } else {
+              // Tile layout component for hard difficulty
               console.log("Tile Layout Hard");
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
@@ -348,9 +356,12 @@ const PreSchoolers = () => {
             }
           }
         } else if (currentQuestion.type === "mt") {
+          // Main type: Matching Tiles
           if (currentQuestion.subType === "text") {
+            // Sub type: text
             if (difficulty === "easy") {
               console.log("Single Match");
+              // Single Match component for easy difficulty
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
                   <SingleMatch
@@ -369,6 +380,7 @@ const PreSchoolers = () => {
               );
             } else if (difficulty === "medium") {
               console.log("Select Option Medium");
+              // Select option component for medium difficulty
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
                   <SelectOption
@@ -387,6 +399,7 @@ const PreSchoolers = () => {
               );
             } else {
               console.log("Select Option Hard");
+                // Select option component for hard difficulty
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
                   <SelectOption
@@ -405,7 +418,9 @@ const PreSchoolers = () => {
               );
             }
           } else {
+            // Subtype: Image
             if (difficulty === "easy") {
+              // Single match component for easy difficulty
               console.log("Single Match");
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
@@ -426,6 +441,7 @@ const PreSchoolers = () => {
               );
             } else if (difficulty === "medium") {
               console.log("Select Option Medium");
+              // Select option component for medium difficulty
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
                   <SelectOption
@@ -445,6 +461,7 @@ const PreSchoolers = () => {
               );
             } else {
               console.log("Select Option");
+              // Select option component for hard difficulty
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
                   <SelectOption

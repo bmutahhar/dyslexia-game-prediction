@@ -42,7 +42,6 @@ const ButtonVarient = {
 
   click: {
     translateY: 4,
-    boxShadow: "0 7px 6px 0 rgba(0, 0, 0, 0.8)",
     outline: "none",
     transition: {
       duration: 0.2,
@@ -147,9 +146,14 @@ const WordConfirm = ({
             </Qinfo>
           </QuestionContainer>
           <AnswerContainer className="row">
-            <Label htmlFor="Correct" name="answerButtons">
-              <ConfirmButton
+            <Label htmlFor="Correct">
+              <input
+                type="radio"
                 id="Correct"
+                value={1}
+                name="answerButtons"
+              />
+              <ConfirmButton
                 hcolor="green"
                 color="#3bb502"
                 variants={ButtonVarient}
@@ -162,8 +166,13 @@ const WordConfirm = ({
               </ConfirmButton>
             </Label>
             <Label htmlFor="Wrong" name="answerButtons">
-              <ConfirmButton
+            <input
+                type="radio"
                 id="Wrong"
+                value={0}
+                name="answerButtons"
+              />
+              <ConfirmButton
                 hcolor="#bd0909"
                 color="#f70000"
                 variants={ButtonVarient}
@@ -272,8 +281,12 @@ const Label = styled.label`
   width: 25%;
   height: 35%;
 
-  input[type="radio"] {
+  input{
     display: none;
+  }
+
+  input:checked + div{
+    box-shadow: 0 0 30px 0 rgba(255, 255, 255, 0.4);
   }
 `;
 

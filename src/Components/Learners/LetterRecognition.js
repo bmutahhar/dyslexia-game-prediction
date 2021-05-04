@@ -67,15 +67,21 @@ const LetterRecognition = ({
             {shuffledOptions.map((tile, index) => {
               return (
                 <motion.div
+                  key={index}
                   initial={{ opacity: 0, scale: 0.2 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7 + (index + 1) / 10, duration: 0.7, type: "spring", stiffness: 100, ease: "easeIn" }}
+                  transition={{
+                    delay: 0.7 + (index + 1) / 10,
+                    duration: 0.7,
+                    type: "spring",
+                    stiffness: 100,
+                    ease: "easeIn",
+                  }}
                 >
-                  <Tile key={index} onClick={onClick} name="lr">
+                  <Tile onClick={onClick} name="lr" id={index}>
                     {tile}
                   </Tile>
                 </motion.div>
-
               );
             })}
           </AnswerContainer>
@@ -97,13 +103,13 @@ const LetterRecognition = ({
               </UIButton>
             </motion.div>
           ) : (
-              <NextButton
-                onClick={() => {
-                  if ((activeStep + 1) % 2 === 0) openBadge();
-                  nextStep();
-                }}
-              />
-            )}
+            <NextButton
+              onClick={() => {
+                if ((activeStep + 1) % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
         </NextButtonContainer>
       </MainContainer>
     );
@@ -112,7 +118,6 @@ const LetterRecognition = ({
 export default LetterRecognition;
 
 const useStyles = makeStyles(({ theme }) => ({
-
   backdrop: {
     zIndex: 10,
     backgroundColor: "rgba(0,0,0,0.6)",

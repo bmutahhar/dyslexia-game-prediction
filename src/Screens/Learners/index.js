@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { GameScreen, Loader, QuestionError } from "../../Components";
 import {
   LetterRecognition,
@@ -8,6 +8,12 @@ import {
   WordConfirm,
   NameImage,
 } from "../../Components/Learners";
+import {
+  easyDifficulty,
+  mediumDifficulty,
+  hardDifficulty,
+  resetConsecutiveScore,
+} from "../../actions";
 import { InstructionScreen } from "../../Screens";
 import { yay } from "../../Sounds";
 
@@ -35,6 +41,8 @@ const Learners = () => {
   const audio = new Audio(yay);
   const url = process.env["REACT_APP_API_URL"];
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
+  const consecutiveScore = useSelector((state) => state.consecutiveScore);
+  const dispatch = useDispatch();
 
   const nextStep = () => {
     setActiveStep(activeStep + 1);
@@ -58,24 +66,19 @@ const Learners = () => {
     else return Math.floor(activeStep / 2) - 1;
   };
 
-  const getRandomQuestion = () => {
+  const getRandomQuestion = (difficulty) => {
     const random = Math.floor(
       Math.random() * (questionSet[difficulty].length - 1)
     );
-    console.log("Random Number: ", random);
     const prevQuestion = { ...currentQuestion };
     const questions = { ...questionSet };
 
     const question = questions[difficulty][random];
-    console.log("Random Question Currently Picked: ", question);
-    console.log("Prev Question", prevQuestion);
     if (!question.displayed && prevQuestion.type !== question.type) {
-      console.log("First question");
       questions[difficulty][random].displayed = true;
       setCurrentQuestion(question);
       setQuestionSet(questions);
     } else {
-      console.log("NOOBS");
       let index = random + 1;
       for (let i = 0; i < questions[difficulty].length; i++) {
         if (
@@ -84,7 +87,6 @@ const Learners = () => {
           prevQuestion.type !==
             questions[difficulty][index % questions[difficulty].length].type
         ) {
-          console.log("Index: ", index);
           questions[difficulty][
             index % questions[difficulty].length
           ].displayed = true;
@@ -92,10 +94,8 @@ const Learners = () => {
             questions[difficulty][index % questions[difficulty].length]
           );
           setQuestionSet(questions);
-          console.log("Setting question successfully!!!!!!!!");
           break;
         }
-        console.log("Gandalf: ", index % questions[difficulty].length);
         index++;
       }
     }
@@ -112,7 +112,6 @@ const Learners = () => {
       .then((resp) => resp.json())
       .then((respJson) => {
         if (respJson.error === undefined) {
-          console.log("Fetching 2.... ");
           console.log(respJson);
           const easy = shuffleArray(respJson.easy);
           const medium = shuffleArray(respJson.medium);
@@ -122,10 +121,8 @@ const Learners = () => {
             medium,
             hard,
           });
-          console.log("Fetched");
           setStatus({ success: true, error: "", loading: true });
         } else {
-          console.log("No wayyy");
           setStatus({ success: false, error: respJson.error, loading: false });
         }
       })
@@ -134,35 +131,79 @@ const Learners = () => {
       });
   };
 
+  const monitorDifficulty = () => {
+    if (consecutiveScore === "111") {
+      if (difficulty === "easy") {
+        dispatch(mediumDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "medium";
+      } else if (difficulty === "medium") {
+        dispatch(hardDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "hard";
+      } else {
+        dispatch(resetConsecutiveScore());
+        return "hard";
+      }
+    } else if (consecutiveScore === "000") {
+      if (difficulty === "hard") {
+        dispatch(mediumDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "medium";
+      } else if (difficulty === "medium") {
+        dispatch(easyDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "easy";
+      } else {
+        dispatch(resetConsecutiveScore());
+        return "easy";
+      }
+    }
+    else{
+      return difficulty;
+    }
+  };
+
   useEffect(() => {
     if (!showInstructions) {
-      console.log("Fetching....");
-      setTimeout(fetchQuestions, 4000);
+      try {
+        fetchQuestions();
+      } catch (e) {
+        console.log(e);
+        setStatus({ success: false, error: e, loading: false });
+      }
     }
   }, [showInstructions]);
 
   useEffect(() => {
     if (status.success && !showInstructions) {
-      console.log("Getting random question bruh!!!");
-      getRandomQuestion();
+      const newDifficulty = monitorDifficulty();
+      getRandomQuestion(newDifficulty);
       if (status.success && status.loading) {
         setStatus({ ...status, loading: false });
-        console.log("Setting loading to false");
       }
     }
-  }, [activeStep, status.success, difficulty, showInstructions]);
-
-  useEffect(() => {
-    console.log("Current Question: ", currentQuestion);
-  }, [currentQuestion]);
-
-  useEffect(() => {
-    if (activeStep === 5) {
-      setDifficulty("medium");
-    } else if (activeStep === 10) {
-      setDifficulty("hard");
-    }
   }, [activeStep]);
+
+  useEffect(() => {
+    if (status.success && !showInstructions) {
+
+      const random = Math.floor(
+        Math.random() * (questionSet[difficulty].length - 1)
+      );
+      const questions = { ...questionSet };
+      const question = questions[difficulty][random];
+      questions[difficulty][random].displayed = true;
+      setCurrentQuestion(question);
+      setQuestionSet(questions);
+
+      if (status.success && status.loading) {
+        setStatus({ ...status, loading: false });
+      }
+    }
+  }, [status.success, showInstructions]);
+
+
 
   if (showInstructions) {
     return <InstructionScreen onClick={hideInstructions} />;
@@ -175,6 +216,7 @@ const Learners = () => {
         if (currentQuestion.type === "lr") {
           if (difficulty === "easy") {
             console.log("Easy Letter Recognition");
+            // Easy Letter Recognition
             return (
               <GameScreen activeStep={activeStep} badges={badges}>
                 <LetterRecognition
@@ -191,6 +233,7 @@ const Learners = () => {
               </GameScreen>
             );
           } else {
+            // Medium/Hard Letter Recognition
             console.log("Medium/Hard Letter Recognition");
             return (
               <GameScreen activeStep={activeStep} badges={badges}>
@@ -210,6 +253,7 @@ const Learners = () => {
           }
         } else if (currentQuestion.type === "cvc") {
           console.log("CVC");
+          // CVC
           return (
             <GameScreen activeStep={activeStep} badges={badges}>
               <CVCwords
@@ -227,6 +271,7 @@ const Learners = () => {
           );
         } else if (currentQuestion.type === "ni") {
           if (difficulty === "easy") {
+            // Easy name image
             return (
               <GameScreen activeStep={activeStep} badges={badges}>
                 <NameImage
@@ -244,6 +289,7 @@ const Learners = () => {
               </GameScreen>
             );
           } else {
+            // medium/hard name image
             return (
               <GameScreen activeStep={activeStep} badges={badges}>
                 <NameImage
@@ -261,6 +307,7 @@ const Learners = () => {
             );
           }
         } else if (currentQuestion.type === "wc") {
+          // Word confirm
           return (
             <GameScreen activeStep={activeStep} badges={badges}>
               <WordConfirm
