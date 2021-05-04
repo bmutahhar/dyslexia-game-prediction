@@ -45,6 +45,7 @@ const TileLayout = ({
   const [optionsA, setOptionsA] = useState([]);
   const [optionsB, setOptionsB] = useState([]);
   const [show, setShow] = useState(true);
+  const [time, setTime] = useState(0);
   const [disabled, setDisabled] = useState(false);
   const optionsRefA = useRef(null);
   const optionsRefB = useRef(null);
@@ -59,6 +60,10 @@ const TileLayout = ({
     setClickCount((prev) => prev + 1);
   };
   const getAnswer = () => {
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time);
+
     const factor = getFactor(gridSize);
     let hit = 0;
     let miss = 0;
@@ -92,6 +97,7 @@ const TileLayout = ({
         score: score,
         accuracy: hit / clickCount,
         missrate: miss / clickCount,
+        time: timeDiff,
       };
       if (score >= 0.5) {
         dispatch(addScore(scoreObj));
@@ -135,6 +141,14 @@ const TileLayout = ({
       tempOptions.slice(Math.floor(options.length / 2), options.length)
     );
   }, [options]);
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   if (showBadge) {
     return (

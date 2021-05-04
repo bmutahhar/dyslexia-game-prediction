@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { IconButton, Typography, Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -37,6 +37,7 @@ const ObjectRotation = ({
   const [shown, setShown] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [clickCount, setClickCount] = useState(0);
+  const [time, setTime] = useState(0);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const difficulty = useSelector((state) => state.difficulty);
   const gender = useSelector((state) => state.gender);
@@ -55,14 +56,18 @@ const ObjectRotation = ({
 
   const rotateRight = () => {
     setRotation(rotation + degree);
+    setClickCount(clickCount+1);
   };
 
   const rotateLeft = () => {
     setRotation(rotation - degree);
+    setClickCount(clickCount+1);
   };
 
   const getAnswer = () => {
-    const clicks = 1;
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time)
     let newAngle;
     if (rotation < 0) {
       newAngle = 360 - (Math.abs(rotation) % 360);
@@ -72,29 +77,41 @@ const ObjectRotation = ({
     if (newAngle === angle) {
       const scoreObj = {
         difficulty: difficulty,
-        clicks: clicks,
+        clickCount: clickCount,
         hits: 1,
         miss: 0,
         score: 1,
-        accuracy: 1 / clicks,
-        missrate: 0 / clicks,
+        accuracy: 1 / clickCount,
+        missrate: 0 / clickCount,
+        time: timeDiff,
       };
       dispatch(addScore(scoreObj));
       dispatch(incrementConsecutiveScore())
     } else {
       const scoreObj = {
         difficulty: difficulty,
-        clicks: clicks,
+        clickCount: clickCount,
         hits: 0,
         miss: 1,
         score: 0,
-        accuracy: 0 / clicks,
-        missrate: 1 / clicks,
+        accuracy: 0 / clickCount,
+        missrate: 1 / clickCount,
+        time: timeDiff,
       };
       dispatch(addScore(scoreObj));
       dispatch(decrementConsecutiveScore())
     }
   };
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
+
+
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>

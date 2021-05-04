@@ -40,6 +40,7 @@ const SelectOption = ({
   const gender = useSelector((state) => state.gender);
   const factor = getFactor(gridSize);
   const [show, setShow] = useState(true);
+  const [time, setTime] = useState(0);
   const [hit, setHit] = useState(0);
   const [miss, setMiss] = useState(0);
   const [clickCount, setClickCount] = useState(0);
@@ -52,22 +53,22 @@ const SelectOption = ({
   };
 
   const onClick = (myRef) => {
-    setClickCount((prev) => prev + 1);
+    setClickCount(clickCount+1);
     // Code to work if checked
     if (!myRef.current.checked) {
       if (image) {
         const value = myRef.current.value;
         if (word.alt.trim() === value.trim()) {
-          setHit((prev) => prev + 1);
+          setHit(hit+1);
         } else {
-          setMiss((prev) => prev + 1);
+          setMiss(miss+1);
         }
       } else {
         const value = myRef.current.value;
         if (word.trim() === value.trim()) {
-          setHit((prev) => prev + 1);
+          setHit(hit+1);
         } else {
-          setMiss((prev) => prev + 1);
+          setMiss(miss+1);
         }
       }
     }
@@ -76,22 +77,25 @@ const SelectOption = ({
       if (image) {
         const value = myRef.current.value;
         if (word.alt.trim() === value.trim()) {
-          setHit((prev) => prev - 1);
+          setHit(hit+1);
         } else {
-          setMiss((prev) => prev - 1);
+          setMiss(miss+1);
         }
       } else {
         const value = myRef.current.value;
         if (word.trim() === value.trim()) {
-          setHit((prev) => prev - 1);
+          setHit(hit+1);
         } else {
-          setMiss((prev) => prev - 1);
+          setMiss(miss+1);
         }
       }
     }
   };
 
   const getAnswer = () => {
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time)
     const score = hit * factor;
     const scoreObj = {
       difficulty: difficulty,
@@ -101,6 +105,7 @@ const SelectOption = ({
       score: score,
       accuracy: hit / clickCount,
       missrate: miss / clickCount,
+      time: timeDiff,
     };
     if (score >= 0.5) {
       dispatch(addScore(scoreObj));
@@ -113,6 +118,14 @@ const SelectOption = ({
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, []);
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   if (showBadge) {
     return (

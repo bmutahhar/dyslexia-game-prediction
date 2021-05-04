@@ -42,6 +42,7 @@ const SingleDrag = ({
   const [disabled, setDisabled] = useState(true);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
+  const [time, setTime] = useState(0);
   const placer = useRef(null);
   const ansRef = useRef(null);
   const dispatch = useDispatch();
@@ -58,6 +59,9 @@ const SingleDrag = ({
 
   const getAnswer = (placer) => {
     if (placer.current && placer.current.childNodes.length > 0) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      const timeDiff = Math.abs(seconds - time)
       if (image) {
         const node = placer.current.firstChild;
         const img = node.getElementsByTagName("img")[0];
@@ -73,9 +77,10 @@ const SingleDrag = ({
             score: hit,
             accuracy: hit / clickCount,
             missrate: miss / clickCount,
+            time: timeDiff,
           };
           dispatch(addScore(scoreObj));
-          dispatch(incrementConsecutiveScore())
+          dispatch(incrementConsecutiveScore());
         } else {
           const hit = 0;
           const miss = 1;
@@ -87,6 +92,7 @@ const SingleDrag = ({
             score: hit,
             accuracy: hit / clickCount,
             missrate: miss / clickCount,
+            time: timeDiff,
           };
           dispatch(addScore(scoreObj));
           dispatch(decrementConsecutiveScore());
@@ -105,9 +111,10 @@ const SingleDrag = ({
             score: hit,
             accuracy: hit / clickCount,
             missrate: miss / clickCount,
+            time: timeDiff,
           };
           dispatch(addScore(scoreObj));
-          dispatch(incrementConsecutiveScore())
+          dispatch(incrementConsecutiveScore());
         } else {
           const hit = 0;
           const miss = 1;
@@ -119,9 +126,10 @@ const SingleDrag = ({
             score: hit,
             accuracy: hit / clickCount,
             missrate: miss / clickCount,
+            time: timeDiff,
           };
           dispatch(addScore(scoreObj));
-          dispatch(decrementConsecutiveScore())
+          dispatch(decrementConsecutiveScore());
         }
       }
     }
@@ -148,6 +156,15 @@ const SingleDrag = ({
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, []);
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      console.log("Initial Time: " + seconds);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   if (showBadge) {
     return (

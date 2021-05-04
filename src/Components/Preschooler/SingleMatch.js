@@ -38,6 +38,7 @@ const DisplayTile = ({
   const [score, setScore] = useState(0);
   const [miss, setMiss] = useState(0);
   const [clickCount, setClickCount] = useState(0);
+  const [time, setTime] = useState(0);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
@@ -53,7 +54,6 @@ const DisplayTile = ({
   const onClick = (myRef) => {
     setClickCount((prev) => prev + 1);
     if (!myRef.current.checked) {
-      console.log("Now Checked!!!");
       if (image) {
         const value = myRef.current.value;
         if (word.alt.trim() === value.trim()) {
@@ -76,6 +76,9 @@ const DisplayTile = ({
     }
   };
   const getAnswer = () => {
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time)
     const scoreObj = {
       difficulty: "easy",
       clicks: clickCount,
@@ -84,6 +87,7 @@ const DisplayTile = ({
       score: score,
       accuracy: score / clickCount,
       missrate: miss / clickCount,
+      time: timeDiff,
     };
     if (score > 0) {
       dispatch(addScore(scoreObj));
@@ -97,6 +101,14 @@ const DisplayTile = ({
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, []);
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   if (showBadge) {
     return (
