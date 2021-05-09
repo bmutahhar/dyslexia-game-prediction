@@ -6,10 +6,12 @@ import {
   NameImage,
   CVCwords,
   LetterRecognition,
+
 } from "../../Components/Learners";
 import {
   CompletePuzzle,
   TypeWord,
+  RecognizeSound,
 
 } from "../../Components/Elementary";
 import { InstructionScreen } from "../../Screens";
@@ -80,7 +82,10 @@ const Elementary = () => {
       if (activeStep === 0) {
         return (
           <GameScreen activeStep={activeStep} badges={badges}>
-            <TypeWord></TypeWord>
+            <RecognizeSound
+              word={"lion"}
+              text={["lion", "loin", "lian", "boin"]}
+            ></RecognizeSound>
           </GameScreen>
         );
       } else if (activeStep === 1) {
