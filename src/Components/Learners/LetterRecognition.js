@@ -13,7 +13,11 @@ import {
   UIButton,
   BadgePopUp,
 } from "..";
-import { addAnswer } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
@@ -31,18 +35,67 @@ const LetterRecognition = ({
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
+  const difficulty = useSelector((state) => state.difficulty);
   const dispatch = useDispatch();
   const classes = useStyles();
   const [shuffledOptions, setShuffledOptions] = useState([]);
-  const [answer, setAnswer] = useState("");
+  const [clickCount, setClickCount] = useState(0);
+  const [disabled, setDisabled] = useState(true);
+  const [time, setTime] = useState(0);
+  const [value, setValue] = useState("");
 
-  const onClick = (answer) => {
-    setAnswer(answer);
+  const onClick = (ref) => {
+    setClickCount(clickCount + 1);
+    disabled && setDisabled(false);
+    if (!ref.current.checked) {
+      setValue(ref.current.value);
+    }
+  };
+
+  const getAnswer = () => {
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time);
+    if (word.trim() === value) {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1 / clickCount,
+        missrate: 0 / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(incrementConsecutiveScore());
+    } else {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: 0,
+        miss: 1,
+        score: 0,
+        accuracy: 0 / clickCount,
+        missrate: 1 / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(decrementConsecutiveScore());
+    }
   };
 
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, [options]);
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   if (showBadge) {
     return (
@@ -104,8 +157,10 @@ const LetterRecognition = ({
             </motion.div>
           ) : (
             <NextButton
+              disabled={disabled}
               onClick={() => {
-                if ((activeStep + 1) % 2 === 0) openBadge();
+                getAnswer();
+                // if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />

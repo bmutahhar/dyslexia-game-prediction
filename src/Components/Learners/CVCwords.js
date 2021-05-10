@@ -1,10 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Player, UIButton, NextButton, AvatarMessage, BadgePopUp } from "../../Components";
+import {
+  Player,
+  UIButton,
+  NextButton,
+  AvatarMessage,
+  BadgePopUp,
+} from "../../Components";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 import { motion } from "framer-motion";
-import {Backdrop} from "@material-ui/core"
+import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import larka from "../../Images/characters/larka2.svg";
@@ -67,13 +78,68 @@ const CVCwords = ({
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
+  const difficulty = useSelector((state) => state.difficulty);
   const dispatch = useDispatch();
   const [shuffledOptions, setShuffledOptions] = useState([]);
+  const [value, setValue] = useState("");
+  const [clickCount, setClickCount] = useState(0);
+  const [disabled, setDisabled] = useState(true);
+  const [time, setTime] = useState(0);
   const classes = useStyles();
+
+  const onClick = (myRef) => {
+    setClickCount(clickCount + 1);
+    disabled && setDisabled(false);
+    if (!myRef.current.checked) {
+      setValue(myRef.current.value);
+    }
+  };
+
+  const getAnswer = () => {
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time);
+    if (word.trim() === value.trim()) {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1 / clickCount,
+        missrate: 0 / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(incrementConsecutiveScore());
+    } else {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: 0,
+        miss: 1,
+        score: 0,
+        accuracy: 0 / clickCount,
+        missrate: 1 / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(decrementConsecutiveScore());
+    }
+  };
 
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, [options]);
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
+
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
@@ -91,40 +157,7 @@ const CVCwords = ({
         <GameArea className="col-8">
           <QuestionContainer className="row">
             {shuffledOptions.map((el, i) => {
-              return (
-                <Optionsbox
-                  key={i}
-                  variants={optionVarient}
-                  initial="start"
-                  animate="end"
-                  transition={{
-                    delay: 0.2 + (i + 1) / 10,
-                    duration: 0.5,
-                    type: "spring",
-                    stiffness: 120,
-                  }}
-                >
-                  <Spellingoptions
-                    variants={optionVarient}
-                    whileHover="hover"
-                    whileTap="click"
-                  >
-                    <Spelling
-                      variants={SpellingVariant}
-                      initial="start"
-                      animate="end"
-                      transition={{
-                        delay: 0.6 + (i + 1) / 10,
-                        duration: 0.4,
-                        type: "spring",
-                        stiffness: 30,
-                      }}
-                    >
-                      {el}
-                    </Spelling>
-                  </Spellingoptions>
-                </Optionsbox>
-              );
+              return <OptionsBox key={i} i={i} el={el} onClick={onClick} />;
             })}
             <Qinfo
               initial={{
@@ -169,8 +202,10 @@ const CVCwords = ({
             </motion.div>
           ) : (
             <NextButton
+            disabled={disabled}
               onClick={() => {
-                if ((activeStep + 1) % 2 === 0) openBadge();
+                getAnswer();
+                // if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />
@@ -183,19 +218,70 @@ const CVCwords = ({
 
 export default CVCwords;
 
+const OptionsBox = ({ onClick, i, el }) => {
+  const myRef = useRef(null);
+  return (
+    <OptionsBoxContainer
+      variants={optionVarient}
+      initial="start"
+      animate="end"
+      transition={{
+        delay: 0.2 + (i + 1) / 10,
+        duration: 0.5,
+        type: "spring",
+        stiffness: 120,
+      }}
+    >
+      <input type="radio" id={i} value={el} name="optionButtons" ref={myRef} />
+      <Spellingoptions
+        variants={optionVarient}
+        whileHover="hover"
+        whileTap="click"
+        htmlFor={i}
+        onClick={() => {
+          onClick(myRef);
+        }}
+      >
+        <Spelling
+          variants={SpellingVariant}
+          initial="start"
+          animate="end"
+          transition={{
+            delay: 0.6 + (i + 1) / 10,
+            duration: 0.4,
+            type: "spring",
+            stiffness: 30,
+          }}
+        >
+          {el}
+        </Spelling>
+      </Spellingoptions>
+    </OptionsBoxContainer>
+  );
+};
+
 const Spelling = styled(motion.h1)`
   color: white;
   font-size: 4.5vw;
   letter-spacing: 2rem;
   margin-left: 2rem;
 `;
-const Optionsbox = styled(motion.div)`
+const OptionsBoxContainer = styled(motion.div)`
   margin-bottom: 1vw;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  input {
+    display: none;
+  }
+  input:checked + label {
+    ${"" /* border:none; */}
+    ${"" /* box-shadow: 0 0 30px 0 rgba(255, 255, 255, 0.5); */}
+    background-color:#007bff8a;
+    transition: ease-in 0.2s;
+  }
 `;
-const Spellingoptions = styled(motion.div)`
+const Spellingoptions = styled(motion.label)`
   display: flex;
   flex-direction: column;
   width: 30vw;
@@ -257,7 +343,6 @@ const NextButtonContainer = styled.div`
   padding: 50px;
 `;
 const useStyles = makeStyles(({ theme }) => ({
-
   backdrop: {
     zIndex: 10,
     backgroundColor: "rgba(0,0,0,0.6)",

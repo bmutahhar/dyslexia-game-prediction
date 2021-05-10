@@ -29,6 +29,7 @@ import b8 from "../../Images/badges/Zebra.svg";
 const Learners = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [badgeOpen, setBadgeOpen] = useState(false);
+  const difficulty = useSelector((state) => state.difficulty);
   const [showInstructions, setShowInstructions] = useState(true);
   const [status, setStatus] = useState({
     loading: true,
@@ -37,7 +38,6 @@ const Learners = () => {
   });
   const [questionSet, setQuestionSet] = useState({});
   const [currentQuestion, setCurrentQuestion] = useState({});
-  const [difficulty, setDifficulty] = useState("easy");
   const audio = new Audio(yay);
   const url = process.env["REACT_APP_API_URL"];
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
@@ -67,6 +67,7 @@ const Learners = () => {
   };
 
   const getRandomQuestion = (difficulty) => {
+    console.log("Difficulty: " + difficulty);
     const random = Math.floor(
       Math.random() * (questionSet[difficulty].length - 1)
     );
@@ -158,8 +159,7 @@ const Learners = () => {
         dispatch(resetConsecutiveScore());
         return "easy";
       }
-    }
-    else{
+    } else {
       return difficulty;
     }
   };
@@ -175,19 +175,9 @@ const Learners = () => {
     }
   }, [showInstructions]);
 
+  // Code to get first question only
   useEffect(() => {
     if (status.success && !showInstructions) {
-      const newDifficulty = monitorDifficulty();
-      getRandomQuestion(newDifficulty);
-      if (status.success && status.loading) {
-        setStatus({ ...status, loading: false });
-      }
-    }
-  }, [activeStep]);
-
-  useEffect(() => {
-    if (status.success && !showInstructions) {
-
       const random = Math.floor(
         Math.random() * (questionSet[difficulty].length - 1)
       );
@@ -203,7 +193,16 @@ const Learners = () => {
     }
   }, [status.success, showInstructions]);
 
-
+  // Code to get random questions from question 2 and onwards
+  useEffect(() => {
+    if (status.success && !showInstructions) {
+      const newDifficulty = monitorDifficulty();
+      getRandomQuestion(newDifficulty);
+      if (status.success && status.loading) {
+        setStatus({ ...status, loading: false });
+      }
+    }
+  }, [activeStep]);
 
   if (showInstructions) {
     return <InstructionScreen onClick={hideInstructions} />;

@@ -15,7 +15,11 @@ import {
   UIButton,
   BadgePopUp,
 } from "..";
-import { addScore } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
@@ -33,17 +37,69 @@ const DragDrop = ({
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
   const [shuffledOptions, setShuffledOptions] = useState([]);
+  const [clickCount, setClickCount] = useState(0);
+  const [time, setTime] = useState(0);
   const elRefs = useRef([]);
   const ansRef = useRef(null);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
+  const difficulty = useSelector((state) => state.difficulty);
   const dispatch = useDispatch();
   const classes = useStyles();
 
+  const onClick = () => {
+    setClickCount(clickCount + 1);
+  };
+
   const getAnswer = () => {
     let answer = "";
-    elRefs.current.map((el, i) => (answer += el.textContent));
+    let hit = 0;
+    let miss = 0;
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time);
+    const factor = 1 / word.length;
+    elRefs.current.forEach((el, i) => {
+      if (el.textContent === word[i]) hit++;
+      else miss++;
+      answer += el.textContent;
+    });
+    if (answer.toLowerCase() === word.toLowerCase()) {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: hit,
+        miss: miss,
+        score: hit * factor,
+        accuracy: hit / clickCount,
+        missrate: miss / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(incrementConsecutiveScore());
+    } else {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: hit,
+        miss: miss,
+        score: hit * factor,
+        accuracy: hit / clickCount,
+        missrate: miss / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(decrementConsecutiveScore());
+    }
   };
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   useEffect(() => {
     if (elRefs.current && ansRef.current) {
@@ -65,7 +121,6 @@ const DragDrop = ({
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, [options]);
-
 
   if (showBadge) {
     return (
@@ -120,7 +175,11 @@ const DragDrop = ({
           </QuestionContainer>
           <AnswerContainer ref={ansRef} className="row">
             {shuffledOptions.map((tile, index) => {
-              return <DraggableTile key={index}>{tile}</DraggableTile>;
+              return (
+                <DraggableTile key={index} onMouseDown={onClick}>
+                  {tile}
+                </DraggableTile>
+              );
             })}
           </AnswerContainer>
         </GameArea>
@@ -141,15 +200,15 @@ const DragDrop = ({
               </UIButton>
             </motion.div>
           ) : (
-              <NextButton
-                disabled={disabled}
-                onClick={() => {
-                  getAnswer();
-                  if ((activeStep + 1) % 2 === 0) openBadge();
-                  nextStep();
-                }}
-              />
-            )}
+            <NextButton
+              disabled={disabled}
+              onClick={() => {
+                getAnswer();
+                // if ((activeStep + 1) % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
         </NextButtonContainer>
       </MainContainer>
     );

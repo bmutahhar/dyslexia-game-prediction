@@ -61,7 +61,7 @@ const SingleDrag = ({
     if (placer.current && placer.current.childNodes.length > 0) {
       const date = new Date();
       const seconds = Math.floor(date.getTime() / 1000);
-      const timeDiff = Math.abs(seconds - time)
+      const timeDiff = Math.abs(seconds - time);
       if (image) {
         const node = placer.current.firstChild;
         const img = node.getElementsByTagName("img")[0];
@@ -161,7 +161,6 @@ const SingleDrag = ({
     if (!showBadge) {
       const date = new Date();
       const seconds = Math.floor(date.getTime() / 1000);
-      console.log("Initial Time: " + seconds);
       setTime(seconds);
     }
   }, [showBadge]);
@@ -267,6 +266,7 @@ const SingleDrag = ({
             </motion.div>
           ) : (
             <NextButton
+              disabled={disabled}
               onClick={() => {
                 getAnswer(placer);
                 if ((activeStep + 1) % 2 === 0) openBadge();

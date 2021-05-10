@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Check, Close } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
@@ -73,6 +73,11 @@ const WordConfirm = ({
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
+  const [disabled, setDisabled] = useState(false);
+
+  const onClick = () => {
+    disabled && setDisabled(false);
+  };
 
   if (showBadge) {
     return (
@@ -147,12 +152,7 @@ const WordConfirm = ({
           </QuestionContainer>
           <AnswerContainer className="row">
             <Label htmlFor="Correct">
-              <input
-                type="radio"
-                id="Correct"
-                value={1}
-                name="answerButtons"
-              />
+              <input type="radio" id="Correct" value={1} name="answerButtons" />
               <ConfirmButton
                 hcolor="green"
                 color="#3bb502"
@@ -166,12 +166,7 @@ const WordConfirm = ({
               </ConfirmButton>
             </Label>
             <Label htmlFor="Wrong" name="answerButtons">
-            <input
-                type="radio"
-                id="Wrong"
-                value={0}
-                name="answerButtons"
-              />
+              <input type="radio" id="Wrong" value={0} name="answerButtons" />
               <ConfirmButton
                 hcolor="#bd0909"
                 color="#f70000"
@@ -204,8 +199,9 @@ const WordConfirm = ({
             </motion.div>
           ) : (
             <NextButton
+              disabled={disabled}
               onClick={() => {
-                if ((activeStep + 1) % 2 === 0) openBadge();
+                // if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />
@@ -281,11 +277,11 @@ const Label = styled.label`
   width: 25%;
   height: 35%;
 
-  input{
+  input {
     display: none;
   }
 
-  input:checked + div{
+  input:checked + div {
     box-shadow: 0 0 30px 0 rgba(255, 255, 255, 0.4);
   }
 `;

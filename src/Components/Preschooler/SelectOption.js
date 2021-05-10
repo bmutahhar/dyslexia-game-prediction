@@ -40,6 +40,7 @@ const SelectOption = ({
   const gender = useSelector((state) => state.gender);
   const factor = getFactor(gridSize);
   const [show, setShow] = useState(true);
+  const [disabled, setDisabled] = useState(true);
   const [time, setTime] = useState(0);
   const [hit, setHit] = useState(0);
   const [miss, setMiss] = useState(0);
@@ -53,22 +54,23 @@ const SelectOption = ({
   };
 
   const onClick = (myRef) => {
-    setClickCount(clickCount+1);
+    setClickCount(clickCount + 1);
+    disabled && setDisabled(false);
     // Code to work if checked
     if (!myRef.current.checked) {
       if (image) {
         const value = myRef.current.value;
         if (word.alt.trim() === value.trim()) {
-          setHit(hit+1);
+          setHit(hit + 1);
         } else {
-          setMiss(miss+1);
+          setMiss(miss + 1);
         }
       } else {
         const value = myRef.current.value;
         if (word.trim() === value.trim()) {
-          setHit(hit+1);
+          setHit(hit + 1);
         } else {
-          setMiss(miss+1);
+          setMiss(miss + 1);
         }
       }
     }
@@ -77,16 +79,16 @@ const SelectOption = ({
       if (image) {
         const value = myRef.current.value;
         if (word.alt.trim() === value.trim()) {
-          setHit(hit+1);
+          setHit(hit + 1);
         } else {
-          setMiss(miss+1);
+          setMiss(miss + 1);
         }
       } else {
         const value = myRef.current.value;
         if (word.trim() === value.trim()) {
-          setHit(hit+1);
+          setHit(hit + 1);
         } else {
-          setMiss(miss+1);
+          setMiss(miss + 1);
         }
       }
     }
@@ -95,7 +97,7 @@ const SelectOption = ({
   const getAnswer = () => {
     const date = new Date();
     const seconds = Math.floor(date.getTime() / 1000);
-    const timeDiff = Math.abs(seconds - time)
+    const timeDiff = Math.abs(seconds - time);
     const score = hit * factor;
     const scoreObj = {
       difficulty: difficulty,
@@ -287,6 +289,7 @@ const SelectOption = ({
             </motion.div>
           ) : (
             <NextButton
+              disabled={disabled}
               onClick={() => {
                 getAnswer();
                 if ((activeStep + 1) % 2 === 0) openBadge();

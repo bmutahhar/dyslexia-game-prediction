@@ -169,6 +169,6 @@ const Container = styled.div`
       ? ``
       : `input:checked + label div{
   transform: scale(1.1);
-  border: 4px solid #187d31;
+  box-shadow: 0 0 40px 0 rgba(255, 255, 255, 0.4);
 }`}
 `;
