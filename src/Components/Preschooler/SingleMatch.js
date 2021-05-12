@@ -37,6 +37,7 @@ const DisplayTile = ({
   const [open, setOpen] = useState(true);
   const [score, setScore] = useState(0);
   const [miss, setMiss] = useState(0);
+  const [disabled, setDisabled] = useState(true);
   const [clickCount, setClickCount] = useState(0);
   const [time, setTime] = useState(0);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
@@ -46,6 +47,7 @@ const DisplayTile = ({
   const [shuffledOptions, setShuffledOptions] = useState([]);
   const showDisplay = () => {
     setOpen(true);
+    setDisabled(true);
   };
   const closeDisplay = () => {
     setOpen(false);
@@ -53,6 +55,7 @@ const DisplayTile = ({
 
   const onClick = (myRef) => {
     setClickCount((prev) => prev + 1);
+    disabled && setDisabled(false);
     if (!myRef.current.checked) {
       if (image) {
         const value = myRef.current.value;
@@ -78,7 +81,7 @@ const DisplayTile = ({
   const getAnswer = () => {
     const date = new Date();
     const seconds = Math.floor(date.getTime() / 1000);
-    const timeDiff = Math.abs(seconds - time)
+    const timeDiff = Math.abs(seconds - time);
     const scoreObj = {
       difficulty: "easy",
       clicks: clickCount,
@@ -232,6 +235,7 @@ const DisplayTile = ({
             </motion.div>
           ) : (
             <NextButton
+            disabled={disabled}
               onClick={() => {
                 getAnswer();
                 if ((activeStep + 1) % 2 === 0) openBadge();

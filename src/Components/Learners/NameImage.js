@@ -16,7 +16,11 @@ import {
   UIButton,
   BadgePopUp,
 } from "..";
-import { addScore } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
@@ -37,16 +41,72 @@ const NameImage = ({
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
   const [shuffledOptions, setShuffledOptions] = useState([]);
+  const [clickCount, setClickCount] = useState(0);
+  const [time, setTime] = useState(0);
   const elRefs = useRef([]);
   const ansRef = useRef(null);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
+  const difficulty = useSelector((state) => state.difficulty);
   const dispatch = useDispatch();
   const classes = useStyles();
 
   const getAnswer = () => {
     let answer = "";
-    elRefs.current.map((el, i) => (answer += el.textContent));
+    let hit = 0;
+    let miss = 0;
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time);
+    const factor =
+      easy === true ? 1 / (word.alt.length - 1) : 1 / word.alt.length;
+    if (easy === true) {
+      answer = word.alt[0];
+      elRefs.current.forEach((el, i) => {
+        if (el.textContent === word.alt[i]) {
+          hit++;
+        } else miss++;
+        answer += el.textContent;
+      });
+    } else {
+      answer = "";
+      elRefs.current.forEach((el, i) => {
+        if (el.textContent === word.alt[i]) hit++;
+        else miss++;
+        answer += el.textContent;
+      });
+    }
+    if (answer.toLowerCase() === word.alt.toLowerCase()) {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: hit,
+        miss: miss,
+        score: hit * factor,
+        accuracy: hit / clickCount,
+        missrate: miss / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(incrementConsecutiveScore());
+    } else {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: hit,
+        miss: miss,
+        score: hit * factor,
+        accuracy: hit / clickCount,
+        missrate: miss / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(decrementConsecutiveScore());
+    }
+  };
+
+  const onClick = () => {
+    setClickCount(clickCount + 1);
   };
 
   useEffect(() => {
@@ -69,6 +129,14 @@ const NameImage = ({
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, [options]);
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   if (showBadge) {
     return (
@@ -151,12 +219,16 @@ const NameImage = ({
                 ease: "easeIn",
               }}
             >
-             {question}
+              {question}
             </Qinfo>
           </QuestionContainer>
           <AnswerContainer ref={ansRef} className="row">
             {shuffledOptions.map((tile, index) => {
-              return <DraggableTile key={index}>{tile}</DraggableTile>;
+              return (
+                <DraggableTile key={index} onMouseDown={onClick}>
+                  {tile}
+                </DraggableTile>
+              );
             })}
           </AnswerContainer>
         </GameArea>
@@ -181,7 +253,7 @@ const NameImage = ({
               disabled={disabled}
               onClick={() => {
                 getAnswer();
-                if ((activeStep + 1) % 2 === 0) openBadge();
+                // if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />

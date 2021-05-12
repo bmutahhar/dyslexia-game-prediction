@@ -13,7 +13,7 @@ const Player = ({ color, text }) => {
     if (iconName === "play") {
       speak({
         text: text,
-        rate: 0.6,
+        rate: 1.0,
         voice: voices[3],
       });
       setIconName("pause");

@@ -35,6 +35,7 @@ const ObjectRotation = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [shown, setShown] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [rotation, setRotation] = useState(0);
   const [clickCount, setClickCount] = useState(0);
   const [time, setTime] = useState(0);
@@ -57,11 +58,13 @@ const ObjectRotation = ({
   const rotateRight = () => {
     setRotation(rotation + degree);
     setClickCount(clickCount+1);
+    disabled && setDisabled(false);
   };
 
   const rotateLeft = () => {
     setRotation(rotation - degree);
     setClickCount(clickCount+1);
+    disabled && setDisabled(false);
   };
 
   const getAnswer = () => {
@@ -269,6 +272,7 @@ const ObjectRotation = ({
             </motion.div>
           ) : (
             <NextButton
+            disabled={disabled}
               onClick={() => {
                 getAnswer();
                 if ((activeStep + 1) % 2 === 0) openBadge();
