@@ -1,4 +1,6 @@
 export { default as Home } from "./Home";
+export { default as ProfileTracking } from "./ProfileTracking";
+
 export { default as About } from "./About";
 export { default as Avatar } from "./AvatarSelection";
 export { default as Contact } from "./ContactUs";
