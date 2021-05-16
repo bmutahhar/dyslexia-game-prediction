@@ -158,8 +158,7 @@ const PreSchoolers = () => {
         dispatch(resetConsecutiveScore());
         return "easy";
       }
-    }
-    else{
+    } else {
       return difficulty;
     }
   };
@@ -187,7 +186,6 @@ const PreSchoolers = () => {
 
   useEffect(() => {
     if (status.success && !showInstructions) {
-
       const random = Math.floor(
         Math.random() * (questionSet[difficulty].length - 1)
       );
@@ -399,7 +397,7 @@ const PreSchoolers = () => {
               );
             } else {
               console.log("Select Option Hard");
-                // Select option component for hard difficulty
+              // Select option component for hard difficulty
               return (
                 <GameScreen activeStep={activeStep} badges={badges}>
                   <SelectOption
@@ -483,7 +481,13 @@ const PreSchoolers = () => {
           }
         }
       } else {
-        return <QuestionError open={!status.sucess} />;
+        return (
+          <QuestionError
+            open={!status.sucess}
+            message1="Oops! There Was A Trouble Loading The Game"
+            message2="Please Refresh The Page And Try Again"
+          />
+        );
       }
     }
   }

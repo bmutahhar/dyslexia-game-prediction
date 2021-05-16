@@ -255,7 +255,13 @@ const Elementary = () => {
           );
         }
       } else {
-        return <QuestionError open={!status.sucess} />;
+        return (
+          <QuestionError
+            open={!status.sucess}
+            message1="Oops! There Was A Trouble Loading The Game"
+            message2="Please Refresh The Page And Try Again"
+          />
+        );
       }
     }
   }

@@ -229,6 +229,7 @@ const DisplayTile = ({
                 type="button"
                 component={Link}
                 to="/completed"
+                onClick={getAnswer}
               >
                 Submit
               </UIButton>

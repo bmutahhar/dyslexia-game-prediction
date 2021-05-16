@@ -247,6 +247,7 @@ const WordConfirm = ({
                 type="button"
                 component={Link}
                 to="/completed"
+                onClick={getAnswer}
               >
                 Submit
               </UIButton>
