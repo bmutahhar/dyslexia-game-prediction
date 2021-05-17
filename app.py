@@ -16,7 +16,7 @@ app.config['DB_URL'] = os.environ.get("DB_URL") or "mongodb://localhost:27017"
 try:
 
     mongo = pymongo.MongoClient(app.config['DB_URL'], serverSelectionTimeoutMS=15000,
-                                read_preference=ReadPreference.PRIMARY,connect=False)
+                                read_preference=ReadPreference.PRIMARY, connect=False)
     db = mongo["dyxsis"]
 
     mongo.server_info()  # trigger exception if cannot connect to database
@@ -247,5 +247,46 @@ def get_questions(difficulty):
             mimetype='application/json')
 
 
+@app.route("/api/v1/nonUserScores", methods=["POST"])
+def add_final_score():
+    try:
+        if request.method.strip() == "POST":
+            content = {"timeStamp": datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"), 'score': request.json}
+            dbResponse = db.nonUserScores.insert_one(content)
+            if dbResponse.acknowledged:
+                print("Scores submitted successfully")
+                print("Record id: ", dbResponse.inserted_id)
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Score inserted successfully', 'id': f"{dbResponse.inserted_id}", 'error': ""}),
+                    status=200,
+                    mimetype='application/json')
+            else:
+                print('****************************************************************')
+                print("Error occurred")
+                print(dbResponse)
+                print('****************************************************************')
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Data could not be inserted in database', 'error': "Data not added successfully"}),
+                    status=500,
+                    mimetype='application/json')
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Data could not be inserted in database',
+                     "error": "Only POST requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Data could not be inserted in database', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
 if __name__ == '__main__':
-    app.run(debug=True,threaded=True)
+    app.run(debug=True, threaded=True)
