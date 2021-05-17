@@ -11,9 +11,10 @@ const Player = ({ color, text }) => {
   const { speak, cancel, voices, speaking } = useSpeechSynthesis();
   const togglePlay = () => {
     if (iconName === "play") {
+      console.log(text)
       speak({
         text: text,
-        rate: 1.0,
+        rate: 0.8,
         voice: voices[3],
       });
       setIconName("pause");

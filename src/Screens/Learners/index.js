@@ -113,7 +113,6 @@ const Learners = () => {
       .then((resp) => resp.json())
       .then((respJson) => {
         if (respJson.error === undefined) {
-          console.log(respJson);
           const easy = shuffleArray(respJson.easy);
           const medium = shuffleArray(respJson.medium);
           const hard = shuffleArray(respJson.hard);
@@ -305,25 +304,15 @@ const Learners = () => {
               </GameScreen>
             );
           }
-        } else if (currentQuestion.type === "wc") {
-          // Word confirm
-          return (
-            <GameScreen activeStep={activeStep} badges={badges}>
-              <WordConfirm
-                word={currentQuestion.word.toUpperCase()}
-                question={currentQuestion.question}
-                activeStep={activeStep}
-                nextStep={nextStep}
-                showBadge={badgeOpen}
-                badge={badges[badgeIndex].image}
-                badgeName={badges[badgeIndex].name}
-                openBadge={openBadge}
-              />
-            </GameScreen>
-          );
         }
       } else {
-        return <QuestionError open={!status.sucess} />;
+        return (
+          <QuestionError
+            open={!status.sucess}
+            message1="Oops! There Was A Trouble Loading The Game"
+            message2="Please Refresh The Page And Try Again"
+          />
+        );
       }
     }
   }

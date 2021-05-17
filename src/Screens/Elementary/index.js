@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { GameScreen, Loader, QuestionError } from "../../Components";
 import {
-  DragDrop,
   WordConfirm,
-  NameImage,
-  CVCwords,
-  LetterRecognition,
-
-} from "../../Components/Learners";
-import {
-  CompletePuzzle,
   TypeWord,
   RecognizeSound,
-
 } from "../../Components/Elementary";
 import { InstructionScreen } from "../../Screens";
+import {
+  easyDifficulty,
+  mediumDifficulty,
+  hardDifficulty,
+  resetConsecutiveScore,
+} from "../../actions";
 import { yay } from "../../Sounds";
 
 import b1 from "../../Images/badges/Dear.svg";
@@ -26,102 +24,243 @@ import b6 from "../../Images/badges/Panda.svg";
 import b7 from "../../Images/badges/Teddy.svg";
 import b8 from "../../Images/badges/Zebra.svg";
 
-const badges = [
-  { image: b1, name: "Teddy" },
-  { image: b2, name: "Kitty" },
-  { image: b3, name: "Foxy" },
-  { image: b4, name: "Monkey" },
-  { image: b5, name: "Donkey" },
-  { image: b6, name: "Doggy" },
-  { image: b7, name: "Monkey" },
-  { image: b8, name: "Monkey" },
-];
-
 const Elementary = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [badgeOpen, setBadgeOpen] = useState(false);
+  const difficulty = useSelector((state) => state.difficulty);
   const [showInstructions, setShowInstructions] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState({
+    loading: true,
+    success: false,
+    error: "",
+  });
+  const [questionSet, setQuestionSet] = useState({});
+  const [currentQuestion, setCurrentQuestion] = useState({});
   const audio = new Audio(yay);
+  const url = process.env["REACT_APP_API_URL"];
+  const totalLevels = useSelector((state) => state.questions.totalQuestions);
+  const consecutiveScore = useSelector((state) => state.consecutiveScore);
+  const dispatch = useDispatch();
+
+  const nextStep = () => {
+    setActiveStep(activeStep + 1);
+  };
 
   const openBadge = () => {
-    console.log("Inside badge open");
     setBadgeOpen(true);
     audio.play();
-    console.log(audio.src);
     setTimeout(() => {
       audio.pause();
       setBadgeOpen(false);
     }, 5000);
   };
-
   const hideInstructions = () => {
     setShowInstructions(false);
   };
 
-  const shuffleArray = (array) => {
-    let newArray = array.slice();
-    for (var i = newArray.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = newArray[i];
-      newArray[i] = newArray[j];
-      newArray[j] = temp;
-    }
-    return newArray;
+  const getBadgeIndex = () => {
+    if (activeStep === 0) return 0;
+    else if (activeStep === 1) return 1;
+    else return Math.floor(activeStep / 2) - 1;
   };
 
-  const nextStep = () => {
-    setActiveStep(activeStep + 1);
+  const getRandomQuestion = (difficulty) => {
+    const random = Math.floor(
+      Math.random() * (questionSet[difficulty].length - 1)
+    );
+    const prevQuestion = { ...currentQuestion };
+    const questions = { ...questionSet };
+
+    const question = questions[difficulty][random];
+    if (!question.displayed && prevQuestion.type !== question.type) {
+      questions[difficulty][random].displayed = true;
+      setCurrentQuestion(question);
+      setQuestionSet(questions);
+    } else {
+      let index = random + 1;
+      for (let i = 0; i < questions[difficulty].length; i++) {
+        if (
+          !questions[difficulty][index % questions[difficulty].length]
+            .displayed &&
+          prevQuestion.type !==
+            questions[difficulty][index % questions[difficulty].length].type
+        ) {
+          questions[difficulty][
+            index % questions[difficulty].length
+          ].displayed = true;
+          setCurrentQuestion(
+            questions[difficulty][index % questions[difficulty].length]
+          );
+          setQuestionSet(questions);
+          break;
+        }
+        index++;
+      }
+    }
   };
+
+  const fetchQuestions = () => {
+    fetch(`${url}/api/v1/questions/elementary`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((respJson) => {
+        if (respJson.error === undefined) {
+          const easy = shuffleArray(respJson.easy);
+          const medium = shuffleArray(respJson.medium);
+          const hard = shuffleArray(respJson.hard);
+          setQuestionSet({
+            easy,
+            medium,
+            hard,
+          });
+          setStatus({ success: true, error: "", loading: true });
+        } else {
+          setStatus({ success: false, error: respJson.error, loading: false });
+        }
+      })
+      .catch((err) => {
+        setStatus({ success: false, error: err, loading: false });
+      });
+  };
+
+  const monitorDifficulty = () => {
+    if (consecutiveScore === "111") {
+      if (difficulty === "easy") {
+        dispatch(mediumDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "medium";
+      } else if (difficulty === "medium") {
+        dispatch(hardDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "hard";
+      } else {
+        dispatch(resetConsecutiveScore());
+        return "hard";
+      }
+    } else if (consecutiveScore === "000") {
+      if (difficulty === "hard") {
+        dispatch(mediumDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "medium";
+      } else if (difficulty === "medium") {
+        dispatch(easyDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "easy";
+      } else {
+        dispatch(resetConsecutiveScore());
+        return "easy";
+      }
+    } else {
+      return difficulty;
+    }
+  };
+
+  useEffect(() => {
+    if (!showInstructions) {
+      try {
+        fetchQuestions();
+      } catch (e) {
+        console.log(e);
+        setStatus({ success: false, error: e, loading: false });
+      }
+    }
+  }, [showInstructions]);
+
+  useEffect(() => {
+    if (status.success && !showInstructions) {
+      const newDifficulty = monitorDifficulty();
+      getRandomQuestion(newDifficulty);
+      if (status.success && status.loading) {
+        setStatus({ ...status, loading: false });
+      }
+    }
+  }, [activeStep]);
+
+  useEffect(() => {
+    if (status.success && !showInstructions) {
+      const random = Math.floor(
+        Math.random() * (questionSet[difficulty].length - 1)
+      );
+      const questions = { ...questionSet };
+      const question = questions[difficulty][random];
+      questions[difficulty][random].displayed = true;
+      setCurrentQuestion(question);
+      setQuestionSet(questions);
+
+      if (status.success && status.loading) {
+        setStatus({ ...status, loading: false });
+      }
+    }
+  }, [status.success, showInstructions]);
+
   if (showInstructions) {
     return <InstructionScreen onClick={hideInstructions} />;
   } else {
-    if (loading) {
-      return <QuestionError open={loading} onClick={() => setLoading(false)} />;
+    if (status.loading) {
+      return <Loader open={status.loading} />;
     } else {
-      if (activeStep === 0) {
-        return (
-          <GameScreen activeStep={activeStep} badges={badges}>
-            <RecognizeSound
-              word={"lion"}
-              text={["lion", "loin", "lian", "boin"]}
-            ></RecognizeSound>
-          </GameScreen>
-        );
-      } else if (activeStep === 1) {
-        return (
-          <GameScreen activeStep={activeStep} badges={badges}>
-            <DragDrop
-              activeStep={activeStep}
-              nextStep={nextStep}
-              word="four"
-              options={["a", "b", "c", "d"]}
-              showBadge={badgeOpen}
-              badge={badges[1].image}
-              badgeName={badges[1].name}
-              openBadge={openBadge}
-            />
-          </GameScreen>
-        );
-      } else if (activeStep === 2) {
-        return (
-          <GameScreen activeStep={activeStep} badges={badges}>
-            <NameImage
-              activeStep={activeStep}
-              nextStep={nextStep}
-              showBadge={badgeOpen}
-              badge={badges[Math.floor(activeStep / 2) - 1].image}
-              badgeName={badges[Math.floor(activeStep / 2) - 1].name}
-              openBadge={openBadge}
-              options={["A", "B", "C", "D"]}
-            />
-          </GameScreen>
-        );
+      if (status.success) {
+        const badgeIndex = getBadgeIndex();
+        if (currentQuestion.type === "rs") {
+          return (
+            <GameScreen activeStep={activeStep} badges={badges}>
+              <RecognizeSound
+                question={currentQuestion.question}
+                word={currentQuestion.word}
+                options={currentQuestion.options}
+                activeStep={activeStep}
+                nextStep={nextStep}
+                showBadge={badgeOpen}
+                badge={badges[badgeIndex].image}
+                badgeName={badges[badgeIndex].name}
+                openBadge={openBadge}
+              />
+            </GameScreen>
+          );
+        } else if (currentQuestion.type === "tw") {
+          return (
+            <GameScreen activeStep={activeStep} badges={badges}>
+              <TypeWord
+                question={currentQuestion.question}
+                word={currentQuestion.word}
+                activeStep={activeStep}
+                nextStep={nextStep}
+                showBadge={badgeOpen}
+                badge={badges[badgeIndex].image}
+                badgeName={badges[badgeIndex].name}
+                openBadge={openBadge}
+              />
+            </GameScreen>
+          );
+        } else {
+          return (
+            <GameScreen activeStep={activeStep} badges={badges}>
+              <WordConfirm
+                question={currentQuestion.question}
+                word={currentQuestion.word}
+                answer={currentQuestion.answer}
+                activeStep={activeStep}
+                nextStep={nextStep}
+                showBadge={badgeOpen}
+                badge={badges[badgeIndex].image}
+                badgeName={badges[badgeIndex].name}
+                openBadge={openBadge}
+              />
+            </GameScreen>
+          );
+        }
       } else {
         return (
-          <GameScreen activeStep={activeStep} badges={badges}>
-            <CVCwords></CVCwords>
-          </GameScreen>
+          <QuestionError
+            open={!status.sucess}
+            message1="Oops! There Was A Trouble Loading The Game"
+            message2="Please Refresh The Page And Try Again"
+          />
         );
       }
     }
@@ -129,3 +268,25 @@ const Elementary = () => {
 };
 
 export default Elementary;
+
+const shuffleArray = (array) => {
+  let newArray = array.slice();
+  for (var i = newArray.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = newArray[i];
+    newArray[i] = newArray[j];
+    newArray[j] = temp;
+  }
+  return newArray;
+};
+
+const badges = [
+  { image: b1, name: "Dear" },
+  { image: b2, name: "Doggy" },
+  { image: b3, name: "Elephant" },
+  { image: b4, name: "Foxy" },
+  { image: b5, name: "Monkey" },
+  { image: b6, name: "Panda" },
+  { image: b7, name: "Teddy" },
+  { image: b8, name: "Zebra" },
+];

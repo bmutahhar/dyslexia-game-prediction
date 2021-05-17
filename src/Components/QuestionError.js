@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import errorguy from "../Images/characters/errorguy.gif";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
-const QuestionError = ({ open, onClick }) => {
+const QuestionError = ({ open, onClick, message1, message2 }) => {
   const classes = useStyles();
   const loggedIn = useSelector((state) => state.user.loggedIn);
   return (
@@ -40,12 +40,10 @@ const QuestionError = ({ open, onClick }) => {
             transition={{
               duration: 0.8,
               type: "tween",
-
             }}
-
-
             src={errorguy}
-            alt="error guy GIF" />
+            alt="error guy GIF"
+          />
           <Errormsg
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -53,7 +51,9 @@ const QuestionError = ({ open, onClick }) => {
               delay: 1.3,
               duration: 0.3,
             }}
-          >Oops! There Was A Trouble Loading The Game</Errormsg>
+          >
+            {message1}
+          </Errormsg>
           <Errormsg2
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -61,7 +61,9 @@ const QuestionError = ({ open, onClick }) => {
               delay: 1.6,
               duration: 0.3,
             }}
-          >Please Refresh The Page And Try Again</Errormsg2>
+          >
+            {message2}
+          </Errormsg2>
         </Backdrop>
       </LoadingScreen>
     </Container>
@@ -69,15 +71,7 @@ const QuestionError = ({ open, onClick }) => {
 };
 
 export default QuestionError;
-const Errormsg = styled(motion.h1)`
-  color: white;
-  font-size: 2.5vw;
-`;
 
-const Errormsg2 = styled(motion.h2)`
-  color: white;
-  font-size: 1.5vw;
-`;
 const useStyles = makeStyles((theme) => ({
   backdrop: {
     display: "flex",
@@ -147,4 +141,14 @@ const Profile = styled.div`
 `;
 const Errorgif = styled(motion.img)`
   transform: scaleX(-1);
+`;
+
+const Errormsg = styled(motion.h1)`
+  color: white;
+  font-size: 2.5vw;
+`;
+
+const Errormsg2 = styled(motion.h2)`
+  color: white;
+  font-size: 1.5vw;
 `;

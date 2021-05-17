@@ -13,7 +13,11 @@ import {
   BadgePopUp,
 } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
-import { addAnswer } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
@@ -68,16 +72,64 @@ const WordConfirm = ({
   badge,
   openBadge,
   badgeName,
+  answer
 }) => {
   const classes = useStyles();
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
+  const difficulty = useSelector((state) => state.difficulty);
   const dispatch = useDispatch();
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+  const [value, setValue] = useState("");
+  const [clickCount, setClickCount] = useState(0);
+  const [time, setTime] = useState(0);
 
-  const onClick = () => {
+  const onClick = (value) => {
+    setValue(value);
+    setClickCount(clickCount + 1);
     disabled && setDisabled(false);
   };
+
+  const getAnswer = () => {
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time);
+    if ((answer.trim().toLowerCase()==="correct" && value === 1) || (answer.trim().toLowerCase()==="wrong" && value === 0)) {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1 / clickCount,
+        missrate: 0 / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(incrementConsecutiveScore());
+    } else {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: 0,
+        miss: 1,
+        score: 0,
+        accuracy: 0 / clickCount,
+        missrate: 1 / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(decrementConsecutiveScore());
+    }
+  };
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   if (showBadge) {
     return (
@@ -152,7 +204,7 @@ const WordConfirm = ({
           </QuestionContainer>
           <AnswerContainer className="row">
             <Label htmlFor="Correct">
-              <input type="radio" id="Correct" value={1} name="answerButtons" />
+              <input type="radio" id="Correct" name="answerButtons" />
               <ConfirmButton
                 hcolor="green"
                 color="#3bb502"
@@ -161,12 +213,13 @@ const WordConfirm = ({
                 animate="end"
                 whileHover="hover"
                 whileTap="click"
+                onClick={() => onClick(1)}
               >
                 <Check className={classes.icon} />
               </ConfirmButton>
             </Label>
             <Label htmlFor="Wrong" name="answerButtons">
-              <input type="radio" id="Wrong" value={0} name="answerButtons" />
+              <input type="radio" id="Wrong" name="answerButtons" />
               <ConfirmButton
                 hcolor="#bd0909"
                 color="#f70000"
@@ -175,6 +228,7 @@ const WordConfirm = ({
                 animate="end"
                 whileHover="hover1"
                 whileTap="click"
+                onClick={() => onClick(0)}
               >
                 <Close className={classes.icon} />
               </ConfirmButton>
@@ -193,6 +247,7 @@ const WordConfirm = ({
                 type="button"
                 component={Link}
                 to="/completed"
+                onClick={getAnswer}
               >
                 Submit
               </UIButton>
@@ -201,6 +256,7 @@ const WordConfirm = ({
             <NextButton
               disabled={disabled}
               onClick={() => {
+                getAnswer();
                 // if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
@@ -294,13 +350,11 @@ const ConfirmButton = styled(motion.div)`
   align-items: center;
   justify-content: center;
   align-content: center;
-
   background-color: ${(props) => props.color};
   color: white;
   border: none;
   border-radius: 5px;
   box-shadow: 0 10px 6px 0 rgba(0, 0, 0, 0.4);
-  outline: none;
 `;
 const GameArea = styled.div`
   height: 100%;
