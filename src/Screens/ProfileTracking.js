@@ -242,7 +242,6 @@ font-weight: black;
 height: 20vh;
 `;
 const GamePerformance = styled.div`
-margin-top: 5vw;
 display: flex;
 align-items: center;
 justify-content: center;
