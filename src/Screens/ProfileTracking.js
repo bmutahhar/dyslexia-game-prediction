@@ -16,6 +16,7 @@ const ProfileTracking = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState(null);
   const [imgFile, setImgFile] = useState(null);
+  const [fileType, setFileType] = useState(null);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({
     username: "",
@@ -48,55 +49,8 @@ const ProfileTracking = () => {
     // I've kept this example simple by using the first image instead of multiple
     setSelectedFile(e.target.files[0]);
     setImgFile(e.target.files[0]);
-  };
-  const uploadImgHandler = () => {
-    const token = sessionStorage.getItem("token");
-    const fd = new FormData();
-    fd.append("username", "bmutahhar");
-    fd.append("file", imgFile);
-    setStatus({ ...status, loading: true });
-    fetch(`${url}/api/v1/uploadPfp`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Bearer " + token,
-      },
-      body: fd,
-    })
-      .then(
-        (response) => response.json() // if the response is a JSON object
-      )
-      .then(
-        (respJSON) => {
-          if (respJSON.error.trim().length === 0) {
-            setStatus({
-              loading: false,
-              success: true,
-              message: "Picture updated successfully!",
-            });
-            setOpen(true);
-            preview && sessionStorage.setItem("pfp", JSON.stringify(preview));
-          } else {
-            setStatus({
-              loading: false,
-              success: false,
-              message: "Error! Please try again!",
-            });
-            setOpen(true);
-          }
-        } // Handle the success response object
-      )
-      .catch(
-        (error) => {
-          console.log(error);
-          setStatus({
-            loading: false,
-            success: false,
-            message: error,
-          });
-          setOpen(true);
-        } // Handle the error response object
-      );
+    setFileType(e.target.files[0].type);
+    setEditinfo(true);
   };
 
   const fetchData = () => {
@@ -112,27 +66,35 @@ const ProfileTracking = () => {
       .then((respJSON) => {
         const dataJson = respJSON.data;
         setData({
-          username: dataJson.username,
-          phone: dataJson.phone,
-          parentName: dataJson.parentName,
-          childName: dataJson.childName,
-          age: dataJson.childAge,
-          gender: dataJson.gender,
-          email: dataJson.email,
-          country: dataJson.country,
-          city: dataJson.city,
+          username: dataJson.username || "",
+          phone: dataJson.phone || "",
+          parentName: dataJson.parentName || "",
+          childName: dataJson.childName || "",
+          age: dataJson.childAge || "",
+          gender: dataJson.gender || "",
+          email: dataJson.email || "",
+          country: dataJson.country || "",
+          city: dataJson.city || "",
         });
-        respJSON.data.pfp &&
+        const pfp = respJSON.data.pfp;
+        if (pfp) {
+          let ext = pfp.split(",")[0];
+          ext = ext.slice(ext.indexOf(":") + 1, ext.indexOf(";"));
+          console.log(ext);
+          setFileType(ext);
           fetch(respJSON.data.pfp)
             .then((resp) => resp.blob())
             .then((blob) => {
+              //   blob.type = ext;
               console.log(blob);
+              setImgFile(blob);
               const url = URL.createObjectURL(blob);
               console.log(url);
               sessionStorage.setItem("pfp", JSON.stringify(url));
               setPreview(url);
             })
             .catch((err) => console.log(err));
+        }
       })
       .catch((err) => {
         console.log(err.message);
@@ -145,8 +107,12 @@ const ProfileTracking = () => {
       });
   };
 
+  useEffect(() => console.log("File Type: ", fileType), [fileType]);
+
   const deleteImage = () => {
-    setPreview(undefined);
+    setPreview(null);
+    setImgFile(null);
+    setEditinfo(true);
   };
 
   const handleClose = () => {
@@ -160,10 +126,10 @@ const ProfileTracking = () => {
   };
 
   const onSave = () => {
-    const dataJson = { ...data, pfp: preview };
     const fd = new FormData();
-    fd.append("username", "bmutahhar");
-    fd.append("file", imgFile);
+    imgFile && fd.append("file", imgFile);
+    fileType && imgFile && fd.append("fileType", fileType);
+    fd.append("data", JSON.stringify(data));
     const token = sessionStorage.getItem("token");
     setStatus({ ...status, loading: true });
     fetch(`${url}/api/v1/updateProfileData`, {
@@ -171,22 +137,39 @@ const ProfileTracking = () => {
       headers: {
         Accept: "application/json",
         Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
       },
-      body: JSON.stringify(dataJson),
+      body: fd,
     })
       .then((resp) => resp.json())
       .then((respJSON) => {
-        console.log("success");
-        setStatus({
-          loading: false,
-          success: true,
-          message: "Information updated successfully!",
-        });
+        if (respJSON.error.trim().length === 0) {
+          setStatus({
+            loading: false,
+            success: true,
+            message: respJSON.message.trim(),
+          });
+          preview && sessionStorage.setItem("pfp", JSON.stringify(preview));
+        } else {
+          setStatus({
+            loading: false,
+            success: false,
+            message: respJSON.error.trim(),
+          });
+        }
         setOpen(true);
         setEditinfo(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err.message);
+        setStatus({
+          loading: false,
+          success: false,
+          message: "Failed to fetch. Please refresh the page.",
+        });
+        setOpen(true);
+        setEditinfo(false);
+      });
   };
 
   useEffect(() => {
@@ -207,16 +190,11 @@ const ProfileTracking = () => {
   }, []);
 
   const UploadImgJSX = (
-    <ImageLabel htmlFor="imgUpload">
-      <input
-        type="file"
-        id="imgUpload"
-        accept=".jpg, .jpeg .png"
-        onChange={onSelectFile}
-        hidden
-      />
+    <ImgDisplay>
       <Dpic src={dp} alt="image" width="25%" />
-    </ImageLabel>
+      <br />
+      Upload Your Photo
+    </ImgDisplay>
   );
 
   const ImageJSX = (
@@ -231,15 +209,18 @@ const ProfileTracking = () => {
         <Profileimg className="col-4">
           {!preview ? UploadImgJSX : ImageJSX}
           <SetButtons>
-            <Selectimg onClick={uploadImgHandler}>
-              {status.loading ? (
-                <CircularProgress size={30} />
-              ) : (
-                <Span>
-                  <Icon iconimg={upload} />
-                  Upload
-                </Span>
-              )}
+            <Selectimg htmlFor="imgUpload">
+              <input
+                type="file"
+                id="imgUpload"
+                accept=".jpg, .jpeg, .png"
+                onChange={onSelectFile}
+                hidden
+              />
+              <Span>
+                <Icon iconimg={upload} />
+                Upload
+              </Span>
             </Selectimg>
             <Deleteimg onClick={deleteImage}>
               <Span>
@@ -515,10 +496,13 @@ const Profileimg = styled.div`
 const ImgDisplay = styled.div`
   display: flex;
   align-items: center;
-  justify: center;
+  justify-content: center;
+  flex-direction: column;
   height: 70%;
   width: 75%;
   background-color: #d1d1d1;
+  margin: 0px;
+  padding: 0px;
 `;
 
 const SetButtons = styled.div`
@@ -539,7 +523,7 @@ const Icon = styled.div`
   background-size: cover;
 `;
 
-const Selectimg = styled.button`
+const Selectimg = styled.label`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -557,6 +541,7 @@ const Selectimg = styled.button`
     border: none;
     background-color: #a8adad;
   }
+  cursor: pointer;
 `;
 const Deleteimg = styled.button`
   display: flex;
@@ -626,18 +611,6 @@ const Span = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-const ImageLabel = styled.label`
-  display: flex;
-  align-items: center;
-  justify: center;
-  height: 70%;
-  width: 75%;
-  background-color: #d1d1d1;
-  cursor: pointer;
-  margin: 0px;
-  padding: 0px;
 `;
 
 const InputTextField = withStyles({
