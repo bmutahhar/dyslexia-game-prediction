@@ -288,69 +288,69 @@ def add_final_score():
             mimetype='application/json')
 
 
-@app.route("/api/v1/uploadPfp", methods=["POST"])
-def update_pfp():
-    try:
-        if request.method == "POST":
-            auth_token = request.headers.get("Authorization")
-            if auth_token is not None:
-                if "file" in request.files:
-                    file = request.files['file']
-                    ext = file.filename.split(".")[-1].lower()
-                    print("Filename: {}\nExt: {}".format(file.filename, ext))
-                    auth_token = auth_token.strip().split(" ")[-1]
-                    decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
-                    img = base64.b64encode(file.read())
-                    pfpEncoded = "data:image/{};base64,{}".format(ext, img.decode())
-                    print(pfpEncoded[:50])
-                    username = decoded_jwt.get('username')
-                    if username is not None:
-                        existingUsername = db.users.find_one({'username': username})
-                        if existingUsername:
-                            db.users.update({"_id": existingUsername["_id"]}, {"$set": {"pfp": pfpEncoded}})
-                            return Response(
-                                response=json.dumps(
-                                    {'message': 'Image received successfully',
-                                     'error': ""}),
-                                status=200,
-                                mimetype='application/json')
-                        else:
-                            return Response(
-                                response=json.dumps(
-                                    {'message': 'User not found!',
-                                     'error': "User not found!"}),
-                                status=500,
-                                mimetype='application/json')
-
-
-                    else:
-                        return Response(
-                            response=json.dumps(
-                                {'message': 'User not found!',
-                                 'error': "User not found!"}),
-                            status=500,
-                            mimetype='application/json')
-                else:
-                    return Response(
-                        response=json.dumps(
-                            {'message': 'No file received!',
-                             'error': "No file received!"}),
-                        status=500,
-                        mimetype='application/json')
-            else:
-                return Response(
-                    response=json.dumps(
-                        {'message': 'Only authorized users are allowed on this end point.',
-                         'error': "Only authorized users are allowed on this end point."}),
-                    status=500,
-                    mimetype='application/json')
-    except Exception as e:
-        print(e)
-        return Response(
-            response=json.dumps(
-                {'message': 'Profile pic could not be saved', "error": str(e)}),
-            status=500,
-            mimetype='application/json')
+# @app.route("/api/v1/uploadPfp", methods=["POST"])
+# def update_pfp():
+#     try:
+#         if request.method == "POST":
+#             auth_token = request.headers.get("Authorization")
+#             if auth_token is not None:
+#                 if "file" in request.files:
+#                     file = request.files['file']
+#                     ext = file.filename.split(".")[-1].lower()
+#                     print("Filename: {}\nExt: {}".format(file.filename, ext))
+#                     auth_token = auth_token.strip().split(" ")[-1]
+#                     decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
+#                     img = base64.b64encode(file.read())
+#                     pfpEncoded = "data:image/{};base64,{}".format(ext, img.decode())
+#                     print(pfpEncoded[:50])
+#                     username = decoded_jwt.get('username')
+#                     if username is not None:
+#                         existingUsername = db.users.find_one({'username': username})
+#                         if existingUsername:
+#                             db.users.update_one({"_id": existingUsername["_id"]}, {"$set": {"pfp": pfpEncoded}})
+#                             return Response(
+#                                 response=json.dumps(
+#                                     {'message': 'Image received successfully',
+#                                      'error': ""}),
+#                                 status=200,
+#                                 mimetype='application/json')
+#                         else:
+#                             return Response(
+#                                 response=json.dumps(
+#                                     {'message': 'User not found!',
+#                                      'error': "User not found!"}),
+#                                 status=500,
+#                                 mimetype='application/json')
+#
+#
+#                     else:
+#                         return Response(
+#                             response=json.dumps(
+#                                 {'message': 'User not found!',
+#                                  'error': "User not found!"}),
+#                             status=500,
+#                             mimetype='application/json')
+#                 else:
+#                     return Response(
+#                         response=json.dumps(
+#                             {'message': 'No file received!',
+#                              'error': "No file received!"}),
+#                         status=500,
+#                         mimetype='application/json')
+#             else:
+#                 return Response(
+#                     response=json.dumps(
+#                         {'message': 'Only authorized users are allowed on this end point.',
+#                          'error': "Only authorized users are allowed on this end point."}),
+#                     status=500,
+#                     mimetype='application/json')
+#     except Exception as e:
+#         print(e)
+#         return Response(
+#             response=json.dumps(
+#                 {'message': 'Profile pic could not be saved', "error": str(e)}),
+#             status=500,
+#             mimetype='application/json')
 
 
 @app.route("/api/v1/getUserData", methods=["GET"])
@@ -406,14 +406,65 @@ def getUserData():
 def updateProfileData():
     try:
         if request.method == "POST":
-            print(request.json)
-            return Response(
-                response=json.dumps(
-                    {'message': 'Data updated successfully!',
-                     'error': ""}),
-                status=200,
-                mimetype='application/json')
-
+            auth_token = request.headers.get("Authorization")
+            print(request.form)
+            print(request.files)
+            if auth_token is not None:
+                auth_token = auth_token.strip().split(" ")[-1]
+                decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
+                file = request.files.get("file")
+                fileType = request.form.get('fileType')
+                pfpEncoded = ""
+                data = request.form.get("data")
+                if file and fileType:
+                    fileType = request.form['fileType'].replace("jpeg", "jpg")
+                    print("Filename: {}\nType: {}".format(file.filename, fileType))
+                    img = base64.b64encode(file.read())
+                    pfpEncoded = "data:{};base64,{}".format(fileType, img.decode())
+                if data:
+                    data = json.loads(data)
+                    username = decoded_jwt.get('username')
+                    if username is not None:
+                        existingUsername = db.users.find_one({'username': username})
+                        if existingUsername:
+                            db.users.update_one({"_id": existingUsername["_id"]},
+                                                {"$set": {"username": data.get('username', ""),
+                                                          "parentName": data.get("parentName", ""),
+                                                          "childName": data.get("childName", ""),
+                                                          "childAge": data.get("age", ""),
+                                                          "gender": data.get("gender", ""),
+                                                          "email": data.get("email", ""),
+                                                          "phone": data.get("phone", ""),
+                                                          "country": data.get("country", ""),
+                                                          "city": data.get("city", ""),
+                                                          "pfp": pfpEncoded}})
+                            return Response(
+                                response=json.dumps(
+                                    {'message': 'Data updated successfully!',
+                                     'error': ""}),
+                                status=200,
+                                mimetype='application/json')
+                        else:
+                            return Response(
+                                response=json.dumps(
+                                    {'message': 'User not found!',
+                                     'error': "User not found!"}),
+                                status=500,
+                                mimetype='application/json')
+                    else:
+                        return Response(
+                            response=json.dumps(
+                                {'message': 'User not found!',
+                                 'error': "User not found!"}),
+                            status=500,
+                            mimetype='application/json')
+            else:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Only authorized users are allowed on this end point.',
+                         'error': "Only authorized users are allowed on this end point."}),
+                    status=500,
+                    mimetype='application/json')
 
         else:
             return Response(
