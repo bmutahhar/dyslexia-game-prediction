@@ -14,9 +14,7 @@ import {
 } from "@material-ui/core";
 import { signout } from "../actions";
 
-import dp from "../Images/characters/dp2.png";
-
-const ProfileAvatar = ({ menu }) => {
+const ProfileAvatar = ({ menu, pfp }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = React.useRef(null);
   const dispatch = useDispatch();
@@ -40,11 +38,7 @@ const ProfileAvatar = ({ menu }) => {
             aria-haspopup="true"
             onClick={handleToggle}
           >
-            <Avatar
-              alt="Mutahhar bin Muzaffar"
-              src={dp}
-              className={classes.avatar}
-            />
+            <Avatar alt="pfp" src={pfp} className={classes.avatar} />
           </IconButton>
           <Popper
             open={open}
@@ -64,8 +58,14 @@ const ProfileAvatar = ({ menu }) => {
                 <Paper>
                   <ClickAwayListener onClickAway={handleClose}>
                     <MenuList autoFocusItem={open} id="menu-list-grow">
-                      <MenuItem onClick={handleClose}>Profile</MenuItem>
-                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem
+                        onClick={(event) => {
+                          handleClose(event);
+                          history.push("/profile");
+                        }}
+                      >
+                        My account
+                      </MenuItem>
                       <MenuItem
                         onClick={(event) => {
                           handleClose(event);
@@ -83,11 +83,7 @@ const ProfileAvatar = ({ menu }) => {
           </Popper>
         </>
       ) : (
-        <Avatar
-          alt="Mutahhar bin Muzaffar"
-          src={dp}
-          className={classes.avatar}
-        />
+        <Avatar alt="pfp" src={pfp} className={classes.avatar} />
       )}
     </>
   );
@@ -99,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     width: theme.spacing(6),
     height: theme.spacing(6),
+    objectFit:"contain",
   },
   iconButton: {
     padding: 0,

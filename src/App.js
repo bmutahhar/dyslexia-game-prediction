@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar } from "./Components";
 import {
@@ -17,16 +17,27 @@ import {
   Elementary,
   AllBadgeDisplay,
   InstructionScreen,
+  ProfileTracking,
 } from "./Screens";
 import { useMediaQuery } from "react-responsive";
 
 import "./App.css";
 import "react-dragula/dist/dragula.css";
 
-function App() {
+const App = () => {
   const isNotMobileDevice = useMediaQuery({
     query: "(min-device-width:600px)",
   });
+
+  const unloadHandler = () => {
+    localStorage.clear();
+  };
+
+  useEffect(() => {
+    // window.addEventListener("beforeunload", unloadHandler);
+
+    // return () => window.removeEventListener("beforeunload", unloadHandler);
+  }, []);
 
   return (
     <Router>
@@ -45,6 +56,7 @@ function App() {
               <Route path="/elementary" component={Elementary} />
               <Route path="/completed" component={AllBadgeDisplay} />
               <Route path="/instruction" component={InstructionScreen} />
+              <Route path="/profile" component={ProfileTracking} />
             </>
           ) : (
             <Route path="/notSupported" component={NotSupported} />
@@ -53,7 +65,7 @@ function App() {
       </div>
     </Router>
   );
-}
+};
 
 export default App;
 

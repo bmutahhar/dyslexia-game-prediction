@@ -13,6 +13,7 @@ import "./styles/Navbar.css";
 const Navbar = ({ isNotMobileDevice }) => {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(false);
+  const [pfp, setPfp] = useState(null);
   const isUserLoggedIn = useSelector((state) => state.user.loggedIn);
   const handleClick = () => {
     setClick(!click);
@@ -27,6 +28,14 @@ const Navbar = ({ isNotMobileDevice }) => {
 
   useEffect(() => {
     window.addEventListener("resize", showButton);
+
+    return () => window.removeEventListener("resize", showButton);
+  }, []);
+
+  useEffect(() => {
+    const dp = JSON.parse(sessionStorage.getItem("pfp"));
+    console.log(dp);
+    setPfp(dp);
   }, []);
 
   return (
@@ -76,7 +85,7 @@ const Navbar = ({ isNotMobileDevice }) => {
                 Log In
               </NavButton>
             ) : (
-              <ProfileAvatar menu />
+              <ProfileAvatar menu pfp={pfp} />
             )}
           </NavButtonContainer>
         </div>

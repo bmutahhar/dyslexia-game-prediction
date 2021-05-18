@@ -151,6 +151,7 @@ const LoginComponent = () => {
 
   const googleSuccess = (response) => {
     setGoogleStatus({ loading: true, success: false, error: "" });
+    console.log(response)
     postData(
       JSON.stringify({
         username: response.profileObj.email.split("@")[0],
@@ -203,7 +204,7 @@ const LoginComponent = () => {
                 <IconButton
                   onClick={() => setVisibility(!visibility)}
                   style={{
-                    "MuiButtonBase-root MuiIconButton-root": {
+                    "MuiButtonBaseRoot MuiIconButtonRoot": {
                       outline: "none",
                     },
                   }}

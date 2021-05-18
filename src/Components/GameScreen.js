@@ -12,6 +12,7 @@ const GameScreen = ({ children, activeStep, badges }) => {
   const [showBadges, setShowBadges] = useState(
     Array(badges.length).fill(false)
   );
+  const [pfp, setPfp] = useState(null);
 
   useEffect(() => {
     if (activeStep === 0) return;
@@ -28,6 +29,12 @@ const GameScreen = ({ children, activeStep, badges }) => {
       }
     }
   }, [activeStep]);
+
+  useEffect(() => {
+    const dp = JSON.parse(sessionStorage.getItem("pfp"));
+    console.log(dp);
+    setPfp(dp);
+  }, []);
   return (
     <Container className="container-fluid" background={gamebg}>
       <Header className="row">
@@ -36,8 +43,8 @@ const GameScreen = ({ children, activeStep, badges }) => {
             return badge ? (
               <Badgeimg src={badges[index].image} alt="badge" key={index} />
             ) : (
-                <BadgeHolder key={index} />
-              );
+              <BadgeHolder key={index} />
+            );
           })}
         </Badges>
         <ProgressStepper className="col-8">
@@ -45,7 +52,7 @@ const GameScreen = ({ children, activeStep, badges }) => {
         </ProgressStepper>
         <Profile className="col-2">
           <Timer initialSeconds={0} initialMinutes={0} />
-          {loggedIn && <ProfileAvatar />}
+          {(loggedIn && pfp) && <ProfileAvatar pfp={pfp} />}
         </Profile>
       </Header>
       <GameArea className="row">{children}</GameArea>
@@ -107,7 +114,6 @@ const BadgeHolder = styled.div`
   display: flex;
   background-color: rgba(7, 94, 12, 0.4);
   border: 1px solid #08780e;
-  
 `;
 
 const ProgressStepper = styled.div`
