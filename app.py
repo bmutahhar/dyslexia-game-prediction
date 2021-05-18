@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 from datetime import datetime, timedelta
@@ -36,8 +37,8 @@ def signup():
                 'password'] is not None else os.urandom(24)
             passwordHash = generate_password_hash(password)
             content['password'] = passwordHash
-            token = jwt.encode({'username': username, 'expire': str(datetime.utcnow() + timedelta(minutes=60))},
-                               app.config['SECRET_KEY'])
+            token = jwt.encode({'username': username, 'expire': str(datetime.utcnow() + timedelta(minutes=80))},
+                               app.config['SECRET_KEY'], algorithm="HS256")
             existingUsername = db.users.find_one({'username': username})
             if existingUsername is None:
                 existingEmail = db.users.find_one({'email': email})
@@ -90,8 +91,8 @@ def login():
             content = json.loads(request.json)
             username = content['username'].strip()
             password = content['password'].strip()
-            token = jwt.encode({'username': username, 'expire': str(datetime.utcnow() + timedelta(minutes=60))},
-                               app.config['SECRET_KEY'])
+            token = jwt.encode({'username': username, 'expire': str(datetime.utcnow() + timedelta(minutes=80))},
+                               app.config['SECRET_KEY'], algorithm="HS256")
             dbResponse = db.users.find_one({'$or': [{'username': username}, {'email': username}]}, {
                 'username': 1, 'password': 1})
             if dbResponse is not None:
@@ -140,8 +141,8 @@ def googleLogin():
             username = content['username'].strip()
             email = content['email'].strip()
             loginType = content['googleLogin']
-            token = jwt.encode({'username': username, 'expire': str(datetime.utcnow() + timedelta(minutes=60))},
-                               app.config['SECRET_KEY'])
+            token = jwt.encode({'username': username, 'expire': str(datetime.utcnow() + timedelta(minutes=80))},
+                               app.config['SECRET_KEY'], algorithm="HS256")
             dbResponse = db.users.find_one({'email': email})
             if dbResponse is not None and loginType:
                 return Response(
@@ -156,7 +157,6 @@ def googleLogin():
                     status=500,
                     mimetype='application/json')
             elif dbResponse is None:
-                print("1234")
                 return Response(
                     response=json.dumps(
                         {'message': 'Credentials not found',
@@ -284,6 +284,150 @@ def add_final_score():
         return Response(
             response=json.dumps(
                 {'message': 'Data could not be inserted in database', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/uploadPfp", methods=["POST"])
+def update_pfp():
+    try:
+        if request.method == "POST":
+            auth_token = request.headers.get("Authorization")
+            if auth_token is not None:
+                if "file" in request.files:
+                    file = request.files['file']
+                    ext = file.filename.split(".")[-1].lower()
+                    print("Filename: {}\nExt: {}".format(file.filename, ext))
+                    auth_token = auth_token.strip().split(" ")[-1]
+                    decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
+                    img = base64.b64encode(file.read())
+                    pfpEncoded = "data:image/{};base64,{}".format(ext, img.decode())
+                    print(pfpEncoded[:50])
+                    username = decoded_jwt.get('username')
+                    if username is not None:
+                        existingUsername = db.users.find_one({'username': username})
+                        if existingUsername:
+                            db.users.update({"_id": existingUsername["_id"]}, {"$set": {"pfp": pfpEncoded}})
+                            return Response(
+                                response=json.dumps(
+                                    {'message': 'Image received successfully',
+                                     'error': ""}),
+                                status=200,
+                                mimetype='application/json')
+                        else:
+                            return Response(
+                                response=json.dumps(
+                                    {'message': 'User not found!',
+                                     'error': "User not found!"}),
+                                status=500,
+                                mimetype='application/json')
+
+
+                    else:
+                        return Response(
+                            response=json.dumps(
+                                {'message': 'User not found!',
+                                 'error': "User not found!"}),
+                            status=500,
+                            mimetype='application/json')
+                else:
+                    return Response(
+                        response=json.dumps(
+                            {'message': 'No file received!',
+                             'error': "No file received!"}),
+                        status=500,
+                        mimetype='application/json')
+            else:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Only authorized users are allowed on this end point.',
+                         'error': "Only authorized users are allowed on this end point."}),
+                    status=500,
+                    mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Profile pic could not be saved', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/getUserData", methods=["GET"])
+def getUserData():
+    try:
+        if request.method == "GET":
+            auth_token = request.headers.get("Authorization")
+            if auth_token is not None:
+                auth_token = auth_token.strip().split(" ")[-1]
+                decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
+                username = decoded_jwt.get('username')
+                if username is not None:
+                    existingUsername = db.users.find_one({'username': username})
+                    existingUsername.pop('_id')
+                    return Response(
+                        response=json.dumps(
+                            {'message': 'Data sent successfully!',
+                             'error': "", "data": existingUsername}),
+                        status=200,
+                        mimetype='application/json')
+                else:
+                    return Response(
+                        response=json.dumps(
+                            {'message': 'User not found!',
+                             'error': "User not found!"}),
+                        status=500,
+                        mimetype='application/json')
+            else:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Only authorized users are allowed on this end point.',
+                         'error': "Only authorized users are allowed on this end point."}),
+                    status=500,
+                    mimetype='application/json')
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Only authorized GET requests are allowed on this end point.',
+                     'error': "Only authorized GET requests are allowed on this end point."}),
+                status=500,
+                mimetype='application/json')
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Profile pic could not be saved', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/updateProfileData", methods=["POST"])
+def updateProfileData():
+    try:
+        if request.method == "POST":
+            print(request.json)
+            return Response(
+                response=json.dumps(
+                    {'message': 'Data updated successfully!',
+                     'error': ""}),
+                status=200,
+                mimetype='application/json')
+
+
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Only authorized POST requests are allowed on this end point.',
+                     'error': "Only authorized POST requests are allowed on this end point."}),
+                status=500,
+                mimetype='application/json')
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Error while processing the request', "error": str(e)}),
             status=500,
             mimetype='application/json')
 
