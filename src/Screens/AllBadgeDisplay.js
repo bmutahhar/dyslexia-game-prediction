@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { NextButton, QuestionError } from "../Components";
+import { NextButton } from "../Components";
 import { CircularProgress, Typography, Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { motion } from "framer-motion";
@@ -44,6 +44,9 @@ const AllBadgeDisplay = () => {
     error: "",
   });
   const finalScores = useSelector((state) => state.scores);
+  const level = useSelector((state) => state.currentLevel);
+  const time = useSelector((state) => state.time);
+  const gender = useSelector((state) => state.gender);
   let history = useHistory();
   const audio = new Audio(yay);
   const classes = useStyles();
@@ -55,6 +58,12 @@ const AllBadgeDisplay = () => {
 
   const submitScore = () => {
     let scores = [...finalScores];
+    const data = {
+      level: level,
+      gender: gender,
+      totalToFinish: time,
+      scores: scores,
+    };
     close();
     setStatus({ ...status, loading: true });
     fetch(`${url}/api/v1/nonUserScores`, {
@@ -63,7 +72,7 @@ const AllBadgeDisplay = () => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(scores),
+      body: JSON.stringify(data),
     })
       .then((resp) => resp.json())
       .then((respJson) => {

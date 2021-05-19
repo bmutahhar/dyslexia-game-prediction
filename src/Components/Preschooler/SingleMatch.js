@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import {
   Tile,
   Timer,
@@ -33,6 +32,7 @@ const DisplayTile = ({
   badge,
   openBadge,
   badgeName,
+  stopTime
 }) => {
   const [open, setOpen] = useState(true);
   const [score, setScore] = useState(0);
@@ -227,16 +227,17 @@ const DisplayTile = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>
             </motion.div>
           ) : (
             <NextButton
-            disabled={disabled}
+              disabled={disabled}
               onClick={() => {
                 getAnswer();
                 if ((activeStep + 1) % 2 === 0) openBadge();

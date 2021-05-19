@@ -5,7 +5,6 @@ import Dragula from "react-dragula";
 import { motion, AnimatePresence } from "framer-motion";
 import { Backdrop, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import {
   Tileplacer,
   Tile,
@@ -36,6 +35,7 @@ const TileLayout = ({
   badge,
   openBadge,
   badgeName,
+  stopTime
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
@@ -355,9 +355,10 @@ const TileLayout = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>

@@ -50,3 +50,8 @@ export const mediumDifficulty = () => ({
 export const hardDifficulty = () => ({
   type: "HARD",
 })
+
+export const recordTime = (payload) => ({
+  type: "SET_TIME",
+  payload: payload,
+});

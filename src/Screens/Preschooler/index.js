@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { GameScreen, Loader, QuestionError } from "../../Components";
 import {
   ObjectRotation,
@@ -40,13 +41,19 @@ const PreSchoolers = () => {
   });
   const [questionSet, setQuestionSet] = useState({});
   const [currentQuestion, setCurrentQuestion] = useState({});
+  const [stop, setStop] = useState(false);
   const audio = new Audio(yay);
   const url = process.env["REACT_APP_API_URL"];
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const dispatch = useDispatch();
+  let history = useHistory();
 
   const nextStep = () => {
     setActiveStep(activeStep + 1);
+  };
+
+  const stopTime = () => {
+    setStop(true);
   };
 
   const openBadge = () => {
@@ -212,7 +219,7 @@ const PreSchoolers = () => {
         if (currentQuestion.type === "or") {
           // easy/medium/hard for object rotation
           return (
-            <GameScreen activeStep={activeStep} badges={badges}>
+            <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
               <ObjectRotation
                 question={currentQuestion.question}
                 word={currentQuestion.word}
@@ -224,6 +231,7 @@ const PreSchoolers = () => {
                 badge={badges[badgeIndex].image}
                 badgeName={badges[badgeIndex].name}
                 openBadge={openBadge}
+                stopTime={stopTime}
               />
             </GameScreen>
           );
@@ -235,7 +243,7 @@ const PreSchoolers = () => {
               // Single Drag component for easy difficulty
               console.log("Single Drag");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SingleDrag
                     name="displayTile"
                     question={currentQuestion.question}
@@ -247,6 +255,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -254,7 +263,7 @@ const PreSchoolers = () => {
               // Tile layout component for medium difficulty
               console.log("Tile Layout Medium");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <TileLayout
                     question={currentQuestion.question}
                     word={currentQuestion.word}
@@ -266,6 +275,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -273,7 +283,7 @@ const PreSchoolers = () => {
               // Tile layout for hard difficulty
               console.log("Tile Layout Hard");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <TileLayout
                     question={currentQuestion.question}
                     word={currentQuestion.word}
@@ -285,6 +295,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -295,7 +306,7 @@ const PreSchoolers = () => {
               // Single drag component for easy difficulty
               console.log("Single Drag");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SingleDrag
                     name="displayTile"
                     image
@@ -308,6 +319,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -315,7 +327,7 @@ const PreSchoolers = () => {
               // Tile layout component for medium difficulty
               console.log("Tile Layout Medium");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <TileLayout
                     image
                     question={currentQuestion.question}
@@ -328,6 +340,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -335,7 +348,7 @@ const PreSchoolers = () => {
               // Tile layout component for hard difficulty
               console.log("Tile Layout Hard");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <TileLayout
                     image
                     question={currentQuestion.question}
@@ -348,6 +361,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -361,7 +375,7 @@ const PreSchoolers = () => {
               console.log("Single Match");
               // Single Match component for easy difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SingleMatch
                     name="displayTile"
                     question={currentQuestion.question}
@@ -373,6 +387,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -380,7 +395,7 @@ const PreSchoolers = () => {
               console.log("Select Option Medium");
               // Select option component for medium difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SelectOption
                     gridSize={2}
                     activeStep={activeStep}
@@ -392,6 +407,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -399,7 +415,7 @@ const PreSchoolers = () => {
               console.log("Select Option Hard");
               // Select option component for hard difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SelectOption
                     gridSize={3}
                     activeStep={activeStep}
@@ -411,6 +427,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -421,7 +438,7 @@ const PreSchoolers = () => {
               // Single match component for easy difficulty
               console.log("Single Match");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SingleMatch
                     name="displayTile"
                     image={true}
@@ -434,6 +451,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -441,7 +459,7 @@ const PreSchoolers = () => {
               console.log("Select Option Medium");
               // Select option component for medium difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SelectOption
                     image
                     gridSize={2}
@@ -454,6 +472,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -461,7 +480,7 @@ const PreSchoolers = () => {
               console.log("Select Option");
               // Select option component for hard difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SelectOption
                     image
                     gridSize={3}
@@ -474,6 +493,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );

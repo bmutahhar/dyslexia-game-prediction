@@ -43,6 +43,11 @@ const Learners = () => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const consecutiveScore = useSelector((state) => state.consecutiveScore);
   const dispatch = useDispatch();
+  const [stop, setStop] = useState(false)
+
+  const stopTime = () => {
+    setStop(true);
+  };
 
   const nextStep = () => {
     setActiveStep(activeStep + 1);
@@ -216,7 +221,7 @@ const Learners = () => {
             console.log("Easy Letter Recognition");
             // Easy Letter Recognition
             return (
-              <GameScreen activeStep={activeStep} badges={badges}>
+              <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                 <LetterRecognition
                   question={currentQuestion.question}
                   word={currentQuestion.word}
@@ -227,6 +232,7 @@ const Learners = () => {
                   badge={badges[badgeIndex].image}
                   badgeName={badges[badgeIndex].name}
                   openBadge={openBadge}
+                  stopTime={stopTime}
                 />
               </GameScreen>
             );
@@ -234,7 +240,7 @@ const Learners = () => {
             // Medium/Hard Letter Recognition
             console.log("Medium/Hard Letter Recognition");
             return (
-              <GameScreen activeStep={activeStep} badges={badges}>
+              <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                 <DragDrop
                   question={currentQuestion.question}
                   word={currentQuestion.word}
@@ -245,6 +251,7 @@ const Learners = () => {
                   badge={badges[badgeIndex].image}
                   badgeName={badges[badgeIndex].name}
                   openBadge={openBadge}
+                  stopTime={stopTime}
                 />
               </GameScreen>
             );
@@ -253,7 +260,7 @@ const Learners = () => {
           console.log("CVC");
           // CVC
           return (
-            <GameScreen activeStep={activeStep} badges={badges}>
+            <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
               <CVCwords
                 question={currentQuestion.question}
                 word={currentQuestion.word}
@@ -264,6 +271,7 @@ const Learners = () => {
                 badge={badges[badgeIndex].image}
                 badgeName={badges[badgeIndex].name}
                 openBadge={openBadge}
+                stopTime={stopTime}
               />
             </GameScreen>
           );
@@ -271,7 +279,7 @@ const Learners = () => {
           if (difficulty === "easy") {
             // Easy name image
             return (
-              <GameScreen activeStep={activeStep} badges={badges}>
+              <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                 <NameImage
                   word={currentQuestion.word}
                   easy={true}
@@ -283,13 +291,14 @@ const Learners = () => {
                   badgeName={badges[badgeIndex].name}
                   openBadge={openBadge}
                   options={currentQuestion.options}
+                  stopTime={stopTime}
                 />
               </GameScreen>
             );
           } else {
             // medium/hard name image
             return (
-              <GameScreen activeStep={activeStep} badges={badges}>
+              <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                 <NameImage
                   word={currentQuestion.word}
                   question={currentQuestion.question}
@@ -300,6 +309,7 @@ const Learners = () => {
                   badgeName={badges[badgeIndex].name}
                   openBadge={openBadge}
                   options={currentQuestion.options}
+                  stopTime={stopTime}
                 />
               </GameScreen>
             );

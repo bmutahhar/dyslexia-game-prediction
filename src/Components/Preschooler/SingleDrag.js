@@ -36,6 +36,7 @@ const SingleDrag = ({
   badge,
   openBadge,
   badgeName,
+  stopTime
 }) => {
   const [show, setShow] = useState(true);
   const [clickCount, setClickCount] = useState(0);
@@ -258,9 +259,10 @@ const SingleDrag = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>

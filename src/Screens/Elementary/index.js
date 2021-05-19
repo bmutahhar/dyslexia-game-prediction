@@ -41,6 +41,11 @@ const Elementary = () => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const consecutiveScore = useSelector((state) => state.consecutiveScore);
   const dispatch = useDispatch();
+  const [stop, setStop] = useState(false);
+
+  const stopTime = () => {
+    setStop(true);
+  };
 
   const nextStep = () => {
     setActiveStep(activeStep + 1);
@@ -208,7 +213,7 @@ const Elementary = () => {
         const badgeIndex = getBadgeIndex();
         if (currentQuestion.type === "rs") {
           return (
-            <GameScreen activeStep={activeStep} badges={badges}>
+            <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
               <RecognizeSound
                 question={currentQuestion.question}
                 word={currentQuestion.word}
@@ -219,12 +224,13 @@ const Elementary = () => {
                 badge={badges[badgeIndex].image}
                 badgeName={badges[badgeIndex].name}
                 openBadge={openBadge}
+                stopTime={stopTime}
               />
             </GameScreen>
           );
         } else if (currentQuestion.type === "tw") {
           return (
-            <GameScreen activeStep={activeStep} badges={badges}>
+            <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
               <TypeWord
                 question={currentQuestion.question}
                 word={currentQuestion.word}
@@ -234,12 +240,13 @@ const Elementary = () => {
                 badge={badges[badgeIndex].image}
                 badgeName={badges[badgeIndex].name}
                 openBadge={openBadge}
+                stopTime={stopTime}
               />
             </GameScreen>
           );
         } else {
           return (
-            <GameScreen activeStep={activeStep} badges={badges}>
+            <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
               <WordConfirm
                 question={currentQuestion.question}
                 word={currentQuestion.word}
@@ -250,6 +257,7 @@ const Elementary = () => {
                 badge={badges[badgeIndex].image}
                 badgeName={badges[badgeIndex].name}
                 openBadge={openBadge}
+                stopTime={stopTime}
               />
             </GameScreen>
           );

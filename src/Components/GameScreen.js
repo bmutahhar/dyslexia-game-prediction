@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
 
-const GameScreen = ({ children, activeStep, badges }) => {
+const GameScreen = ({ children, activeStep, badges, stop }) => {
   const loggedIn = useSelector((state) => state.user.loggedIn);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const [showBadges, setShowBadges] = useState(
@@ -51,7 +51,7 @@ const GameScreen = ({ children, activeStep, badges }) => {
           <CustomStepper activeStep={activeStep} />
         </ProgressStepper>
         <Profile className="col-2">
-          <Timer initialSeconds={0} initialMinutes={0} />
+          <Timer initialSeconds={0} initialMinutes={0} stop={stop} />
           {(loggedIn && pfp) && <ProfileAvatar pfp={pfp} />}
         </Profile>
       </Header>
@@ -61,23 +61,6 @@ const GameScreen = ({ children, activeStep, badges }) => {
 };
 
 export default GameScreen;
-
-const useStyles = makeStyles(({ theme }) => ({
-  title: {
-    color: "white",
-    fontSize: "2.5vw",
-  },
-  info: {
-    color: "white",
-    margin: "2px 5px",
-    fontSize: "1.5vw",
-  },
-  backdrop: {
-    zIndex: 10,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    backdropFilter: "blur(20px)",
-  },
-}));
 
 const Badgeimg = styled.img`
   height: 1.7vw;

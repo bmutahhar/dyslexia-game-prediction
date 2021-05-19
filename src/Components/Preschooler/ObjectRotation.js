@@ -5,7 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { RotateLeft, RotateRight } from "@material-ui/icons";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import {
   AvatarMessage,
   UIButton,
@@ -32,6 +31,7 @@ const ObjectRotation = ({
   degree,
   openBadge,
   badgeName,
+  stopTime,
 }) => {
   const [open, setOpen] = useState(false);
   const [shown, setShown] = useState(false);
@@ -57,20 +57,20 @@ const ObjectRotation = ({
 
   const rotateRight = () => {
     setRotation(rotation + degree);
-    setClickCount(clickCount+1);
+    setClickCount(clickCount + 1);
     disabled && setDisabled(false);
   };
 
   const rotateLeft = () => {
     setRotation(rotation - degree);
-    setClickCount(clickCount+1);
+    setClickCount(clickCount + 1);
     disabled && setDisabled(false);
   };
 
   const getAnswer = () => {
     const date = new Date();
     const seconds = Math.floor(date.getTime() / 1000);
-    const timeDiff = Math.abs(seconds - time)
+    const timeDiff = Math.abs(seconds - time);
     let newAngle;
     if (rotation < 0) {
       newAngle = 360 - (Math.abs(rotation) % 360);
@@ -89,7 +89,7 @@ const ObjectRotation = ({
         time: timeDiff,
       };
       dispatch(addScore(scoreObj));
-      dispatch(incrementConsecutiveScore())
+      dispatch(incrementConsecutiveScore());
     } else {
       const scoreObj = {
         difficulty: difficulty,
@@ -102,7 +102,7 @@ const ObjectRotation = ({
         time: timeDiff,
       };
       dispatch(addScore(scoreObj));
-      dispatch(decrementConsecutiveScore())
+      dispatch(decrementConsecutiveScore());
     }
   };
 
@@ -113,7 +113,6 @@ const ObjectRotation = ({
       setTime(seconds);
     }
   }, [showBadge]);
-
 
   if (showBadge) {
     return (
@@ -264,16 +263,17 @@ const ObjectRotation = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>
             </motion.div>
           ) : (
             <NextButton
-            disabled={disabled}
+              disabled={disabled}
               onClick={() => {
                 getAnswer();
                 if ((activeStep + 1) % 2 === 0) openBadge();

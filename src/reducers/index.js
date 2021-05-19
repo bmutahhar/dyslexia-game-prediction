@@ -5,6 +5,7 @@ import genderReducer from "./genderReducer";
 import levelReducer from "./levelReducer";
 import consecutiveScoreReducer from "./consecutiveScoreReducer";
 import difficultyReducer from "./difficultyReducer";
+import timeReducer from "./timeReducer";
 import { combineReducers } from "redux";
 
 const reducers = combineReducers({
@@ -15,6 +16,7 @@ const reducers = combineReducers({
   currentLevel: levelReducer,
   consecutiveScore: consecutiveScoreReducer,
   difficulty: difficultyReducer,
+  time: timeReducer,
 });
 
 export default reducers;

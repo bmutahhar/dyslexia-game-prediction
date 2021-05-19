@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import {
   Tileplacer,
   Tile,
@@ -34,6 +33,7 @@ const SelectOption = ({
   badge,
   openBadge,
   badgeName,
+  stopTime
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const difficulty = useSelector((state) => state.difficulty);
@@ -281,9 +281,10 @@ const SelectOption = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>
