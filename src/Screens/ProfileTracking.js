@@ -11,399 +11,474 @@ import remove from "../Images/backgrounds/eraser.svg";
 import edit from "../Images/backgrounds/pencil.svg";
 import dp from "../Images/backgrounds/UploadIcon.svg";
 import save from "../Images/backgrounds/save.png";
+import bg from "../Images/backgrounds/gamebg.png";
 
 const ProfileTracking = () => {
-  const [editinfo, setEditinfo] = useState(false);
-  const [selectedFile, setSelectedFile] = useState();
-  const [preview, setPreview] = useState(null);
-  const [imgFile, setImgFile] = useState(null);
-  const [fileType, setFileType] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState({
-    username: "",
-    phone: "",
-    parentName: "",
-    childName: "",
-    age: "",
-    gender: "",
-    email: "",
-    country: "",
-    city: "",
-  });
-  const [status, setStatus] = useState({
-    loading: false,
-    success: false,
-    message: "",
-    info: false,
-  });
-  const url = process.env["REACT_APP_API_URL"];
+    const [editinfo, setEditinfo] = useState(false);
+    const [selectedFile, setSelectedFile] = useState();
+    const [preview, setPreview] = useState(null);
+    const [imgFile, setImgFile] = useState(null);
+    const [fileType, setFileType] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [data, setData] = useState({
+        username: "",
+        phone: "",
+        parentName: "",
+        childName: "",
+        age: "",
+        gender: "",
+        email: "",
+        country: "",
+        city: "",
+    });
+    const [status, setStatus] = useState({
+        loading: false,
+        success: false,
+        message: "",
+        info: false,
+    });
+    const url = process.env["REACT_APP_API_URL"];
 
-  const SetReadState = () => {
-    setEditinfo(!editinfo);
-  };
+    const SetReadState = () => {
+        setEditinfo(!editinfo);
+    };
 
-  const onSelectFile = (e) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined);
-      return;
-    }
-    // I've kept this example simple by using the first image instead of multiple
-    setSelectedFile(e.target.files[0]);
-    setImgFile(e.target.files[0]);
-    setFileType(e.target.files[0].type);
-    setEditinfo(true);
-  };
+    const onSelectFile = (e) => {
+        if (!e.target.files || e.target.files.length === 0) {
+            setSelectedFile(undefined);
+            return;
+        }
+        // I've kept this example simple by using the first image instead of multiple
+        setSelectedFile(e.target.files[0]);
+        setImgFile(e.target.files[0]);
+        setFileType(e.target.files[0].type);
+        setEditinfo(true);
+    };
 
-  const fetchData = () => {
-    const token = sessionStorage.getItem("token");
-    fetch(`${url}/api/v1/getUserData`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((resp) => resp.json())
-      .then((respJSON) => {
-        const dataJson = respJSON.data;
-        setData({
-          username: dataJson.username || "",
-          phone: dataJson.phone || "",
-          parentName: dataJson.parentName || "",
-          childName: dataJson.childName || "",
-          age: dataJson.childAge || "",
-          gender: dataJson.gender || "",
-          email: dataJson.email || "",
-          country: dataJson.country || "",
-          city: dataJson.city || "",
-        });
-        const pfp = respJSON.data.pfp;
-        if (pfp) {
-          let ext = pfp.split(",")[0];
-          ext = ext.slice(ext.indexOf(":") + 1, ext.indexOf(";"));
-          console.log(ext);
-          setFileType(ext);
-          fetch(respJSON.data.pfp)
-            .then((resp) => resp.blob())
-            .then((blob) => {
-              //   blob.type = ext;
-              console.log(blob);
-              setImgFile(blob);
-              const url = URL.createObjectURL(blob);
-              console.log(url);
-              sessionStorage.setItem("pfp", JSON.stringify(url));
-              setPreview(url);
+    const fetchData = () => {
+        const token = sessionStorage.getItem("token");
+        fetch(`${url}/api/v1/getUserData`, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + token,
+            },
+        })
+            .then((resp) => resp.json())
+            .then((respJSON) => {
+                const dataJson = respJSON.data;
+                setData({
+                    username: dataJson.username || "",
+                    phone: dataJson.phone || "",
+                    parentName: dataJson.parentName || "",
+                    childName: dataJson.childName || "",
+                    age: dataJson.childAge || "",
+                    gender: dataJson.gender || "",
+                    email: dataJson.email || "",
+                    country: dataJson.country || "",
+                    city: dataJson.city || "",
+                });
+                const pfp = respJSON.data.pfp;
+                if (pfp) {
+                    let ext = pfp.split(",")[0];
+                    ext = ext.slice(ext.indexOf(":") + 1, ext.indexOf(";"));
+                    console.log(ext);
+                    setFileType(ext);
+                    fetch(respJSON.data.pfp)
+                        .then((resp) => resp.blob())
+                        .then((blob) => {
+                            //   blob.type = ext;
+                            console.log(blob);
+                            setImgFile(blob);
+                            const url = URL.createObjectURL(blob);
+                            console.log(url);
+                            sessionStorage.setItem("pfp", JSON.stringify(url));
+                            setPreview(url);
+                        })
+                        .catch((err) => console.log(err));
+                }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err.message);
+                setStatus({
+                    loading: false,
+                    success: false,
+                    message: "Failed to fetch. Please refresh the page.",
+                });
+                setOpen(true);
+            });
+    };
+
+    useEffect(() => console.log("File Type: ", fileType), [fileType]);
+
+    const deleteImage = () => {
+        setPreview(null);
+        setImgFile(null);
+        setEditinfo(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const onChange = (e) => {
+        e.preventDefault();
+        const { name, value } = e.target;
+        setData({ ...data, [name]: value });
+    };
+
+    const onSave = () => {
+        const fd = new FormData();
+        imgFile && fd.append("file", imgFile);
+        fileType && imgFile && fd.append("fileType", fileType);
+        fd.append("data", JSON.stringify(data));
+        const token = sessionStorage.getItem("token");
+        setStatus({ ...status, loading: true });
+        fetch(`${url}/api/v1/updateProfileData`, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + token,
+                // "Content-Type": "application/json",
+            },
+            body: fd,
+        })
+            .then((resp) => resp.json())
+            .then((respJSON) => {
+                if (respJSON.error.trim().length === 0) {
+                    if (respJSON.token) {
+                        sessionStorage.setItem("token", respJSON.token);
+                    }
+                    setStatus({
+                        loading: false,
+                        success: true,
+                        message: respJSON.message.trim(),
+                    });
+                    preview && sessionStorage.setItem("pfp", JSON.stringify(preview));
+                } else {
+                    setStatus({
+                        loading: false,
+                        success: false,
+                        message: respJSON.error.trim(),
+                    });
+                }
+                setOpen(true);
+                setEditinfo(false);
+            })
+            .catch((err) => {
+                console.log(err.message);
+                setStatus({
+                    loading: false,
+                    success: false,
+                    message: "Failed to fetch. Please refresh the page.",
+                });
+                setOpen(true);
+                setEditinfo(false);
+            });
+    };
+
+    useEffect(() => {
+        if (!selectedFile) {
+            setPreview(undefined);
+            return;
         }
-      })
-      .catch((err) => {
-        console.log(err.message);
-        setStatus({
-          loading: false,
-          success: false,
-          message: "Failed to fetch. Please refresh the page.",
-        });
-        setOpen(true);
-      });
-  };
 
-  useEffect(() => console.log("File Type: ", fileType), [fileType]);
+        const objectUrl = URL.createObjectURL(selectedFile);
+        setPreview(objectUrl);
 
-  const deleteImage = () => {
-    setPreview(null);
-    setImgFile(null);
-    setEditinfo(true);
-  };
+        // free memory when ever this component is unmounted
+        // return () => URL.revokeObjectURL(objectUrl);
+    }, [selectedFile]);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-  const onChange = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setData({ ...data, [name]: value });
-  };
-
-  const onSave = () => {
-    const fd = new FormData();
-    imgFile && fd.append("file", imgFile);
-    fileType && imgFile && fd.append("fileType", fileType);
-    fd.append("data", JSON.stringify(data));
-    const token = sessionStorage.getItem("token");
-    setStatus({ ...status, loading: true });
-    fetch(`${url}/api/v1/updateProfileData`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Bearer " + token,
-        // "Content-Type": "application/json",
-      },
-      body: fd,
-    })
-      .then((resp) => resp.json())
-      .then((respJSON) => {
-        if (respJSON.error.trim().length === 0) {
-          if (respJSON.token) {
-            sessionStorage.setItem("token", respJSON.token);
-          }
-          setStatus({
-            loading: false,
-            success: true,
-            message: respJSON.message.trim(),
-          });
-          preview && sessionStorage.setItem("pfp", JSON.stringify(preview));
-        } else {
-          setStatus({
-            loading: false,
-            success: false,
-            message: respJSON.error.trim(),
-          });
-        }
-        setOpen(true);
-        setEditinfo(false);
-      })
-      .catch((err) => {
-        console.log(err.message);
-        setStatus({
-          loading: false,
-          success: false,
-          message: "Failed to fetch. Please refresh the page.",
-        });
-        setOpen(true);
-        setEditinfo(false);
-      });
-  };
-
-  useEffect(() => {
-    if (!selectedFile) {
-      setPreview(undefined);
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreview(objectUrl);
-
-    // free memory when ever this component is unmounted
-    // return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const UploadImgJSX = (
-    <ImgDisplay>
-      <Dpic src={dp} alt="image" width="25%" />
-      <br />
+    const UploadImgJSX = (
+        <ImgDisplay>
+            <Dpic src={dp} alt="image" width="25%" />
+            <br />
       Upload Your Photo
-    </ImgDisplay>
-  );
+        </ImgDisplay>
+    );
 
-  const ImageJSX = (
-    <ImgDisplay>
-      <Dpic src={preview} alt="pfp" width="100%" height="100%" />
-    </ImgDisplay>
-  );
+    const ImageJSX = (
+        <ImgDisplay>
+            <Dpic src={preview} alt="pfp" width="100%" height="100%" />
+        </ImgDisplay>
+    );
 
-  return (
-    <Background className="container-fluid" background={image}>
-      <ProfileInfo className="row">
-        <Profileimg className="col-4">
-          {!preview ? UploadImgJSX : ImageJSX}
-          <SetButtons>
-            <Selectimg htmlFor="imgUpload">
-              <input
-                type="file"
-                id="imgUpload"
-                accept=".jpg, .jpeg, .png"
-                onChange={onSelectFile}
-                hidden
-              />
-              <Span>
-                <Icon iconimg={upload} />
+    return (
+        <Background className="container-fluid" background={image}>
+            <ProfileInfo className="row">
+                <Profileimg className="col-4">
+                    {!preview ? UploadImgJSX : ImageJSX}
+                    <SetButtons>
+                        <Selectimg htmlFor="imgUpload">
+                            <input
+                                type="file"
+                                id="imgUpload"
+                                accept=".jpg, .jpeg, .png"
+                                onChange={onSelectFile}
+                                hidden
+                            />
+                            <Span>
+                                <Icon iconimg={upload} />
                 Upload
               </Span>
-            </Selectimg>
-            <Deleteimg onClick={deleteImage}>
-              <Span>
-                <Icon iconimg={remove} />
+                        </Selectimg>
+                        <Deleteimg onClick={deleteImage}>
+                            <Span>
+                                <Icon iconimg={remove} />
                 Delete
               </Span>
-            </Deleteimg>
-          </SetButtons>
-        </Profileimg>
-        <Snackbar
-          open={open}
-          autoHideDuration={5000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        >
-          <Alert
-            severity={status.success ? "success" : "error"}
-            onClose={handleClose}
-          >
-            {status.message}
-          </Alert>
-        </Snackbar>
-        <ProfileDetails className="col-8">
-          <Row1 className="row">
-            <Col1 className="col-6">
-              <DisabledTextField
-                label="Username"
-                variant="outlined"
-                name="username"
-                placeholder="Username"
-                type="text"
-                value={data.username || ""}
-                disabled={true}
-                onClick={() => data.username}
-              />
-            </Col1>
-            <Col1 className="col-6">
-              <InputTextField
-                name="phone"
-                label="Phone"
-                placeholder="Phone Number"
-                type="text"
-                variant="outlined"
-                value={data.phone || ""}
-                disabled={!editinfo}
-                onChange={onChange}
-              />
-            </Col1>
-          </Row1>
-          <Row1 className="row">
-            <Col1 className="col-6">
-              <InputTextField
-                name="parentName"
-                label="Parent's Name"
-                placeholder="Parent's Name"
-                type="text"
-                variant="outlined"
-                value={data.parentName || ""}
-                disabled={!editinfo}
-                onChange={onChange}
-              />
-            </Col1>
-            <Col1 className="col-6">
-              <InputTextField
-                name="childName"
-                label="Child's Name"
-                placeholder="Child's Name"
-                variant="outlined"
-                type="text"
-                value={data.childName || ""}
-                disabled={!editinfo}
-                onChange={onChange}
-              />
-            </Col1>
-          </Row1>
-          <Row1 className="row">
-            <Col1 className="col-3">
-              <InputTextField
-                name="age"
-                label="Age"
-                placeholder="Age"
-                type="number"
-                variant="outlined"
-                value={data.age || ""}
-                disabled={!editinfo}
-                onChange={onChange}
-              />
-            </Col1>
-            <Col1 className="col-3">
-              <InputTextField
-                name="gender"
-                label="Gender"
-                type="text"
-                placeholder="Gender"
-                variant="outlined"
-                value={data.gender || ""}
-                disabled={!editinfo}
-                onChange={onChange}
-              />
-            </Col1>
-            <Col1 className="col-6">
-              <DisabledTextField
-                name="email"
-                label="Email"
-                placeholder="Email"
-                type="email"
-                variant="outlined"
-                value={data.email || ""}
-                disabled={true}
-              />
-            </Col1>
-          </Row1>
-          <Row1 className="row">
-            <Col1 className="col-5">
-              <InputTextField
-                name="country"
-                label="Country"
-                placeholder="Country"
-                type="text"
-                variant="outlined"
-                value={data.country || ""}
-                disabled={!editinfo}
-                onChange={onChange}
-              />
-            </Col1>
-            <Col1 className="col-5">
-              <InputTextField
-                name="city"
-                label="City"
-                placeholder="City"
-                type="text"
-                variant="outlined"
-                value={data.city || ""}
-                disabled={!editinfo}
-                onChange={onChange}
-              />
-            </Col1>
-            <Col1 className="col-2">
-              <Editinfo onClick={SetReadState}>
-                {status.loading ? (
-                  <CircularProgress size={30} />
-                ) : !editinfo ? (
-                  <Span>
-                    Edit <Icon iconimg={edit}></Icon>
-                  </Span>
-                ) : (
-                  <Span onClick={onSave}>
-                    Save <Icon iconimg={save}></Icon>
-                  </Span>
-                )}
-              </Editinfo>
-            </Col1>
-          </Row1>
-        </ProfileDetails>
-      </ProfileInfo>
-      <GamePerformance className="row">
-        <Title className="row">
-          <h1>Child's Performance</h1>
-        </Title>
-        <ChartContainer>
-          <ChartButton>
-            <NavButton>Scoreboards</NavButton>
-            <NavButton>Dyslexic Prediction</NavButton>
-            <NavButton>Improvement Graph</NavButton>
-          </ChartButton>
-          <ScoreBoard>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
-              (_, i) => {
-                return <QuestionScore index={i} key={i} />;
-              }
-            )}
-          </ScoreBoard>
-        </ChartContainer>
-      </GamePerformance>
-    </Background>
-  );
+                        </Deleteimg>
+                    </SetButtons>
+                </Profileimg>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={5000}
+                    onClose={handleClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                >
+                    <Alert
+                        severity={status.success ? "success" : "error"}
+                        onClose={handleClose}
+                    >
+                        {status.message}
+                    </Alert>
+                </Snackbar>
+                <ProfileDetails className="col-8">
+                    <Row1 className="row">
+                        <Col1 className="col-6">
+                            <DisabledTextField
+                                label="Username"
+                                variant="outlined"
+                                name="username"
+                                placeholder="Username"
+                                type="text"
+                                value={data.username || ""}
+                                disabled={true}
+                                onClick={() => data.username}
+                            />
+                        </Col1>
+                        <Col1 className="col-6">
+                            <InputTextField
+                                name="phone"
+                                label="Phone"
+                                placeholder="Phone Number"
+                                type="text"
+                                variant="outlined"
+                                value={data.phone || ""}
+                                disabled={!editinfo}
+                                onChange={onChange}
+                            />
+                        </Col1>
+                    </Row1>
+                    <Row1 className="row">
+                        <Col1 className="col-6">
+                            <InputTextField
+                                name="parentName"
+                                label="Parent's Name"
+                                placeholder="Parent's Name"
+                                type="text"
+                                variant="outlined"
+                                value={data.parentName || ""}
+                                disabled={!editinfo}
+                                onChange={onChange}
+                            />
+                        </Col1>
+                        <Col1 className="col-6">
+                            <InputTextField
+                                name="childName"
+                                label="Child's Name"
+                                placeholder="Child's Name"
+                                variant="outlined"
+                                type="text"
+                                value={data.childName || ""}
+                                disabled={!editinfo}
+                                onChange={onChange}
+                            />
+                        </Col1>
+                    </Row1>
+                    <Row1 className="row">
+                        <Col1 className="col-3">
+                            <InputTextField
+                                name="age"
+                                label="Age"
+                                placeholder="Age"
+                                type="number"
+                                variant="outlined"
+                                value={data.age || ""}
+                                disabled={!editinfo}
+                                onChange={onChange}
+                            />
+                        </Col1>
+                        <Col1 className="col-3">
+                            <InputTextField
+                                name="gender"
+                                label="Gender"
+                                type="text"
+                                placeholder="Gender"
+                                variant="outlined"
+                                value={data.gender || ""}
+                                disabled={!editinfo}
+                                onChange={onChange}
+                            />
+                        </Col1>
+                        <Col1 className="col-6">
+                            <DisabledTextField
+                                name="email"
+                                label="Email"
+                                placeholder="Email"
+                                type="email"
+                                variant="outlined"
+                                value={data.email || ""}
+                                disabled={true}
+                            />
+                        </Col1>
+                    </Row1>
+                    <Row1 className="row">
+                        <Col1 className="col-5">
+                            <InputTextField
+                                name="country"
+                                label="Country"
+                                placeholder="Country"
+                                type="text"
+                                variant="outlined"
+                                value={data.country || ""}
+                                disabled={!editinfo}
+                                onChange={onChange}
+                            />
+                        </Col1>
+                        <Col1 className="col-5">
+                            <InputTextField
+                                name="city"
+                                label="City"
+                                placeholder="City"
+                                type="text"
+                                variant="outlined"
+                                value={data.city || ""}
+                                disabled={!editinfo}
+                                onChange={onChange}
+                            />
+                        </Col1>
+                        <Col1 className="col-2">
+                            <Editinfo onClick={SetReadState}>
+                                {status.loading ? (
+                                    <CircularProgress size={30} />
+                                ) : !editinfo ? (
+                                    <Span>
+                                        Edit <Icon iconimg={edit}></Icon>
+                                    </Span>
+                                ) : (
+                                    <Span onClick={onSave}>
+                                        Save <Icon iconimg={save}></Icon>
+                                    </Span>
+                                )}
+                            </Editinfo>
+                        </Col1>
+                    </Row1>
+                </ProfileDetails>
+            </ProfileInfo>
+            <GamePerformance className="row">
+                <Title className="row">
+                    <h1>Child's Performance</h1>
+                </Title>
+                <ChartContainer>
+                    <ChartButton>
+                        <NavButton>Scoreboards</NavButton>
+                        <NavButton>Dyslexic Prediction</NavButton>
+                        <NavButton>Improvement Graph</NavButton>
+                    </ChartButton>
+                    <ScoreBoard>
+                        <ScoreCard>
+                            <TopBar className="row">
+                                <Profiledp>
+                                    <img
+                                        src={bg}
+                                        alt="dp"
+                                        style={{ height: "100%", width: "100%", borderRadius: "50%" }}
+                                    ></img>
+                                </Profiledp>
+
+                                <h4 style={{ color: "white", fontSize: "1.6vw" }}>Game Level</h4>
+                                <Time>00:00</Time>
+                            </TopBar>
+                            <QuestionContainer>
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
+                                    (_, i) => {
+                                        return <QuestionScore index={i} key={i} />;
+                                    }
+                                )}
+                            </QuestionContainer>
+                        </ScoreCard>
+                    </ScoreBoard>
+                </ChartContainer>
+            </GamePerformance>
+        </Background>
+    );
 };
 
 export default ProfileTracking;
+
+const QuestionContainer = styled.div`
+display: grid;
+height: 100%;
+width: 100%;
+grid-template-columns: 50% 50%;
+grid-column-gap: 5vw;
+grid-row-gap: 0.1vw;
+
+padding-left: 5vw;
+padding-right: 5vw;
+grid-row: auto auto;
+align-items: center;
+overflow-y: scroll;
+justify-content: space-around;
+`;
+const Time = styled.time`
+  color: #ffffff;
+  font-size: 1.6vw;
+  margin: 2px 5px;
+`;
+const TopBar = styled.div`
+  height: 13%;
+  width: 100%;
+
+  display: flex;
+  padding-top: 1.5vw;
+  padding-bottom: 1.5vw;
+
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const Profiledp = styled.div`
+  background-color: red;
+  width: 3vw;
+  height: 3vw;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ScoreCard = styled.div`
+padding-left: 1vw;
+  padding-right: 1vw;
+  padding-bottom: 1vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  height: 95%;
+  width: 85%;
+  background-image: linear-gradient(to bottom, #388258, #0e0e13);
+  color: white;
+  border: 6px solid #5bc45f;
+  border-radius: 10px;
+`;
 
 const NavButton = styled.button`
   display: flex;
@@ -443,19 +518,15 @@ const ChartGraphs = styled.div`
 
 const ScoreBoard = styled.div`
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  grid-template-columns: 7vw 7vw;
-  grid-row: auto auto;
+  
   align-items: center;
   justify-content: center;
   height: 90%;
   width: 80%;
   margin-right: 2vw;
   margin-left: 2vw;
-  background-color: grey;
+  background-color: #ECECE6;
   border-radius: 22px;
-  border: 2px solid black;
 `;
 
 const ChartButton = styled.div`
@@ -652,84 +723,84 @@ const Span = styled.div`
 `;
 
 const InputTextField = withStyles({
-  root: {
-    backgroundColor: "#ffffff",
-    borderRadius: "10px",
-    width: "100%",
-    boxShadow: "5px 8px 5px rgba(0,0,0,0.16)",
-
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      boxShadow: "5px 8px 10px rgba(0,0,0,0.3)",
-      transition: "0.3s ease-in-out",
-      border: "1px solid #ffffff",
-    },
-
-    "& .MuiFormLabel-root": {
-      fontFamily: "Open Sans",
-      fontWeight: 700,
-      color: "black",
-    },
-
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
+    root: {
+        backgroundColor: "#ffffff",
         borderRadius: "10px",
         width: "100%",
-        transition: "0.3s ease-in-out",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#111",
-      },
-      "& .MuiOutlinedInput-input": {
-        fontFamily: "Open Sans",
-        textAlign: "left",
-        fontSize: "1.3vw",
-        color: "#000000",
-        fontWeight: "500",
-      },
+        boxShadow: "5px 8px 5px rgba(0,0,0,0.16)",
+
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+            boxShadow: "5px 8px 10px rgba(0,0,0,0.3)",
+            transition: "0.3s ease-in-out",
+            border: "1px solid #ffffff",
+        },
+
+        "& .MuiFormLabel-root": {
+            fontFamily: "Open Sans",
+            fontWeight: 700,
+            color: "black",
+        },
+
+        "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderRadius: "10px",
+                width: "100%",
+                transition: "0.3s ease-in-out",
+            },
+            "&.Mui-focused fieldset": {
+                borderColor: "#111",
+            },
+            "& .MuiOutlinedInput-input": {
+                fontFamily: "Open Sans",
+                textAlign: "left",
+                fontSize: "1.3vw",
+                color: "#000000",
+                fontWeight: "500",
+            },
+        },
     },
-  },
 })(TextField);
 
 const DisabledTextField = withStyles({
-  root: {
-    backgroundColor: "#d1d1d1",
-    borderRadius: "10px",
-    width: "100%",
-    boxShadow: "5px 8px 5px rgba(0,0,0,0.16)",
-    color: "#8f8f8f",
-
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      boxShadow: "5px 8px 10px rgba(0,0,0,0.3)",
-      transition: "0.3s ease-in-out",
-      border: "1px solid #ffffff",
-    },
-
-    "& .MuiFormLabel-root": {
-      fontFamily: "Open Sans",
-      fontWeight: 700,
-      color: "black",
-    },
-
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
+    root: {
+        backgroundColor: "#d1d1d1",
         borderRadius: "10px",
         width: "100%",
-        transition: "0.3s ease-in-out",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#111",
-      },
-      "& .MuiOutlinedInput-input": {
-        fontFamily: "Open Sans",
-        textAlign: "left",
-        fontSize: "1.3vw",
-        color: "#7a7a7a",
-        fontWeight: "500",
-      },
+        boxShadow: "5px 8px 5px rgba(0,0,0,0.16)",
+        color: "#8f8f8f",
+
+        "&:hover .MuiOutlinedInput-notchedOutline": {
+            boxShadow: "5px 8px 10px rgba(0,0,0,0.3)",
+            transition: "0.3s ease-in-out",
+            border: "1px solid #ffffff",
+        },
+
+        "& .MuiFormLabel-root": {
+            fontFamily: "Open Sans",
+            fontWeight: 700,
+            color: "black",
+        },
+
+        "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderRadius: "10px",
+                width: "100%",
+                transition: "0.3s ease-in-out",
+            },
+            "&.Mui-focused fieldset": {
+                borderColor: "#111",
+            },
+            "& .MuiOutlinedInput-input": {
+                fontFamily: "Open Sans",
+                textAlign: "left",
+                fontSize: "1.3vw",
+                color: "#7a7a7a",
+                fontWeight: "500",
+            },
+        },
     },
-  },
 })(TextField);
 
 const Alert = (props) => {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
 };

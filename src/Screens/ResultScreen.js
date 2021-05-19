@@ -1,8 +1,8 @@
 import React, { Component, useState } from "react";
 import {
-  IoIosCheckmarkCircle,
-  IoIosCloseCircle,
-  IoIosCloseCircleOutline,
+    IoIosCheckmarkCircle,
+    IoIosCloseCircle,
+    IoIosCloseCircleOutline,
 } from "react-icons/io";
 import { HiCheckCircle } from "react-icons/hi";
 
@@ -14,71 +14,71 @@ import larka from "../Images/characters/larka2.svg";
 import larki from "../Images/characters/larki2.svg";
 
 const ResultScreen = () => {
-  var QuestionList = [];
-  for (var i = 0; i < 15; i++) {
-    QuestionList.push(
-      <QuestionScore Answer={1} index={i} key={i}></QuestionScore>
-    );
-  }
-  return (
-    <Resultbg className="container-fluid" background={bg}>
-      <Resultcards className="row">
-        <Card>
-          <TopBar className="row">
-            <Profileimg>
-              <img
-                src={bg}
-                alt="dp"
-                style={{ height: "100%", width: "100%", borderRadius: "50%" }}
-              ></img>
-            </Profileimg>
+    var QuestionList = [];
+    for (var i = 0; i < 15; i++) {
+        QuestionList.push(
+            <QuestionScore Answer={1} index={i} key={i}></QuestionScore>
+        );
+    }
+    return (
+        <Resultbg className="container-fluid" background={bg}>
+            <Resultcards className="row">
+                <Card>
+                    <TopBar className="row">
+                        <Profileimg>
+                            <img
+                                src={bg}
+                                alt="dp"
+                                style={{ height: "100%", width: "100%", borderRadius: "50%" }}
+                            ></img>
+                        </Profileimg>
 
-            <h4 style={{ color: "white", fontSize: "1.6vw" }}>Game Level</h4>
-            <Time>00:00</Time>
-          </TopBar>
-          {/* <Question className="row">
+                        <h4 style={{ color: "white", fontSize: "1.6vw" }}>Game Level</h4>
+                        <Time>00:00</Time>
+                    </TopBar>
+                    {/* <Question className="row">
                         <p style={{ color: "white", fontSize: "1.3vw" }}>Question {1 + 1}</p>
                         <IoIosCheckmarkCircle style={{ color: "#F44336", fontSize: "2vw" }}></IoIosCheckmarkCircle>
 
                     </Question> */}
 
-          {QuestionList}
-        </Card>
-        <Card>
-          <Heading className="row">
-            <h3 style={{ fontSize: "1.6vw" }}>Dyslexic Prediction</h3>
-          </Heading>
-          <Prediction className="row">
-            <h1 style={{ fontSize: "5vw", color: "#FF6161" }}>{95}%</h1>
-            <img
-              src={larka}
-              alt="larka"
-              style={{ height: "10vw", marginLeft: "3vw" }}
-            ></img>
-          </Prediction>
-          <Msg1 className="row">
-            <p style={{ color: "#FF7F46" }}>
-              Unfortunately your child has been diagnosed with Dyslexia with the
-              prediction of 95%.
+                    {QuestionList}
+                </Card>
+                <Card>
+                    <Heading className="row">
+                        <h3 style={{ fontSize: "1.6vw" }}>Dyslexic Prediction</h3>
+                    </Heading>
+                    <Prediction className="row">
+                        <h1 style={{ fontSize: "5vw", color: "#FF6161" }}>{95}%</h1>
+                        <img
+                            src={larka}
+                            alt="larka"
+                            style={{ height: "10vw", marginLeft: "3vw" }}
+                        ></img>
+                    </Prediction>
+                    <Msg1 className="row">
+                        <p style={{ color: "#FF7F46" }}>
+                            Unfortunately your child has been diagnosed with Dyslexia with the
+                            prediction of 95%.
             </p>
-          </Msg1>
-          <Msg2 className="row">
-            <p>
-              {" "}
+                    </Msg1>
+                    <Msg2 className="row">
+                        <p>
+                            {" "}
               We would recommend that you consider any of the nearest
               educational phycologist for your child. The phycologist will help
               your child in improving his condition
             </p>
-          </Msg2>
-          <NavButtons className="row">
-            <PlayButton>Play Again</PlayButton>
-            <ExitButton>Exit</ExitButton>
-          </NavButtons>
-        </Card>
-        <Card></Card>
-      </Resultcards>
-    </Resultbg>
-  );
+                    </Msg2>
+                    <NavButtons className="row">
+                        <PlayButton>Play Again</PlayButton>
+                        <ExitButton>Exit</ExitButton>
+                    </NavButtons>
+                </Card>
+                <Card></Card>
+            </Resultcards>
+        </Resultbg>
+    );
 };
 
 export default ResultScreen;

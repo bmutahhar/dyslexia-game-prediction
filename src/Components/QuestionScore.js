@@ -4,6 +4,7 @@ import { IoIosCheckmarkCircle, IoIosCloseCircle } from "react-icons/io";
 
 const QuestionScore = ({ Answer, index }) => {
   return (
+
     <Question className="row">
       <p style={{ color: "white", fontSize: "1.3vw" }}>Question {index + 1}</p>
       {Answer === 1 ? (
