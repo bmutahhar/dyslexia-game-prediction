@@ -144,6 +144,9 @@ const ProfileTracking = () => {
       .then((resp) => resp.json())
       .then((respJSON) => {
         if (respJSON.error.trim().length === 0) {
+          if (respJSON.token) {
+            sessionStorage.setItem("token", respJSON.token);
+          }
           setStatus({
             loading: false,
             success: true,
@@ -246,21 +249,22 @@ const ProfileTracking = () => {
         <ProfileDetails className="col-8">
           <Row1 className="row">
             <Col1 className="col-6">
-              <InputTextField
+              <DisabledTextField
                 label="Username"
                 variant="outlined"
                 name="username"
+                placeholder="Username"
                 type="text"
                 value={data.username || ""}
-                autoFocus={editinfo}
-                disabled={!editinfo}
-                onChange={onChange}
+                disabled={true}
+                onClick={() => data.username}
               />
             </Col1>
             <Col1 className="col-6">
               <InputTextField
                 name="phone"
                 label="Phone"
+                placeholder="Phone Number"
                 type="text"
                 variant="outlined"
                 value={data.phone || ""}
@@ -274,6 +278,7 @@ const ProfileTracking = () => {
               <InputTextField
                 name="parentName"
                 label="Parent's Name"
+                placeholder="Parent's Name"
                 type="text"
                 variant="outlined"
                 value={data.parentName || ""}
@@ -285,6 +290,7 @@ const ProfileTracking = () => {
               <InputTextField
                 name="childName"
                 label="Child's Name"
+                placeholder="Child's Name"
                 variant="outlined"
                 type="text"
                 value={data.childName || ""}
@@ -298,6 +304,7 @@ const ProfileTracking = () => {
               <InputTextField
                 name="age"
                 label="Age"
+                placeholder="Age"
                 type="number"
                 variant="outlined"
                 value={data.age || ""}
@@ -310,6 +317,7 @@ const ProfileTracking = () => {
                 name="gender"
                 label="Gender"
                 type="text"
+                placeholder="Gender"
                 variant="outlined"
                 value={data.gender || ""}
                 disabled={!editinfo}
@@ -317,14 +325,14 @@ const ProfileTracking = () => {
               />
             </Col1>
             <Col1 className="col-6">
-              <InputTextField
+              <DisabledTextField
                 name="email"
                 label="Email"
+                placeholder="Email"
                 type="email"
                 variant="outlined"
                 value={data.email || ""}
-                disabled={!editinfo}
-                onChange={onChange}
+                disabled={true}
               />
             </Col1>
           </Row1>
@@ -333,6 +341,7 @@ const ProfileTracking = () => {
               <InputTextField
                 name="country"
                 label="Country"
+                placeholder="Country"
                 type="text"
                 variant="outlined"
                 value={data.country || ""}
@@ -344,6 +353,7 @@ const ProfileTracking = () => {
               <InputTextField
                 name="city"
                 label="City"
+                placeholder="City"
                 type="text"
                 variant="outlined"
                 value={data.city || ""}
@@ -649,6 +659,48 @@ const InputTextField = withStyles({
         fontWeight: "500",
       },
     },
+    
+  },
+})(TextField);
+
+const DisabledTextField = withStyles({
+  root: {
+    backgroundColor: "#d1d1d1",
+    borderRadius: "10px",
+    width: "100%",
+    boxShadow: "5px 8px 5px rgba(0,0,0,0.16)",
+    color:"#8f8f8f",
+
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      boxShadow: "5px 8px 10px rgba(0,0,0,0.3)",
+      transition: "0.3s ease-in-out",
+      border: "1px solid #ffffff",
+    },
+
+    "& .MuiFormLabel-root": {
+      fontFamily: "Open Sans",
+      fontWeight: 700,
+      color: "black",
+    },
+
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderRadius: "10px",
+        width: "100%",
+        transition: "0.3s ease-in-out",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#111",
+      },
+      "& .MuiOutlinedInput-input": {
+        fontFamily: "Open Sans",
+        textAlign: "left",
+        fontSize: "1.3vw",
+        color: "#7a7a7a",
+        fontWeight: "500",
+      },
+    },
+    
   },
 })(TextField);
 

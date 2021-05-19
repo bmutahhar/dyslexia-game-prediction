@@ -73,7 +73,18 @@ const LoginComponent = () => {
             ? setStatus({ loading: false, success: true, error: "" })
             : setGoogleStatus({ loading: false, success: true, error: "" });
           dispatch(signin(respJson.token));
-          
+          const pfp = respJson.pfp;
+          if (pfp) {
+            fetch(respJson.pfp)
+              .then((resp) => resp.blob())
+              .then((blob) => {
+                const url = URL.createObjectURL(blob);
+                console.log(url);
+                sessionStorage.setItem("pfp", JSON.stringify(url));
+              })
+              .catch((err) => console.log(err));
+          }
+
           setTimeout(() => history.replace("/userform"), 1000);
         } else {
           !googleLogin
@@ -151,7 +162,7 @@ const LoginComponent = () => {
 
   const googleSuccess = (response) => {
     setGoogleStatus({ loading: true, success: false, error: "" });
-    console.log(response)
+    console.log(response);
     postData(
       JSON.stringify({
         username: response.profileObj.email.split("@")[0],
