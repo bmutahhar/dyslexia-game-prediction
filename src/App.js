@@ -18,6 +18,7 @@ import {
   AllBadgeDisplay,
   InstructionScreen,
   ProfileTracking,
+  ResultScreen
 } from "./Screens";
 import { useMediaQuery } from "react-responsive";
 
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="/completed" component={AllBadgeDisplay} />
               <Route path="/instruction" component={InstructionScreen} />
               <Route path="/profile" component={ProfileTracking} />
+              <Route path="/diagnosisResult" component={ResultScreen} />
             </>
           ) : (
             <Route path="/notSupported" component={NotSupported} />

@@ -14,4 +14,6 @@ export { default as Elementary } from "./Elementary";
 export { default as AllBadgeDisplay } from "./AllBadgeDisplay";
 export { default as InstructionScreen } from "./InstructionScreen";
 export { default as ProfileTracking } from "./ProfileTracking";
+export { default as ResultScreen } from "./ResultScreen";
+
 

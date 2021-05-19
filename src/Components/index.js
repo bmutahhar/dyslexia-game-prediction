@@ -21,6 +21,7 @@ export { default as AvatarMessage } from "./AvatarMessage";
 export { default as BadgePopUp } from "./BadgePopup";
 export { default as Loader } from "./Loader";
 export { default as QuestionError } from "./QuestionError";
+export { default as QuestionScore } from "./QuestionScore";
 
 
 

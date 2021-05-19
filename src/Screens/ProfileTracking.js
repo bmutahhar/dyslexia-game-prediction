@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { QuestionScore } from "../Components";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { TextField, CircularProgress } from "@material-ui/core";
@@ -389,7 +390,13 @@ const ProfileTracking = () => {
             <NavButton>Dyslexic Prediction</NavButton>
             <NavButton>Improvement Graph</NavButton>
           </ChartButton>
-          <ChartGraphs></ChartGraphs>
+          <ScoreBoard>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
+              (_, i) => {
+                return <QuestionScore index={i} key={i} />;
+              }
+            )}
+          </ScoreBoard>
         </ChartContainer>
       </GamePerformance>
     </Background>
@@ -423,6 +430,9 @@ const NavButton = styled.button`
   }
 `;
 const ChartGraphs = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 80%;
   height: 90%;
   margin-right: 2vw;
@@ -430,6 +440,24 @@ const ChartGraphs = styled.div`
   background-color: white;
   border-radius: 22px;
 `;
+
+const ScoreBoard = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  grid-template-columns: 7vw 7vw;
+  grid-row: auto auto;
+  align-items: center;
+  justify-content: center;
+  height: 90%;
+  width: 80%;
+  margin-right: 2vw;
+  margin-left: 2vw;
+  background-color: grey;
+  border-radius: 22px;
+  border: 2px solid black;
+`;
+
 const ChartButton = styled.div`
   display: flex;
   flex-direction: column;
@@ -659,7 +687,6 @@ const InputTextField = withStyles({
         fontWeight: "500",
       },
     },
-    
   },
 })(TextField);
 
@@ -669,7 +696,7 @@ const DisabledTextField = withStyles({
     borderRadius: "10px",
     width: "100%",
     boxShadow: "5px 8px 5px rgba(0,0,0,0.16)",
-    color:"#8f8f8f",
+    color: "#8f8f8f",
 
     "&:hover .MuiOutlinedInput-notchedOutline": {
       boxShadow: "5px 8px 10px rgba(0,0,0,0.3)",
@@ -700,7 +727,6 @@ const DisabledTextField = withStyles({
         fontWeight: "500",
       },
     },
-    
   },
 })(TextField);
 

@@ -46,26 +46,27 @@ const Contactuspage = () => {
       id="contact"
       customStyle={false}
       src={image}
-    // style={{position:"fixed"}}
+      // style={{position:"fixed"}}
     >
       <TopMsg className="wow">
         <Heading>
-          <Typography variant="subtitle1" style={{
-            color: "white",
+          <Typography
+            variant="subtitle1"
+            style={{
+              color: "white",
 
-            fontSize: "2vw",
-            marginTop: "-5px",
-
-          }}>
+              fontSize: "2vw",
+              marginTop: "-5px",
+            }}
+          >
             Data Request Form
-        </Typography>
+          </Typography>
         </Heading>
         <DataRequestForm>
           <Question>Name:</Question>
           <InputTextField
             variant="outlined"
             placeholder="Enter your Name"
-
             inputProps={{
               style: {
                 padding: "15px 10px",
@@ -76,18 +77,16 @@ const Contactuspage = () => {
           <InputTextField
             variant="outlined"
             placeholder="Enter your Email"
-
             inputProps={{
               style: {
                 padding: "15px 10px",
               },
             }}
           />
-          <Question>contact no:</Question>
+          <Question>Contact no:</Question>
           <InputTextField
             variant="outlined"
-            placeholder="Enter your number"
-
+            placeholder="Enter your phone number"
             inputProps={{
               style: {
                 padding: "15px 10px",
@@ -98,17 +97,9 @@ const Contactuspage = () => {
           <InputTextField
             id="outlined-multiline-flexible"
             placeholder="Enter your Purpose for data request"
-
             multiline
-            rowsMax={4}
-
+            rowsMax={5}
             variant="outlined"
-
-            inputProps={{
-              style: {
-                padding: "15px 10px",
-              },
-            }}
           />
           {/* <FormSubmit>Submit</FormSubmit> */}
 
@@ -189,45 +180,43 @@ const wobbleAnimation = keyframes`${wobble}`;
 const bounce2 = keyframes`${bounceInUp}`;
 
 const FormSubmit = styled.button`
-width: 20%;
-height: 60%;
-border-radius: 10px;
-background-color: #25ce4a;
-color: white;
-align-items: center;
-justify-content: center;
-font-size: 1.5vw;
-border: none;
-z-index:10;
-&:hover{
-  background-color: #027719;
-}
+  width: 20%;
+  height: 60%;
+  border-radius: 10px;
+  background-color: #25ce4a;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5vw;
+  border: none;
+  z-index: 10;
+  &:hover {
+    background-color: #027719;
+  }
 `;
 const Heading = styled.div`
-width: 100%;
-height: 10%;
-align-items: center;
-text-align: center;
-margin-top: -10px;
+  width: 100%;
+  height: 10%;
+  align-items: center;
+  text-align: center;
+  margin-top: -10px;
 `;
 
 const DataRequestForm = styled.div`
-display: flex;
-flex-direction: column;
-width: 100%;
-height: 80%;
-text-align: left;
-
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80%;
+  text-align: left;
 `;
 
 const RequestFormButton = styled.div`
-display: flex;
-flex-direction: column;
-width: 100%;
-height: 15%;
-align-items: center;
-justify-content: center;
-
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 15%;
+  align-items: center;
+  justify-content: center;
 `;
 const Question = styled.h3`
   margin-top: 5px;
