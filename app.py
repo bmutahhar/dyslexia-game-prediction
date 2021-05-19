@@ -99,7 +99,8 @@ def login():
                 if check_password_hash(dbResponse['password'].strip(), password):
                     return Response(
                         response=json.dumps(
-                            {'message': 'Login successful!', "error": "", 'token': token}),
+                            {'message': 'Login successful!', "error": "", 'token': token,
+                             'pfp': dbResponse.get('pfp', "")}),
                         status=200,
                         mimetype='application/json')
                 else:
@@ -147,7 +148,8 @@ def googleLogin():
             if dbResponse is not None and loginType:
                 return Response(
                     response=json.dumps(
-                        {'message': 'Login successful!', "error": "", 'token': token}),
+                        {'message': 'Login successful!', "error": "", 'token': token,
+                         'pfp': dbResponse.get('pfp', "")}),
                     status=200,
                     mimetype='application/json')
             elif not loginType:
