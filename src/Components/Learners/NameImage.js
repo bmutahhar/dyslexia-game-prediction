@@ -37,6 +37,7 @@ const NameImage = ({
   badge,
   openBadge,
   badgeName,
+  stopTime,
 }) => {
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
@@ -185,7 +186,7 @@ const NameImage = ({
                 if (easy === true && index === 0) {
                   return (
                     <Tileplacer key={index} height="10vw" width="10vw">
-                      <Tile question>{word.alt[0]}</Tile>
+                      <Tile question>{word.alt[0].toLowerCase()}</Tile>
                     </Tileplacer>
                   );
                 } else {
@@ -226,7 +227,7 @@ const NameImage = ({
             {shuffledOptions.map((tile, index) => {
               return (
                 <DraggableTile key={index} onMouseDown={onClick}>
-                  {tile}
+                  {tile.toLowerCase()}
                 </DraggableTile>
               );
             })}
@@ -242,9 +243,10 @@ const NameImage = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>

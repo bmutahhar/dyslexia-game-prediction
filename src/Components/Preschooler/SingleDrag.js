@@ -272,7 +272,7 @@ const SingleDrag = ({
               disabled={disabled}
               onClick={() => {
                 getAnswer(placer);
-                if ((activeStep + 1) % 2 === 0) openBadge();
+                // if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />

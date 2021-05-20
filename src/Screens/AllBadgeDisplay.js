@@ -47,6 +47,7 @@ const AllBadgeDisplay = () => {
   const level = useSelector((state) => state.currentLevel);
   const time = useSelector((state) => state.time);
   const gender = useSelector((state) => state.gender);
+  const isUserLoggedIn = useSelector((state) => state.user.loggedIn);
   let history = useHistory();
   const audio = new Audio(yay);
   const classes = useStyles();
@@ -57,21 +58,32 @@ const AllBadgeDisplay = () => {
   };
 
   const submitScore = () => {
+    const token = sessionStorage.getItem("token");
     let scores = [...finalScores];
     const data = {
-      level: level,
+      level: level.replace("/",""),
       gender: gender,
-      totalToFinish: time,
+      totalTimeToFinish: time,
       scores: scores,
     };
-    close();
-    setStatus({ ...status, loading: true });
-    fetch(`${url}/api/v1/nonUserScores`, {
-      method: "POST",
-      headers: {
+    let endpoint = `${url}/api/v1/nonUserScores`;
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    if (isUserLoggedIn && token) {
+      endpoint = `${url}/api/v1/userScores`;
+      headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
-      },
+        Authorization: "Bearer " + token,
+      };
+    }
+    close();
+    setStatus({ ...status, loading: true });
+    fetch(endpoint, {
+      method: "POST",
+      headers: headers,
       body: JSON.stringify(data),
     })
       .then((resp) => resp.json())

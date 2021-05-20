@@ -72,7 +72,8 @@ const WordConfirm = ({
   badge,
   openBadge,
   badgeName,
-  answer
+  answer,
+  stopTime,
 }) => {
   const classes = useStyles();
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
@@ -245,9 +246,10 @@ const WordConfirm = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>

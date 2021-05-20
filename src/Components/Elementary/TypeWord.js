@@ -31,6 +31,7 @@ const TypeWord = ({
   badge,
   openBadge,
   badgeName,
+  stopTime,
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
@@ -154,9 +155,10 @@ const TypeWord = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>

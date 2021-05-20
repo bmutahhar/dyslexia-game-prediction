@@ -35,6 +35,7 @@ const RecognizeSound = ({
   openBadge,
   badgeName,
   options,
+  stopTime,
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
@@ -197,9 +198,10 @@ const RecognizeSound = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>

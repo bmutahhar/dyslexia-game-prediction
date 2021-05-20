@@ -33,6 +33,7 @@ const DragDrop = ({
   badge,
   openBadge,
   badgeName,
+  stopTime
 }) => {
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
@@ -193,9 +194,10 @@ const DragDrop = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
-                onClick={getAnswer}
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>
