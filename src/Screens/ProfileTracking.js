@@ -20,6 +20,7 @@ const ProfileTracking = () => {
   const [imgFile, setImgFile] = useState(null);
   const [fileType, setFileType] = useState(null);
   const [open, setOpen] = useState(false);
+  const [activeNav, setActiveNav] = useState(1);
   const [data, setData] = useState({
     username: "",
     phone: "",
@@ -41,6 +42,10 @@ const ProfileTracking = () => {
 
   const SetReadState = () => {
     setEditinfo(!editinfo);
+  };
+
+  const navigate = (nav) => {
+    setActiveNav(nav);
   };
 
   const onSelectFile = (e) => {
@@ -82,16 +87,13 @@ const ProfileTracking = () => {
         if (pfp) {
           let ext = pfp.split(",")[0];
           ext = ext.slice(ext.indexOf(":") + 1, ext.indexOf(";"));
-          console.log(ext);
           setFileType(ext);
           fetch(respJSON.data.pfp)
             .then((resp) => resp.blob())
             .then((blob) => {
               //   blob.type = ext;
-              console.log(blob);
               setImgFile(blob);
               const url = URL.createObjectURL(blob);
-              console.log(url);
               sessionStorage.setItem("pfp", JSON.stringify(url));
               setPreview(url);
             })
@@ -108,8 +110,6 @@ const ProfileTracking = () => {
         setOpen(true);
       });
   };
-
-  useEffect(() => console.log("File Type: ", fileType), [fileType]);
 
   const deleteImage = () => {
     setPreview(null);
@@ -387,23 +387,19 @@ const ProfileTracking = () => {
         </Title>
         <ChartContainer>
           <ChartButton>
-            <NavButton>Scoreboards</NavButton>
-            <NavButton>Dyslexic Prediction</NavButton>
-            <NavButton>Improvement Graph</NavButton>
+            <NavButton onClick={() => navigate(1)}>Scoreboards</NavButton>
+            <NavButton onClick={() => navigate(2)}>
+              Dyslexic Prediction
+            </NavButton>
+            <NavButton onClick={() => navigate(3)}>Improvement Graph</NavButton>
           </ChartButton>
-          <ScoreCard>
-            <TopBar className="row">
-              <ScoreBoardTitle>Previous Game Record</ScoreBoardTitle>
-            </TopBar>
-            <QuestionContainer>
-              {[
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 12, 12, 12,
-                12, 12,
-              ].map((_, i) => {
-                return <QuestionScore index={i} key={i} />;
-              })}
-            </QuestionContainer>
-          </ScoreCard>
+          {activeNav === 1 ? (
+            <ScoreBoard />
+          ) : activeNav === 2 ? (
+            <PredictionBoard />
+          ) : (
+            <ScoreBoardContainer>Improvement Graph</ScoreBoardContainer>
+          )}
         </ChartContainer>
       </GamePerformance>
     </Background>
@@ -411,6 +407,213 @@ const ProfileTracking = () => {
 };
 
 export default ProfileTracking;
+
+const ScoreBoard = () => {
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    message: "",
+  });
+  const url = process.env["REACT_APP_API_URL"];
+  const [score, setScore] = useState([]);
+  const [level, setLevel] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const fetchScoreData = () => {
+    const token = sessionStorage.getItem("token");
+    fetch(`${url}/api/v1/getUserScore`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((respJSON) => {
+        const scores = respJSON.scores.scores;
+        if (scores.length === 0) {
+          setScore(scores);
+          setLevel(respJSON.scores.level);
+          setStatus({
+            loading: false,
+            success: true,
+            message: respJSON.message,
+          });
+        }
+        setScore(respJSON.scores.scores);
+        setLevel(respJSON.scores.level);
+        setStatus({ loading: false, success: true, message: "" });
+      })
+      .catch((err) => {
+        console.log(err);
+        setStatus({ loading: false, success: false, message: err.message });
+        setOpen(true);
+      });
+  };
+
+  useEffect(() => {
+    setStatus({ ...status, loading: true });
+    fetchScoreData();
+  }, []);
+
+  return (
+    <NavBackground>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert severity="error" onClose={handleClose}>
+          Could not load data, please try again!
+        </Alert>
+      </Snackbar>
+      {status.loading ? (
+        <CircularProgress size={80} style={{ color: "white" }} />
+      ) : score.length === 0 ? (
+        <NoRecord>No Previous Record Found</NoRecord>
+      ) : (
+        <>
+          <TopBar className="row">
+            <ScoreBoardTitle>
+              {level === "" ? "" : `Last Played: ${level} Level`}
+            </ScoreBoardTitle>
+          </TopBar>
+          <QuestionContainer>
+            {score.map((el, i) => {
+              return <QuestionScore index={i} key={i} answer={el.score} />;
+            })}
+          </QuestionContainer>
+        </>
+      )}
+    </NavBackground>
+  );
+};
+
+const PredictionBoard = () => {
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    message: "",
+  });
+  const url = process.env["REACT_APP_API_URL"];
+  const [open, setOpen] = useState(false);
+  const [noRecord, setNoRecord] = useState(false);
+  const [diagnosis, setDiagnosis] = useState({
+    accuracy: 0,
+    dyslexic: false,
+  });
+  const [msg1, setMsg1] = useState("");
+  const [msg2, setMsg2] = useState("");
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const getPrediction = () => {
+    const token = sessionStorage.getItem("token");
+    fetch(`${url}/api/v1/getTrackHistory`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((respJSON) => {
+        if (respJSON.data) {
+          const data = respJSON.data.latestDiagnosis;
+          const dyslexic =
+            data.diagnosis.trim().toLowerCase() === "yes" ? true : false;
+          setDiagnosis({
+            accuracy: data.accuracy,
+            dyslexic: diagnosis,
+          });
+          if (dyslexic) {
+            setMsg1(`Unfortunately your child has been diagnosed with DYSLEXIA with the
+            prediction accuracy of ${data.accuracy}%.`);
+            setMsg2(`We would recommend that you consider any of the nearest
+            educational psycologist for your child. The psycologist will help
+            your child in improving his condition.`);
+          } else {
+            setMsg1("Congratulations! Your child is NOT DYSLEXIC.");
+            setMsg2(
+              "No need to worry. However, if you think our prediction is incorrect, you should consult a professional psychologist as soon as possible."
+            );
+          }
+          setStatus({ loading: false, success: true, message: "Success!" });
+        } else {
+          setNoRecord(true);
+          setStatus({
+            loading: false,
+            success: true,
+            message: "No previous record found!",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setStatus({
+          loading: false,
+          success: false,
+          message: "Error, please try again!",
+        });
+        setOpen(true);
+      });
+  };
+
+  useEffect(() => {
+    setStatus({ ...status, loading: true });
+    getPrediction();
+  }, []);
+
+  return (
+    <NavBackground>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert severity="error" onClose={handleClose}>
+          Could not load data, please try again!
+        </Alert>
+      </Snackbar>
+      {status.loading ? (
+        <CircularProgress size={80} style={{ color: "white" }} />
+      ) : noRecord ? (
+        <NoRecord>No Previous Record Found</NoRecord>
+      ) : (
+        <PredictionContainer>
+          <Span className="row">
+            <ScoreBoardTitle>Dyslexic Prediction</ScoreBoardTitle>
+          </Span>
+          <Span>
+            <Prediction color={diagnosis.dyslexic ? "#ff6161" : "#6bff93"}>
+              {diagnosis.accuracy}%
+            </Prediction>
+          </Span>
+
+          <Span className="row">
+            <Msg
+              color={diagnosis.dyslexic ? "#ff6161" : "#6bff93"}
+              fontSize="1.5vw"
+            >
+              {msg1}
+            </Msg>
+          </Span>
+          <Span className="row">
+            <Msg fontSize="1.2vw">{msg2}</Msg>
+          </Span>
+        </PredictionContainer>
+      )}
+    </NavBackground>
+  );
+};
 
 const QuestionContainer = styled.div`
   display: grid;
@@ -428,11 +631,11 @@ const QuestionContainer = styled.div`
   justify-content: space-around;
 `;
 const ScoreBoardTitle = styled.div`
-font-size: 2.0vw;
-font-family:"Open Sans", sans-serif;
-font-weight: 600;
-color:#fff;
-
+  font-size: 2vw;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  color: #fff;
+  text-transform: capitalize;
 `;
 const TopBar = styled.div`
   height: 13%;
@@ -456,13 +659,14 @@ const Profiledp = styled.div`
   justify-content: center;
 `;
 
-const ScoreCard = styled.div`
+const NavBackground = styled.div`
   padding-left: 1vw;
   padding-right: 1vw;
   padding-bottom: 1vw;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 95%;
   width: 80%;
   background-image: linear-gradient(to bottom, #388258, #0e0e13);
@@ -508,7 +712,7 @@ const ChartGraphs = styled.div`
   border-radius: 22px;
 `;
 
-const ScoreBoard = styled.div`
+const ScoreBoardContainer = styled.div`
   display: flex;
 
   align-items: center;
@@ -712,6 +916,38 @@ const Span = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const NoRecord = styled.div`
+  color: white;
+  font-size: 2.5vw;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+`;
+
+const Prediction = styled.h1`
+  color: ${({ color }) => color};
+  font-size: 5vw;
+  padding: 10px;
+  margin: 20px 10px;
+`;
+
+const PredictionContainer = styled.div`
+  display: flex;
+  align-item: flex-start;
+  ${"" /* justify-content: space-evenly; */}
+  flex-direction: column;
+  width: 80%;
+  height: 100%;
+  padding: 15px;
+  margin: 5px;
+`;
+
+const Msg = styled.p`
+  color: ${({ color }) => color};
+  font-size: ${({ fontSize }) => fontSize};
+  padding: 5px;
+  margin: 10px;
 `;
 
 const InputTextField = withStyles({

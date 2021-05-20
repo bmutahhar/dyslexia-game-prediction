@@ -2,12 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { IoIosCheckmarkCircle, IoIosCloseCircle } from "react-icons/io";
 
-const QuestionScore = ({ Answer, index }) => {
+const QuestionScore = ({ answer, index }) => {
   return (
-
     <Question className="row">
-      <p style={{ color: "white", fontSize: "1.3vw" }}>Question {index + 1}</p>
-      {Answer === 1 ? (
+      <p style={{ color: "white", fontSize: "1.5vw" }}>Question {index + 1}</p>
+      {answer >= 0.5 ? (
         <IoIosCheckmarkCircle
           style={{ color: "#3BB54A", fontSize: "2vw" }}
         ></IoIosCheckmarkCircle>
