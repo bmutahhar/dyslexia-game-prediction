@@ -250,11 +250,13 @@ def get_questions(difficulty):
 
 
 @app.route("/api/v1/nonUserScores", methods=["POST"])
-def add_final_score():
+def add_nonuser_score():
     try:
         if request.method.strip() == "POST":
-            content = {"timeStamp": datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"), 'score': request.json}
+            print("Non User Scoressss")
+            content = request.json
+            content['timeStamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(content)
             dbResponse = db.nonUserScores.insert_one(content)
             if dbResponse.acknowledged:
                 print("Scores submitted successfully")
@@ -265,10 +267,6 @@ def add_final_score():
                     status=200,
                     mimetype='application/json')
             else:
-                print('****************************************************************')
-                print("Error occurred")
-                print(dbResponse)
-                print('****************************************************************')
                 return Response(
                     response=json.dumps(
                         {'message': 'Data could not be inserted in database', 'error': "Data not added successfully"}),
@@ -290,69 +288,106 @@ def add_final_score():
             mimetype='application/json')
 
 
-# @app.route("/api/v1/uploadPfp", methods=["POST"])
-# def update_pfp():
-#     try:
-#         if request.method == "POST":
-#             auth_token = request.headers.get("Authorization")
-#             if auth_token is not None:
-#                 if "file" in request.files:
-#                     file = request.files['file']
-#                     ext = file.filename.split(".")[-1].lower()
-#                     print("Filename: {}\nExt: {}".format(file.filename, ext))
-#                     auth_token = auth_token.strip().split(" ")[-1]
-#                     decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
-#                     img = base64.b64encode(file.read())
-#                     pfpEncoded = "data:image/{};base64,{}".format(ext, img.decode())
-#                     print(pfpEncoded[:50])
-#                     username = decoded_jwt.get('username')
-#                     if username is not None:
-#                         existingUsername = db.users.find_one({'username': username})
-#                         if existingUsername:
-#                             db.users.update_one({"_id": existingUsername["_id"]}, {"$set": {"pfp": pfpEncoded}})
-#                             return Response(
-#                                 response=json.dumps(
-#                                     {'message': 'Image received successfully',
-#                                      'error': ""}),
-#                                 status=200,
-#                                 mimetype='application/json')
-#                         else:
-#                             return Response(
-#                                 response=json.dumps(
-#                                     {'message': 'User not found!',
-#                                      'error': "User not found!"}),
-#                                 status=500,
-#                                 mimetype='application/json')
-#
-#
-#                     else:
-#                         return Response(
-#                             response=json.dumps(
-#                                 {'message': 'User not found!',
-#                                  'error': "User not found!"}),
-#                             status=500,
-#                             mimetype='application/json')
-#                 else:
-#                     return Response(
-#                         response=json.dumps(
-#                             {'message': 'No file received!',
-#                              'error': "No file received!"}),
-#                         status=500,
-#                         mimetype='application/json')
-#             else:
-#                 return Response(
-#                     response=json.dumps(
-#                         {'message': 'Only authorized users are allowed on this end point.',
-#                          'error': "Only authorized users are allowed on this end point."}),
-#                     status=500,
-#                     mimetype='application/json')
-#     except Exception as e:
-#         print(e)
-#         return Response(
-#             response=json.dumps(
-#                 {'message': 'Profile pic could not be saved', "error": str(e)}),
-#             status=500,
-#             mimetype='application/json')
+@app.route("/api/v1/userScores", methods=["POST"])
+def add_user_score():
+    try:
+        if request.method.strip() == "POST":
+            print("User Scoresssss")
+            auth_token = request.headers.get("Authorization")
+            if auth_token is not None:
+                auth_token = auth_token.strip().split(" ")[-1]
+                decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
+                username = decoded_jwt.get('username')
+                content = request.json
+                content['timeStamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                if username is not None:
+                    existingUsername = db.users.find_one({'username': username})
+                    if existingUsername is not None:
+                        userScore = db.userScores.find_one({'username': username})
+                        if userScore is not None:
+                            lastLevel = content.get("level", '')
+                            if lastLevel == "":
+                                lastLevel = userScore['lastPlayedLevel']
+                            db.userScores.update_one({"_id": userScore['_id']},
+                                                     {"$set": {"lastPlayedLevel": lastLevel}})
+                            db.userScores.update_one({"_id": userScore['_id']},
+                                                     {"$push": {"scores.{}".format(lastLevel): content}})
+                            print("Scores submitted successfully")
+                            return Response(
+                                response=json.dumps(
+                                    {'message': 'Score inserted successfully', 'error': ""}),
+                                status=200,
+                                mimetype='application/json')
+                        else:
+                            lastLevel = content.get("level", '')
+                            if lastLevel == "":
+                                lastLevel = 'preschooler'
+                            userObj = {
+                                'username': username,
+                                'lastPlayedLevel': lastLevel,
+                                'scores': {
+                                    'preschooler': [],
+                                    'learner': [],
+                                    'elementary': []
+                                }
+                            }
+                            userObj['scores'][lastLevel].append(content)
+                            dbResponse = db.userScores.insert_one(userObj)
+                            if dbResponse.acknowledged:
+                                print("Scores submitted successfully")
+                                print("Record id: ", dbResponse.inserted_id)
+                                return Response(
+                                    response=json.dumps(
+                                        {'message': 'Score inserted successfully', 'id': f"{dbResponse.inserted_id}",
+                                         'error': ""}),
+                                    status=200,
+                                    mimetype='application/json')
+                            else:
+                                return Response(
+                                    response=json.dumps(
+                                        {'message': 'Data could not be inserted in database',
+                                         'error': "Data not added successfully"}),
+                                    status=500,
+                                    mimetype='application/json')
+                    else:
+                        return Response(
+                            response=json.dumps(
+                                {'message': 'User Record not found!',
+                                 'error': "User Record not found!"}),
+                            status=500,
+                            mimetype='application/json')
+
+
+                else:
+                    return Response(
+                        response=json.dumps(
+                            {'message': 'User not found!',
+                             'error': "User not found!"}),
+                        status=500,
+                        mimetype='application/json')
+
+            else:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Only authorized users are allowed on this end point.',
+                         'error': "Only authorized users are allowed on this end point."}),
+                    status=500,
+                    mimetype='application/json')
+
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Data could not be inserted in database',
+                     "error": "Only POST requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Data could not be inserted in database', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
 
 
 @app.route("/api/v1/getUserData", methods=["GET"])
@@ -366,13 +401,21 @@ def getUserData():
                 username = decoded_jwt.get('username')
                 if username is not None:
                     existingUsername = db.users.find_one({'username': username})
-                    existingUsername.pop('_id')
-                    return Response(
-                        response=json.dumps(
-                            {'message': 'Data sent successfully!',
-                             'error': "", "data": existingUsername}),
-                        status=200,
-                        mimetype='application/json')
+                    if existingUsername is not None:
+                        existingUsername.pop('_id')
+                        return Response(
+                            response=json.dumps(
+                                {'message': 'Data sent successfully!',
+                                 'error': "", "data": existingUsername}),
+                            status=200,
+                            mimetype='application/json')
+                    else:
+                        return Response(
+                            response=json.dumps(
+                                {'message': 'User not found!',
+                                 'error': "User not found!"}),
+                            status=500,
+                            mimetype='application/json')
                 else:
                     return Response(
                         response=json.dumps(
@@ -460,6 +503,63 @@ def updateProfileData():
                                  'error': "User not found!"}),
                             status=500,
                             mimetype='application/json')
+            else:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Only authorized users are allowed on this end point.',
+                         'error': "Only authorized users are allowed on this end point."}),
+                    status=500,
+                    mimetype='application/json')
+
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Only authorized POST requests are allowed on this end point.',
+                     'error': "Only authorized POST requests are allowed on this end point."}),
+                status=500,
+                mimetype='application/json')
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Error while processing the request', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/getUserScore", methods=["GET"])
+def getUserScore():
+    try:
+        if request.method == "GET":
+            auth_token = request.headers.get("Authorization")
+            if auth_token is not None:
+                auth_token = auth_token.strip().split(" ")[-1]
+                decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
+                username = decoded_jwt.get('username')
+                if username is not None:
+                    existingUsername = db.userScores.find_one({'username': username})
+                    if existingUsername is not None:
+                        lastLevel = existingUsername['lastPlayedLevel']
+                        prevScore = existingUsername['scores'][lastLevel][-1]
+                        return Response(
+                            response=json.dumps(
+                                {'message': 'User score successfully sent!', 'scores': prevScore,'error': ""}),
+                            status=200,
+                            mimetype='application/json')
+                    else:
+                        return Response(
+                            response=json.dumps(
+                                {'message': 'No Previous Record Found', 'scores': [], 'error': ""}),
+                            status=200,
+                            mimetype='application/json')
+                else:
+                    return Response(
+                        response=json.dumps(
+                            {'message': 'User not found!',
+                             'error': "User not found!"}),
+                        status=500,
+                        mimetype='application/json')
             else:
                 return Response(
                     response=json.dumps(
