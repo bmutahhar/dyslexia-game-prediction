@@ -544,7 +544,7 @@ def getUserScore():
                         prevScore = existingUsername['scores'][lastLevel][-1]
                         return Response(
                             response=json.dumps(
-                                {'message': 'User score successfully sent!', 'scores': prevScore,'error': ""}),
+                                {'message': 'User score successfully sent!', 'scores': prevScore, 'error': ""}),
                             status=200,
                             mimetype='application/json')
                     else:
@@ -571,8 +571,64 @@ def getUserScore():
         else:
             return Response(
                 response=json.dumps(
-                    {'message': 'Only authorized POST requests are allowed on this end point.',
-                     'error': "Only authorized POST requests are allowed on this end point."}),
+                    {'message': 'Only authorized GET requests are allowed on this end point.',
+                     'error': "Only authorized GET requests are allowed on this end point."}),
+                status=500,
+                mimetype='application/json')
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Error while processing the request', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/getTrackHistory", methods=["GET"])
+def getTrackHistory():
+    try:
+        if request.method == "GET":
+            auth_token = request.headers.get("Authorization")
+            auth_token = auth_token.strip().split(" ")[-1].strip() if auth_token is not None else ""
+            if auth_token is not None and auth_token != "":
+                decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
+                username = decoded_jwt.get('username')
+                if username is not None:
+                    existingHistory = db.history.find_one({'username': username})
+                    if existingHistory is not None:
+                        existingHistory.pop("_id")
+                        return Response(
+                            response=json.dumps(
+                                {'message': 'Track history successfully sent!', 'data': existingHistory, 'error': ""}),
+                            status=200,
+                            mimetype='application/json')
+                    else:
+                        return Response(
+                            response=json.dumps(
+                                {'message': 'No Previous Record Found', 'error': ""}),
+                            status=200,
+                            mimetype='application/json')
+                else:
+                    return Response(
+                        response=json.dumps(
+                            {'message': 'User not found!',
+                             'error': "User not found!"}),
+                        status=500,
+                        mimetype='application/json')
+            else:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Only authorized users are allowed on this end point.',
+                         'error': "Only authorized users are allowed on this end point."}),
+                    status=500,
+                    mimetype='application/json')
+
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Only authorized GET requests are allowed on this end point.',
+                     'error': "Only authorized GET requests are allowed on this end point."}),
                 status=500,
                 mimetype='application/json')
 
