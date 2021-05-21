@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { QuestionScore } from "../Components";
-import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import { TextField, CircularProgress } from "@material-ui/core";
+import { TextField, CircularProgress, Snackbar, Icon } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { BarChart, ShowChart } from "@material-ui/icons";
+import { Bar, Line } from "react-chartjs-2";
 import image from "../Images/backgrounds/profilebg.png";
 import upload from "../Images/backgrounds/photo.svg";
 import remove from "../Images/backgrounds/eraser.svg";
@@ -223,13 +224,13 @@ const ProfileTracking = () => {
                 hidden
               />
               <Span>
-                <Icon iconimg={upload} />
+                <MyIcon iconimg={upload} />
                 Upload
               </Span>
             </Selectimg>
             <Deleteimg onClick={deleteImage}>
               <Span>
-                <Icon iconimg={remove} />
+                <MyIcon iconimg={remove} />
                 Delete
               </Span>
             </Deleteimg>
@@ -369,11 +370,11 @@ const ProfileTracking = () => {
                   <CircularProgress size={30} />
                 ) : !editinfo ? (
                   <Span>
-                    Edit <Icon iconimg={edit}></Icon>
+                    Edit <MyIcon iconimg={edit}></MyIcon>
                   </Span>
                 ) : (
                   <Span onClick={onSave}>
-                    Save <Icon iconimg={save}></Icon>
+                    Save <MyIcon iconimg={save}></MyIcon>
                   </Span>
                 )}
               </Editinfo>
@@ -398,7 +399,7 @@ const ProfileTracking = () => {
           ) : activeNav === 2 ? (
             <PredictionBoard />
           ) : (
-            <ScoreBoardContainer>Improvement Graph</ScoreBoardContainer>
+            <GraphBoard />
           )}
         </ChartContainer>
       </GamePerformance>
@@ -615,6 +616,173 @@ const PredictionBoard = () => {
   );
 };
 
+const GraphBoard = () => {
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    message: "",
+  });
+  const url = process.env["REACT_APP_API_URL"];
+  const [open, setOpen] = useState(false);
+  const [noRecord, setNoRecord] = useState(false);
+  const [xAxis, setXAxis] = useState([]);
+  const [yAxis, setYAxis] = useState([]);
+  const [chartType, setChartType] = useState("line");
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const onClick = (val) => {
+    setChartType(val);
+  };
+
+  const getGraphData = () => {
+    const token = sessionStorage.getItem("token");
+    fetch(`${url}/api/v1/getTrackHistory`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((respJSON) => {
+        if (respJSON.data) {
+          const data = respJSON.data;
+          if (data.trackRecord) {
+            setXAxis(data.trackRecord.xAxis);
+            setYAxis(data.trackRecord.yAxis);
+            setStatus({
+              loading: false,
+              success: true,
+              message: "graph loading successfully!",
+            });
+          } else {
+            setNoRecord(true);
+            setStatus({
+              loading: false,
+              success: true,
+              message: "No previous record found!",
+            });
+          }
+        } else {
+          setNoRecord(true);
+          setStatus({
+            loading: false,
+            success: true,
+            message: "No previous record found!",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setStatus({
+          loading: false,
+          success: false,
+          message: "Error, please try again!",
+        });
+        setOpen(true);
+      });
+  };
+
+  useEffect(() => {
+    setStatus({ ...status, loading: true });
+    getGraphData();
+  }, []);
+
+  return (
+    <BoardContainer>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert severity="error" onClose={handleClose}>
+          Could not load data, please try again!
+        </Alert>
+      </Snackbar>
+      {status.loading ? (
+        <CircularProgress size={80} style={{ color: "white" }} />
+      ) : noRecord ? (
+        <NoRecord color="black">No Previous Record Found</NoRecord>
+      ) : chartType === "line" ? (
+        <Line
+          data={{
+            labels: xAxis,
+            datasets: [
+              {
+                label: "Average Score",
+                data: yAxis,
+                backgroundColor: "#5bc45f",
+                borderWidth: 4,
+                borderColor: "#5bc45f",
+              },
+            ],
+          }}
+          options={{
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          }}
+        />
+      ) : (
+        <Bar
+          data={{
+            labels: xAxis,
+            datasets: [
+              {
+                label: "Average Score",
+                data: yAxis,
+                backgroundColor: "#f7ca34",
+                borderWidth: 1,
+              },
+            ],
+          }}
+          options={{
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          }}
+        />
+      )}
+      {!status.loading && !noRecord && (
+        <GraphButtonsContainer>
+          <GraphButton onClick={() => onClick("line")}>
+            <Icon
+              style={{
+                color: "#5bc45f",
+                margin: "2px 5px",
+                justifySelf: "center",
+              }}
+            >
+              <ShowChart />
+            </Icon>
+            Line
+          </GraphButton>
+          <GraphButton onClick={() => onClick("bar")}>
+            <Icon
+              style={{
+                color: "#f7ca34",
+                margin: "2px 5px",
+                justifySelf: "center",
+              }}
+            >
+              <BarChart />
+            </Icon>
+            Bar
+          </GraphButton>
+        </GraphButtonsContainer>
+      )}
+    </BoardContainer>
+  );
+};
+
 const QuestionContainer = styled.div`
   display: grid;
   height: 100%;
@@ -693,11 +861,15 @@ const NavButton = styled.button`
   &:hover {
     background-color: #19d14a;
     transition: 0.3s ease-in-out;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   }
 
-  &: focus {
+  &:focus {
     background-color: #19d14a;
     transition: 0.3s ease-in-out;
+  }
+  &:active {
+    transform: translateY(5px);
   }
 `;
 const ChartGraphs = styled.div`
@@ -709,20 +881,20 @@ const ChartGraphs = styled.div`
   margin-right: 2vw;
   margin-left: 2vw;
   background-color: white;
-  border-radius: 22px;
+  border-radius: 6px;
 `;
 
-const ScoreBoardContainer = styled.div`
+const BoardContainer = styled.div`
   display: flex;
-
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   height: 90%;
   width: 80%;
   margin-right: 2vw;
   margin-left: 2vw;
   background-color: #ecece6;
-  border-radius: 22px;
+  border-radius: 6px;
 `;
 
 const ChartButton = styled.div`
@@ -753,16 +925,14 @@ const Title = styled.div`
   color: white;
   font-weight: bold;
   height: 10vh;
-  ${"" /* margin: 25px 0px; */}
+  margin: 10px 5px;
 `;
 const GamePerformance = styled.div`
-  ${"" /* margin-top: 8vw; */}
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   height: 100vh;
-  ${"" /* margin:25px 0px; */}
 `;
 const Background = styled.div`
   display: flex;
@@ -818,7 +988,7 @@ const SetButtons = styled.div`
   border-radius: 25px;
 `;
 
-const Icon = styled.div`
+const MyIcon = styled.div`
   background: url(${({ iconimg }) => iconimg});
   height: 2vw;
   width: 2vw;
@@ -919,7 +1089,7 @@ const Span = styled.div`
 `;
 
 const NoRecord = styled.div`
-  color: white;
+  color: ${({color})=>color? color:"white"};
   font-size: 2.5vw;
   font-family: "Open Sans", sans-serif;
   font-weight: 700;
@@ -935,7 +1105,6 @@ const Prediction = styled.h1`
 const PredictionContainer = styled.div`
   display: flex;
   align-item: flex-start;
-  ${"" /* justify-content: space-evenly; */}
   flex-direction: column;
   width: 80%;
   height: 100%;
@@ -948,6 +1117,34 @@ const Msg = styled.p`
   font-size: ${({ fontSize }) => fontSize};
   padding: 5px;
   margin: 10px;
+`;
+
+const GraphButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  margin-top: 10px;
+  height: 10%;
+  width: 80%;
+`;
+
+const GraphButton = styled.div`
+  background-color: #ede8e8;
+  border: none;
+  border-radius: 5px;
+  width: 15%;
+  margin: 5px 25px;
+  padding: 2px 5px;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+  &:hover {
+    background-color: #e0dede;
+    transition: 0.3s ease-out;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  }
+  &:active {
+    transform: translateY(5px);
+  }
 `;
 
 const InputTextField = withStyles({
