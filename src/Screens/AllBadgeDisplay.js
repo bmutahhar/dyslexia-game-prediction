@@ -61,7 +61,7 @@ const AllBadgeDisplay = () => {
     const token = sessionStorage.getItem("token");
     let scores = [...finalScores];
     const data = {
-      level: level.replace("/",""),
+      level: level.replace("/", ""),
       gender: gender,
       totalTimeToFinish: time,
       scores: scores,
@@ -90,8 +90,10 @@ const AllBadgeDisplay = () => {
       .then((respJson) => {
         if (respJson.error.trim().length === 0) {
           console.log("Score Submitted Successfully!");
-          setStatus({ loading: false, success: true, error: "" });
-          history.push("/diagnosisResult");
+          setTimeout(() => {
+            setStatus({ loading: false, success: true, error: "" });
+            history.push("/diagnosisResult");
+          }, 1000);
         } else {
           console.log("Error while submitting score...");
           setStatus({ loading: false, success: false, error: respJson.error });
@@ -231,7 +233,7 @@ const AllBadgeDisplay = () => {
           color: "white",
         }}
       >
-        Processing Diagnosis...
+        Submitting Score...
       </Typography>
     </LoadingContainer>
   );

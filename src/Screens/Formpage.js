@@ -18,6 +18,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { BsCircleFill } from "react-icons/bs";
 import { QandA } from "../Components";
+import { v4 as uuidv4 } from "uuid";
 
 import bg from "../Images/backgrounds/bg.jpg";
 import penguin1 from "../Images/characters/penguin1.png";
@@ -26,13 +27,7 @@ import polar from "../Images/characters/polar.png";
 import seal from "../Images/characters/seal.png";
 import penguin2 from "../Images/characters/penguin2.png";
 
-export default class Form extends Component {
-  render() {
-    return <Formpage />;
-  }
-}
-
-const Formpage = () => {
+const Form = () => {
   const active = "33px";
   const nonactive = "20px";
   const [savecheck, setSavecheck] = useState(false);
@@ -139,7 +134,7 @@ const Formpage = () => {
 
   for (var i = 0; i < QA.q1options; i++) {
     menuitem1.push(
-      <MenuItem value={q1arr[i]} style={styles.menuitem}>
+      <MenuItem key={uuidv4()} value={q1arr[i]} style={styles.menuitem}>
         {q1arr[i]}
       </MenuItem>
     );
@@ -147,7 +142,7 @@ const Formpage = () => {
 
   for (var i1 = 0; i1 < QA.q2options; i1++) {
     menuitem2.push(
-      <MenuItem value={q2arr[i1]} style={styles.menuitem}>
+      <MenuItem key={uuidv4()} value={q2arr[i1]} style={styles.menuitem}>
         {q2arr[i1]}
       </MenuItem>
     );
@@ -155,7 +150,7 @@ const Formpage = () => {
 
   for (var i2 = 0; i2 < QA.q3options; i2++) {
     menuitem3.push(
-      <MenuItem value={q3arr[i2]} style={styles.menuitem}>
+      <MenuItem key={uuidv4()} value={q3arr[i2]} style={styles.menuitem}>
         {q3arr[i2]}
       </MenuItem>
     );
@@ -163,7 +158,7 @@ const Formpage = () => {
 
   for (var i3 = 0; i3 < QA.q4options; i3++) {
     menuitem4.push(
-      <MenuItem value={q4arr[i3]} style={styles.menuitem}>
+      <MenuItem key={uuidv4()} value={q4arr[i3]} style={styles.menuitem}>
         {q4arr[i3]}
       </MenuItem>
     );
@@ -471,6 +466,7 @@ const Formpage = () => {
             loading: false,
             alertMessage: "Information Registered Successfully",
           });
+          save && localStorage.setItem("contentSaved", true);
           setTimeout(() => history.push("/levelselect"), 1000);
         } else {
           console.log(respJson);
@@ -488,7 +484,7 @@ const Formpage = () => {
           open: true,
           success: false,
           loading: false,
-          alertMessage: error,
+          alertMessage: error.message,
         });
       });
   };
@@ -618,7 +614,6 @@ const Formpage = () => {
                       label="Save my answers for next time"
                     />
                   )}
-
                 </FormControl>
               )}
               {consentf && (
@@ -695,17 +690,19 @@ const Formpage = () => {
                   {status.loading ? (
                     <CircularProgress style={{ color: "white" }} size={30} />
                   ) : (
-                      "Done"
-                    )}
+                    "Done"
+                  )}
                 </Submitbutton>
               )}
 
               {questionf && (
                 <NavIcons>
                   {/* <FrontBackIcon> */}
-                  <IconButton disabled={backdisabled}>
+                  <IconButton
+                    disabled={backdisabled}
+                    onClick={Backwardnavigate}
+                  >
                     <IoIosArrowBack
-                      onClick={Backwardnavigate}
                       color={arrowcolorb}
                       size="58px"
                       style={styles.navicon}
@@ -739,9 +736,11 @@ const Formpage = () => {
                     style={styles.circle}
                   />
                   {/* <FrontBackIcon> */}
-                  <IconButton disabled={frontdisabled}>
+                  <IconButton
+                    disabled={frontdisabled}
+                    onClick={Forwardnavigate}
+                  >
                     <IoIosArrowForward
-                      onClick={Forwardnavigate}
                       color={arrowcolorf}
                       size="58px"
                       style={styles.navicon}
@@ -775,6 +774,8 @@ const Formpage = () => {
     </Container>
   );
 };
+
+export default Form;
 
 const zoomAnimation = keyframes`${zoomIn}`;
 const fadeInAnimation = keyframes`${fadeIn}`;

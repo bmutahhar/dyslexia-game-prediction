@@ -1117,6 +1117,10 @@ const Msg = styled.p`
   font-size: ${({ fontSize }) => fontSize};
   padding: 5px;
   margin: 10px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 `;
 
 const GraphButtonsContainer = styled.div`

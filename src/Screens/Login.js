@@ -247,11 +247,17 @@ const LoginComponent = () => {
             )}
           </UserButton>
 
-          <Link to="/userform">
-            <UserButton variant="contained" fullWidth>
+            <UserButton variant="contained" fullWidth onClick={()=>{
+              const contentSaved = localStorage.getItem('contentSaved')
+              if (contentSaved){
+                history.push("/levelSelect")
+              }
+              else{
+                history.push("/userform")
+              }
+            }}>
               Play As Guest
             </UserButton>
-          </Link>
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_ID}
             render={(renderProps) => (
