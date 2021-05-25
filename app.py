@@ -2,6 +2,7 @@ import base64
 import json
 import os
 from datetime import datetime, timedelta
+from copy import deepcopy
 
 import jwt
 import pymongo
@@ -14,6 +15,8 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)
 app.config['DB_URL'] = os.environ.get("DB_URL") or "mongodb://localhost:27017"
+scores = []
+print("Scores is: ", scores)
 try:
 
     mongo = pymongo.MongoClient(app.config['DB_URL'], serverSelectionTimeoutMS=15000,
@@ -254,16 +257,19 @@ def add_nonuser_score():
     try:
         if request.method.strip() == "POST":
             print("Non User Scoressss")
+            if request.json:
+                global scores
+                scores = deepcopy(request.json)
+                print("Scores is: ", scores)
             content = request.json
             content['timeStamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            print(content)
             dbResponse = db.nonUserScores.insert_one(content)
             if dbResponse.acknowledged:
                 print("Scores submitted successfully")
                 print("Record id: ", dbResponse.inserted_id)
                 return Response(
                     response=json.dumps(
-                        {'message': 'Score inserted successfully', 'id': f"{dbResponse.inserted_id}", 'error': ""}),
+                        {'message': 'Score inserted successfully', 'error': ""}),
                     status=200,
                     mimetype='application/json')
             else:
@@ -298,6 +304,10 @@ def add_user_score():
                 auth_token = auth_token.strip().split(" ")[-1]
                 decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
                 username = decoded_jwt.get('username')
+                if request.json:
+                    global scores
+                    scores = deepcopy(request.json)
+                    print("Scores is: ", scores)
                 content = request.json
                 content['timeStamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 if username is not None:
@@ -637,6 +647,45 @@ def getTrackHistory():
         return Response(
             response=json.dumps(
                 {'message': 'Error while processing the request', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/getPrediction", methods=["GET"])
+def getPrediction():
+    try:
+        print("Scores is: ", scores)
+        if request.method.strip() == "GET":
+            if len(scores) == 0:
+                return Response(
+                    response=json.dumps(
+                        {'message': 'No Score Data Found!',
+                         'error': "We're sorry but you will have to play the game again."}),
+                    status=200,
+                    mimetype='application/json')
+            else:
+                prediction = {
+                    "accuracy": 86.5,
+                    "diagnosis": "yes"
+                }
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Prediction sent successfully!', "error": "", "prediction": prediction,
+                         "scores": scores}),
+                    status=200,
+                    mimetype='application/json')
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Could not get prediction.',
+                     "error": "Only GET requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Could not get prediction.', "error": str(e)}),
             status=500,
             mimetype='application/json')
 
