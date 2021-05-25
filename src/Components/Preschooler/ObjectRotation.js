@@ -80,7 +80,7 @@ const ObjectRotation = ({
     if (newAngle === angle) {
       const scoreObj = {
         difficulty: difficulty,
-        clickCount: clickCount,
+        clicks: clickCount,
         hits: 1,
         miss: 0,
         score: 1,
@@ -93,7 +93,7 @@ const ObjectRotation = ({
     } else {
       const scoreObj = {
         difficulty: difficulty,
-        clickCount: clickCount,
+        clicks: clickCount,
         hits: 0,
         miss: 1,
         score: 0,

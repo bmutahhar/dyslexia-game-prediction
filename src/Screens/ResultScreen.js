@@ -1,20 +1,177 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { CircularProgress, Snackbar, Typography } from "@material-ui/core";
-import { LocationOn, SentimentSatisfiedAltRounded } from "@material-ui/icons";
+import { motion } from "framer-motion";
+import {
+  CircularProgress,
+  Snackbar,
+  Typography,
+  Backdrop,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { LocationOn } from "@material-ui/icons";
 import MuiAlert from "@material-ui/lab/Alert";
 import styled from "styled-components";
 import { QuestionScore } from "../Components";
 import ReactMapGL, { Marker, Popup, FlyToInterpolator } from "react-map-gl";
 import StarRatings from "react-star-ratings";
+import errorguy from "../Images/characters/errorguy.gif";
 import bg from "../Images/backgrounds/gamebg.png";
 import larka from "../Images/characters/larka2.svg";
 import larki from "../Images/characters/larki2.svg";
 
 const ResultScreen = () => {
   const [scores, setScores] = useState([
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+    {
+      difficulty: "easy",
+      clickCount: 1,
+      hits: 1,
+      miss: 0,
+      score: 1,
+      accuracy: 1,
+      missrate: 0,
+      time: 9,
+    },
+    {
+      difficulty: "easy",
+      clicks: 1,
+      hits: 1,
+      miss: 0,
+      score: 1,
+      accuracy: 1,
+      missrate: 0,
+      time: 15,
+    },
+    {
+      difficulty: "easy",
+      clickCount: 2,
+      hits: 1,
+      miss: 0,
+      score: 1,
+      accuracy: 0.5,
+      missrate: 0,
+      time: 4,
+    },
+    {
+      difficulty: "medium",
+      clicks: 2,
+      hits: 1,
+      miss: 1,
+      score: 0.5,
+      accuracy: 0.5,
+      missrate: 0.5,
+      time: 13,
+    },
+    {
+      difficulty: "medium",
+      clickCount: 1,
+      hits: 1,
+      miss: 0,
+      score: 1,
+      accuracy: 1,
+      missrate: 0,
+      time: 5,
+    },
+    {
+      difficulty: "medium",
+      clicks: 4,
+      hits: 0,
+      miss: 4,
+      score: 0,
+      accuracy: 0,
+      missrate: 1,
+      time: 16,
+    },
+    {
+      difficulty: "medium",
+      clicks: 2,
+      hits: 0,
+      miss: 2,
+      score: 0,
+      accuracy: 0,
+      missrate: 1,
+      time: 12,
+    },
+    {
+      difficulty: "medium",
+      clickCount: 1,
+      hits: 0,
+      miss: 1,
+      score: 0,
+      accuracy: 0,
+      missrate: 1,
+      time: 5,
+    },
+    {
+      difficulty: "easy",
+      clicks: 1,
+      hits: 0,
+      miss: 1,
+      score: 0,
+      accuracy: 0,
+      missrate: 1,
+      time: 12,
+    },
+    {
+      difficulty: "easy",
+      clicks: 1,
+      hits: 1,
+      miss: 0,
+      score: 1,
+      accuracy: 1,
+      missrate: 0,
+      time: 13,
+    },
+    {
+      difficulty: "easy",
+      clicks: 1,
+      hits: 1,
+      miss: 0,
+      score: 1,
+      accuracy: 1,
+      missrate: 0,
+      time: 11,
+    },
+    {
+      difficulty: "easy",
+      clicks: 1,
+      hits: 1,
+      miss: 0,
+      score: 1,
+      accuracy: 1,
+      missrate: 0,
+      time: 18,
+    },
+    {
+      difficulty: "medium",
+      clicks: 5,
+      hits: 4,
+      miss: 0,
+      score: 1,
+      accuracy: 0.8,
+      missrate: 0,
+      time: 19,
+    },
+    {
+      difficulty: "medium",
+      clicks: 2,
+      hits: 2,
+      miss: 0,
+      score: 1,
+      accuracy: 1,
+      missrate: 0,
+      time: 14,
+    },
+    {
+      difficulty: "medium",
+      clicks: 4,
+      hits: 4,
+      miss: 0,
+      score: 1,
+      accuracy: 1,
+      missrate: 0,
+      time: 17,
+    },
   ]);
   const [viewport, setViewport] = useState({
     latitude: 30.3753,
@@ -28,7 +185,8 @@ const ResultScreen = () => {
   const [status, setStatus] = useState({
     loading: true,
     success: false,
-    message: "",
+    message1: "",
+    message2: "",
   });
   const [navigation, setNavigation] = useState(null);
   const [nearby, setNearby] = useState(null);
@@ -39,14 +197,21 @@ const ResultScreen = () => {
   const [message, setMessage] = useState(
     "Navigation not supported on this browser."
   );
+  const [pMsg1, setPMsg1] = useState("");
+  const [pMsg2, setPMsg2] = useState("");
+  const [prediction, setPrediction] = useState({
+    accuracy: 0,
+    diagnosis: null,
+  });
   const time = useSelector((state) => state.time);
   const gender = useSelector((state) => state.gender);
   const currentLevel = useSelector((state) =>
     state.currentLevel.replace("/", "")
   );
   const history = useHistory();
+  const classes = useStyles();
   const mapboxApiToken = process.env.REACT_APP_MAPBOX_API_KEY;
-  const size = 30;
+  const url = process.env["REACT_APP_API_URL"];
 
   const handleClose = () => {
     setOpen(false);
@@ -82,7 +247,6 @@ const ResultScreen = () => {
 
   const fetchHospitals = (longitude, latitude) => {
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/hospital.json?access_token=${mapboxApiToken}&proximity=${longitude},${latitude}&country=PK`;
-    console.log(url);
     fetch(url, {
       method: "GET",
       headers: {
@@ -104,55 +268,157 @@ const ResultScreen = () => {
       });
   };
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      setNavigation(true);
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          console.log(position.coords);
-          console.log("Latitude: ", position.coords.latitude);
-          console.log("Longitude: ", position.coords.longitude);
-          setViewport({
-            ...viewport,
-            longitude: position.coords.longitude,
-            latitude: position.coords.latitude,
-            transitionDuration: 5000,
-            transitionInterpolator: new FlyToInterpolator(),
+  const getPrediction = () => {
+    fetch(`${url}/api/v1/getPrediction`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((respJSON) => {
+        console.log(respJSON);
+        if (respJSON.error.length === 0) {
+          const dyslexic =
+            respJSON.prediction.diagnosis.trim().toLowerCase() === "yes"
+              ? true
+              : false;
+          if (dyslexic) {
+            setPMsg1(`Unfortunately your child has been diagnosed with DYSLEXIA with the
+            prediction accuracy of ${respJSON.prediction.accuracy}%.`);
+            setPMsg2(`We would recommend that you consider any of the nearest
+            educational psycologist for your child. The psycologist will help
+            your child in improving his condition.`);
+          } else {
+            setPMsg1("Congratulations! Your child is NOT DYSLEXIC.");
+            setPMsg2(
+              "No need to worry. However, if you think our prediction is incorrect, you should consult a professional psychologist as soon as possible."
+            );
+          }
+          setScores(respJSON.scores.scores);
+          setPrediction({
+            accuracy: respJSON.prediction.accuracy,
+            diagnosis: dyslexic,
           });
-          setCurrentCoordinates({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+          setStatus({
+            loading: false,
+            success: true,
+            message1: "",
+            message2: "",
           });
-          fetchHospitals(position.coords.longitude, position.coords.latitude);
-          setNavigation(true);
-          setTimeout(() => setMapLoaded(true), 4500);
-        },
-        (err) => {
-          console.log(err);
-          setMessage(err.message);
-          setNavigation(false);
+        } else {
+          setStatus({
+            loading: false,
+            success: false,
+            message1: respJSON.message,
+            message2: respJSON.error,
+          });
         }
-      );
-    } else {
-      setNavigation(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setStatus({
+          loading: false,
+          success: false,
+          message1: err.message,
+        });
+      });
+  };
+
+  useEffect(() => {
+    console.log(status.loading);
+    if (!status.loading) {
+      if (navigator.geolocation) {
+        setNavigation(true);
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            console.log(position.coords);
+            console.log("Latitude: ", position.coords.latitude);
+            console.log("Longitude: ", position.coords.longitude);
+            setViewport({
+              ...viewport,
+              longitude: position.coords.longitude,
+              latitude: position.coords.latitude,
+              transitionDuration: 5000,
+              transitionInterpolator: new FlyToInterpolator(),
+            });
+            setCurrentCoordinates({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+            fetchHospitals(position.coords.longitude, position.coords.latitude);
+            setNavigation(true);
+            setTimeout(() => setMapLoaded(true), 4500);
+          },
+          (err) => {
+            console.log(err);
+            setMessage(err.message);
+            setNavigation(false);
+          }
+        );
+      } else {
+        setNavigation(false);
+      }
     }
+  }, [status.loading]);
+
+  useEffect(() => {
+    setStatus({ ...status, loading: true });
+    getPrediction();
   }, []);
 
   if (status.loading) {
     return (
-      <Resultbg className="container-fluid" background={bg} loading>
-          <CircularProgress
-            style={{ color: "white", marginBottom: 40 }}
-            size={150}
+      <Resultbg className="container-fluid" background={bg} loading={1}>
+        <CircularProgress
+          style={{ color: "white", marginBottom: 40 }}
+          size={150}
+        />
+        <Typography
+          variant="h5"
+          style={{
+            color: "white",
+          }}
+        >
+          Processing Diagnosis...
+        </Typography>
+      </Resultbg>
+    );
+  } else if (!status.success) {
+    return (
+      <Resultbg className="container-fluid" background={bg} loading={1}>
+        <Backdrop className={classes.backdrop} open={!status.success}>
+          <Errorgif
+            initial={{ opacity: 0, height: "0%" }}
+            animate={{ opacity: 1, height: "40%" }}
+            transition={{
+              duration: 0.8,
+              type: "tween",
+            }}
+            src={errorguy}
+            alt="error guy GIF"
           />
-          <Typography
-            variant="h5"
-            style={{
-              color: "white",
+          <Errormsg
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              delay: 1.3,
+              duration: 0.3,
             }}
           >
-            Processing Diagnosis...
-          </Typography>
+            {status.message1}
+          </Errormsg>
+          <Errormsg2
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              delay: 1.6,
+              duration: 0.3,
+            }}
+          >
+            {status.message2}
+          </Errormsg2>
+        </Backdrop>
       </Resultbg>
     );
   } else {
@@ -186,8 +452,8 @@ const ResultScreen = () => {
               <Time>{secondsToMinutes(time)}</Time>
             </TopBar>
 
-            {scores.map((_, i) => {
-              return <QuestionScore answer={1} index={i} key={i} />;
+            {scores.map((el, i) => {
+              return <QuestionScore answer={el.score} index={i} key={i} />;
             })}
           </Card>
           <Card>
@@ -195,26 +461,26 @@ const ResultScreen = () => {
               <h3 style={{ fontSize: "1.6vw" }}>Dyslexic Prediction</h3>
             </Heading>
             <Prediction className="row">
-              <h1 style={{ fontSize: "5vw", color: "#FF6161" }}>{95}%</h1>
+              <Accuracy color={prediction.diagnosis ? "#ff6161" : "#6bff93"}>
+                {prediction.accuracy}%
+              </Accuracy>
               <img
                 src={gender === "male" ? larka : larki}
                 alt={gender === "male" ? "larka" : "larki"}
                 style={{ height: "10vw", marginLeft: "3vw" }}
               />
             </Prediction>
-            <Msg1 className="row">
-              <p style={{ color: "#FF7F46" }}>
-                Unfortunately your child has been diagnosed with Dyslexia with
-                the prediction of 95%.
-              </p>
-            </Msg1>
-            <Msg2 className="row">
-              <p>
-                We would recommend that you consider any of the nearest
-                educational phycologist for your child. The phycologist will
-                help your child in improving his condition
-              </p>
-            </Msg2>
+            <Span className="row">
+              <Msg
+                color={prediction.diagnosis ? "#ff6161" : "#6bff93"}
+                fontSize="1.5vw"
+              >
+                {pMsg1}
+              </Msg>
+            </Span>
+            <Span className="row">
+              <Msg fontSize="1.2vw">{pMsg2}</Msg>
+            </Span>
             <NavButtons className="row">
               <PlayButton onClick={() => history.replace("/levelSelect")}>
                 Play Again
@@ -393,31 +659,12 @@ const Prediction = styled.div`
   flex-direction: row;
   height: 40%;
   width: 100%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Msg1 = styled.div`
-  display: flex;
-  margin-bottom: 1vw;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  height: 10%;
-  width: 100%;
-`;
-
-const Msg2 = styled.div`
-  display: flex;
-  margin-bottom: 1vw;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  height: 20%;
-  width: 100%;
+  ${'' /* align-items: center; */}
+  ${'' /* justify-content: center; */}
 `;
 
 const NavButtons = styled.div`
+  display:flex;
   align-items: center;
   justify-content: space-around;
   height: 20%;
@@ -490,6 +737,7 @@ const Card = styled.div`
   padding-bottom: 1vw;`;
   }}
   overflow-y: scroll;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -554,6 +802,54 @@ const MarkerText = styled.div`
   font-family: "Open Sans", sans-serif;
   font-weight: 500;
 `;
+
+const Errorgif = styled(motion.img)`
+  transform: scaleX(-1);
+`;
+
+const Errormsg = styled(motion.h1)`
+  color: white;
+  font-size: 2.2vw;
+`;
+
+const Errormsg2 = styled(motion.h2)`
+  color: white;
+  font-size: 1.8vw;
+`;
+
+const Msg = styled.p`
+  color: ${({ color }) => color};
+  font-size: ${({ fontSize }) => fontSize};
+  padding: 5px;
+  margin: 10px;
+  display: flex;
+  text-align: center;
+  ${'' /* align-items: center; */}
+  ${'' /* justify-content: center; */}
+`;
+
+const Span = styled.div`
+  display: flex;
+  ${'' /* align-items: center; */}
+  ${'' /* justify-content: center; */}
+`;
+
+const Accuracy = styled.h1`
+  color: ${({ color }) => color};
+  font-size: 5vw;
+  padding: 10px;
+  margin: 20px 10px;
+`;
+
+const useStyles = makeStyles(({ theme }) => ({
+  backdrop: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1000,
+  },
+}));
 
 function titleCase(str) {
   if (str !== "") {

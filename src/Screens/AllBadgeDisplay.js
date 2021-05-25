@@ -18,7 +18,6 @@ import b7 from "../Images/badges/Teddy.svg";
 import b8 from "../Images/badges/Zebra.svg";
 import gamebg from "../Images/backgrounds/gamebg.png";
 import errorguy from "../Images/characters/errorguy.gif";
-import { yay } from "../Sounds";
 
 const BadgeVarient = {
   start: {
@@ -49,17 +48,167 @@ const AllBadgeDisplay = () => {
   const gender = useSelector((state) => state.gender);
   const isUserLoggedIn = useSelector((state) => state.user.loggedIn);
   let history = useHistory();
-  const audio = new Audio(yay);
   const classes = useStyles();
 
   const close = () => {
-    audio.pause();
     setOpen(false);
   };
 
   const submitScore = () => {
     const token = sessionStorage.getItem("token");
-    let scores = [...finalScores];
+    // let scores = [...finalScores];
+    let scores = [
+      {
+        difficulty: "easy",
+        clickCount: 1,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1,
+        missrate: 0,
+        time: 9,
+      },
+      {
+        difficulty: "easy",
+        clicks: 1,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1,
+        missrate: 0,
+        time: 15,
+      },
+      {
+        difficulty: "easy",
+        clickCount: 2,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 0.5,
+        missrate: 0,
+        time: 4,
+      },
+      {
+        difficulty: "medium",
+        clicks: 2,
+        hits: 1,
+        miss: 1,
+        score: 0.5,
+        accuracy: 0.5,
+        missrate: 0.5,
+        time: 13,
+      },
+      {
+        difficulty: "medium",
+        clickCount: 1,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1,
+        missrate: 0,
+        time: 5,
+      },
+      {
+        difficulty: "medium",
+        clicks: 4,
+        hits: 0,
+        miss: 4,
+        score: 0,
+        accuracy: 0,
+        missrate: 1,
+        time: 16,
+      },
+      {
+        difficulty: "medium",
+        clicks: 2,
+        hits: 0,
+        miss: 2,
+        score: 0,
+        accuracy: 0,
+        missrate: 1,
+        time: 12,
+      },
+      {
+        difficulty: "medium",
+        clickCount: 1,
+        hits: 0,
+        miss: 1,
+        score: 0,
+        accuracy: 0,
+        missrate: 1,
+        time: 5,
+      },
+      {
+        difficulty: "easy",
+        clicks: 1,
+        hits: 0,
+        miss: 1,
+        score: 0,
+        accuracy: 0,
+        missrate: 1,
+        time: 12,
+      },
+      {
+        difficulty: "easy",
+        clicks: 1,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1,
+        missrate: 0,
+        time: 13,
+      },
+      {
+        difficulty: "easy",
+        clicks: 1,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1,
+        missrate: 0,
+        time: 11,
+      },
+      {
+        difficulty: "easy",
+        clicks: 1,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1,
+        missrate: 0,
+        time: 18,
+      },
+      {
+        difficulty: "medium",
+        clicks: 5,
+        hits: 4,
+        miss: 0,
+        score: 1,
+        accuracy: 0.8,
+        missrate: 0,
+        time: 19,
+      },
+      {
+        difficulty: "medium",
+        clicks: 2,
+        hits: 2,
+        miss: 0,
+        score: 1,
+        accuracy: 1,
+        missrate: 0,
+        time: 14,
+      },
+      {
+        difficulty: "medium",
+        clicks: 4,
+        hits: 4,
+        miss: 0,
+        score: 1,
+        accuracy: 1,
+        missrate: 0,
+        time: 17,
+      },
+    ];
     const data = {
       level: level.replace("/", ""),
       gender: gender,
@@ -89,7 +238,6 @@ const AllBadgeDisplay = () => {
       .then((resp) => resp.json())
       .then((respJson) => {
         if (respJson.error.trim().length === 0) {
-          console.log("Score Submitted Successfully!");
           setTimeout(() => {
             setStatus({ loading: false, success: true, error: "" });
             history.push("/diagnosisResult");
@@ -105,9 +253,7 @@ const AllBadgeDisplay = () => {
       });
   };
 
-  useEffect(() => {
-    audio.play();
-  }, []);
+  
 
   const AllBadgesJSX = (
     <Backdrop className={classes.backdrop} open={open}>
