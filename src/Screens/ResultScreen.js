@@ -7,9 +7,11 @@ import {
   Snackbar,
   Typography,
   Backdrop,
+  IconButton,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { LocationOn } from "@material-ui/icons";
+import { MdContentCopy } from "react-icons/md";
 import MuiAlert from "@material-ui/lab/Alert";
 import styled from "styled-components";
 import { QuestionScore } from "../Components";
@@ -21,158 +23,7 @@ import larka from "../Images/characters/larka2.svg";
 import larki from "../Images/characters/larki2.svg";
 
 const ResultScreen = () => {
-  const [scores, setScores] = useState([
-    {
-      difficulty: "easy",
-      clickCount: 1,
-      hits: 1,
-      miss: 0,
-      score: 1,
-      accuracy: 1,
-      missrate: 0,
-      time: 9,
-    },
-    {
-      difficulty: "easy",
-      clicks: 1,
-      hits: 1,
-      miss: 0,
-      score: 1,
-      accuracy: 1,
-      missrate: 0,
-      time: 15,
-    },
-    {
-      difficulty: "easy",
-      clickCount: 2,
-      hits: 1,
-      miss: 0,
-      score: 1,
-      accuracy: 0.5,
-      missrate: 0,
-      time: 4,
-    },
-    {
-      difficulty: "medium",
-      clicks: 2,
-      hits: 1,
-      miss: 1,
-      score: 0.5,
-      accuracy: 0.5,
-      missrate: 0.5,
-      time: 13,
-    },
-    {
-      difficulty: "medium",
-      clickCount: 1,
-      hits: 1,
-      miss: 0,
-      score: 1,
-      accuracy: 1,
-      missrate: 0,
-      time: 5,
-    },
-    {
-      difficulty: "medium",
-      clicks: 4,
-      hits: 0,
-      miss: 4,
-      score: 0,
-      accuracy: 0,
-      missrate: 1,
-      time: 16,
-    },
-    {
-      difficulty: "medium",
-      clicks: 2,
-      hits: 0,
-      miss: 2,
-      score: 0,
-      accuracy: 0,
-      missrate: 1,
-      time: 12,
-    },
-    {
-      difficulty: "medium",
-      clickCount: 1,
-      hits: 0,
-      miss: 1,
-      score: 0,
-      accuracy: 0,
-      missrate: 1,
-      time: 5,
-    },
-    {
-      difficulty: "easy",
-      clicks: 1,
-      hits: 0,
-      miss: 1,
-      score: 0,
-      accuracy: 0,
-      missrate: 1,
-      time: 12,
-    },
-    {
-      difficulty: "easy",
-      clicks: 1,
-      hits: 1,
-      miss: 0,
-      score: 1,
-      accuracy: 1,
-      missrate: 0,
-      time: 13,
-    },
-    {
-      difficulty: "easy",
-      clicks: 1,
-      hits: 1,
-      miss: 0,
-      score: 1,
-      accuracy: 1,
-      missrate: 0,
-      time: 11,
-    },
-    {
-      difficulty: "easy",
-      clicks: 1,
-      hits: 1,
-      miss: 0,
-      score: 1,
-      accuracy: 1,
-      missrate: 0,
-      time: 18,
-    },
-    {
-      difficulty: "medium",
-      clicks: 5,
-      hits: 4,
-      miss: 0,
-      score: 1,
-      accuracy: 0.8,
-      missrate: 0,
-      time: 19,
-    },
-    {
-      difficulty: "medium",
-      clicks: 2,
-      hits: 2,
-      miss: 0,
-      score: 1,
-      accuracy: 1,
-      missrate: 0,
-      time: 14,
-    },
-    {
-      difficulty: "medium",
-      clicks: 4,
-      hits: 4,
-      miss: 0,
-      score: 1,
-      accuracy: 1,
-      missrate: 0,
-      time: 17,
-    },
-  ]);
+  const [scores, setScores] = useState(null);
   const [viewport, setViewport] = useState({
     latitude: 30.3753,
     longitude: 69.3451,
@@ -188,6 +39,7 @@ const ResultScreen = () => {
     message1: "",
     message2: "",
   });
+  const [copySet, setCopySet] = useState(false);
   const [navigation, setNavigation] = useState(null);
   const [nearby, setNearby] = useState(null);
   const [nearbyPopup, setNearbyPopup] = useState(null);
@@ -212,9 +64,21 @@ const ResultScreen = () => {
   const classes = useStyles();
   const mapboxApiToken = process.env.REACT_APP_MAPBOX_API_KEY;
   const url = process.env["REACT_APP_API_URL"];
+  const isUserLoggedIn = useSelector((state) => state.user.loggedIn);
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const copyContent = (e, el) => {
+    e.stopPropagation();
+    const text = el.place_name;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then((e) => {
+        setCopySet(true);
+        setOpen(true);
+      });
+    }
   };
 
   const handleNearbyPopupClick = (index) => {
@@ -232,7 +96,7 @@ const ResultScreen = () => {
     }
   };
 
-  const handleNearbyMarkerClick = (el, i) => {
+  const handleNearbyMarkerClick = (e, el, i) => {
     setNearbyPopup(Array(nearby.length).fill(false));
     setViewport({
       ...viewport,
@@ -269,11 +133,21 @@ const ResultScreen = () => {
   };
 
   const getPrediction = () => {
-    fetch(`${url}/api/v1/getPrediction`, {
-      method: "GET",
-      headers: {
+    let endpoint = `${url}/api/v1/getPrediction`;
+    const token = sessionStorage.getItem("token");
+    let headers = {
+      Accept: "application/json",
+    };
+    if (isUserLoggedIn && token) {
+      endpoint = `${url}/api/v1/getUserPrediction`;
+      headers = {
         Accept: "application/json",
-      },
+        Authorization: "Bearer " + token,
+      };
+    }
+    fetch(endpoint, {
+      method: "GET",
+      headers:headers,
     })
       .then((resp) => resp.json())
       .then((respJSON) => {
@@ -290,12 +164,14 @@ const ResultScreen = () => {
             educational psycologist for your child. The psycologist will help
             your child in improving his condition.`);
           } else {
-            setPMsg1("Congratulations! Your child is NOT DYSLEXIC.");
+            setPMsg1(
+              `Congratulations! There is a ${respJSON.prediction.accuracy}% chance that your child is NOT DYSLEXIC.`
+            );
             setPMsg2(
-              "No need to worry. However, if you think our prediction is incorrect, you should consult a professional psychologist as soon as possible."
+              "No need to worry. However, if you think our prediction is incorrect, you should consult a professional psychologist as soon as possible. We have recommended some of the nearest hospitals in your area."
             );
           }
-          setScores(respJSON.scores.scores);
+          setScores(respJSON.scores);
           setPrediction({
             accuracy: respJSON.prediction.accuracy,
             diagnosis: dyslexic,
@@ -382,6 +258,14 @@ const ResultScreen = () => {
         >
           Processing Diagnosis...
         </Typography>
+        <Typography
+          variant="h6"
+          style={{
+            color: "white",
+          }}
+        >
+          This may take a while...
+        </Typography>
       </Resultbg>
     );
   } else if (!status.success) {
@@ -430,32 +314,39 @@ const ResultScreen = () => {
           onClose={handleClose}
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         >
-          <Alert severity="error" onClose={handleClose}>
-            Could not load nearby hospitals, please try again!
+          <Alert
+            severity={!copySet ? "error" : "success"}
+            onClose={handleClose}
+          >
+            {!copySet
+              ? "Could not load nearby hospitals, please try again!"
+              : "Copied!"}
           </Alert>
         </Snackbar>
         <Resultcards className="row">
-          <Card>
-            <TopBar className="row">
-              <h4
-                style={{
-                  color: "white",
-                  fontSize: "1.5vw",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  margin: "2px 5px",
-                }}
-              >
-                Level: {titleCase(currentLevel)}
-              </h4>
-              <Time>{secondsToMinutes(time)}</Time>
-            </TopBar>
+          {scores && (
+            <Card>
+              <TopBar className="row">
+                <h4
+                  style={{
+                    color: "white",
+                    fontSize: "1.5vw",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "2px 5px",
+                  }}
+                >
+                  Level: {titleCase(currentLevel)}
+                </h4>
+                <Time>{secondsToMinutes(time)}</Time>
+              </TopBar>
 
-            {scores.map((el, i) => {
-              return <QuestionScore answer={el.score} index={i} key={i} />;
-            })}
-          </Card>
+              {scores.map((el, i) => {
+                return <QuestionScore answer={el.score} index={i} key={i} />;
+              })}
+            </Card>
+          )}
           <Card>
             <Heading className="row">
               <h3 style={{ fontSize: "1.6vw" }}>Dyslexic Prediction</h3>
@@ -573,20 +464,25 @@ const ResultScreen = () => {
                 ? nearby.map((el, i) => (
                     <RecommendationItem
                       key={i}
-                      onClick={() => handleNearbyMarkerClick(el, i)}
+                      onClick={(e) => handleNearbyMarkerClick(e, el, i)}
                     >
-                      <Name>{el.text}</Name>
-                      <Address>
-                        {el.place_name.split(",").slice(1).join(",")}
-                      </Address>
-                      <StarRatings
-                        rating={4.5}
-                        starRatedColor="yellow"
-                        numberOfStars={5}
-                        name="rating"
-                        starDimension="15px"
-                        starSpacing="2px"
-                      />
+                      <RecommendationText>
+                        <Name>{el.text}</Name>
+                        <Address>
+                          {el.place_name.split(",").slice(1).join(",")}
+                        </Address>
+                        <StarRatings
+                          rating={4.5}
+                          starRatedColor="yellow"
+                          numberOfStars={5}
+                          name="rating"
+                          starDimension="15px"
+                          starSpacing="2px"
+                        />
+                      </RecommendationText>
+                      <IconButton onClick={(e) => copyContent(e, el)}>
+                        <MdContentCopy color="white" />
+                      </IconButton>
                     </RecommendationItem>
                   ))
                 : viewport.latitude &&
@@ -659,12 +555,12 @@ const Prediction = styled.div`
   flex-direction: row;
   height: 40%;
   width: 100%;
-  ${'' /* align-items: center; */}
-  ${'' /* justify-content: center; */}
+  ${"" /* align-items: center; */}
+  ${"" /* justify-content: center; */}
 `;
 
 const NavButtons = styled.div`
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: space-around;
   height: 20%;
@@ -772,15 +668,21 @@ const RecommendationArea = styled.div`
 
 const RecommendationItem = styled.div`
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   width: 95%;
   padding-top: 2px;
   padding-left: 5px;
   padding-right: 5px;
   margin: 2px;
   cursor: pointer;
+`;
+
+const RecommendationText = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 `;
 
 const Name = styled.h4`
@@ -824,19 +726,19 @@ const Msg = styled.p`
   margin: 10px;
   display: flex;
   text-align: center;
-  ${'' /* align-items: center; */}
-  ${'' /* justify-content: center; */}
+  ${"" /* align-items: center; */}
+  ${"" /* justify-content: center; */}
 `;
 
 const Span = styled.div`
   display: flex;
-  ${'' /* align-items: center; */}
-  ${'' /* justify-content: center; */}
+  ${"" /* align-items: center; */}
+  ${"" /* justify-content: center; */}
 `;
 
 const Accuracy = styled.h1`
   color: ${({ color }) => color};
-  font-size: 5vw;
+  font-size: 4vw;
   padding: 10px;
   margin: 20px 10px;
 `;

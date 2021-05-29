@@ -163,7 +163,7 @@ const LetterRecognition = ({
               disabled={disabled}
               onClick={() => {
                 getAnswer();
-                // if ((activeStep + 1) % 2 === 0) openBadge();
+                if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />
