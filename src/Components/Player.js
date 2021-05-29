@@ -11,10 +11,9 @@ const Player = ({ color, text }) => {
   const { speak, cancel, voices, speaking } = useSpeechSynthesis();
   const togglePlay = () => {
     if (iconName === "play") {
-      console.log(text)
       speak({
         text: text,
-        rate: 0.8,
+        rate: 0.6,
         voice: voices[3],
       });
       setIconName("pause");
@@ -100,8 +99,8 @@ const Player = ({ color, text }) => {
           {iconName === "play" ? (
             <PlayArrowRounded fontSize="large" style={{ color: color }} />
           ) : (
-              <PauseRounded fontSize="large" style={{ color: color }} />
-            )}
+            <PauseRounded fontSize="large" style={{ color: color }} />
+          )}
         </IconButton>
         <ProgressBarAndTimer>
           <ProgressBar ref={progressbar} max="1" value="0" />
