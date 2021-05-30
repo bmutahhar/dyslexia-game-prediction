@@ -177,13 +177,21 @@ const RecognizeSound = ({
           <AnswerContainer className="row">
             {shuffledOptions.map((_, i) => {
               return (
-                <PlayButton
-                  key={i}
-                  option={shuffledOptions[i]}
-                  togglePlay={togglePlay}
-                  iconName={iconNames[i]}
-                  index={i}
-                />
+                <motion.div
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: "spring", delay: 0.8, duration: 1.5, stiffness: 100 }}
+                >
+                  <PlayButton
+                    key={i}
+                    option={shuffledOptions[i]}
+                    togglePlay={togglePlay}
+                    iconName={iconNames[i]}
+                    index={i}
+                  />
+                </motion.div>
+
               );
             })}
           </AnswerContainer>
