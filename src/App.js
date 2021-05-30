@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Navbar, GameReview } from "./Components";
+import { Navbar } from "./Components";
 import {
   Home,
   HowItWorks,
@@ -77,12 +77,11 @@ const MainPage = () => {
   });
   return (
     <>
-      {/* <Navbar isNotMobileDevice={isNotMobileDevice} />
+      <Navbar isNotMobileDevice={isNotMobileDevice} />
       <Home />
       <HowItWorks />
       <About />
-      <Contact /> */}
-      <GameReview></GameReview>
+      <Contact />
     </>
   );
 };
