@@ -791,5 +791,53 @@ def getUserPrediction():
             mimetype='application/json')
 
 
+@app.route("/api/v1/addFeedback", methods=['POST'])
+def add_feedback():
+    try:
+        if request.method.strip() == "POST":
+            auth_token = request.headers.get("Authorization")
+            data = request.json
+            if auth_token is None:
+                print("No auth token")
+                if data:
+                    db.feedbacks.insert_one(data)
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Feedback stored successfully!',
+                         "error": ""}),
+                    status=200,
+                    mimetype='application/json')
+            else:
+                auth_token = auth_token.strip().split(" ")[-1]
+                decoded_jwt = jwt.decode(auth_token, app.config["SECRET_KEY"], algorithms=["HS256"])
+                username = decoded_jwt.get('username')
+                if data:
+                    if username is not None:
+                        data['username'] = username
+
+                    db.feedbacks.insert_one(data)
+                return Response(
+                    response=json.dumps(
+                        {'message': 'Feedback stored successfully!',
+                         "error": ""}),
+                    status=200,
+                    mimetype='application/json')
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Could not get prediction.',
+                     "error": "Only POST requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Could not get prediction.', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)
