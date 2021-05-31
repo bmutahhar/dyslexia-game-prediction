@@ -132,15 +132,23 @@ const TypeWord = ({
         />
         <GameArea className="col-8">
           <QuestionContainer className="row">
-            <InputTextField
-              onKeyUp={handleKeyUp}
-              variant="outlined"
-              inputProps={{
-                style: {
-                  padding: "15px 10px",
-                },
-              }}
-            />
+            <motion.div
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              initial={{ width: "0%" }}
+              animate={{ width: "60%" }}
+              transition={{ type: "spring", duration: 1.5 }}
+            >
+              <InputTextField
+                onKeyUp={handleKeyUp}
+                variant="outlined"
+                inputProps={{
+                  style: {
+                    padding: "15px 10px",
+                  },
+                }}
+              />
+            </motion.div>
+
             <Qinfo>{question}</Qinfo>
             <Player color="white" text={word} />
           </QuestionContainer>
@@ -156,9 +164,9 @@ const TypeWord = ({
                 variant="contained"
                 type="button"
                 onClick={() => {
-                getAnswer();
-                stopTime();
-              }}
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>
@@ -236,7 +244,7 @@ const InputTextField = withStyles({
   root: {
     backgroundColor: "#05e338",
     borderRadius: "15px",
-    width: "50%",
+    width: "100%",
     boxShadow: "2px 10px 40px rgba(0,0,0,0.3)",
 
     "&:hover .MuiOutlinedInput-notchedOutline": {
