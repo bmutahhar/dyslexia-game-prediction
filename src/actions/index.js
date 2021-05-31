@@ -12,9 +12,8 @@ export const addScore = (payload) => ({
   payload: payload,
 });
 
-export const removeScore = (payload) => ({
-  type: "REMOVE_SCORE",
-  payload: payload,
+export const resetScore = () => ({
+  type: "RESET_SCORE",
 });
 
 export const setGender = (payload) => ({
@@ -36,7 +35,7 @@ export const decrementConsecutiveScore = () => ({
 })
 
 export const resetConsecutiveScore = () => ({
-  type: "RESET_SCORE",
+  type: "RESET_CONSECUTIVE_SCORE",
 })
 
 export const easyDifficulty = () => ({

@@ -15,6 +15,7 @@ import {
   mediumDifficulty,
   hardDifficulty,
   resetConsecutiveScore,
+  resetScore,
 } from "../../actions";
 import { yay } from "../../Sounds";
 
@@ -207,6 +208,7 @@ const PreSchoolers = () => {
       }
     }
   }, [status.success, showInstructions]);
+
 
   if (showInstructions) {
     return <InstructionScreen onClick={hideInstructions} />;

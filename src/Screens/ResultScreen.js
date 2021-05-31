@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import {
   CircularProgress,
@@ -14,7 +14,7 @@ import { LocationOn } from "@material-ui/icons";
 import { MdContentCopy } from "react-icons/md";
 import MuiAlert from "@material-ui/lab/Alert";
 import styled from "styled-components";
-import { QuestionScore } from "../Components";
+import { QuestionScore, GameReview } from "../Components";
 import ReactMapGL, { Marker, Popup, FlyToInterpolator } from "react-map-gl";
 import StarRatings from "react-star-ratings";
 import errorguy from "../Images/characters/errorguy.gif";
@@ -55,12 +55,13 @@ const ResultScreen = () => {
     accuracy: 0,
     diagnosis: null,
   });
+  const [openReview, setOpenReview] = useState(false);
+  const [goToURL, setGoToURL] = useState("");
   const time = useSelector((state) => state.time);
   const gender = useSelector((state) => state.gender);
   const currentLevel = useSelector((state) =>
     state.currentLevel.replace("/", "")
   );
-  const history = useHistory();
   const classes = useStyles();
   const mapboxApiToken = process.env.REACT_APP_MAPBOX_API_KEY;
   const url = process.env["REACT_APP_API_URL"];
@@ -68,6 +69,14 @@ const ResultScreen = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleOpenReview = () => {
+    setOpenReview(true);
+  };
+
+  const handleCloseReview = () => {
+    setOpenReview(false);
   };
 
   const copyContent = (e, el) => {
@@ -147,7 +156,7 @@ const ResultScreen = () => {
     }
     fetch(endpoint, {
       method: "GET",
-      headers:headers,
+      headers: headers,
     })
       .then((resp) => resp.json())
       .then((respJSON) => {
@@ -323,6 +332,11 @@ const ResultScreen = () => {
               : "Copied!"}
           </Alert>
         </Snackbar>
+        <GameReview
+          open={openReview}
+          onClose={handleCloseReview}
+          goToURL={goToURL}
+        />
         <Resultcards className="row">
           {scores && (
             <Card>
@@ -373,10 +387,22 @@ const ResultScreen = () => {
               <Msg fontSize="1.2vw">{pMsg2}</Msg>
             </Span>
             <NavButtons className="row">
-              <PlayButton onClick={() => history.replace("/levelSelect")}>
+              <PlayButton
+                onClick={() => {
+                  setGoToURL("/levelSelect");
+                  handleOpenReview();
+                }}
+              >
                 Play Again
               </PlayButton>
-              <ExitButton onClick={() => history.replace("/")}>Exit</ExitButton>
+              <ExitButton
+                onClick={() => {
+                  setGoToURL("/");
+                  handleOpenReview();
+                }}
+              >
+                Exit
+              </ExitButton>
             </NavButtons>
           </Card>
           <Card noPadding>

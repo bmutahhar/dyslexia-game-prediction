@@ -3,8 +3,9 @@ const scoreReducer = (state = [], action) => {
     case "ADD_SCORE":
       state.push(action.payload);
       return state;
-    case "REMOVE_SCORE":
-      return state.filter((item) => item !== action.payload);
+    case "RESET_SCORE":
+      state = []
+      return state;
     default:
       return state;
   }

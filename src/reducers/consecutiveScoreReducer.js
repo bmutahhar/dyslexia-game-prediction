@@ -6,7 +6,7 @@ const consecutiveScoreReducer = (state = "***", action) => {
     case "DECREMENT_SCORE":
       state = state.slice(1,) + "0";
       return state;
-    case "RESET_SCORE":
+    case "RESET_CONSECUTIVE_SCORE":
       state = "***";
       return state;
     default:

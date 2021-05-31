@@ -20,6 +20,7 @@ import {
   ProfileTracking,
   ResultScreen
 } from "./Screens";
+import {GameReview} from "./Components"
 import { useMediaQuery } from "react-responsive";
 
 import "./App.css";
@@ -29,16 +30,6 @@ const App = () => {
   const isNotMobileDevice = useMediaQuery({
     query: "(min-device-width:600px)",
   });
-
-  const unloadHandler = () => {
-    localStorage.clear();
-  };
-
-  useEffect(() => {
-    // window.addEventListener("beforeunload", unloadHandler);
-
-    // return () => window.removeEventListener("beforeunload", unloadHandler);
-  }, []);
 
   return (
     <Router>
@@ -59,6 +50,7 @@ const App = () => {
               <Route path="/instruction" component={InstructionScreen} />
               <Route path="/profile" component={ProfileTracking} />
               <Route path="/diagnosisResult" component={ResultScreen} />
+              <Route path="/review" component={GameReview} />
             </>
           ) : (
             <Route path="/notSupported" component={NotSupported} />

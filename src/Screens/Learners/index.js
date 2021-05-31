@@ -43,7 +43,7 @@ const Learners = () => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const consecutiveScore = useSelector((state) => state.consecutiveScore);
   const dispatch = useDispatch();
-  const [stop, setStop] = useState(false)
+  const [stop, setStop] = useState(false);
 
   const stopTime = () => {
     setStop(true);
