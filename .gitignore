@@ -118,6 +118,7 @@ env.bak/
 venv.bak/
 Dataset/
 Models/
+Temp/
 
 # Spyder project settings
 .spyderproject

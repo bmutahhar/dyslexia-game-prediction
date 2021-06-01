@@ -1,3 +1,9 @@
+import csv
+import json
+import os
+import zipfile
+
+from jsonflat import JsonFlat
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
@@ -34,3 +40,43 @@ def get_avg_score(dataArr):
         score += obj['score']
 
     return round(score, 2)
+
+
+def convert_json(data):
+    data = JsonFlat().flatten(data)
+    return data
+
+
+def write_file(formData, scoreData, fileType):
+    if not os.path.exists("./Temp"):
+        os.mkdir("./Temp")
+    if fileType == "csv":
+        formDataCSV = convert_json(formData)
+        scoreDataCSV = convert_json(scoreData)
+        form_path = "./Temp/form-data.csv"
+        score_path = "./Temp/score-data.csv"
+        with open(form_path, 'w', encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=formDataCSV['field_names'])
+            writer.writeheader()
+            writer.writerows(formDataCSV['rows'])
+        with open(score_path, 'w', encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=scoreDataCSV['field_names'])
+            writer.writeheader()
+            writer.writerows(scoreDataCSV['rows'])
+        with zipfile.ZipFile("./Temp/csv-data.zip", "w") as zipF:
+            zipF.write(form_path, compress_type=zipfile.ZIP_DEFLATED, arcname=os.path.basename(form_path))
+            zipF.write(score_path, compress_type=zipfile.ZIP_DEFLATED, arcname=os.path.basename(score_path))
+        os.remove(form_path)
+        os.remove(score_path)
+    else:
+        form_path = "./Temp/form-data.json"
+        score_path = "./Temp/score-data.json"
+        with open(form_path, 'w', encoding="utf-8") as f:
+            json.dump(formData, f, indent=2, ensure_ascii=False)
+        with open(score_path, 'w', encoding="utf-8", newline="") as f:
+            json.dump(scoreData, f, indent=2, ensure_ascii=False)
+        with zipfile.ZipFile("./Temp/json-data.zip", "w") as zipF:
+            zipF.write(form_path, compress_type=zipfile.ZIP_DEFLATED, arcname=os.path.basename(form_path))
+            zipF.write(score_path, compress_type=zipfile.ZIP_DEFLATED, arcname=os.path.basename(score_path))
+            os.remove(form_path)
+            os.remove(score_path)

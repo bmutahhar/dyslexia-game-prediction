@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import shutil
 from copy import deepcopy
 from datetime import datetime, timedelta
 
@@ -9,17 +10,31 @@ import pymongo
 from Models import Models
 from flask import Flask, Response, request
 from flask_cors import CORS
+from flask_mail import Mail, Message
 from pymongo import ReadPreference
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from HelperFuctions import get_avg_score
+from HelperFuctions import get_avg_score, write_file
 
 app = Flask(__name__)
 cors = CORS(app)
+app.config.update(dict(
+    DEBUG=True,
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=587,
+    MAIL_USE_TLS=True,
+    MAIL_USE_SSL=False,
+    MAIL_USERNAME=os.environ.get("EMAIL"),
+    MAIL_PASSWORD=os.environ.get("PASSWORD"),
+    MAIL_DEFAULT_SENDER=os.environ.get("EMAIL"),
+))
+mail = Mail(app)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)
 app.config['DB_URL'] = os.environ.get("DB_URL") or "mongodb://localhost:27017"
 scores = {}
+data_info = {}
 print("Scores is: ", scores)
+print("Data Info is: ", data_info)
 try:
 
     mongo = pymongo.MongoClient(app.config['DB_URL'], serverSelectionTimeoutMS=15000,
@@ -825,7 +840,7 @@ def add_feedback():
         else:
             return Response(
                 response=json.dumps(
-                    {'message': 'Could not get prediction.',
+                    {'message': 'Could not add feedback.',
                      "error": "Only POST requests allowed on this URI"}),
                 status=500,
                 mimetype='application/json')
@@ -834,7 +849,175 @@ def add_feedback():
         print(e)
         return Response(
             response=json.dumps(
-                {'message': 'Could not get prediction.', "error": str(e)}),
+                {'message': 'Could not add feedback.', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/dataRequest", methods=["POST"])
+def data_access_request():
+    try:
+        if request.method.strip() == "POST":
+            info = request.json
+            name = info.get("name", "")
+            email = info.get("email", "")
+            fileType = info.get("fileType", "")
+            sop = info.get("sop", "")
+            global data_info
+            data_info['name'] = name
+            data_info['email'] = email
+            data_info['fileType'] = fileType
+            print("Data Info is: ", data_info)
+            initialFormData = db.initialFormData.find({}, {"_id": False})
+            nonUserScores = db.nonUserScores.find({}, {"_id": False})
+            initialFormData = list(initialFormData)
+            nonUserScores = list(nonUserScores)
+            write_file(initialFormData, nonUserScores, fileType)
+            url = "http://localhost:5000/api/v1/sendDataFiles"
+            print(info)
+            htmlMail = f"""<table style="width: 100%; border-collapse: initial; border-spacing: 0; max-width: 470px; text-align: left; border-radius: 8px; margin: 32px auto 0; padding: 0; border: 1px solid #c9cccf;" cellspacing="0" cellpadding="0" align="center">
+<tbody>
+<tr style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; padding: 0; border: 0;">
+<table style="width: 100%; border-collapse: collapse; border-spacing: 0; margin-top: 0; margin-bottom: 0; padding: 0;" cellspacing="0" cellpadding="0">
+<tbody>
+<tr style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; padding: 24px 20px; border: 0;">
+<table style="width: 100%; border-collapse: collapse; border-spacing: 0; margin-top: 0; margin-bottom: 0; padding: 0;" cellspacing="0" cellpadding="0">
+<tbody>
+<tr style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; padding: 0 4px 20px; border: 0;">
+<table style="width: 100%; border-collapse: collapse; border-spacing: 0; margin-top: 0; margin-bottom: 0; padding: 0;" cellspacing="0" cellpadding="0">
+<tbody>
+<tr style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; padding: 0; border: 0;">
+<p style="color: #202223; line-height: 1.41; font-size: 14px; font-weight: 400; margin: 0; padding: 0 0 20px;"><strong style="color: #202223;">DyxsisML </strong></p>
+</td>
+</tr>
+<tr style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; padding: 0; border: 0;">
+<div>This is an automatically generated email. Mr./Mrs. {name} has requested access to your data in order to fulfill his research. He states:</div>
+</td>
+</tr>
+<tr style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; padding: 0; border: 0;">
+<div style="margin-top: 20px;">"{sop}"</div>
+</td>
+</tr>
+<tr style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; padding: 0; border: 0;"><a style="margin-top: 20px; margin-bottom: 0; color: white; text-decoration: none; font-weight: 400; text-transform: initial; letter-spacing: initial; display: inline-block; font-size: 14px; line-height: 1.41; background-color: #008060; border-radius: 4px; padding: 0; border-color: #008060; border-style: solid; border-width: 8px 16px;" href="{url}" target="_blank">Send Files</a></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table style="width: 100%; border-collapse: collapse; border-spacing: 0; margin-top: 0; margin-bottom: 0; padding: 0;" cellspacing="0" cellpadding="0">
+<tbody>
+<tr style="margin-top: 0; margin-bottom: 0; border-top-width: 1px; border-top-color: #c9cccf; border-top-style: solid; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; padding: 20px 4px 0; border: 0;">
+<p style="color: #202223; line-height: 20px; margin: 0; padding: 0;">You can click the above button to automatically send files to the person in his requested file format.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; padding: 0; border: 0;">
+<table style="width: 100%; border-collapse: collapse; border-spacing: 0; margin-top: 0; margin-bottom: 0; text-align: center; padding: 0;" cellspacing="0" cellpadding="0">
+<tbody>
+<tr style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<td style="margin-top: 0; margin-bottom: 0; border-radius: 8px; border-top-color: #dfe3e8; border-top-style: solid; padding: 20px 8px 20px 20px; border-width: 1px 0 0;" align="left" bgcolor="#f9fafb">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>"""
+            msg = Message("Data Access Request By {}".format(name), html=htmlMail,
+                          recipients=[email])
+            mail.send(msg)
+            return Response(
+                response=json.dumps(
+                    {'message': 'Success!',
+                     "error": ""}),
+                status=200,
+                mimetype='application/json')
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Could not add feedback.',
+                     "error": "Only POST requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Could not process data access request', "error": str(e)}),
+            status=500,
+            mimetype='application/json')
+
+
+@app.route("/api/v1/sendDataFiles", methods=["GET"])
+def sendDataFiles():
+    try:
+        if request.method == "GET":
+            if os.path.exists("./Temp"):
+                global data_info
+                if len(data_info.keys()) != 0:
+                    name = data_info.get('name', "")
+                    email = data_info.get('email')
+                    fileType = data_info.get("fileType")
+                    if email is not None and fileType is not None:
+                        msg = Message("Data File From DyxsisML", recipients=[email])
+                        msg.body = f"""Greetings!
+Our admin panel has reviewed your request and has decided to give you access to our data files.
+We hope you use them well. Please find the attached archived file.
+Good luck with your endeavour :)
+
+For any queries, please contact us at {app.config.get("MAIL_DEFAULT_SENDER", "")}
+"""
+                        if fileType == "csv":
+                            print("Attaching csv zip file...")
+                            with open("./Temp/csv-data.zip", 'rb') as f:
+                                msg.attach("csv-data.zip", "application/octect-stream", f.read())
+                        else:
+                            print("Attaching json zip file...")
+                            with open("./Temp/json-data.zip", 'rb') as f:
+                                msg.attach("json-data.zip", "application/octect-stream", f.read())
+                        mail.send(msg)
+                        shutil.rmtree("./Temp")
+                        data_info = {}
+                        print("Data info is: ", data_info)
+                        return "<h2>Files Sent Successfully!</h2>"
+                    else:
+                        return "<h2>Name, Email, and File Type Not Set...</h2><br/><h3>Files not sent.</h3>"
+                else:
+                    return "<h2>Name, Email, and File Type Not Set...</h2><br/><h3>Files not sent.</h3>"
+            else:
+                return "<h2>No Files Found</h2>"
+        else:
+            return Response(
+                response=json.dumps(
+                    {'message': 'Could not send files.',
+                     "error": "Only POST requests allowed on this URI"}),
+                status=500,
+                mimetype='application/json')
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps(
+                {'message': 'Could not process data access request', "error": str(e)}),
             status=500,
             mimetype='application/json')
 
