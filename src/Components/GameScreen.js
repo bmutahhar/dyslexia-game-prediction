@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { ProfileAvatar, Timer, CustomStepper } from "../Components";
-import { makeStyles } from "@material-ui/core/styles";
+import { Timer, CustomStepper } from "../Components";
 import { useSelector } from "react-redux";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
 
 const GameScreen = ({ children, activeStep, badges, stop }) => {
-  const loggedIn = useSelector((state) => state.user.loggedIn);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const [showBadges, setShowBadges] = useState(
     Array(badges.length).fill(false)
   );
-  const [pfp, setPfp] = useState(null);
 
   useEffect(() => {
     if (activeStep === 0) return;
@@ -30,11 +27,6 @@ const GameScreen = ({ children, activeStep, badges, stop }) => {
     }
   }, [activeStep]);
 
-  useEffect(() => {
-    const dp = JSON.parse(sessionStorage.getItem("pfp"));
-    console.log(dp);
-    setPfp(dp);
-  }, []);
   return (
     <Container className="container-fluid" background={gamebg}>
       <Header className="row">
@@ -52,7 +44,6 @@ const GameScreen = ({ children, activeStep, badges, stop }) => {
         </ProgressStepper>
         <Profile className="col-2">
           <Timer initialSeconds={0} initialMinutes={0} stop={stop} />
-          {(loggedIn && pfp) && <ProfileAvatar pfp={pfp} />}
         </Profile>
       </Header>
       <GameArea className="row">{children}</GameArea>

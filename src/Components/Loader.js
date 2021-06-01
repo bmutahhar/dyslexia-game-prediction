@@ -2,15 +2,13 @@ import React from "react";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
-import { ProfileAvatar, CustomStepper } from "../Components";
-import { useSelector } from "react-redux";
+import { CustomStepper } from "../Components";
 import { motion } from "framer-motion";
 import doggy from "../Images/characters/dog4.gif";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
 const Loader = ({ open, onClick }) => {
   const classes = useStyles();
-  const loggedIn = useSelector((state) => state.user.loggedIn);
   return (
     <Container className="container-fluid" background={gamebg}>
       <Header className="row">
@@ -29,7 +27,6 @@ const Loader = ({ open, onClick }) => {
         </ProgressStepper>
         <Profile className="col-2">
           <Time>00:00</Time>
-          {loggedIn && <ProfileAvatar />}
         </Profile>
       </Header>
       <LoadingScreen className="row">
@@ -40,10 +37,10 @@ const Loader = ({ open, onClick }) => {
             transition={{
               duration: 0.8,
               type: "tween",
-
             }}
             src={doggy}
-            alt="dog Waiting GIF" />
+            alt="dog Waiting GIF"
+          />
           <Loadingmsg
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -51,7 +48,9 @@ const Loader = ({ open, onClick }) => {
               delay: 0.4,
               duration: 0.2,
             }}
-          >Loading......Please Wait!</Loadingmsg>
+          >
+            Loading......Please Wait!
+          </Loadingmsg>
         </Backdrop>
       </LoadingScreen>
     </Container>
@@ -71,7 +70,6 @@ const Loadingmsg = styled(motion.h1)`
   animation: typing 3.5s steps(35, end), blink-caret 0.4s step-end infinite;
   @keyframes typing {
     from {
-
       width: 0;
     }
     to {

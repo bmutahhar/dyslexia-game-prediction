@@ -387,7 +387,7 @@ const Form = () => {
           q4sf: QandA.qna16.fieldselect,
           q4if: QandA.qna16.fieldinput,
         });
-
+        setSavecheck(false);
         break;
       }
 

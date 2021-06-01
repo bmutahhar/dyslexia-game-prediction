@@ -56,6 +56,7 @@ const LoginComponent = () => {
     error: "",
   });
   const dispatch = useDispatch();
+  const contentSaved = localStorage.getItem("contentSaved");
 
   function postData(data, uri, googleLogin) {
     fetch(uri, {
@@ -79,13 +80,18 @@ const LoginComponent = () => {
               .then((resp) => resp.blob())
               .then((blob) => {
                 const url = URL.createObjectURL(blob);
-                console.log(url);
                 sessionStorage.setItem("pfp", JSON.stringify(url));
               })
               .catch((err) => console.log(err));
           }
 
-          setTimeout(() => history.replace("/userform"), 1000);
+          setTimeout(() => {
+            if (contentSaved) {
+              history.replace("/levelSelect");
+            } else {
+              history.replace("/userform");
+            }
+          }, 1000);
         } else {
           !googleLogin
             ? setStatus({
@@ -247,17 +253,20 @@ const LoginComponent = () => {
             )}
           </UserButton>
 
-            <UserButton variant="contained" fullWidth onClick={()=>{
-              const contentSaved = localStorage.getItem('contentSaved')
-              if (contentSaved){
-                history.push("/levelSelect")
+          <UserButton
+            variant="contained"
+            fullWidth
+            onClick={() => {
+              const contentSaved = localStorage.getItem("contentSaved");
+              if (contentSaved) {
+                history.push("/levelSelect");
+              } else {
+                history.push("/userform");
               }
-              else{
-                history.push("/userform")
-              }
-            }}>
-              Play As Guest
-            </UserButton>
+            }}
+          >
+            Play As Guest
+          </UserButton>
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_ID}
             render={(renderProps) => (
