@@ -305,6 +305,7 @@ const FormSubmit = styled.button`
   border-radius: 5px;
   background-color: #25ce4a;
   color: white;
+  display:flex;
   align-items: center;
   justify-content: center;
   font-size: 1.3vw;

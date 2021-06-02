@@ -59,7 +59,7 @@ const RecognizeSound = ({
       setValue(ref.current.value);
       speak({
         text: shuffledOptions[i],
-        rate: 0.8,
+        rate: 0.9,
         voice: voices[3],
       });
       let icons = playIcons;
