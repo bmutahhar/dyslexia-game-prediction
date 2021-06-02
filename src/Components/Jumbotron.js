@@ -33,7 +33,12 @@ const Jumbotron = () => {
           endIcon={<FiChevronRight className={classes.icon} />}
           onClick={() => {
             if (loggedIn) {
-              history.push("/levelSelect");
+              if (contentSaved){
+                history.push("/levelSelect")
+              }
+              else{
+              history.push("/userform");
+              }
             } else if (contentSaved) {
               history.push("/levelSelect");
             } else if (isNotMobileDevice) {
