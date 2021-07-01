@@ -12,7 +12,6 @@ import remove from "../Images/backgrounds/eraser.svg";
 import edit from "../Images/backgrounds/pencil.svg";
 import dp from "../Images/backgrounds/UploadIcon.svg";
 import save from "../Images/backgrounds/save.png";
-import bg from "../Images/backgrounds/gamebg.png";
 
 const ProfileTracking = () => {
   const [editinfo, setEditinfo] = useState(false);
@@ -953,8 +952,8 @@ const Dpic = styled.img`
   margin-left: auto;
   margin-right: auto;
   width: ${({ width }) => width};
-  height: ${({ height }) => height}
-  object-fit:contain;
+  height: ${({ height }) => height};
+  object-fit: contain;
 `;
 const ProfileInfo = styled.div`
   height: 80vh;
@@ -1089,7 +1088,7 @@ const Span = styled.div`
 `;
 
 const NoRecord = styled.div`
-  color: ${({color})=>color? color:"white"};
+  color: ${({ color }) => (color ? color : "white")};
   font-size: 2.5vw;
   font-family: "Open Sans", sans-serif;
   font-weight: 700;

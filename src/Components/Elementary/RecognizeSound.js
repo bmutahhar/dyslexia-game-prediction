@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import {
   Tile,
-  Player,
   UIButton,
   NextButton,
   AvatarMessage,
@@ -18,8 +16,7 @@ import {
 import { motion } from "framer-motion";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import { withStyles } from "@material-ui/core/styles";
+
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 import { PlayArrowRounded, PauseRounded } from "@material-ui/icons";
@@ -178,10 +175,19 @@ const RecognizeSound = ({
             {shuffledOptions.map((_, i) => {
               return (
                 <motion.div
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: "spring", delay: 0.8, duration: 1.5, stiffness: 100 }}
+                  transition={{
+                    type: "spring",
+                    delay: 0.8,
+                    duration: 1.5,
+                    stiffness: 100,
+                  }}
                 >
                   <PlayButton
                     key={i}
@@ -191,7 +197,6 @@ const RecognizeSound = ({
                     index={i}
                   />
                 </motion.div>
-
               );
             })}
           </AnswerContainer>

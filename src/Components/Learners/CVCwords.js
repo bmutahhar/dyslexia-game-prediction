@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import {
   Player,
   UIButton,
@@ -196,16 +195,16 @@ const CVCwords = ({
                 variant="contained"
                 type="button"
                 onClick={() => {
-                getAnswer();
-                stopTime();
-              }}
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>
             </motion.div>
           ) : (
             <NextButton
-            disabled={disabled}
+              disabled={disabled}
               onClick={() => {
                 getAnswer();
                 if ((activeStep + 1) % 2 === 0) openBadge();

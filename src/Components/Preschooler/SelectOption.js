@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
@@ -33,7 +33,7 @@ const SelectOption = ({
   badge,
   openBadge,
   badgeName,
-  stopTime
+  stopTime,
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const difficulty = useSelector((state) => state.difficulty);
@@ -282,9 +282,9 @@ const SelectOption = ({
                 variant="contained"
                 type="button"
                 onClick={() => {
-                getAnswer();
-                stopTime();
-              }}
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>

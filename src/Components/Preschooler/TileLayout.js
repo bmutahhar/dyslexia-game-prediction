@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Dragula from "react-dragula";
 import { motion, AnimatePresence } from "framer-motion";
-import { Backdrop, Typography } from "@material-ui/core";
+import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Tileplacer,
@@ -35,7 +35,7 @@ const TileLayout = ({
   badge,
   openBadge,
   badgeName,
-  stopTime
+  stopTime,
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
@@ -356,9 +356,9 @@ const TileLayout = ({
                 variant="contained"
                 type="button"
                 onClick={() => {
-                getAnswer();
-                stopTime();
-              }}
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>

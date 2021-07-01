@@ -15,7 +15,6 @@ import {
   mediumDifficulty,
   hardDifficulty,
   resetConsecutiveScore,
-  resetScore,
 } from "../../actions";
 import { yay } from "../../Sounds";
 
@@ -45,9 +44,7 @@ const PreSchoolers = () => {
   const [stop, setStop] = useState(false);
   const audio = new Audio(yay);
   const url = process.env["REACT_APP_API_URL"];
-  const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const dispatch = useDispatch();
-  let history = useHistory();
 
   const nextStep = () => {
     setActiveStep(activeStep + 1);
@@ -208,7 +205,6 @@ const PreSchoolers = () => {
       }
     }
   }, [status.success, showInstructions]);
-
 
   if (showInstructions) {
     return <InstructionScreen onClick={hideInstructions} />;

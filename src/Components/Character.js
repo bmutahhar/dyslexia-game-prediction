@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
-import { pulse, zoomInUp, zoomInDown, bounce, zoomIn, fadeIn } from "react-animations";
+import {
+  pulse,
+  zoomInUp,
+  zoomInDown,
+  bounce,
+  zoomIn,
+  fadeIn,
+} from "react-animations";
 
 export default class Character extends Component {
   render() {
@@ -18,15 +25,15 @@ export default class Character extends Component {
             transition={this.props.transition}
           ></Animated>
         ) : (
-            <NonAnimated
-              className={this.props.className}
-              onClick={this.props.onClick}
-              src={this.props.src}
-              alt={this.props.alt}
-              onError={this.props.onError}
-              style={this.props.style}
-            ></NonAnimated>
-          )}
+          <NonAnimated
+            className={this.props.className}
+            onClick={this.props.onClick}
+            src={this.props.src}
+            alt={this.props.alt}
+            onError={this.props.onError}
+            style={this.props.style}
+          ></NonAnimated>
+        )}
       </Container>
     );
   }
@@ -39,16 +46,14 @@ const animations = {
   zoomInDown: keyframes`${zoomInDown}`,
   bounce: keyframes`${bounce}`,
   fadeIn: keyframes`${fadeIn}`,
-
-
 };
 
 const Container = styled.div``;
 const Animated = styled.img`
   animation: ${(props) => {
-    return `${props.transition}`;
-  }}
-  ${(props) => animations[props.animation]};}
+      return `${props.transition}`;
+    }}
+    ${(props) => animations[props.animation]};
 
   &:hover {
     cursor: pointer;

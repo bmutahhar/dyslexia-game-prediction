@@ -103,16 +103,16 @@ export const DraggableTile = ({
 };
 
 const TileComponent = styled.div`
-  font-size:${({ fontSize }) => (fontSize ? fontSize : "4vw")};
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : "4vw")};
   font-weight: bold;
   font-family: "Open Sans", sans-serif;
   color: #910d0a;
   box-sizing: border-box;
   height: ${({ height }) => (height ? height : "7vw")};
-  width:${({ width }) => (width ? width : "7vw")};
+  width: ${({ width }) => (width ? width : "7vw")};
   border: 4px solid #5a110f;
   border-radius: 5px;
-  margin:3px 5px;
+  margin: 3px 5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -141,8 +141,6 @@ const TileComponent = styled.div`
     cursor:grab;
     transition: 0.3s ease-in-out;
   }`}
-  
-  }
 `;
 
 const Label = styled.label`

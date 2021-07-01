@@ -117,43 +117,41 @@ const Avatarname = styled.h3`
   left: 37%;
 `;
 const Selectbutton = styled.button`
-position: absolute;
-bottom: 3%;
-left: 26%;
-width: 50%;
-height: 8%;
-border: none;
-background-color: ${(props) => {
-  return `${props.buttoncolor}`;
-}};
-margin-top: 1rem;
-margin-bottom: 1rem;
-box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-border-radius: 30px;
-font-weight: bold;
-color: black;
+  position: absolute;
+  bottom: 3%;
+  left: 26%;
+  width: 50%;
+  height: 8%;
+  border: none;
+  background-color: ${(props) => {
+    return `${props.buttoncolor}`;
+  }};
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
+  font-weight: bold;
+  color: black;
 
-transition: 0.2s ;
-  
+  transition: 0.2s;
+
   &:hover {
-      border : ${(props) => {
-        return `${props.buttonborder}`;
-      }};
-      outline: none;
-      
+    border: ${(props) => {
+      return `${props.buttonborder}`;
+    }};
+    outline: none;
+
     cursor: pointer;
     background-color: ${(props) => {
       return `${props.buttoncolorh}`;
     }};
-
-
   }
 
   &: active {
     box-shadow: ${(props) => {
       return `${props.buttonshadow}`;
     }};
+  }
 
-    
-    outline: none;
+  outline: none;
 `;

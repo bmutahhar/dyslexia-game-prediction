@@ -19,20 +19,6 @@ import b8 from "../Images/badges/Zebra.svg";
 import gamebg from "../Images/backgrounds/gamebg.png";
 import errorguy from "../Images/characters/errorguy.gif";
 
-const BadgeVarient = {
-  start: {
-    opacity: 0,
-    scale: 0.3,
-    rotate: "0deg",
-  },
-
-  end: {
-    opacity: 0,
-    scale: 1,
-    rotate: "360deg",
-  },
-};
-
 const AllBadgeDisplay = () => {
   const alt = "Badge";
   const url = process.env["REACT_APP_API_URL"];
@@ -252,7 +238,6 @@ const AllBadgeDisplay = () => {
         setStatus({ success: false, error: err.message, loading: false });
       });
   };
-
 
   const AllBadgesJSX = (
     <Backdrop className={classes.backdrop} open={open}>

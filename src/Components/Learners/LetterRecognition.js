@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import {
   Player,
   Tile,
@@ -151,9 +150,9 @@ const LetterRecognition = ({
                 variant="contained"
                 type="button"
                 onClick={() => {
-                getAnswer();
-                stopTime();
-              }}
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>

@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import {
   Player,
   UIButton,
@@ -133,7 +132,11 @@ const TypeWord = ({
         <GameArea className="col-8">
           <QuestionContainer className="row">
             <motion.div
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
               initial={{ width: "0%" }}
               animate={{ width: "60%" }}
               transition={{ type: "spring", duration: 1.5 }}

@@ -5,7 +5,6 @@ import {
   LetterRecognition,
   DragDrop,
   CVCwords,
-  WordConfirm,
   NameImage,
 } from "../../Components/Learners";
 import {
@@ -40,7 +39,6 @@ const Learners = () => {
   const [currentQuestion, setCurrentQuestion] = useState({});
   const audio = new Audio(yay);
   const url = process.env["REACT_APP_API_URL"];
-  const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const consecutiveScore = useSelector((state) => state.consecutiveScore);
   const dispatch = useDispatch();
   const [stop, setStop] = useState(false);

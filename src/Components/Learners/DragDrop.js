@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import {
   Tileplacer,
   Player,
@@ -33,7 +32,7 @@ const DragDrop = ({
   badge,
   openBadge,
   badgeName,
-  stopTime
+  stopTime,
 }) => {
   const arrLength = options.length;
   const [disabled, setDisabled] = useState(true);
@@ -195,9 +194,9 @@ const DragDrop = ({
                 variant="contained"
                 type="button"
                 onClick={() => {
-                getAnswer();
-                stopTime();
-              }}
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>

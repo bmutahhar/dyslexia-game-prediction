@@ -32,7 +32,7 @@ const DisplayTile = ({
   badge,
   openBadge,
   badgeName,
-  stopTime
+  stopTime,
 }) => {
   const [open, setOpen] = useState(true);
   const [score, setScore] = useState(0);

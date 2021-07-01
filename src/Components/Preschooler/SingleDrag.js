@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Dragula from "react-dragula";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import {
   DraggableTile,
   Tile,
@@ -36,7 +35,7 @@ const SingleDrag = ({
   badge,
   openBadge,
   badgeName,
-  stopTime
+  stopTime,
 }) => {
   const [show, setShow] = useState(true);
   const [clickCount, setClickCount] = useState(0);
@@ -260,9 +259,9 @@ const SingleDrag = ({
                 variant="contained"
                 type="button"
                 onClick={() => {
-                getAnswer();
-                stopTime();
-              }}
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>

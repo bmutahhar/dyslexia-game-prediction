@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import {
   Tileplacer,
   Tile,
@@ -244,9 +243,9 @@ const NameImage = ({
                 variant="contained"
                 type="button"
                 onClick={() => {
-                getAnswer();
-                stopTime();
-              }}
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>

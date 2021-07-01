@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { zoomIn, fadeIn } from "react-animations";
 import { useHistory } from "react-router-dom";

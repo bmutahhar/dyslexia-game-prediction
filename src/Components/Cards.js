@@ -1,9 +1,9 @@
 import React, { Component, useState } from "react";
 import { useHistory } from "react-router-dom";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { zoomIn, fadeIn } from "react-animations";
-import {setLevel} from "../actions";
+import { setLevel } from "../actions";
 
 export default class Cards extends Component {
   render() {
@@ -41,7 +41,7 @@ function Card(props) {
   };
 
   const nextPage = () => {
-    dispatch(setLevel(props.currentLevel))
+    dispatch(setLevel(props.currentLevel));
     history.push("/selectAvatar");
   };
   const Animate = () => {
@@ -252,12 +252,12 @@ const Moreinfo = styled.li`
 `;
 
 const Buttonstart = styled.button`
-position: absolute;
-bottom: 18%;
-left: 25%;
-width: 50%;
-height: 8%;
-border: none;
+  position: absolute;
+  bottom: 18%;
+  left: 25%;
+  width: 50%;
+  height: 8%;
+  border: none;
 
   background-color: ${(props) => {
     return `${props.buttoncolor}`;
@@ -268,21 +268,19 @@ border: none;
   border-radius: 30px;
   font-weight: bold;
   color: black;
-  
+
   transition: 0.2s ease-in;
-  
+
   &:hover {
-      border : ${(props) => {
-        return `${props.buttonborder}`;
-      }};
-      outline: none;
-      
+    border: ${(props) => {
+      return `${props.buttonborder}`;
+    }};
+    outline: none;
+
     cursor: pointer;
     background-color: ${(props) => {
       return `${props.buttoncolorh}`;
     }};
-
-
   }
 
   &: active {
@@ -290,8 +288,8 @@ border: none;
       return `${props.buttonshadow}`;
     }};
 
-    
     outline: none;
+  }
 `;
 
 const Buttoninfo = styled(Buttonstart)`

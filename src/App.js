@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar } from "./Components";
 import {
@@ -18,9 +18,9 @@ import {
   AllBadgeDisplay,
   InstructionScreen,
   ProfileTracking,
-  ResultScreen
+  ResultScreen,
 } from "./Screens";
-import {GameReview} from "./Components"
+import { GameReview } from "./Components";
 import { useMediaQuery } from "react-responsive";
 
 import "./App.css";

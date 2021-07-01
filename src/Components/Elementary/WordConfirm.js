@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Check, Close } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { Backdrop } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Tile,
@@ -95,7 +94,10 @@ const WordConfirm = ({
     const date = new Date();
     const seconds = Math.floor(date.getTime() / 1000);
     const timeDiff = Math.abs(seconds - time);
-    if ((answer.trim().toLowerCase()==="correct" && value === 1) || (answer.trim().toLowerCase()==="wrong" && value === 0)) {
+    if (
+      (answer.trim().toLowerCase() === "correct" && value === 1) ||
+      (answer.trim().toLowerCase() === "wrong" && value === 0)
+    ) {
       const scoreObj = {
         difficulty: difficulty,
         clicks: clickCount,
@@ -247,9 +249,9 @@ const WordConfirm = ({
                 variant="contained"
                 type="button"
                 onClick={() => {
-                getAnswer();
-                stopTime();
-              }}
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>
