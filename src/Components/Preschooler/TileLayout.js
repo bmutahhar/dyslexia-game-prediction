@@ -5,7 +5,6 @@ import Dragula from "react-dragula";
 import { motion, AnimatePresence } from "framer-motion";
 import { Backdrop, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import {
   Tileplacer,
   Tile,
@@ -16,7 +15,11 @@ import {
   Timer,
   BadgePopUp,
 } from "../../Components";
-import { addAnswer } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
@@ -32,14 +35,18 @@ const TileLayout = ({
   badge,
   openBadge,
   badgeName,
+  stopTime
 }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
+  const difficulty = useSelector((state) => state.difficulty);
   const grid = Array(gridSize * gridSize).fill(true);
+  const [clickCount, setClickCount] = useState(0);
   const [optionsA, setOptionsA] = useState([]);
   const [optionsB, setOptionsB] = useState([]);
   const [show, setShow] = useState(true);
-  const [disabled, setDisabled] = useState(false);
+  const [time, setTime] = useState(0);
+  const [disabled, setDisabled] = useState(true);
   const optionsRefA = useRef(null);
   const optionsRefB = useRef(null);
   const elRefs = useRef([]);
@@ -49,10 +56,57 @@ const TileLayout = ({
   const closeQuestion = () => {
     setShow(false);
   };
+  const onClick = () => {
+    setClickCount((prev) => prev + 1);
+  };
   const getAnswer = () => {
-    let answer = "";
-    elRefs.current.map((el, i) => (answer += el.textContent));
-    dispatch(addAnswer(answer));
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time);
+
+    const factor = getFactor(gridSize);
+    let hit = 0;
+    let miss = 0;
+    if (elRefs.current) {
+      elRefs.current.forEach((el, i) => {
+        if (el.childNodes.length > 0) {
+          const node = el.firstChild;
+          if (image) {
+            const img = node.getElementsByTagName("img")[0];
+            const alt = img.getAttribute("alt");
+            if (alt.trim() === word.alt.trim()) {
+              hit++;
+            } else {
+              miss++;
+            }
+          } else {
+            if (node.innerText.trim() === word.trim()) {
+              hit++;
+            } else {
+              miss++;
+            }
+          }
+        }
+      });
+      const score = hit * factor;
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: hit,
+        miss: miss,
+        score: score,
+        accuracy: hit / clickCount,
+        missrate: miss / clickCount,
+        time: timeDiff,
+      };
+      if (score >= 0.5) {
+        dispatch(addScore(scoreObj));
+        dispatch(incrementConsecutiveScore());
+      } else {
+        dispatch(addScore(scoreObj));
+        dispatch(decrementConsecutiveScore());
+      }
+    }
   };
 
   useEffect(() => {
@@ -79,12 +133,22 @@ const TileLayout = ({
   }, [elRefs, optionsRefA, optionsRefB, show]);
 
   useEffect(() => {
-    const tempOptions = shuffleArray(options);
+    let tempOptions = shuffleArray(options);
+    tempOptions = shuffleArray(tempOptions);
+
     setOptionsA(tempOptions.slice(0, Math.floor(options.length / 2)));
     setOptionsB(
       tempOptions.slice(Math.floor(options.length / 2), options.length)
     );
   }, [options]);
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   if (showBadge) {
     return (
@@ -106,36 +170,83 @@ const TileLayout = ({
               <QuestionContainer
                 className="row"
                 question
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.25, duration: 0.25 }}
-                exit={{ opacity: 0 }}
+                // initial={{ opacity: 0 }}
+                // animate={{ opacity: 1 }}
+                // transition={{ delay: 0.25, duration: 0.25 }}
+                // exit={{ opacity: 0 }}
               >
                 <TileContainer
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.1,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
                   exit={{ opacity: 0 }}
                 >
-                  <Timer
-                    initialSeconds={7}
-                    initialMinutes={0}
-                    reverse
-                    callBack={closeQuestion}
-                  />
-                  {image ? (
-                    <Tile
-                      question
-                      image
-                      height="15vw"
-                      width="15vw"
-                      fontSize="10vw"
-                      src={word.image}
-                      alt={word.alt}
+                  <motion.div
+                    initial={{
+                      scale: 0,
+                    }}
+                    animate={{
+                      scale: 1,
+                    }}
+                    transition={{
+                      delay: 0.6,
+                      duration: 0.2,
+                    }}
+                  >
+                    <Timer
+                      initialSeconds={7}
+                      initialMinutes={0}
+                      reverse
+                      callBack={closeQuestion}
                     />
+                  </motion.div>
+
+                  {image ? (
+                    <motion.div
+                      initial={{
+                        scale: 0,
+                      }}
+                      animate={{
+                        scale: 1,
+                      }}
+                      transition={{
+                        delay: 0.9,
+                        duration: 0.5,
+                      }}
+                    >
+                      <Tile
+                        question
+                        image
+                        height="15vw"
+                        width="15vw"
+                        fontSize="10vw"
+                        src={word.image}
+                        alt={word.alt}
+                      />
+                    </motion.div>
                   ) : (
-                    <Tile question height="15vw" width="15vw" fontSize="10vw">
-                      {word}
-                    </Tile>
+                    <motion.div
+                      initial={{
+                        scale: 0,
+                      }}
+                      animate={{
+                        scale: 1,
+                      }}
+                      transition={{
+                        delay: 0.9,
+                        duration: 0.5,
+                      }}
+                    >
+                      <Tile question height="15vw" width="15vw" fontSize="10vw">
+                        {word}
+                      </Tile>
+                    </motion.div>
                   )}
                 </TileContainer>
                 <Qinfo>Remember this tile carefully</Qinfo>
@@ -156,11 +267,14 @@ const TileLayout = ({
                       key={i}
                       src={el.image}
                       alt={el.alt}
+                      onMouseDown={onClick}
                       // height="10vw"
                       // width="10vw"
                     />
                   ) : (
-                    <DraggableTile key={i}>{el}</DraggableTile>
+                    <DraggableTile key={i} onMouseDown={onClick}>
+                      {el}
+                    </DraggableTile>
                   );
                 })}
               </TileGrid>
@@ -172,7 +286,18 @@ const TileLayout = ({
                   flexDirection: "column",
                 }}
               >
-                <GridPlacer gridSize={gridSize} className="drag-area">
+                <GridPlacer
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: 0.3,
+                    duration: 0.5,
+                    type: "spring",
+                    stiffness: 80,
+                  }}
+                  gridSize={gridSize}
+                  className="drag-area"
+                >
                   {grid.map((_, i) => {
                     return (
                       <Tileplacer
@@ -192,7 +317,7 @@ const TileLayout = ({
                     alignItems: "center",
                     justifyContent: "center",
                     flexWrap: "wrap",
-                    textAlign: "center"
+                    textAlign: "center",
                   }}
                 >
                   <Qinfo>{question}</Qinfo>
@@ -206,11 +331,14 @@ const TileLayout = ({
                       key={i}
                       src={el.image}
                       alt={el.alt}
+                      onMouseDown={onClick}
                       // height="10vw"
                       // width="10vw"
                     />
                   ) : (
-                    <DraggableTile key={i}>{el}</DraggableTile>
+                    <DraggableTile key={i} onMouseDown={onClick}>
+                      {el}
+                    </DraggableTile>
                   );
                 })}
               </TileGrid>
@@ -227,8 +355,10 @@ const TileLayout = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>
@@ -238,7 +368,7 @@ const TileLayout = ({
               disabled={disabled}
               onClick={() => {
                 getAnswer();
-                if ((activeStep+1)  % 2===0) openBadge();
+                if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}
             />
@@ -280,7 +410,7 @@ const useStyles = makeStyles(({ theme }) => ({
   },
 }));
 
-const GridPlacer = styled.div`
+const GridPlacer = styled(motion.div)`
   display: grid;
   grid-template-columns: ${({ gridSize }) => {
     let columns = "";
@@ -340,7 +470,7 @@ const Qinfo = styled.p`
   margin-top: 30px;
   font-size: 2vw;
   color: white;
-  text-align:center;
+  text-align: center;
 `;
 
 const NextButtonContainer = styled.div`
@@ -366,4 +496,12 @@ const shuffleArray = (array) => {
     newArray[j] = temp;
   }
   return newArray;
+};
+
+const getFactor = (gridSize) => {
+  if (gridSize === 2) {
+    return 1 / 4;
+  } else if (gridSize === 3) {
+    return 1 / 9;
+  }
 };

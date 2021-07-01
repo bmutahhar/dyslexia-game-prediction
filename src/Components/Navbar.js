@@ -13,6 +13,7 @@ import "./styles/Navbar.css";
 const Navbar = ({ isNotMobileDevice }) => {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(false);
+  const [pfp, setPfp] = useState(null);
   const isUserLoggedIn = useSelector((state) => state.user.loggedIn);
   const handleClick = () => {
     setClick(!click);
@@ -27,6 +28,14 @@ const Navbar = ({ isNotMobileDevice }) => {
 
   useEffect(() => {
     window.addEventListener("resize", showButton);
+
+    return () => window.removeEventListener("resize", showButton);
+  }, []);
+
+  useEffect(() => {
+    const dp = JSON.parse(sessionStorage.getItem("pfp"));
+    console.log(dp);
+    setPfp(dp);
   }, []);
 
   return (
@@ -76,7 +85,7 @@ const Navbar = ({ isNotMobileDevice }) => {
                 Log In
               </NavButton>
             ) : (
-              <ProfileAvatar menu />
+              <ProfileAvatar menu pfp={pfp} />
             )}
           </NavButtonContainer>
         </div>
@@ -98,23 +107,19 @@ const NavButton = styled(Link)`
   padding: 5px 20px;
   height: 70%;
   color: #fff;
-  transition: 0.2s all ease-in-out;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  transition: 0.3s all ease-in-out;
 
   &:hover {
     background-color: #027719;
-    transition: 0.2s all ease-in-out;
+    transition: 0.3s all ease-in-out;
     color: #fff;
     text-decoration: none;
     outline: none;
-    ${"" /* transform: scale(1.1); */}
   }
 
   &:active {
-    background-color: #027719;
-    ${"" /* box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.8); */}
-    transform: translateY(2px);
-    transition: 0.1s all ease-in;
+    transform: translateY(5px);
+    transition: 0.2s all ease-in;
   }
 
   @media screen and (max-width: 768px) {

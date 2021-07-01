@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import {
   Tile,
   Timer,
@@ -13,7 +12,11 @@ import {
   BadgePopUp,
 } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
-import { addAnswer } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
@@ -29,9 +32,14 @@ const DisplayTile = ({
   badge,
   openBadge,
   badgeName,
+  stopTime
 }) => {
   const [open, setOpen] = useState(true);
-  const [answer, setAnswer] = useState("");
+  const [score, setScore] = useState(0);
+  const [miss, setMiss] = useState(0);
+  const [disabled, setDisabled] = useState(true);
+  const [clickCount, setClickCount] = useState(0);
+  const [time, setTime] = useState(0);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
@@ -39,19 +47,71 @@ const DisplayTile = ({
   const [shuffledOptions, setShuffledOptions] = useState([]);
   const showDisplay = () => {
     setOpen(true);
+    setDisabled(true);
   };
   const closeDisplay = () => {
     setOpen(false);
   };
 
-  const onClick = (answer) => {
-    setAnswer(answer);
+  const onClick = (myRef) => {
+    setClickCount((prev) => prev + 1);
+    disabled && setDisabled(false);
+    if (!myRef.current.checked) {
+      if (image) {
+        const value = myRef.current.value;
+        if (word.alt.trim() === value.trim()) {
+          setScore(1);
+          setMiss(0);
+        } else {
+          setScore(0);
+          setMiss(1);
+        }
+      } else {
+        const value = myRef.current.value;
+        if (word.trim() === value.trim()) {
+          setScore(1);
+          setMiss(0);
+        } else {
+          setScore(0);
+          setMiss(1);
+        }
+      }
+    }
   };
-  const getAnswer = () => dispatch(addAnswer(answer));
+  const getAnswer = () => {
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time);
+    const scoreObj = {
+      difficulty: "easy",
+      clicks: clickCount,
+      hits: score,
+      miss: miss,
+      score: score,
+      accuracy: score / clickCount,
+      missrate: miss / clickCount,
+      time: timeDiff,
+    };
+    if (score > 0) {
+      dispatch(addScore(scoreObj));
+      dispatch(incrementConsecutiveScore());
+    } else {
+      dispatch(addScore(scoreObj));
+      dispatch(decrementConsecutiveScore());
+    }
+  };
 
   useEffect(() => {
     setShuffledOptions(shuffleArray(options));
   }, []);
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
 
   if (showBadge) {
     return (
@@ -113,20 +173,46 @@ const DisplayTile = ({
           <AnswerContainer className="row">
             {shuffledOptions.map((el, i) => {
               return image ? (
-                <Tile
-                  name={name}
-                  image
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.2 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: 8 + (i + 1) / 10,
+                    duration: 0.4,
+                    type: "spring",
+                    stiffness: 90,
+                    ease: "easeIn",
+                  }}
                   key={i}
-                  onClick={onClick}
-                  src={el.image}
-                  alt={el.alt}
-                  height="10vw"
-                  width="10vw"
-                />
+                >
+                  <Tile
+                    name={name}
+                    id={i}
+                    image
+                    onClick={onClick}
+                    src={el.image}
+                    alt={el.alt}
+                    height="10vw"
+                    width="10vw"
+                  />
+                </motion.div>
               ) : (
-                <Tile name={name} key={i} onClick={onClick}>
-                  {el}
-                </Tile>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.2 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: 8 + (i + 1) / 10,
+                    duration: 0.4,
+                    type: "spring",
+                    stiffness: 90,
+                    ease: "easeIn",
+                  }}
+                  key={i}
+                >
+                  <Tile id={i} name={name} onClick={onClick}>
+                    {el}
+                  </Tile>
+                </motion.div>
               );
             })}
           </AnswerContainer>
@@ -141,16 +227,19 @@ const DisplayTile = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
+                onClick={() => {
+                  getAnswer();
+                  stopTime();
+                }}
               >
                 Submit
               </UIButton>
             </motion.div>
           ) : (
             <NextButton
+              disabled={disabled}
               onClick={() => {
-                // getAnswer();
+                getAnswer();
                 if ((activeStep + 1) % 2 === 0) openBadge();
                 nextStep();
               }}

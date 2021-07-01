@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { GameScreen, Loader, QuestionError } from "../../Components";
 import {
   ObjectRotation,
@@ -9,6 +10,13 @@ import {
   SelectOption,
 } from "../../Components/Preschooler";
 import { InstructionScreen } from "../../Screens";
+import {
+  easyDifficulty,
+  mediumDifficulty,
+  hardDifficulty,
+  resetConsecutiveScore,
+  resetScore,
+} from "../../actions";
 import { yay } from "../../Sounds";
 
 import b1 from "../../Images/badges/Dear.svg";
@@ -24,6 +32,9 @@ const PreSchoolers = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [badgeOpen, setBadgeOpen] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);
+  const difficulty = useSelector((state) => state.difficulty);
+  // const [difficulty, setDifficulty] = useState("medium")
+  const consecutiveScore = useSelector((state) => state.consecutiveScore);
   const [status, setStatus] = useState({
     loading: true,
     success: false,
@@ -31,13 +42,19 @@ const PreSchoolers = () => {
   });
   const [questionSet, setQuestionSet] = useState({});
   const [currentQuestion, setCurrentQuestion] = useState({});
-  const [difficulty, setDifficulty] = useState("hard");
+  const [stop, setStop] = useState(false);
   const audio = new Audio(yay);
   const url = process.env["REACT_APP_API_URL"];
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
+  const dispatch = useDispatch();
+  let history = useHistory();
 
   const nextStep = () => {
     setActiveStep(activeStep + 1);
+  };
+
+  const stopTime = () => {
+    setStop(true);
   };
 
   const openBadge = () => {
@@ -58,24 +75,19 @@ const PreSchoolers = () => {
     else return Math.floor(activeStep / 2) - 1;
   };
 
-  const getRandomQuestion = () => {
+  const getRandomQuestion = (difficulty) => {
     const random = Math.floor(
       Math.random() * (questionSet[difficulty].length - 1)
     );
-    console.log("Random Number: ", random);
     const prevQuestion = { ...currentQuestion };
     const questions = { ...questionSet };
 
     const question = questions[difficulty][random];
-    console.log("Random Question Currently Picked: ", question);
-    console.log("Prev Question", prevQuestion);
     if (!question.displayed && prevQuestion.type !== question.type) {
-      console.log("First question");
       questions[difficulty][random].displayed = true;
       setCurrentQuestion(question);
       setQuestionSet(questions);
     } else {
-      console.log("NOOBS");
       let index = random + 1;
       for (let i = 0; i < questions[difficulty].length; i++) {
         if (
@@ -84,7 +96,6 @@ const PreSchoolers = () => {
           prevQuestion.type !==
             questions[difficulty][index % questions[difficulty].length].type
         ) {
-          console.log("Index: ", index);
           questions[difficulty][
             index % questions[difficulty].length
           ].displayed = true;
@@ -92,10 +103,8 @@ const PreSchoolers = () => {
             questions[difficulty][index % questions[difficulty].length]
           );
           setQuestionSet(questions);
-          console.log("Setting question successfully!!!!!!!!");
           break;
         }
-        console.log("Gandalf: ", index % questions[difficulty].length);
         index++;
       }
     }
@@ -112,8 +121,6 @@ const PreSchoolers = () => {
       .then((resp) => resp.json())
       .then((respJson) => {
         if (respJson.error === undefined) {
-          console.log("Fetching 2.... ");
-          console.log(respJson);
           const easy = shuffleArray(respJson.easy);
           const medium = shuffleArray(respJson.medium);
           const hard = shuffleArray(respJson.hard);
@@ -122,10 +129,8 @@ const PreSchoolers = () => {
             medium,
             hard,
           });
-          console.log("Fetched");
           setStatus({ success: true, error: "", loading: true });
         } else {
-          console.log("No wayyy");
           setStatus({ success: false, error: respJson.error, loading: false });
         }
       })
@@ -134,11 +139,42 @@ const PreSchoolers = () => {
       });
   };
 
+  const monitorDifficulty = () => {
+    if (consecutiveScore === "111") {
+      if (difficulty === "easy") {
+        dispatch(mediumDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "medium";
+      } else if (difficulty === "medium") {
+        dispatch(hardDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "hard";
+      } else {
+        dispatch(resetConsecutiveScore());
+        return "hard";
+      }
+    } else if (consecutiveScore === "000") {
+      if (difficulty === "hard") {
+        dispatch(mediumDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "medium";
+      } else if (difficulty === "medium") {
+        dispatch(easyDifficulty());
+        dispatch(resetConsecutiveScore());
+        return "easy";
+      } else {
+        dispatch(resetConsecutiveScore());
+        return "easy";
+      }
+    } else {
+      return difficulty;
+    }
+  };
+
   useEffect(() => {
     if (!showInstructions) {
       try {
-        console.log("Fetching....");
-        setTimeout(fetchQuestions, 4000);
+        fetchQuestions();
       } catch (e) {
         console.log(e);
         setStatus({ success: false, error: e, loading: false });
@@ -148,18 +184,31 @@ const PreSchoolers = () => {
 
   useEffect(() => {
     if (status.success && !showInstructions) {
-      console.log("Getting random question bruh!!!");
-      getRandomQuestion();
+      const newDifficulty = monitorDifficulty();
+      getRandomQuestion(newDifficulty);
       if (status.success && status.loading) {
         setStatus({ ...status, loading: false });
-        console.log("Setting loading to false");
       }
     }
-  }, [activeStep, status.success, difficulty, showInstructions]);
+  }, [activeStep]);
 
   useEffect(() => {
-    console.log("Current Question: ", currentQuestion);
-  }, [currentQuestion]);
+    if (status.success && !showInstructions) {
+      const random = Math.floor(
+        Math.random() * (questionSet[difficulty].length - 1)
+      );
+      const questions = { ...questionSet };
+      const question = questions[difficulty][random];
+      questions[difficulty][random].displayed = true;
+      setCurrentQuestion(question);
+      setQuestionSet(questions);
+
+      if (status.success && status.loading) {
+        setStatus({ ...status, loading: false });
+      }
+    }
+  }, [status.success, showInstructions]);
+
 
   if (showInstructions) {
     return <InstructionScreen onClick={hideInstructions} />;
@@ -170,9 +219,9 @@ const PreSchoolers = () => {
       if (status.success) {
         const badgeIndex = getBadgeIndex();
         if (currentQuestion.type === "or") {
-          console.log("Object Rotation");
+          // easy/medium/hard for object rotation
           return (
-            <GameScreen activeStep={activeStep} badges={badges}>
+            <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
               <ObjectRotation
                 question={currentQuestion.question}
                 word={currentQuestion.word}
@@ -184,15 +233,19 @@ const PreSchoolers = () => {
                 badge={badges[badgeIndex].image}
                 badgeName={badges[badgeIndex].name}
                 openBadge={openBadge}
+                stopTime={stopTime}
               />
             </GameScreen>
           );
         } else if (currentQuestion.type === "dnd") {
+          // Main type DRAG AND DROP
           if (currentQuestion.subType === "text") {
+            // Sub-type: text
             if (difficulty === "easy") {
+              // Single Drag component for easy difficulty
               console.log("Single Drag");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SingleDrag
                     name="displayTile"
                     question={currentQuestion.question}
@@ -204,13 +257,15 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             } else if (difficulty === "medium") {
+              // Tile layout component for medium difficulty
               console.log("Tile Layout Medium");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <TileLayout
                     question={currentQuestion.question}
                     word={currentQuestion.word}
@@ -222,13 +277,15 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             } else {
+              // Tile layout for hard difficulty
               console.log("Tile Layout Hard");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <TileLayout
                     question={currentQuestion.question}
                     word={currentQuestion.word}
@@ -240,6 +297,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -247,9 +305,10 @@ const PreSchoolers = () => {
           } else {
             //If type is dnd and subType is image
             if (difficulty === "easy") {
+              // Single drag component for easy difficulty
               console.log("Single Drag");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SingleDrag
                     name="displayTile"
                     image
@@ -262,13 +321,15 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             } else if (difficulty === "medium") {
+              // Tile layout component for medium difficulty
               console.log("Tile Layout Medium");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <TileLayout
                     image
                     question={currentQuestion.question}
@@ -281,13 +342,15 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             } else {
+              // Tile layout component for hard difficulty
               console.log("Tile Layout Hard");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <TileLayout
                     image
                     question={currentQuestion.question}
@@ -300,17 +363,21 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             }
           }
         } else if (currentQuestion.type === "mt") {
+          // Main type: Matching Tiles
           if (currentQuestion.subType === "text") {
+            // Sub type: text
             if (difficulty === "easy") {
               console.log("Single Match");
+              // Single Match component for easy difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SingleMatch
                     name="displayTile"
                     question={currentQuestion.question}
@@ -322,13 +389,15 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             } else if (difficulty === "medium") {
               console.log("Select Option Medium");
+              // Select option component for medium difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SelectOption
                     gridSize={2}
                     activeStep={activeStep}
@@ -340,13 +409,15 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             } else {
               console.log("Select Option Hard");
+              // Select option component for hard difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SelectOption
                     gridSize={3}
                     activeStep={activeStep}
@@ -358,15 +429,18 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             }
           } else {
+            // Subtype: Image
             if (difficulty === "easy") {
+              // Single match component for easy difficulty
               console.log("Single Match");
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SingleMatch
                     name="displayTile"
                     image={true}
@@ -379,13 +453,15 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             } else if (difficulty === "medium") {
               console.log("Select Option Medium");
+              // Select option component for medium difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SelectOption
                     image
                     gridSize={2}
@@ -398,13 +474,15 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
             } else {
               console.log("Select Option");
+              // Select option component for hard difficulty
               return (
-                <GameScreen activeStep={activeStep} badges={badges}>
+                <GameScreen activeStep={activeStep} badges={badges} stop={stop}>
                   <SelectOption
                     image
                     gridSize={3}
@@ -417,6 +495,7 @@ const PreSchoolers = () => {
                     badge={badges[badgeIndex].image}
                     badgeName={badges[badgeIndex].name}
                     openBadge={openBadge}
+                    stopTime={stopTime}
                   />
                 </GameScreen>
               );
@@ -424,7 +503,13 @@ const PreSchoolers = () => {
           }
         }
       } else {
-        return <QuestionError open={!status.sucess} />;
+        return (
+          <QuestionError
+            open={!status.sucess}
+            message1="Oops! There Was A Trouble Loading The Game"
+            message2="Please Refresh The Page And Try Again"
+          />
+        );
       }
     }
   }
@@ -444,12 +529,12 @@ const shuffleArray = (array) => {
 };
 
 const badges = [
-  { image: b1, name: "Teddy" },
-  { image: b2, name: "Kitty" },
-  { image: b3, name: "Foxy" },
-  { image: b4, name: "Monkey" },
-  { image: b5, name: "Donkey" },
-  { image: b6, name: "Doggy" },
-  { image: b7, name: "Monkey" },
-  { image: b8, name: "Monkey" },
+  { image: b1, name: "Dear" },
+  { image: b2, name: "Doggy" },
+  { image: b3, name: "Elephant" },
+  { image: b4, name: "Foxy" },
+  { image: b5, name: "Monkey" },
+  { image: b6, name: "Panda" },
+  { image: b7, name: "Teddy" },
+  { image: b8, name: "Zebra" },
 ];

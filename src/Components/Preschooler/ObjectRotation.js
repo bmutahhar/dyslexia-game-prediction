@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { IconButton, Typography, Backdrop } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { RotateLeft, RotateRight } from "@material-ui/icons";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import {
   AvatarMessage,
   UIButton,
@@ -13,7 +12,11 @@ import {
   BadgePopUp,
 } from "../../Components";
 import { useSelector, useDispatch } from "react-redux";
-import { addAnswer } from "../../actions";
+import {
+  addScore,
+  incrementConsecutiveScore,
+  decrementConsecutiveScore,
+} from "../../actions";
 import larka from "../../Images/characters/larka2.svg";
 import larki from "../../Images/characters/larki2.svg";
 
@@ -28,11 +31,16 @@ const ObjectRotation = ({
   degree,
   openBadge,
   badgeName,
+  stopTime,
 }) => {
   const [open, setOpen] = useState(false);
   const [shown, setShown] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [rotation, setRotation] = useState(0);
+  const [clickCount, setClickCount] = useState(0);
+  const [time, setTime] = useState(0);
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
+  const difficulty = useSelector((state) => state.difficulty);
   const gender = useSelector((state) => state.gender);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -49,13 +57,63 @@ const ObjectRotation = ({
 
   const rotateRight = () => {
     setRotation(rotation + degree);
+    setClickCount(clickCount + 1);
+    disabled && setDisabled(false);
   };
 
   const rotateLeft = () => {
     setRotation(rotation - degree);
+    setClickCount(clickCount + 1);
+    disabled && setDisabled(false);
   };
 
-  const getAnswer = () => dispatch(addAnswer(rotation));
+  const getAnswer = () => {
+    const date = new Date();
+    const seconds = Math.floor(date.getTime() / 1000);
+    const timeDiff = Math.abs(seconds - time);
+    let newAngle;
+    if (rotation < 0) {
+      newAngle = 360 - (Math.abs(rotation) % 360);
+    } else {
+      newAngle = rotation % 360;
+    }
+    if (newAngle === angle) {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: 1,
+        miss: 0,
+        score: 1,
+        accuracy: 1 / clickCount,
+        missrate: 0 / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(incrementConsecutiveScore());
+    } else {
+      const scoreObj = {
+        difficulty: difficulty,
+        clicks: clickCount,
+        hits: 0,
+        miss: 1,
+        score: 0,
+        accuracy: 0 / clickCount,
+        missrate: 1 / clickCount,
+        time: timeDiff,
+      };
+      dispatch(addScore(scoreObj));
+      dispatch(decrementConsecutiveScore());
+    }
+  };
+
+  useEffect(() => {
+    if (!showBadge) {
+      const date = new Date();
+      const seconds = Math.floor(date.getTime() / 1000);
+      setTime(seconds);
+    }
+  }, [showBadge]);
+
   if (showBadge) {
     return (
       <Backdrop className={classes.backdrop} open={showBadge}>
@@ -73,21 +131,110 @@ const ObjectRotation = ({
         <GameArea className="col-8">
           <QuestionContainer className="row">
             <IconContainer>
-              <IconButton onClick={rotateLeft}>
+              <IconButton
+                component={motion.button}
+                initial={{
+                  opacity: 0,
+                  scale: 0.5,
+                  rotate: "0deg",
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  rotate: "360deg",
+                }}
+                transition={{
+                  delay: 0.2,
+                  duration: 0.8,
+                  type: "spring",
+                  stiffness: 90,
+                }}
+                onClick={rotateLeft}
+              >
                 <RotateLeft className={classes.icons} />
               </IconButton>
-              <Typography variant="subtitle1" className={classes.info}>
+              <Typography
+                component={motion.p}
+                variant="subtitle1"
+                className={classes.info}
+                initial={{
+                  opacity: 0,
+                  scale: 0.2,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                transition={{
+                  delay: 0.8,
+                  duration: 0.3,
+                  type: "spring",
+                  stiffeness: 100,
+                }}
+              >
                 Left
               </Typography>
             </IconContainer>
-            <ImageContainer animate={{ rotate: rotation }}>
+            <ImageContainer
+              initial={{
+                opacity: 0,
+                scale: 0,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                rotate: rotation,
+              }}
+              transition={{
+                duration: 0.2,
+                type: "spring",
+                stiffness: 110,
+              }}
+            >
               <Image src={word.image} alt={word.alt} />
             </ImageContainer>
             <IconContainer>
-              <IconButton onClick={rotateRight}>
+              <IconButton
+                component={motion.button}
+                initial={{
+                  opacity: 0,
+                  scale: 0.5,
+                  rotate: "0deg",
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  rotate: "360deg",
+                }}
+                transition={{
+                  delay: 0.2,
+                  duration: 0.8,
+                  type: "spring",
+                  stiffness: 90,
+                }}
+                onClick={rotateRight}
+              >
                 <RotateRight className={classes.icons} />
               </IconButton>
-              <Typography variant="subtitle1" className={classes.info}>
+              <Typography
+                component={motion.p}
+                variant="subtitle1"
+                className={classes.info}
+                initial={{
+                  opacity: 0,
+                  scale: 0.2,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                transition={{
+                  delay: 0.8,
+                  duration: 0.3,
+                  type: "spring",
+                  stiffeness: 100,
+                }}
+              >
                 Right
               </Typography>
             </IconContainer>
@@ -116,21 +263,24 @@ const ObjectRotation = ({
               <UIButton
                 variant="contained"
                 type="button"
-                component={Link}
-                to="/completed"
+                onClick={() => {
+                getAnswer();
+                stopTime();
+              }}
               >
                 Submit
               </UIButton>
             </motion.div>
           ) : (
-              <NextButton
-                onClick={() => {
-                  getAnswer();
-                  if ((activeStep + 1) % 2 === 0) openBadge();
-                  nextStep();
-                }}
-              />
-            )}
+            <NextButton
+              disabled={disabled}
+              onClick={() => {
+                getAnswer();
+                if ((activeStep + 1) % 2 === 0) openBadge();
+                nextStep();
+              }}
+            />
+          )}
         </NextButtonContainer>
         <Backdrop
           className={classes.backdrop}
@@ -212,11 +362,11 @@ const AnswerSelection = styled.div`
 
 const ImageContainer = styled(motion.div)``;
 
-const Image = styled.img`
+const Image = styled(motion.img)`
   height: 15vw;
 `;
 
-const IconContainer = styled.div`
+const IconContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -247,3 +397,13 @@ const PopImageContainer = styled.div`
   background-color: transparent;
   margin-bottom: 50px;
 `;
+
+const getDifficulty = (angle) => {
+  if (angle === 90) {
+    return "easy";
+  } else if (angle === 45) {
+    return "medium";
+  } else if (angle === 30) {
+    return "hard";
+  }
+};

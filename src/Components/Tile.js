@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 
 import tilebg from "../Images/backgrounds/tilebg.png";
 
 export const Tile = ({
   name,
+  id,
   question,
   image,
   src,
@@ -12,28 +13,20 @@ export const Tile = ({
   onClick,
   background,
   children,
+  multi,
   ...props
 }) => {
+  const myRef = useRef(null);
   if (question) {
     if (image) {
       return (
-        <TileComponent
-          question={question}
-          onClick={onClick}
-          background={background}
-          {...props}
-        >
+        <TileComponent question={question} background={background} {...props}>
           <Image src={src} alt={alt} />
         </TileComponent>
       );
     } else {
       return (
-        <TileComponent
-          question={question}
-          onClick={onClick}
-          background={background}
-          {...props}
-        >
+        <TileComponent question={question} background={background} {...props}>
           {children}
         </TileComponent>
       );
@@ -41,31 +34,45 @@ export const Tile = ({
   } else {
     if (image) {
       return (
-        <Label
-          htmlFor={children}
-          onClick={() => onClick(children)}
-          question={question}
-          data-correct={true}
-        >
-          <input type="radio" id={children} value={children} name={name} />
-          <TileComponent background={background} {...props}>
-            <Image src={src} alt={alt} />
-          </TileComponent>
-        </Label>
+        <Container>
+          <input
+            type={multi ? "checkbox" : "radio"}
+            id={id}
+            value={alt}
+            name={name}
+            ref={myRef}
+          />
+          <Label
+            htmlFor={id}
+            onClick={() => onClick(myRef)}
+            question={question}
+          >
+            <TileComponent background={background} {...props}>
+              <Image src={src} alt={alt} />
+            </TileComponent>
+          </Label>
+        </Container>
       );
     } else {
       return (
-        <Label
-          htmlFor={children}
-          onClick={() => onClick(children)}
-          question={question}
-          data-correct={true}
-        >
-          <input type="radio" id={children} value={children} name={name} />
-          <TileComponent background={background} {...props}>
-            {children}
-          </TileComponent>
-        </Label>
+        <Container>
+          <input
+            type={multi ? "checkbox" : "radio"}
+            id={id}
+            value={children}
+            name={name}
+            ref={myRef}
+          />
+          <Label
+            htmlFor={id}
+            onClick={() => onClick(myRef)}
+            question={question}
+          >
+            <TileComponent background={background} {...props}>
+              {children}
+            </TileComponent>
+          </Label>
+        </Container>
       );
     }
   }
@@ -77,6 +84,7 @@ export const DraggableTile = ({
   image,
   src,
   alt,
+  onClick,
   ...props
 }) => {
   if (image) {
@@ -143,16 +151,6 @@ const Label = styled.label`
   justify-content: center;
   margin: 0;
   padding: 0;
-  input[type="radio"] {
-    display: none;
-  }
-  ${({ question }) =>
-    question
-      ? ``
-      : `input[type="radio"]:checked ~ div{
-  transform: scale(1.1);
-  border: 4px solid #187d31;
-}`}
 `;
 
 const Image = styled.img`
@@ -160,4 +158,17 @@ const Image = styled.img`
   height: 50%;
   object-fit: contain;
   overflow: hidden;
+`;
+
+const Container = styled.div`
+  input {
+    display: none;
+  }
+  ${({ question }) =>
+    question
+      ? ``
+      : `input:checked + label div{
+  transform: scale(1.1);
+  box-shadow: 0 0 40px 0 rgba(255, 255, 255, 0.4);
+}`}
 `;

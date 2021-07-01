@@ -56,6 +56,7 @@ const LoginComponent = () => {
     error: "",
   });
   const dispatch = useDispatch();
+  const contentSaved = localStorage.getItem("contentSaved");
 
   function postData(data, uri, googleLogin) {
     fetch(uri, {
@@ -73,8 +74,24 @@ const LoginComponent = () => {
             ? setStatus({ loading: false, success: true, error: "" })
             : setGoogleStatus({ loading: false, success: true, error: "" });
           dispatch(signin(respJson.token));
-          
-          setTimeout(() => history.replace("/userform"), 1000);
+          const pfp = respJson.pfp;
+          if (pfp) {
+            fetch(respJson.pfp)
+              .then((resp) => resp.blob())
+              .then((blob) => {
+                const url = URL.createObjectURL(blob);
+                sessionStorage.setItem("pfp", JSON.stringify(url));
+              })
+              .catch((err) => console.log(err));
+          }
+
+          setTimeout(() => {
+            if (contentSaved) {
+              history.replace("/levelSelect");
+            } else {
+              history.replace("/userform");
+            }
+          }, 1000);
         } else {
           !googleLogin
             ? setStatus({
@@ -151,6 +168,7 @@ const LoginComponent = () => {
 
   const googleSuccess = (response) => {
     setGoogleStatus({ loading: true, success: false, error: "" });
+    console.log(response);
     postData(
       JSON.stringify({
         username: response.profileObj.email.split("@")[0],
@@ -203,7 +221,7 @@ const LoginComponent = () => {
                 <IconButton
                   onClick={() => setVisibility(!visibility)}
                   style={{
-                    "MuiButtonBase-root MuiIconButton-root": {
+                    "MuiButtonBaseRoot MuiIconButtonRoot": {
                       outline: "none",
                     },
                   }}
@@ -235,11 +253,20 @@ const LoginComponent = () => {
             )}
           </UserButton>
 
-          <Link to="/userform">
-            <UserButton variant="contained" fullWidth>
-              Play As Guest
-            </UserButton>
-          </Link>
+          <UserButton
+            variant="contained"
+            fullWidth
+            onClick={() => {
+              const contentSaved = localStorage.getItem("contentSaved");
+              if (contentSaved) {
+                history.push("/levelSelect");
+              } else {
+                history.push("/userform");
+              }
+            }}
+          >
+            Play As Guest
+          </UserButton>
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_ID}
             render={(renderProps) => (

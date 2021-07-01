@@ -6,9 +6,14 @@ import { useMediaQuery } from "react-responsive";
 import styled, { keyframes } from "styled-components";
 import { pulse } from "react-animations";
 import { FiChevronsDown, FiChevronRight } from "react-icons/fi";
+import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Jumbotron = () => {
+  const loggedIn = useSelector((state) => state.user.loggedIn);
+  const contentSaved = localStorage.getItem("contentSaved");
   const classes = useStyles();
+  const history = useHistory();
   const isNotMobileDevice = useMediaQuery({
     query: "(min-device-width:600px)",
   });
@@ -26,8 +31,22 @@ const Jumbotron = () => {
         <Button
           variant="contained"
           endIcon={<FiChevronRight className={classes.icon} />}
-          component={Link}
-          to={isNotMobileDevice? "/login":"/notSupported"}
+          onClick={() => {
+            if (loggedIn) {
+              if (contentSaved){
+                history.push("/levelSelect")
+              }
+              else{
+              history.push("/userform");
+              }
+            } else if (contentSaved) {
+              history.push("/levelSelect");
+            } else if (isNotMobileDevice) {
+              history.push("/login");
+            } else {
+              history.push("/notSupported");
+            }
+          }}
           className={classes.button}
         >
           Start

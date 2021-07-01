@@ -1,25 +1,27 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { zoomInUp, bounce, zoomIn, wobble, bounceInUp } from "react-animations";
 import { GrLinkTop } from "react-icons/gr";
 import { HashLink as Link } from "react-router-hash-link";
-import { Background, Character, UIButton } from "../Components";
-import { Typography } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
+import { Background, Character } from "../Components";
+import {
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  InputBase,
+  CircularProgress,
+  Snackbar,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import image from "../Images/backgrounds/last.jpg";
 import stone from "../Images/pagefooter/stonefooter.svg";
 import kangaroo from "../Images/characters/kangaroo.png";
 import koala from "../Images/characters/koala.png";
 
-export default class ContactUs extends Component {
-  render() {
-    return <Contactuspage />;
-  }
-}
-
-const Contactuspage = () => {
+const ContactUs = () => {
   const [koalaMessage, setkoalaMessage] = useState(false);
   const [kangarooMessage, setkangarooMessage] = useState(false);
 
@@ -28,6 +30,21 @@ const Contactuspage = () => {
 
   const [kangarooAnimation, setKangarooAnimation] = useState(true);
   const [kangaroopopup, setKangarooPopup] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [info, setInfo] = useState({
+    name: "",
+    email: "",
+    fileType: "",
+    sop: "",
+  });
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: "",
+  });
+  const url = process.env["REACT_APP_API_URL"];
+  const validEmailRegex =
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
   const displaykoalaMessage = () => {
     setKoalaAnimation(!koalaAnimation);
@@ -40,32 +57,94 @@ const Contactuspage = () => {
     setkangarooMessage(!kangarooMessage);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    setInfo({ ...info, [name]: value });
+  };
+
+  const onSubmit = () => {
+    setStatus({ ...status, loading: true });
+    const emailCheck = validEmailRegex.test(info.email);
+    if (emailCheck) {
+      fetch(`${url}/api/v1/dataRequest`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(info),
+      })
+        .then((resp) => resp.json())
+        .then((respJSON) => {
+          if (respJSON.error.length === 0) {
+            setStatus({
+              loading: false,
+              success: true,
+              error:
+                "We have submitted your request to your admin.\n You will recieve a response in the coming days.",
+            });
+            setOpen(true);
+          } else {
+            setStatus({
+              loading: false,
+              success: false,
+              error: `Error: ${respJSON.error}`,
+            });
+            setOpen(true);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setStatus({
+            loading: false,
+            success: false,
+            error: `Error: ${err.message}`,
+          });
+          setOpen(true);
+        });
+    } else {
+      setStatus({
+        loading: false,
+        success: false,
+        error: "Invalid Email Address!",
+      });
+      setOpen(true);
+    }
+  };
+
   return (
     <Background
       className="d-flex align-items-center justify-content-center flex-column"
       id="contact"
       customStyle={false}
       src={image}
-    // style={{position:"fixed"}}
     >
       <TopMsg className="wow">
         <Heading>
-          <Typography variant="subtitle1" style={{
-            color: "white",
+          <Typography
+            variant="subtitle1"
+            style={{
+              color: "white",
 
-            fontSize: "2vw",
-            marginTop: "-5px",
-
-          }}>
+              fontSize: "2vw",
+              marginTop: "-5px",
+            }}
+          >
             Data Request Form
-        </Typography>
+          </Typography>
         </Heading>
         <DataRequestForm>
           <Question>Name:</Question>
           <InputTextField
+            name="name"
+            value={info.name}
+            onChange={onChange}
             variant="outlined"
-            placeholder="Enter your Name"
-
+            placeholder="Enter Your Name"
             inputProps={{
               style: {
                 padding: "15px 10px",
@@ -74,52 +153,82 @@ const Contactuspage = () => {
           />
           <Question>Email:</Question>
           <InputTextField
+            name="email"
+            value={info.email}
+            onChange={onChange}
             variant="outlined"
-            placeholder="Enter your Email"
-
+            placeholder="Enter Your Email"
             inputProps={{
               style: {
                 padding: "15px 10px",
               },
             }}
           />
-          <Question>contact no:</Question>
-          <InputTextField
+          <Question>Desired File Format:</Question>
+          <Select
+            name="fileType"
+            value={info.fileType}
+            onChange={onChange}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
             variant="outlined"
-            placeholder="Enter your number"
-
-            inputProps={{
-              style: {
-                padding: "15px 10px",
-              },
-            }}
-          />
+            label="Select "
+            input={<BootstrapInput />}
+            renderValue={
+              info.fileType !== ""
+                ? undefined
+                : () => (
+                    <div style={{ color: "#a9a9a9" }}>
+                      Select Your Desired File Format
+                    </div>
+                  )
+            }
+          >
+            <MenuItem value="json">JSON</MenuItem>
+            <MenuItem value="csv">CSV</MenuItem>
+          </Select>
           <Question>Purpose:</Question>
           <InputTextField
-            id="outlined-multiline-flexible"
-            placeholder="Enter your Purpose for data request"
-
+            name="sop"
+            value={info.sop}
+            onChange={onChange}
+            placeholder="Enter Your Purpose For Data Request"
             multiline
-            rowsMax={4}
-
+            rowsMax={5}
             variant="outlined"
-
-            inputProps={{
-              style: {
-                padding: "15px 10px",
-              },
-            }}
           />
-          {/* <FormSubmit>Submit</FormSubmit> */}
-
-          {/* <UIButton type="submit">Submit</UIButton> */}
         </DataRequestForm>
         <RequestFormButton>
-          <FormSubmit>Submit</FormSubmit>
+          <FormSubmit
+            disabled={
+              info.name === "" ||
+              info.email === "" ||
+              info.fileType === "" ||
+              info.sop === ""
+            }
+            onClick={onSubmit}
+          >
+            {status.loading ? (
+              <CircularProgress size={30} style={{ color: "white" }} />
+            ) : (
+              "Submit"
+            )}
+          </FormSubmit>
         </RequestFormButton>
       </TopMsg>
-
-      {/* <BottomMsg className="d-flex align-items-center justify-content-center flex-column wow"></BottomMsg> */}
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert
+          severity={status.success ? "success" : "error"}
+          onClose={handleClose}
+        >
+          {status.error}
+        </Alert>
+      </Snackbar>
 
       {koalaMessage && (
         <KoalaMessage>
@@ -182,6 +291,8 @@ const Contactuspage = () => {
   );
 };
 
+export default ContactUs;
+
 const zoomAnimation = keyframes`${zoomInUp}`;
 const bounce1 = keyframes`${bounce}`;
 const zoomin = keyframes`${zoomIn}`;
@@ -189,45 +300,54 @@ const wobbleAnimation = keyframes`${wobble}`;
 const bounce2 = keyframes`${bounceInUp}`;
 
 const FormSubmit = styled.button`
-width: 20%;
-height: 60%;
-border-radius: 10px;
-background-color: #25ce4a;
-color: white;
-align-items: center;
-justify-content: center;
-font-size: 1.5vw;
-border: none;
-z-index:10;
-&:hover{
-  background-color: #027719;
-}
+  width: 20%;
+  height: 60%;
+  border-radius: 5px;
+  background-color: #25ce4a;
+  color: white;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3vw;
+  border: none;
+  z-index: 10;
+  outline: none;
+  &:hover {
+    background-color: #027719;
+    transition: 0.3s all ease-in-out;
+  }
+  &:active {
+    transform: translateY(5px);
+    transition: 0.2s all ease-in-out;
+  }
+  &:disabled {
+    color: white;
+    background-color: #b0b0b0;
+  }
 `;
 const Heading = styled.div`
-width: 100%;
-height: 10%;
-align-items: center;
-text-align: center;
-margin-top: -10px;
+  width: 100%;
+  height: 10%;
+  align-items: center;
+  text-align: center;
+  margin-top: -10px;
 `;
 
 const DataRequestForm = styled.div`
-display: flex;
-flex-direction: column;
-width: 100%;
-height: 80%;
-text-align: left;
-
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80%;
+  text-align: left;
 `;
 
 const RequestFormButton = styled.div`
-display: flex;
-flex-direction: column;
-width: 100%;
-height: 15%;
-align-items: center;
-justify-content: center;
-
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 15%;
+  align-items: center;
+  justify-content: center;
 `;
 const Question = styled.h3`
   margin-top: 5px;
@@ -418,6 +538,7 @@ const InputTextField = withStyles({
     borderRadius: "5px",
     border: "2px",
     color: "black",
+    zIndex: 10,
 
     "&:hover .MuiOutlinedInput-notchedOutline": {
       borderColor: "red",
@@ -438,3 +559,29 @@ const InputTextField = withStyles({
     },
   },
 })(TextField);
+
+const BootstrapInput = withStyles((theme) => ({
+  input: {
+    backgroundColor: "white",
+    borderRadius: "5px",
+    border: "1px solid black",
+    color: "black",
+    zIndex: 10,
+    padding: "15px 10px",
+
+    "&:focus": {
+      borderRadius: 4,
+      borderColor: "red",
+      backgroundColor: "white",
+    },
+
+    "&:hover": {
+      borderRadius: 4,
+      borderColor: "red",
+    },
+  },
+}))(InputBase);
+
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+};

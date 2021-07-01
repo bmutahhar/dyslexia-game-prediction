@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { ProfileAvatar, Timer, CustomStepper } from "../Components";
-import { makeStyles } from "@material-ui/core/styles";
+import { Timer, CustomStepper } from "../Components";
 import { useSelector } from "react-redux";
 
 import gamebg from "../Images/backgrounds/gamebg.png";
 
-const GameScreen = ({ children, activeStep, badges }) => {
-  const loggedIn = useSelector((state) => state.user.loggedIn);
+const GameScreen = ({ children, activeStep, badges, stop }) => {
   const totalLevels = useSelector((state) => state.questions.totalQuestions);
   const [showBadges, setShowBadges] = useState(
     Array(badges.length).fill(false)
@@ -28,6 +26,7 @@ const GameScreen = ({ children, activeStep, badges }) => {
       }
     }
   }, [activeStep]);
+
   return (
     <Container className="container-fluid" background={gamebg}>
       <Header className="row">
@@ -36,16 +35,15 @@ const GameScreen = ({ children, activeStep, badges }) => {
             return badge ? (
               <Badgeimg src={badges[index].image} alt="badge" key={index} />
             ) : (
-                <BadgeHolder key={index} />
-              );
+              <BadgeHolder key={index} />
+            );
           })}
         </Badges>
         <ProgressStepper className="col-8">
           <CustomStepper activeStep={activeStep} />
         </ProgressStepper>
         <Profile className="col-2">
-          <Timer initialSeconds={0} initialMinutes={0} />
-          {loggedIn && <ProfileAvatar />}
+          <Timer initialSeconds={0} initialMinutes={0} stop={stop} />
         </Profile>
       </Header>
       <GameArea className="row">{children}</GameArea>
@@ -54,23 +52,6 @@ const GameScreen = ({ children, activeStep, badges }) => {
 };
 
 export default GameScreen;
-
-const useStyles = makeStyles(({ theme }) => ({
-  title: {
-    color: "white",
-    fontSize: "2.5vw",
-  },
-  info: {
-    color: "white",
-    margin: "2px 5px",
-    fontSize: "1.5vw",
-  },
-  backdrop: {
-    zIndex: 10,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    backdropFilter: "blur(20px)",
-  },
-}));
 
 const Badgeimg = styled.img`
   height: 1.7vw;
@@ -107,7 +88,6 @@ const BadgeHolder = styled.div`
   display: flex;
   background-color: rgba(7, 94, 12, 0.4);
   border: 1px solid #08780e;
-  
 `;
 
 const ProgressStepper = styled.div`

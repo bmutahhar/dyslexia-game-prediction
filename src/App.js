@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar } from "./Components";
 import {
@@ -17,13 +17,16 @@ import {
   Elementary,
   AllBadgeDisplay,
   InstructionScreen,
+  ProfileTracking,
+  ResultScreen
 } from "./Screens";
+import {GameReview} from "./Components"
 import { useMediaQuery } from "react-responsive";
 
 import "./App.css";
 import "react-dragula/dist/dragula.css";
 
-function App() {
+const App = () => {
   const isNotMobileDevice = useMediaQuery({
     query: "(min-device-width:600px)",
   });
@@ -45,6 +48,9 @@ function App() {
               <Route path="/elementary" component={Elementary} />
               <Route path="/completed" component={AllBadgeDisplay} />
               <Route path="/instruction" component={InstructionScreen} />
+              <Route path="/profile" component={ProfileTracking} />
+              <Route path="/diagnosisResult" component={ResultScreen} />
+              <Route path="/review" component={GameReview} />
             </>
           ) : (
             <Route path="/notSupported" component={NotSupported} />
@@ -53,7 +59,7 @@ function App() {
       </div>
     </Router>
   );
-}
+};
 
 export default App;
 
