@@ -6,6 +6,8 @@ from copy import deepcopy
 from datetime import datetime, timedelta
 
 import jwt
+import dotenv
+import sklearn
 import pymongo
 from Models import Models
 from flask import Flask, Response, request
