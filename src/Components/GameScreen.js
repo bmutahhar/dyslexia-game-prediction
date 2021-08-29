@@ -11,15 +11,19 @@ const GameScreen = ({ children, activeStep, badges, stop }) => {
     Array(badges.length).fill(false)
   );
 
+  // This block actually displays the badge and badge holders on top left of the screen.
+  // This block executes whenever activeStep value is updated.
   useEffect(() => {
     if (activeStep === 0) return;
     else if (activeStep % 2 === 0) {
+      // Logic to display the last badge.
       if (activeStep === totalLevels - 1) {
         let values = [...showBadges];
         values[Math.floor(activeStep / 2) - 1] = true;
         values[-1] = true;
         setShowBadges(values);
       } else {
+        // Logic to display all the badges except the last one. this is the same formula as explained in index.js file
         let values = [...showBadges];
         values[Math.floor(activeStep / 2) - 1] = true;
         setShowBadges(values);
@@ -43,6 +47,7 @@ const GameScreen = ({ children, activeStep, badges, stop }) => {
           <CustomStepper activeStep={activeStep} />
         </ProgressStepper>
         <Profile className="col-2">
+          {/* The stop state is passed to the timer component as props. */}
           <Timer initialSeconds={0} initialMinutes={0} stop={stop} />
         </Profile>
       </Header>

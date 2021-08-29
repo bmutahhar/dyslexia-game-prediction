@@ -665,27 +665,26 @@ const InputGroup = styled.div`
 const Icon = styled.i`
   margin-top: -3px;
   margin-right: 4px;
-  }
 `;
 
 const Header = styled.div`
-display: flex;
-flex-flow: column wrap;
-color: white;
-margin-left:5px;
-margin-right:5px;
-animation: 1s ${slideInAnimation};
+  display: flex;
+  flex-flow: column wrap;
+  color: white;
+  margin-left: 5px;
+  margin-right: 5px;
+  animation: 1s ${slideInAnimation};
 
-h1{
-  font-size:48px;
-  font-family:"Roboto"
-  letter-spacing:5px;
-}
-p{
-  font-size:20px;
-  font-family:"Roboto"
-  letter-spacing:5px;
-}
+  h1 {
+    font-size: 48px;
+    font-family: "Roboto";
+    letter-spacing: 5px;
+  }
+  p {
+    font-size: 20px;
+    font-family: "Roboto";
+    letter-spacing: 5px;
+  }
 `;
 const OtherSignupComponent = styled.div`
   display: flex;
@@ -882,9 +881,11 @@ const Animation = styled.div`
   animation: 1s ${signupAnimation};
 `;
 
-const validEmailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+const validEmailRegex =
+  /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
-const validPasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+const validPasswordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 const mapStateToProps = (state) => ({
   isUserLoggedIn: state.user.loggedIn,

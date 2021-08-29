@@ -31,11 +31,14 @@ const App = () => {
     query: "(min-device-width:600px)",
   });
 
+  // React router code, used to direct different pages to different routes
   return (
     <Router>
       <div className="App">
         <Switch>
+          {/* Main page route. Renders on all screens including mobiles */}
           <Route exact path="/" component={MainPage} />
+          {/* These routes only render on web and not on mobile devices. */}
           {isNotMobileDevice ? (
             <>
               <Route path="/login" component={Login} />
@@ -63,6 +66,7 @@ const App = () => {
 
 export default App;
 
+// Main page / Landing page components called in a single component
 const MainPage = () => {
   const isNotMobileDevice = useMediaQuery({
     query: "(min-device-width:600px)",

@@ -159,19 +159,20 @@ const LionMessage = styled.div`
     width: 20%;
     height: 35%;
     padding: 5px;
-    right:1%;
-    bottom:25%;
+    right: 1%;
+    bottom: 25%;
   }
   @media (min-width: 600px) and (max-width: 767px) {
-    h3{
+    h3 {
       font-size: 18px;
     }
     font-size: 14px;
     width: 20%;
     height: 35%;
     padding: 10px 5px 5px 5px;
-    right:0%;
-    bottom:20%;
+    right: 0%;
+    bottom: 20%;
+  }
 `;
 
 const MonkeyPopup = styled.div`

@@ -9,6 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
+import FormGroup from "@material-ui/core/FormGroup";
 import { withStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
@@ -112,22 +113,22 @@ const Form = () => {
   var q4arr = [QA.q4opt1, QA.q4opt2, QA.q4opt3, QA.q4opt4];
 
   var menuitem1 = [
-    <MenuItem value="" disabled>
+    <MenuItem key={uuidv4()}  value="" disabled>
       Select your answer
     </MenuItem>,
   ];
   var menuitem2 = [
-    <MenuItem value="" disabled>
+    <MenuItem key={uuidv4()} value="" disabled>
       Select your answer
     </MenuItem>,
   ];
   var menuitem3 = [
-    <MenuItem value="" disabled>
+    <MenuItem key={uuidv4()} value="" disabled>
       Select your answer
     </MenuItem>,
   ];
   var menuitem4 = [
-    <MenuItem value="" disabled>
+    <MenuItem key={uuidv4()} value="" disabled>
       Select your answer
     </MenuItem>,
   ];
@@ -502,7 +503,7 @@ const Form = () => {
           <Row className="row">
             <Column className="col-12" style={styles.questions}>
               {questionf && (
-                <FormControl style={styles.formControl}>
+                <FormGroup style={styles.formControl}>
                   <Question>{QA.q1}</Question>
 
                   {QA.q1sf && (
@@ -607,14 +608,13 @@ const Form = () => {
                   )}
                   {savecheck && (
                     <FormControlLabel
-                      style={styles.check1}
                       onClick={saveAnswers}
                       checked={save}
                       control={<Checkbox color="primary" />}
                       label="Save my answers for next time"
                     />
                   )}
-                </FormControl>
+                </FormGroup>
               )}
               {consentf && (
                 <ConsentForm>
@@ -822,17 +822,16 @@ const Submitbutton = styled.button`
   &:hover {
     background-color: #175060;
   }
-  &: focus {
+  &:focus {
     outline: none;
   }
-  &: active {
+  &:active {
     background-color: #175060;
     box-shadow: 0 7px 6px 0 rgba(0, 0, 0, 0.8);
 
     transform: translateY(4px);
     outline: none;
-  }
-`;
+  }`;
 
 const Proceedbutton = styled.button`
   display: flex;
@@ -857,10 +856,10 @@ const Proceedbutton = styled.button`
   &:hover {
     background-color: #175060;
   }
-  &: focus {
+  &:focus {
     outline: none;
   }
-  &: active {
+  &:active {
     background-color: #175060;
     box-shadow: 0 7px 6px 0 rgba(0, 0, 0, 0.8);
 
@@ -869,21 +868,14 @@ const Proceedbutton = styled.button`
   }
 `;
 
-// const FrontBackIcon = styled.div`
-//   display: inline-block;
-//   &:hover {
-//     cursor: pointer;
-//   }
-// `;
+
 const NavIcons = styled.div`
   position: absolute;
   right: 5%;
   bottom: 10%;
 `;
 
-// const Container = styled.div`
-//   height: 100vh;
-// `;
+
 
 const Container = styled.div`
   height: 100vh;
@@ -973,11 +965,6 @@ const styles = {
     left: "7%",
   },
 
-  check1: {
-    position: "absolute",
-    bottom: "20%",
-    left: "1%",
-  },
 
   circle: {
     marginLeft: "3px",
@@ -1027,17 +1014,7 @@ const styles = {
   },
 };
 
-// const Iconb = withStyles({
-//   root: {
 
-//     "&:disabled": {
-//       backgroundColor: "#90ab95",
-//       color: "white",
-//       border: "none",
-//     },
-//   },
-
-// })(IconButton);
 
 const InputTextField = withStyles({
   root: {
